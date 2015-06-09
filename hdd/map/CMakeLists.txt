@@ -15,8 +15,8 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 target_link_libraries(${PROJECT_NAME}
-   hdd-utils
-   hdd-core
+   #hdd-utils
+   #hdd-core
 )
 
 qt5_use_modules(${PROJECT_NAME}

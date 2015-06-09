@@ -5,6 +5,9 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 LIST(APPEND CMAKE_MODULE_PATH ${hdd_SOURCE_DIR}/cmake_modules)
 
+IF(POLICY CMP0043)
+CMAKE_POLICY(SET CMP0043 OLD)
+ENDIF(POLICY CMP0043)
 
 ################################################################################
 # Version
