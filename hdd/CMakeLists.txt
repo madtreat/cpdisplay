@@ -2,7 +2,7 @@ INCLUDE_DIRECTORIES(
    utils
    core
    map
-   pfd
+   instruments
    gui
 )
 
@@ -10,5 +10,5 @@ SET(CMAKE_AUTOMOC ON)
 ADD_SUBDIRECTORY(utils)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(map)
-ADD_SUBDIRECTORY(pfd)
+ADD_SUBDIRECTORY(instruments)
 ADD_SUBDIRECTORY(gui)

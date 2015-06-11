@@ -1,6 +1,6 @@
 #include "window.h"
-#include "pfdwidget.h"
-#include "mapwidget.h"
+#include "pfdcontroller.h"
+#include "mapcontroller.h"
 
 
 HDDWindow::HDDWindow() 

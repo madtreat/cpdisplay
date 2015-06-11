@@ -1,11 +1,11 @@
 project(hdd-map)
 
 set(SOURCES
-   mapwidget.cpp
+   mapcontroller.cpp
 )
 
 set(HEADERS
-   mapwidget.h
+   mapcontroller.h
 )
 
 
