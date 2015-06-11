@@ -27,13 +27,13 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 target_link_libraries(${PROJECT_NAME}
+   ${Qt5Core_LIBRARIES}
+   ${Qt5Widgets_LIBRARIES}
+   ${Qt5Gui_LIBRARIES}
+   ${Qt5Svg_LIBRARIES}
+
+   qfi-core
+   qfi-ui
    #hdd-utils
    #hdd-core
-)
-
-qt5_use_modules(${PROJECT_NAME}
-   Core
-   Widgets
-   Gui
-   Svg
 )

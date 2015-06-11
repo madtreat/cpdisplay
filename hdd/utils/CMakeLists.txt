@@ -13,10 +13,7 @@ set(HEADERS
 #)
 #
 #target_link_libraries(${PROJECT_NAME}
-#)
-#
-#qt5_use_modules(${PROJECT_NAME}
-#   Core
-#   Widgets
-#   Gui
+#   ${Qt5Core_LIBRARIES}
+#   ${Qt5Widgets_LIBRARIES}
+#   ${Qt5Gui_LIBRARIES}
 #)

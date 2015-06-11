@@ -119,7 +119,8 @@ FIND_PACKAGE(Qt5Core    REQUIRED)
 FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5Gui     REQUIRED)
 FIND_PACKAGE(Qt5Svg     REQUIRED)
-#FIND_PACKAGE(Qt5OpenGL REQUIRED)
+FIND_PACKAGE(Qt5Network REQUIRED)
+FIND_PACKAGE(Qt5WebKitWidgets REQUIRED)
 
 
 ################################################################################
@@ -128,9 +129,6 @@ FIND_PACKAGE(Qt5Svg     REQUIRED)
 SET(LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 SET(HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
 SET(EXTERN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext)
-SET(QFI_DIR ${EXTERN_DIR}/qfi)
-SET(QFI_CORE_HEADER_DIR ${QFI_DIR}/core)
-SET(QFI_UI_HEADER_DIR ${QFI_DIR}/ui)
 
 LINK_DIRECTORIES(
    ${LIB_DIR}
@@ -138,12 +136,46 @@ LINK_DIRECTORIES(
 
 INCLUDE_DIRECTORIES(
    ${HEADER_DIR}
-   ${QFI_CORE_HEADER_DIR}
-   ${QFI_UI_HEADER_DIR}
 )
 
 
-# Build the project
+################################################################################
+# Build the project and local dependencies
+################################################################################
+# Dependency: QFI (QFlightInstruments)
+SET(QFI_DIR ${EXTERN_DIR}/qfi)
+SET(QFI_CORE_HEADER_DIR ${QFI_DIR}/core)
+SET(QFI_UI_HEADER_DIR ${QFI_DIR}/ui)
+INCLUDE_DIRECTORIES(
+   ${QFI_CORE_HEADER_DIR}
+   ${QFI_UI_HEADER_DIR}
+)
 ADD_SUBDIRECTORY(ext/qfi)
+
+# Dependency: QJSON
+set(QJSON_LIB_MAJOR_VERSION "0")
+set(QJSON_LIB_MINOR_VERSION "8")
+set(QJSON_LIB_PATCH_VERSION "1")
+OPTION(OSX_FRAMEWORK "Build a Mac OS X Framework")
+SET(FRAMEWORK_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/Library/Frameworks"
+    CACHE PATH "Where to place qjson.framework if OSX_FRAMEWORK is selected")
+SET(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Directory where lib will install")
+SET(BUILD_SHARED_LIBS "Build shared library" ON)
+
+SET(QJSON_DIR ${EXTERN_DIR}/qjson)
+SET(QJSON_HEADER_DIR ${QJSON_DIR}/include)
+INCLUDE_DIRECTORIES(
+   ${QJSON_HEADER_DIR}
+)
+ADD_SUBDIRECTORY(ext/qjson/src)
+
+
+# Dependency: Qt Google Maps
+SET(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTOUIC ON)
+ADD_SUBDIRECTORY(ext/qt-google-maps)
+
+
+# Project: HDD (Head Down Display)
 ADD_SUBDIRECTORY(hdd)
 
