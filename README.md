@@ -6,6 +6,10 @@ Cockpit Head Down Display for the Vehicle Systems and Controls Lab at Texas A&M 
 
 Dependencies
 ============
+In addition to the dependencies listed below, you must have a Google Developer 
+account with both 
+[Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/) and 
+[Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/) enabled.
 
  Name                                       | Version     | Ubuntu Package  | OS X Homebrew Package | Notes
 --------------------------------------------|-------------|-----------------|-----------------------|-------
@@ -17,3 +21,23 @@ Dependencies
 
 1. QFI - QFlightInstruments
   * Used for the Primary Flight Display and other instruments
+
+
+Instructions
+============
+The easiest way to download and build this project is using Git and CMake
+(after installing non-included dependencies):
+```bash
+$ git clone https://github.tamu.edu/vscl/cpdisplay.git
+$ git submodule init
+$ git submodule update
+$ mkdir build && cd build
+$ cmake ..
+$ make
+## Optionally run from this directory
+$ ../bin/[executable]
+```
+
+The executable can be run from anywhere, as long as the config directory exists
+in the same structural location on the file system ( [project root]/bin/executable
+and [project root]/config/[files] )
