@@ -1,6 +1,3 @@
-[submodule "ext/qjson"]
-	path = ext/qjson
-	url = https://github.com/flavio/qjson.git
 [submodule "ext/qt-google-maps"]
 	path = ext/qt-google-maps
 	url = git@github.tamu.edu:mtreat/qt-google-maps.git
