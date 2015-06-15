@@ -35,8 +35,29 @@ MapController::~MapController()
 
 void MapController::setZoom(int level)
 {
+   if (level >= ZOOM_MAX) {
+      emit zoomMaxReached(true);
+      return;
+   }
+   else if (level <= ZOOM_MIN) {
+      emit zoomMinReached(true);
+      return;
+   }
    settings->setZoom(level);
    mapWidget->setZoom(level);
+   emit zoomEither(true);
+}
+
+void MapController::increaseZoom()
+{
+   int newLevel = settings->zoom() + 1;
+   setZoom(newLevel);
+}
+
+void MapController::decreaseZoom()
+{
+   int newLevel = settings->zoom() - 1;
+   setZoom(newLevel);
 }
 
 void MapController::setOrientation(MapOrientation mo)

@@ -26,11 +26,21 @@ public:
 
 public slots:
    void setZoom(int level);
+   void increaseZoom();
+   void decreaseZoom();
    void setOrientation(MapOrientation mo);
    
 signals:
-   void incrementZoom(); // increase zoom level by 1 (zoom in)
-   void decrementZoom(); // decrease zoom level by 1 (zoom out)
+   /*
+    * These signals use a bool argument to interact directly with QPushButtons'
+    * setEnabled(bool) slots. 
+    * 
+    * Use "true" ALWAYS because that is what you want to satisfy "disable" or
+    * "enable" parameters.
+    */
+   void zoomMaxReached(bool disable);
+   void zoomMinReached(bool disable);
+   void zoomEither(bool enable);
 
 private:
    MapSettings* settings;

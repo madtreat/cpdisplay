@@ -35,5 +35,5 @@ void MapOverlay::setZoom(int level)
 void MapOverlay::paintEvent(QPaintEvent*)
 {
    QPainter p(this);
-   p.fillRect(rect(), QColor(80, 80, 255, 128));
+//   p.fillRect(rect(), QColor(80, 80, 255, 128));
 }

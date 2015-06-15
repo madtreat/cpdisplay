@@ -13,8 +13,8 @@ enum MapOrientation {
    TRACK_UP
 };
 
-const int ZOOM_MAX = 19;
-const int ZOOM_MIN = 0;
+const int ZOOM_MAX = 19; // Level 19 is the closest in one can zoom
+const int ZOOM_MIN = 0;  // Level 0 shows the whole planet
 
 #endif	/* MAPCONSTS_H */
 
