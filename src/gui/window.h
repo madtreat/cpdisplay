@@ -1,18 +1,20 @@
-#include <QWindow>
+#include <QMainWindow>
 
 
-class PFDWidget;
-class MapWidget;
+class MapController;
+class PFDController;
 
-class HDDWindow : public QWindow {
+class HDDWindow : public QMainWindow {
    Q_OBJECT
 
 public:
-   HDDWindow();
+   HDDWindow(QObject* _parent=0);
    ~HDDWindow();
 
 public slots:
 
 private:
-   PFDWidget* pfdWidget;
+   MapController* map;
+   PFDController* pfd;
+   
 };

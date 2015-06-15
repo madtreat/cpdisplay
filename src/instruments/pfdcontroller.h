@@ -22,7 +22,7 @@ public:
    PFDController(const PFDController& orig);
    virtual ~PFDController();
 
-   WidgetPFD* getWidget() const {return pfdWidget;}
+   WidgetPFD* getWidget() const  { return pfdWidget; }
 
 public slots:
    // Connect to WidgetPFD functions

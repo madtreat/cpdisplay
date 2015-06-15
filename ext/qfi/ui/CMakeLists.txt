@@ -1,6 +1,6 @@
-PROJECT(qfi-ui)
+project(qfi-ui)
 
-SET(SOURCES
+set(SOURCES
    LayoutSquare.cpp
    MainWindow.cpp
    WidgetADI.cpp
@@ -13,7 +13,7 @@ SET(SOURCES
    WidgetVSI.cpp
 )
 
-SET(HEADERS
+set(HEADERS
    LayoutSquare.h
    MainWindow.h
    WidgetADI.h
@@ -26,7 +26,7 @@ SET(HEADERS
    WidgetVSI.h
 )
 
-SET(FORMS
+set(FORMS
    MainWindow.ui
    WidgetADI.ui
    WidgetALT.ui
@@ -37,18 +37,27 @@ SET(FORMS
    WidgetTC.ui
    WidgetVSI.ui
 )
-QT5_WRAP_UI(FORMS_WRAPPED ${FORMS})
+qt5_wrap_ui(FORMS_WRAPPED ${FORMS})
 
-ADD_LIBRARY(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} SHARED
    ${SOURCES}
    ${MOC_SRC}
    ${FORMS_WRAPPED}
 )
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}
    ${Qt5Core_LIBRARIES}
    ${Qt5Widgets_LIBRARIES}
    ${Qt5Gui_LIBRARIES}
    ${Qt5Svg_LIBRARIES}
    qfi-core
+)
+
+# For testing purposes, it is easy to just add an additional executable to the build
+add_executable(qfi-test
+   main.cpp
+)
+
+target_link_libraries(qfi-test
+   ${PROJECT_NAME}
 )

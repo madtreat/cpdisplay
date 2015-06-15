@@ -2,10 +2,13 @@ project(hdd-map)
 
 set(SOURCES
    mapcontroller.cpp
+   mapwidget.cpp
 )
 
 set(HEADERS
+   mapconsts.h
    mapcontroller.h
+   mapwidget.h
 )
 
 
@@ -18,6 +21,8 @@ target_link_libraries(${PROJECT_NAME}
    ${Qt5Core_LIBRARIES}
    ${Qt5Widgets_LIBRARIES}
    ${Qt5Gui_LIBRARIES}
+
+   qt-gmaps
 
    #hdd-utils
    #hdd-core
