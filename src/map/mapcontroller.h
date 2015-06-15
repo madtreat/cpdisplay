@@ -25,13 +25,12 @@ public:
    MapWidget* getWidget() const { return mapWidget; }
 
 public slots:
+   void setZoom(int level);
+   void setOrientation(MapOrientation mo);
    
 signals:
-   void updateZoomLevel(int level);
    void incrementZoom(); // increase zoom level by 1 (zoom in)
    void decrementZoom(); // decrease zoom level by 1 (zoom out)
-   
-   void updateOrientation(MapOrientation mo);
 
 private:
    MapSettings* settings;

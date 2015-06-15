@@ -1,0 +1,1 @@
+../../ext/qt-google-maps/config/map.js

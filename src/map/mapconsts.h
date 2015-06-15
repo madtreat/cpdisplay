@@ -13,5 +13,8 @@ enum MapOrientation {
    TRACK_UP
 };
 
+const int ZOOM_MAX = 19;
+const int ZOOM_MIN = 0;
+
 #endif	/* MAPCONSTS_H */
 

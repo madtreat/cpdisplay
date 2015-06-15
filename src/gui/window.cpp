@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include <QHBoxLayout>
+#include <QDebug>
 
 #include "pfdcontroller.h"
 #include "mapcontroller.h"

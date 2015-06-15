@@ -3,12 +3,16 @@ project(hdd-map)
 set(SOURCES
    mapcontroller.cpp
    mapwidget.cpp
+   mapview.cpp
+   mapoverlay.cpp
 )
 
 set(HEADERS
    mapconsts.h
    mapcontroller.h
    mapwidget.h
+   mapview.h
+   mapoverlay.h
 )
 
 

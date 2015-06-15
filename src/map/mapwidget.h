@@ -1,8 +1,8 @@
 /* 
- * File:   MapWidget.
+ * File:   mapwidget.h
  * Author: Madison Treat <madison.treat@tamu.edu>
  *
- * Created on June 15, 2015, 11:21 AM
+ * Created on June 15, 2015, 2:37 PM
  */
 
 #ifndef MAPWIDGET_
@@ -11,10 +11,10 @@
 #include <QWidget>
 #include "mapconsts.h"
 
-class QWebView;
 
 class MapSettings;
-class GeocodeDataManager;
+class MapView;
+class MapOverlay;
 
 
 class MapWidget : public QWidget {
@@ -26,24 +26,17 @@ public:
    virtual ~MapWidget();
 
 public slots:
-   void showCoordinates(double lat, double lon, bool saveMarker=true);
-   void errorOccurred(const QString& error);
+   void setZoom(int level);
+   void setOrientation(MapOrientation mo);
+//   void incrementZoom();
+//   void decrementZoom();
    
-   void updateZoomLevel(int level);
-   void incrementZoom();
-   void decrementZoom();
-   
-   void updateOrientation(MapOrientation mo);
 
 private:
-   MapSettings*         settings;
-   bool                 enabled; // are the maps enabled?
-   
-   QWebView*            mapView;
-   GeocodeDataManager*  geocode;
-   
-   int                  currentZoom;
-   MapOrientation       currentOrientation;
+   MapSettings* settings;
+   MapView* view;
+   MapOverlay* overlay;
+
 };
 
 #endif	/* MAPWIDGET_ */

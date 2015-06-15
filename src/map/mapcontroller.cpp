@@ -16,13 +16,13 @@ MapController::MapController(QObject* _parent)
    settings = new MapSettings(QString(), this);
    mapWidget = new MapWidget(settings);
    
-   connect(this, SIGNAL(updateZoomLevel(int)),  mapWidget, SLOT(updateZoomLevel(int)));
-   connect(this, SIGNAL(incrementZoom()),       mapWidget, SLOT(incrementZoom()));
-   connect(this, SIGNAL(decrementZoom()),       mapWidget, SLOT(decrementZoom()));
+//   connect(settings, SIGNAL(zoomChanged(int)),  mapWidget, SLOT(updateZoomLevel(int)));
+//   connect(this, SIGNAL(incrementZoom()),       mapWidget, SLOT(incrementZoom()));
+//   connect(this, SIGNAL(decrementZoom()),       mapWidget, SLOT(decrementZoom()));
    
-   connect(this, SIGNAL(updateOrientation(MapOrientation)), mapWidget, SLOT(updateOrientation(MapOrientation)));
+//   connect(this, SIGNAL(updateOrientation(MapOrientation)), mapWidget, SLOT(updateOrientation(MapOrientation)));
    
-   emit updateOrientation(orientation);
+//   emit updateOrientation(orientation);
 }
 
 //MapController::MapController(const MapController& orig)
@@ -33,3 +33,14 @@ MapController::~MapController()
 {
 }
 
+void MapController::setZoom(int level)
+{
+   settings->setZoom(level);
+   mapWidget->setZoom(level);
+}
+
+void MapController::setOrientation(MapOrientation mo)
+{
+//   settings->setOrientation(mo);
+   mapWidget->setOrientation(mo);
+}
