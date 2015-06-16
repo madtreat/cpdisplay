@@ -1,10 +1,12 @@
 project(hdd-gui)
 
 set(SOURCES
+   hddcontroller.cpp
    window.cpp
 )
 
 set(HEADERS
+   hddcontroller.h
    window.h
 )
 
@@ -24,7 +26,7 @@ target_link_libraries(${PROJECT_NAME}
    qfi-ui
 
    #hdd-utils
-   #hdd-core
+   hdd-core
    hdd-instruments
    hdd-map
 )
