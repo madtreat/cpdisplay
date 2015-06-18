@@ -15,6 +15,7 @@
 HDDSettings::HDDSettings(QString _filename, QObject* _parent)
 : QObject(_parent)
 {
+   settings = NULL;
    m_userHomeDir = QDir::home().absolutePath();
    
    // Get config file from [application root directory]/config
@@ -61,4 +62,5 @@ void HDDSettings::loadSettingsFile(QString _filename)
    settings->beginGroup("xplane");
    m_xplanePort = settings->value("xplane_port").toInt();
    m_xplaneHost = QHostAddress(settings->value("xplane_host").toString());
+   settings->endGroup(); // "xplane"
 }

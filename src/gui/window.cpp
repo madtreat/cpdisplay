@@ -39,32 +39,32 @@ void HDDWindow::setupToolbar()
    
    pfdButton = new QPushButton("PFD");
    pfdButton->setEnabled(false);
-   pfdButton->setMinimumHeight(40);
+   pfdButton->setMinimumHeight(80);
    toolbar->addWidget(pfdButton);
    
    weatherButton = new QPushButton("WX");
    weatherButton->setEnabled(false);
-   weatherButton->setMinimumHeight(40);
+   weatherButton->setMinimumHeight(80);
    toolbar->addWidget(weatherButton);
    
    trafficButton = new QPushButton("TFC");
    trafficButton->setEnabled(false);
-   trafficButton->setMinimumHeight(40);
+   trafficButton->setMinimumHeight(80);
    toolbar->addWidget(trafficButton);
    
    terrainButton = new QPushButton("TER");
    terrainButton->setEnabled(false);
-   terrainButton->setMinimumHeight(40);
+   terrainButton->setMinimumHeight(80);
    toolbar->addWidget(terrainButton);
    
    orientationButton = new QPushButton("Track Up");
    orientationButton->setEnabled(true);
-   orientationButton->setMinimumHeight(40);
+   orientationButton->setMinimumHeight(80);
    toolbar->addWidget(orientationButton);
    
    zoomInButton = new QPushButton("Zoom In");
    zoomInButton->setEnabled(true);
-   zoomInButton->setMinimumHeight(40);
+   zoomInButton->setMinimumHeight(80);
    connect(zoomInButton, SIGNAL(clicked()), map, SLOT(increaseZoom()));
    // If you are at the max zoom (very close shot of ground), disable zoom in button
    connect(map, SIGNAL(zoomMaxReached(bool)), zoomInButton, SLOT(setDisabled(bool)));
@@ -73,7 +73,7 @@ void HDDWindow::setupToolbar()
    
    zoomOutButton = new QPushButton("Zoom Out");
    zoomOutButton->setEnabled(true);
-   zoomOutButton->setMinimumHeight(40);
+   zoomOutButton->setMinimumHeight(80);
    connect(zoomOutButton, SIGNAL(clicked()), map, SLOT(decreaseZoom()));
    // If you are at the minimum zoom (whole earth), disable zoom out button
    connect(map, SIGNAL(zoomMinReached(bool)), zoomOutButton, SLOT(setDisabled(bool)));
@@ -82,3 +82,4 @@ void HDDWindow::setupToolbar()
    
    this->addToolBar(Qt::RightToolBarArea, toolbar);
 }
+

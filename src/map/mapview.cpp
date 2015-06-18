@@ -25,6 +25,9 @@ MapView::MapView(MapSettings* _settings, QWidget* _parent)
    
    QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
    webView = new QWebView(this);
+   connect(webView, SIGNAL(loadStarted()), this, SLOT(startedLoading()));
+   connect(webView, SIGNAL(loadProgress(int)), this, SLOT(loadingProgress(int)));
+   connect(webView, SIGNAL(loadFinished(bool)), this, SLOT(finishedLoading(bool)));
    webView->setUrl(QUrl::fromLocalFile(settings->mapHtmlPath()));
    
    if (settings->canEnableMaps()) {
@@ -39,6 +42,22 @@ MapView::MapView(MapSettings* _settings, QWidget* _parent)
 
 MapView::~MapView()
 {
+}
+
+
+void MapView::startedLoading()
+{
+   qDebug() << "Started loading URL";
+}
+
+void MapView::loadingProgress(int percent)
+{
+   qDebug() << "Loading progress:" << percent << "%";
+}
+
+void MapView::finishedLoading(bool success)
+{
+   qDebug() << "Finished loading URL, successful:" << success;
 }
 
 

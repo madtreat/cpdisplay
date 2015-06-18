@@ -11,6 +11,7 @@ int main(int argc, char* argv[]) {
    int deskWidth = QApplication::desktop()->width();
    int deskHeight = QApplication::desktop()->height();
    
+   qDebug() << "Initializing...";
    HDDSettings* settings = new HDDSettings(QString());// replace default constructor if supplied by command line
    
    HDDController hddc(settings);

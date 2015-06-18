@@ -6,6 +6,9 @@
  */
 
 #include "mapcontroller.h"
+
+#include <QDebug>
+
 #include "mapsettings.h"
 #include "mapwidget.h"
 
@@ -16,6 +19,8 @@ MapController::MapController(QObject* _parent)
    settings = new MapSettings(QString(), this);
    mapWidget = new MapWidget(settings);
    
+   qDebug() << "Can enable maps?" << settings->canEnableMaps();
+
 //   connect(settings, SIGNAL(zoomChanged(int)),  mapWidget, SLOT(updateZoomLevel(int)));
 //   connect(this, SIGNAL(incrementZoom()),       mapWidget, SLOT(incrementZoom()));
 //   connect(this, SIGNAL(decrementZoom()),       mapWidget, SLOT(decrementZoom()));

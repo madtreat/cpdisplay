@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QUdpSocket>
 #include <QByteArray>
+#include <QDebug>
 
 #include "hddsettings.h"
 #include "xplanedata.h"

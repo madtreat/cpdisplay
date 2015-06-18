@@ -28,6 +28,9 @@ public:
    virtual ~MapView();
 
 public slots:
+   void startedLoading();
+   void loadingProgress(int percent);
+   void finishedLoading(bool success);
    void showCoordinates(double lat, double lon, bool saveMarker=true);
    void errorOccurred(const QString& error);
    

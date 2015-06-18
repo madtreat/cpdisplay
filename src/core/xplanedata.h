@@ -10,6 +10,7 @@
 
 
 #include <QByteArray>
+#include <QList>
 #include <QVariant>
 
 enum XPDataIndex {
@@ -78,11 +79,17 @@ enum XPDataType {
    INT = 1
 };
 
+
+// Reverse the byte order
+QByteArray reverse(const QByteArray& ba);
+
+
 // Create an object, then call parseRawData() to fill in the values.
 struct XPData {
    XPDataIndex index;
    XPDataType  type;
-   QVariant    value;
+   // There should be 8 integer or double values
+   QList<QVariant> values;
    
    void parseRawData(QByteArray raw);
 };
