@@ -3,11 +3,13 @@ project(hdd-core)
 set(SOURCES
    hddsettings.cpp
    switchboard.cpp
+   xplanedata.cpp
 )
 
 set(HEADERS
    hddsettings.h
    switchboard.h
+   xplanedata.h
 )
 
 
