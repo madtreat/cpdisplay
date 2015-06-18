@@ -37,22 +37,12 @@ void XPData::parseRawData(QByteArray raw)
    for (int i = 0; i < NUM_VALUES; i++) {
       QByteArray valueRaw = raw.mid(i*4, 4); // grab this set of 4 bytes
       QByteArray valueBytes = valueRaw;
+      float* valueP = (float*) valueRaw.data();
+      float value = (float) *valueP;
+      qDebug() << "      value[" << i << "]:" << value;
 
       type = DOUBLE;
 
-      // If the machine is big endian, reverse the value's bytes to match
-      //if (isBigEndian) {
-         // Switch to big endian
-         valueBytes = reverse(valueRaw);
-      //}
-      // Else use the little-endian ordering
-
-      bool ok = false;
-      QVariant value = valueBytes.toDouble(&ok);
-      if (!ok) {
-         qWarning() << "Warning: Error processing value" << i;
-         continue;
-      }
       values.append(value);
    }
 }

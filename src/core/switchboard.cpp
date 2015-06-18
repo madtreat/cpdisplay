@@ -26,7 +26,8 @@ SwitchBoard::~SwitchBoard()
 void SwitchBoard::initSocket()
 {
    xplane = new QUdpSocket(this);
-   xplane->bind(QHostAddress::LocalHost, settings->xplanePort()); // TODO: make this a config option
+   //xplane->bind(settings->xplaneHost(), settings->xplanePort());
+   xplane->bind(settings->xplanePort(), QUdpSocket::ShareAddress);
    
    connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
 }

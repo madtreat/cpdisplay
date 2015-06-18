@@ -76,7 +76,8 @@ enum XPDataIndex {
 
 enum XPDataType {
    DOUBLE = 0,
-   INT = 1
+   FLOAT,
+   INT
 };
 
 

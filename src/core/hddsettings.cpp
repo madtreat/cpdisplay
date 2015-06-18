@@ -61,6 +61,13 @@ void HDDSettings::loadSettingsFile(QString _filename)
    // Load X-Plane 10 settings
    settings->beginGroup("xplane");
    m_xplanePort = settings->value("xplane_port").toInt();
-   m_xplaneHost = QHostAddress(settings->value("xplane_host").toString());
+   QString host = settings->value("xplane_host").toString();
+   if (host == "localhost") {
+      m_xplaneHost = QHostAddress::LocalHost;
+   }
+   else {
+      m_xplaneHost = QHostAddress(host);
+   }
+   //m_xplaneHost = QHostAddress(settings->value("xplane_host").toString());
    settings->endGroup(); // "xplane"
 }
