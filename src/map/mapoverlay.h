@@ -24,6 +24,7 @@ public:
 
 public slots:
    void setZoom(int level);
+   void panToLocation(float lat, float lon);
 
 protected:
    void paintEvent(QPaintEvent*);

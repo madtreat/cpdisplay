@@ -12,6 +12,7 @@
 #include <QByteArray>
 #include <QList>
 #include <QVariant>
+#include <QDebug>
 
 enum XPDataIndex {
    FRAMERATE = 0,
@@ -93,10 +94,12 @@ struct XPData {
    QList<QVariant> values;
    
    void parseRawData(QByteArray raw);
+//   friend QDebug& operator<<(QDebug& os, const XPData& data);
+   void print();
 };
 
 
-typedef int XP_ALT;
+//typedef int XP_ALT;
 
 #endif	/* XPLANEDATA_H */
 

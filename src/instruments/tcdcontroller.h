@@ -24,8 +24,8 @@ public:
 
 public slots:
    void update()              { tcdWidget->update(); }
-   void setTurnRate(float tr) { tcdWidget->setTurnRate(tr); }
-   void setSlipSkid(float ss) { tcdWidget->setSlipSkid(ss); }
+   void setTurnRate(float tr) { tcdWidget->setTurnRate(tr); update(); }
+   void setSlipSkid(float ss) { tcdWidget->setSlipSkid(ss); update(); }
 
 private:
    WidgetTC* tcdWidget;

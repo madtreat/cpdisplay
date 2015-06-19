@@ -24,7 +24,7 @@ public:
 
 public slots:
    void update()              { hsiWidget->update(); }
-   void setHeading(float h)   { hsiWidget->setHeading(h); }
+   void setHeading(float h)   { hsiWidget->setHeading(h); update(); }
 
 private:
    WidgetHSI* hsiWidget;

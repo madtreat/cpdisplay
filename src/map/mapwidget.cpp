@@ -41,6 +41,12 @@ void MapWidget::setZoom(int level)
    overlay->setZoom(level);
 }
 
+void MapWidget::panToLocation(float lat, float lon)
+{
+   view->panToLocation(lat, lon);
+   overlay->panToLocation(lat, lon);
+}
+
 //void MapWidget::incrementZoom()
 //{
 //   if (settings->zoom() < ZOOM_MAX) {

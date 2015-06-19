@@ -6,6 +6,7 @@ class QHBoxLayout;
 
 class MapController;
 class PFDController;
+class ALTController;
 
 class HDDWindow : public QMainWindow {
    Q_OBJECT
@@ -17,10 +18,14 @@ public:
    void setupToolbar();
 
 public slots:
+   void latLonUpdate(float lat, float lon, int ac=0);
+   void altMSLUpdate(float alt);
+   void altAGLUpdate(float alt);
 
 private:
-   MapController* map;
-   PFDController* pfd;
+   MapController* mapC;
+   PFDController* pfdC;
+   ALTController* altC;
    
    // Main layout for central widget
    QHBoxLayout*   layout;

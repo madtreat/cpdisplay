@@ -17,7 +17,7 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
    sb = new SwitchBoard(settings);
    window = new HDDWindow();
    
-   // connect sb signals to window slots
+   connectSignals();
    
    window->show();
 }
@@ -30,3 +30,14 @@ HDDController::~HDDController()
 {
 }
 
+
+/*
+ * Connects the switchboard to the window.
+ */
+void HDDController::connectSignals()
+{
+   // connect sb signals to window slots
+   connect(sb, SIGNAL(latLonUpdate(float, float, int)), window, SLOT(latLonUpdate(float, float, int)));
+   connect(sb, SIGNAL(altMSLUpdate(float)), window, SLOT(altMSLUpdate(float)));
+   connect(sb, SIGNAL(altAGLUpdate(float)), window, SLOT(altAGLUpdate(float)));
+}

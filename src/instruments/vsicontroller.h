@@ -24,7 +24,7 @@ public:
 
 public slots:
    void update()                 { vsiWidget->update(); }
-   void setClimbRate(float cr)   { vsiWidget->setClimbRate(cr); }
+   void setClimbRate(float cr)   { vsiWidget->setClimbRate(cr); update(); }
 
 private:
    WidgetVSI* vsiWidget;

@@ -23,9 +23,9 @@ public:
    virtual ~ALTController();
 
 public slots:
-   void update()                 { altWidget->update();           }
-   void setAltitude(float alt)   { altWidget->setAltitude(alt);   }
-   void setPressure(float p)     { altWidget->setPressure(p);     }
+   void update()                 { altWidget->update(); }
+   void setAltitude(float alt)   { altWidget->setAltitude(alt);   update(); }
+   void setPressure(float p)     { altWidget->setPressure(p);     update(); }
 
 private:
    WidgetALT* altWidget;

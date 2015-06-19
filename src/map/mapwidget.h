@@ -27,6 +27,7 @@ public:
 
 public slots:
    void setZoom(int level);
+   void panToLocation(float lat, float lon);
    void setOrientation(MapOrientation mo);
 //   void incrementZoom();
 //   void decrementZoom();

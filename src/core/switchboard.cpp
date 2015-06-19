@@ -54,8 +54,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
    
    // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
    int numValues = values.size()/36;
-   qDebug() << "Processing datagram of size:" << data.size() << numValues;
-//   qDebug() << "   Header:" << header.data();
+//   qDebug() << "Processing datagram of size:" << data.size() << numValues;
    
    // Separate each value
    for (int i = 0; i < numValues; i++) {
@@ -63,7 +62,35 @@ void SwitchBoard::processDatagram(QByteArray& data)
       QByteArray valueBytes = values.mid(i*36, 36);
       XPData* data = new XPData();
       data->parseRawData(valueBytes);
-      // do something with data
-      qDebug() << "   Index:" << data->index;
+      
+      notifyAll(data);
    }
+}
+
+/*
+ * Notify everyone of new data.  This parses the data's values and emits signals
+ * that other objects can be connected to.
+ */
+void SwitchBoard::notifyAll(XPData* data)
+{
+   switch (data->index) {
+      case LAT_LON_ALT:
+         emit latLonUpdate(data->values.at(0).toFloat(), data->values.at(1).toFloat(), 0);
+         emit altMSLUpdate(data->values.at(2).toFloat());
+         emit altAGLUpdate(data->values.at(3).toFloat());
+         break;
+         
+      case ALL_LAT:
+         break;
+         
+      case ALL_LON:
+         break;
+         
+      case ALL_ALT:
+         break;
+         
+      default:
+         break;
+   }
+   
 }

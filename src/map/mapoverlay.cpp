@@ -32,6 +32,11 @@ void MapOverlay::setZoom(int level)
    // TODO: set circle radius in proportion to zoom level
 }
 
+void MapOverlay::panToLocation(float lat, float lon)
+{
+   // TODO: change circle position or something
+}
+
 void MapOverlay::paintEvent(QPaintEvent*)
 {
    QPainter p(this);

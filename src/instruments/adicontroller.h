@@ -23,9 +23,9 @@ public:
    virtual ~ADIController();
    
 public slots:
-   void update()           { adiWidget->update();     }
-   void setRoll(float r)   { adiWidget->setRoll(r);   }
-   void setPitch(float p)  { adiWidget->setPitch(p);  }
+   void update()           { adiWidget->update();  }
+   void setRoll(float r)   { adiWidget->setRoll(r);   update(); }
+   void setPitch(float p)  { adiWidget->setPitch(p);  update(); }
    
 private:
    WidgetADI* adiWidget;

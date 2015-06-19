@@ -23,8 +23,8 @@ public:
    virtual ~ASIController();
 
 public slots:
-   void update()              { asiWidget->update();        }
-   void setAirspeed(float as) { asiWidget->setAirspeed(as); }
+   void update()              { asiWidget->update(); }
+   void setAirspeed(float as) { asiWidget->setAirspeed(as); update(); }
 
 private:
    WidgetASI* asiWidget;

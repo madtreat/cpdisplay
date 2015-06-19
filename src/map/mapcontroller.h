@@ -28,6 +28,7 @@ public slots:
    void setZoom(int level);
    void increaseZoom();
    void decreaseZoom();
+   void panToLocation(float lat, float lon, int aircraft);
    void setOrientation(MapOrientation mo);
    
 signals:

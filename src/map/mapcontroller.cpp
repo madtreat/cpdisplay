@@ -65,6 +65,11 @@ void MapController::decreaseZoom()
    setZoom(newLevel);
 }
 
+void MapController::panToLocation(float lat, float lon, int aircraft)
+{
+   mapWidget->panToLocation(lat, lon);
+}
+
 void MapController::setOrientation(MapOrientation mo)
 {
 //   settings->setOrientation(mo);

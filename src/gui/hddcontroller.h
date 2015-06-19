@@ -28,6 +28,8 @@ private:
    HDDSettings*   settings;
    SwitchBoard*   sb;
    HDDWindow*     window;
+   
+   void connectSignals();
 };
 
 #endif	/* HDDCONTROLLER_H */

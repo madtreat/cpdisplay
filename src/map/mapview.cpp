@@ -88,3 +88,9 @@ void MapView::setZoom(int level)
    QString str = QString("map.setZoom(%1);").arg(level);
    webView->page()->currentFrame()->documentElement().evaluateJavaScript(str);
 }
+
+void MapView::panToLocation(float lat, float lon)
+{
+   QString str = QString("map.panTo(new google.maps.LatLng(%1, %2), 500);").arg(lat).arg(lon);
+   webView->page()->currentFrame()->documentElement().evaluateJavaScript(str);
+}

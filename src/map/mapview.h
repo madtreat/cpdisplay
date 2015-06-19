@@ -31,10 +31,12 @@ public slots:
    void startedLoading();
    void loadingProgress(int percent);
    void finishedLoading(bool success);
+   
    void showCoordinates(double lat, double lon, bool saveMarker=true);
    void errorOccurred(const QString& error);
    
    void setZoom(int level);
+   void panToLocation(float lat, float lon);
 
 private:
    MapSettings*         settings;
