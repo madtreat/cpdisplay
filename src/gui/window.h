@@ -11,10 +11,13 @@ class MapView;
 class mapOverlay;
 
 //class MapController;
-class PFDController;
+class ADIController;
 class ALTController;
 class ASIController;
 class HSIController;
+class PFDController;
+class TCDController;
+class VSIController;
 
 class HDDWindow : public QMainWindow {
    Q_OBJECT
@@ -24,10 +27,13 @@ public:
    ~HDDWindow();
 
    MapController* getMapC() const { return mapC; }
-   PFDController* getPFDC() const { return pfdC; }
+   ADIController* getADIC() const { return adiC; }
    ALTController* getALTC() const { return altC; }
    ASIController* getASIC() const { return asiC; }
    HSIController* getHSIC() const { return hsiC; }
+   PFDController* getPFDC() const { return pfdC; }
+   TCDController* getTCDC() const { return tcdC; }
+   VSIController* getVSIC() const { return vsiC; }
    
    MapView*    getMapView() const { return mapC->getMapView(); }
    MapOverlay* getOverlay() const { return mapC->getOverlay(); }
@@ -41,10 +47,13 @@ private:
    HDDSettings* hddSettings;
    
    MapController* mapC;
-   PFDController* pfdC;
+   ADIController* adiC;
    ALTController* altC;
    ASIController* asiC;
    HSIController* hsiC;
+   PFDController* pfdC;
+   TCDController* tcdC;
+   VSIController* vsiC;
    
    // Main layout for central widget
    QHBoxLayout*   layout;

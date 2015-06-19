@@ -11,10 +11,13 @@
 #include "window.h"
 
 #include "mapcontroller.h"
-#include "pfdcontroller.h"
+#include "adicontroller.h"
 #include "altcontroller.h"
 #include "asicontroller.h"
 #include "hsicontroller.h"
+#include "pfdcontroller.h"
+#include "tcdcontroller.h"
+#include "vsicontroller.h"
 
 HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 : QObject(_parent)
@@ -43,17 +46,35 @@ HDDController::~HDDController()
 void HDDController::connectSignals()
 {
    MapController* mapC = window->getMapC();
-   PFDController* pfdC = window->getPFDC();
+   ADIController* adiC = window->getADIC();
    ALTController* altC = window->getALTC();
    ASIController* asiC = window->getASIC();
    HSIController* hsiC = window->getHSIC();
+   PFDController* pfdC = window->getPFDC();
+   TCDController* tcdC = window->getTCDC();
+   VSIController* vsiC = window->getVSIC();
 
    MapView*    mapView = window->getMapView();
    MapOverlay* overlay = window->getOverlay();
 
    // Speeds
-   connect(sb, SIGNAL(speedUpdate(float)), pfdC,    SLOT(setAirspeed(float)));
-   connect(sb, SIGNAL(speedUpdate(float)), asiC,    SLOT(setAirspeed(float)));
+   connect(sb, SIGNAL(speedUpdate(float)), pfdC,      SLOT(setAirspeed(float)));
+   connect(sb, SIGNAL(speedUpdate(float)), asiC,      SLOT(setAirspeed(float)));
+
+   // Mach, Vertical Velocity
+   connect(sb, SIGNAL(machNumUpdate(float)), pfdC,    SLOT(setMachNo(float)));
+   connect(sb, SIGNAL(vertVelUpdate(float)), pfdC,    SLOT(setClimbRate(float)));
+   connect(sb, SIGNAL(vertVelUpdate(float)), vsiC,    SLOT(setClimbRate(float)));
+
+   // AOA, SideSlip
+   connect(sb, SIGNAL(aoaAlphaUpdate(float)), pfdC,   SLOT(setDevH(float)));
+   connect(sb, SIGNAL(aoaBetaUpdate (float)), pfdC,   SLOT(setDevV(float)));
+   
+   //connect(sb, SIGNAL(sideSlipUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
+   //connect(sb, SIGNAL(sideSlipUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
+
+   connect(sb, SIGNAL(sideSlipUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
+   connect(sb, SIGNAL(sideSlipUpdate(float)), tcdC,   SLOT(setSlipSkid(float)));
 
    // Compass/Heading
    connect(sb, SIGNAL(compassUpdate(float)), mapView, SLOT(setHeading(float)));

@@ -6,10 +6,15 @@
 #include <QDebug>
 
 #include "hddsettings.h"
+
 #include "mapcontroller.h"
-#include "pfdcontroller.h"
+#include "adicontroller.h"
 #include "altcontroller.h"
+#include "asicontroller.h"
 #include "hsicontroller.h"
+#include "pfdcontroller.h"
+#include "tcdcontroller.h"
+#include "vsicontroller.h"
 
 
 HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent) 
@@ -17,9 +22,13 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
   hddSettings(_hddSettings)
 {
    mapC = new MapController(hddSettings, this);
-   pfdC = new PFDController(this);
+   adiC = new ADIController(this);
    altC = new ALTController(this);
+   asiC = new ASIController(this);
    hsiC = new HSIController(this);
+   pfdC = new PFDController(this);
+   tcdC = new TCDController(this);
+   vsiC = new VSIController(this);
    
    layout = new QHBoxLayout();
    

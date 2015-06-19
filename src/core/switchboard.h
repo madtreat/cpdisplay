@@ -24,6 +24,16 @@ public slots:
    
 signals:
    void speedUpdate(float speed);
+   
+   void machNumUpdate(float mach);
+   void vertVelUpdate(float vertvel);
+
+   void aoaAlphaUpdate(float aoaA);
+   void aoaBetaUpdate(float aoaB);
+   void hPathUpdate(float hpath);
+   void vPathUpdate(float vpath);
+   void sideSlipUpdate(float ss);
+
    void compassUpdate(float heading);
    void latLonUpdate(float lat, float lon, int aircraft); // in GPS coords/deg
    void altMSLUpdate(float alt); // in feet

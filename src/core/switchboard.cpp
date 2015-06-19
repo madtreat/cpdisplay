@@ -78,6 +78,19 @@ void SwitchBoard::notifyAll(XPData* data)
          emit speedUpdate(data->values.at(0).toFloat());
          break;
 
+      case MACH_VVI_GLOAD:
+         emit machNumUpdate(data->values.at(0).toFloat());
+         emit vertVelUpdate(data->values.at(2).toFloat());
+         break;
+
+      case AOA_SIDESLIP_PATHS:
+         emit aoaAlphaUpdate(data->values.at(0).toFloat());
+         emit aoaBetaUpdate(data->values.at(1).toFloat());
+         emit hPathUpdate(data->values.at(2).toFloat());
+         emit vPathUpdate(data->values.at(3).toFloat());
+         emit sideSlipUpdate(data->values.at(7).toFloat());
+         break;
+
       case MAG_COMPASS:
          emit compassUpdate(data->values.at(0).toFloat());
          break;
