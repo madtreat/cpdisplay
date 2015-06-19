@@ -30,6 +30,8 @@ signals:
 
    void pressureUpdate(float pressure);
 
+   void angVelUpdate(float q, float p, float r);
+
    void pitchUpdate(float pitch);
    void rollUpdate(float roll);
    void headingTrueUpdate(float heading);

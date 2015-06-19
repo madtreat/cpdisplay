@@ -87,6 +87,12 @@ void SwitchBoard::notifyAll(XPData* data)
          emit pressureUpdate(data->values.at(0).toFloat());
          break;
 
+      case ANG_VEL:
+         emit angVelUpdate(data->values.at(0).toFloat(),
+                           data->values.at(1).toFloat(),
+                           data->values.at(2).toFloat());
+         break;
+
       case PITCH_ROLL_HEADINGS:
          emit pitchUpdate(data->values.at(0).toFloat());
          emit rollUpdate(data->values.at(1).toFloat());

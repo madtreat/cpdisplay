@@ -6,6 +6,9 @@
  */
 
 #include "hddcontroller.h"
+
+#include <math.h>
+
 #include "hddsettings.h"
 #include "switchboard.h"
 #include "window.h"
@@ -25,6 +28,10 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
    settings = _settings;
    sb = new SwitchBoard(settings);
    window = new HDDWindow(settings);
+
+   angVelUpdatedFlag = false;
+   pitchUpdatedFlag = false;
+   rollUpdatedFlag = false;
    
    connectSignals();
    
@@ -57,6 +64,10 @@ void HDDController::connectSignals()
    MapView*    mapView = window->getMapView();
    MapOverlay* overlay = window->getOverlay();
 
+   // Self-calculated turn rate
+   connect(this, SIGNAL(turnRateUpdate(float)), pfdC, SLOT(setTurnRate(float)));
+   connect(this, SIGNAL(turnRateUpdate(float)), tcdC, SLOT(setTurnRate(float)));
+
    // Speeds
    connect(sb, SIGNAL(speedUpdate(float)),   asiC,    SLOT(setAirspeed(float)));
    connect(sb, SIGNAL(speedUpdate(float)),   pfdC,    SLOT(setAirspeed(float)));
@@ -71,10 +82,15 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(pressureUpdate(float)), altC,   SLOT(setPressure(float)));
    connect(sb, SIGNAL(pressureUpdate(float)), pfdC,   SLOT(setPressure(float)));
 
+   // Angular Velocities (Q, P, R)
+   connect(sb, SIGNAL(angVelUpdate(float, float, float)), this, SLOT(updateAngVel(float, float, float)));
+
    // Pitch, Roll, Heading
+   connect(sb, SIGNAL(pitchUpdate(float)),   this,    SLOT(updatePitch(float)));
    connect(sb, SIGNAL(pitchUpdate(float)),   adiC,    SLOT(setPitch(float)));
    connect(sb, SIGNAL(pitchUpdate(float)),   pfdC,    SLOT(setPitch(float)));
 
+   connect(sb, SIGNAL(rollUpdate(float)),    this,    SLOT(updateRoll(float)));
    connect(sb, SIGNAL(rollUpdate(float)),    adiC,    SLOT(setRoll(float)));
    connect(sb, SIGNAL(rollUpdate(float)),    pfdC,    SLOT(setRoll(float)));
 
@@ -111,3 +127,50 @@ void HDDController::connectSignals()
    //connect(sb, SIGNAL(altAGLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
    //connect(sb, SIGNAL(altAGLUpdate(float)), altC,     SLOT(setAltitude(float)));
 }
+
+float HDDController::calculateTurnRate(float q, float r, float pitch, float roll)
+{
+   // Calculate Turn Rate in rad/s
+   float turnRateRPS = ( 1/cos(deg2rad(pitch)) ) * ( sin(deg2rad(roll)) * q + cos(deg2rad(roll)) * r );
+   float turnRateDPS = turnRateRPS * 180/PI;
+   return turnRateDPS;
+}
+
+void HDDController::updateAngVel(float q, float p, float r)
+{
+   angVelQ = q;
+   angVelP = p;
+   angVelR = r;
+   angVelUpdatedFlag = true;
+   tryCalculateTurnRate();
+}
+
+void HDDController::updatePitch(float p)
+{
+   pitch = p;
+   pitchUpdatedFlag = true;
+   tryCalculateTurnRate();
+}
+
+void HDDController::updateRoll(float r)
+{
+   roll = r;
+   rollUpdatedFlag = true;
+   tryCalculateTurnRate();
+}
+
+/*
+ * Attempts to update the turn rate, but only works if all 3 flags are true.
+ */
+void HDDController::tryCalculateTurnRate()
+{
+   if (angVelUpdatedFlag && pitchUpdatedFlag && rollUpdatedFlag) {
+      float turnRate = calculateTurnRate(angVelQ, angVelR, pitch, roll);
+      emit turnRateUpdate(turnRate);
+      // Reset the flags
+      angVelUpdatedFlag = false;
+      pitchUpdatedFlag = false;
+      rollUpdatedFlag = false;
+   }
+}
+
