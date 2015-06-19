@@ -4,7 +4,7 @@
 
 class QToolBar;
 class QPushButton;
-class QHBoxLayout;
+class QGridLayout;
 
 class HDDSettings;
 class MapView;
@@ -39,6 +39,7 @@ public:
    MapOverlay* getOverlay() const { return mapC->getOverlay(); }
 
 public slots:
+   void pfdButtonClicked(bool checked);
    void orientationButtonClicked(bool checked);
    
    void latLonUpdate(float lat, float lon, int ac=0);
@@ -56,7 +57,7 @@ private:
    VSIController* vsiC;
    
    // Main layout for central widget
-   QHBoxLayout*   layout;
+   QGridLayout*   layout;
    QWidget*       centralWidget;
    
    // The toolbar and buttons

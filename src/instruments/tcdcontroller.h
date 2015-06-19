@@ -22,6 +22,8 @@ public:
    TCDController(const TCDController& orig);
    virtual ~TCDController();
 
+   WidgetTC* getWidget() const { return tcdWidget; }
+   
 public slots:
    void update()              { tcdWidget->update(); }
    void setTurnRate(float tr) { tcdWidget->setTurnRate(tr); update(); }

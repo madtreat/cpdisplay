@@ -36,7 +36,7 @@ MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _pa
    if (settings->canEnableMaps()) {
       enabled = true;
    }
-   setMinimumSize(QSize(640, 640));
+   //setMinimumSize(QSize(320, 320));
 }
 
 //MapView::MapView(const MapView& orig)

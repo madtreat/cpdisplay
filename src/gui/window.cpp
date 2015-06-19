@@ -2,7 +2,7 @@
 
 #include <QToolBar>
 #include <QPushButton>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QDebug>
 
 #include "hddsettings.h"
@@ -30,17 +30,17 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    tcdC = new TCDController(this);
    vsiC = new VSIController(this);
    
-   layout = new QHBoxLayout();
+   layout = new QGridLayout();
    
    centralWidget = new QWidget();
    centralWidget->setLayout(layout);
-   layout->addWidget((QWidget*) pfdC->getWidget());
-   layout->addWidget((QWidget*) mapC->getWidget());
+   layout->addWidget((QWidget*) pfdC->getWidget(), 0, 0, 3, 3);
+   layout->addWidget((QWidget*) mapC->getWidget(), 0, 3, 3, 3);
    setCentralWidget(centralWidget);
    
    setupToolbar();
    
-   setMinimumSize(QSize(1280, 620));
+   setMinimumSize(QSize(800, 400));
 //   showWindow();
 }
 
@@ -53,8 +53,11 @@ void HDDWindow::setupToolbar()
    toolbar->setOrientation(Qt::Vertical);
    
    pfdButton = new QPushButton("PFD");
-   pfdButton->setEnabled(false);
+   pfdButton->setEnabled(true);
    pfdButton->setMinimumHeight(80);
+   pfdButton->setCheckable(true);
+   pfdButton->setChecked(true);
+   connect(pfdButton, SIGNAL(toggled(bool)), this, SLOT(pfdButtonClicked(bool)));
    toolbar->addWidget(pfdButton);
    
    weatherButton = new QPushButton("WX");
@@ -102,6 +105,55 @@ void HDDWindow::setupToolbar()
    toolbar->addWidget(zoomOutButton);
    
    this->addToolBar(Qt::RightToolBarArea, toolbar);
+}
+
+void HDDWindow::pfdButtonClicked(bool checked)
+{
+   QWidget* mapW = (QWidget*) mapC->getWidget();
+   QWidget* adiW = (QWidget*) adiC->getWidget();
+   QWidget* altW = (QWidget*) altC->getWidget();
+   QWidget* asiW = (QWidget*) asiC->getWidget();
+   QWidget* hsiW = (QWidget*) hsiC->getWidget();
+   QWidget* pfdW = (QWidget*) pfdC->getWidget();
+   QWidget* tcdW = (QWidget*) tcdC->getWidget();
+   QWidget* vsiW = (QWidget*) vsiC->getWidget();
+   
+   // Display PFD if checked
+   if (checked) {
+      layout->removeWidget(adiW);
+      layout->removeWidget(altW);
+      layout->removeWidget(asiW);
+      layout->removeWidget(hsiW);
+      layout->removeWidget(tcdW);
+      layout->removeWidget(vsiW);
+      adiW->hide();
+      altW->hide();
+      asiW->hide();
+      hsiW->hide();
+      tcdW->hide();
+      vsiW->hide();
+
+      layout->addWidget(pfdW, 0, 0, 3, 3);
+      pfdW->show();
+   }
+   // Disply other instruments if unchecked
+   else {
+      layout->removeWidget(pfdW);
+      pfdW->hide();
+      
+      layout->addWidget(asiW, 0, 0);
+      layout->addWidget(adiW, 0, 1);
+      layout->addWidget(altW, 0, 2);
+      layout->addWidget(tcdW, 1, 0);
+      layout->addWidget(hsiW, 1, 1);
+      layout->addWidget(vsiW, 1, 2);
+      adiW->show();
+      altW->show();
+      asiW->show();
+      hsiW->show();
+      tcdW->show();
+      vsiW->show();
+   }
 }
 
 void HDDWindow::orientationButtonClicked(bool checked)

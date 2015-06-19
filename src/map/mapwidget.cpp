@@ -25,6 +25,8 @@ MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidg
    
    overlay = new MapOverlay(hddSettings, mapSettings, view);
    overlay->setGeometry(view->geometry());
+   
+   setMinimumSize(QSize(320, 320));
 }
 
 //MapWidget::MapWidget(const MapWidget& orig)

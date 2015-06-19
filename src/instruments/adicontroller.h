@@ -21,6 +21,8 @@ public:
    ADIController(QObject* _parent=0);
    ADIController(const ADIController& orig);
    virtual ~ADIController();
+
+   WidgetADI* getWidget() const { return adiWidget; }
    
 public slots:
    void update()           { adiWidget->update();  }

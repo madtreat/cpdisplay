@@ -22,14 +22,6 @@ MapController::MapController(HDDSettings* _hddSettings, QObject* _parent)
    mapWidget = new MapWidget(hddSettings, settings);
    
    qDebug() << "Can enable maps?" << settings->canEnableMaps();
-
-//   connect(settings, SIGNAL(zoomChanged(int)),  mapWidget, SLOT(updateZoomLevel(int)));
-//   connect(this, SIGNAL(incrementZoom()),       mapWidget, SLOT(incrementZoom()));
-//   connect(this, SIGNAL(decrementZoom()),       mapWidget, SLOT(decrementZoom()));
-   
-//   connect(this, SIGNAL(updateOrientation(MapOrientation)), mapWidget, SLOT(updateOrientation(MapOrientation)));
-   
-//   emit updateOrientation(orientation);
 }
 
 //MapController::MapController(const MapController& orig)

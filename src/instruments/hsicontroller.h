@@ -22,6 +22,8 @@ public:
    HSIController(const HSIController& orig);
    virtual ~HSIController();
 
+   WidgetHSI* getWidget() const { return hsiWidget; }
+   
 public slots:
    void update()              { hsiWidget->update(); }
    void setHeading(float h)   { hsiWidget->setHeading(h); update(); }

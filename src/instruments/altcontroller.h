@@ -22,6 +22,8 @@ public:
    ALTController(const ALTController& orig);
    virtual ~ALTController();
 
+   WidgetALT* getWidget() const { return altWidget; }
+   
 public slots:
    void update()                 { altWidget->update(); }
    void setAltitude(float alt)   { altWidget->setAltitude(alt);   update(); }
