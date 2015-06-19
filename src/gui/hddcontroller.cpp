@@ -84,14 +84,10 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(headingMagUpdate(float)), pfdC,    SLOT(setHeading(float)));
 
    // AOA, SideSlip
-   connect(sb, SIGNAL(aoaAlphaUpdate(float)), pfdC,   SLOT(setDevH(float)));
-   connect(sb, SIGNAL(aoaBetaUpdate (float)), pfdC,   SLOT(setDevV(float)));
+   connect(sb, SIGNAL(aoaSideSlipUpdate(float, float)), pfdC, SLOT(setFlightPathMarker(float, float)));
    
-   //connect(sb, SIGNAL(sideSlipUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
-   //connect(sb, SIGNAL(sideSlipUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
-
-   connect(sb, SIGNAL(sideSlipUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
-   connect(sb, SIGNAL(sideSlipUpdate(float)), tcdC,   SLOT(setSlipSkid(float)));
+   connect(sb, SIGNAL(slipSkidUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
+   connect(sb, SIGNAL(slipSkidUpdate(float)), tcdC,   SLOT(setSlipSkid(float)));
 
    // Compass != Heading
    /*

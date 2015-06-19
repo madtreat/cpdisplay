@@ -35,11 +35,10 @@ signals:
    void headingTrueUpdate(float heading);
    void headingMagUpdate(float heading);
 
-   void aoaAlphaUpdate(float aoaA);
-   void aoaBetaUpdate(float aoaB);
+   void aoaSideSlipUpdate(float aoa, float sideslip);
    void hPathUpdate(float hpath);
    void vPathUpdate(float vpath);
-   void sideSlipUpdate(float ss);
+   void slipSkidUpdate(float ss);
 
    void compassUpdate(float heading);
    void latLonUpdate(float lat, float lon, int aircraft); // in GPS coords/deg
