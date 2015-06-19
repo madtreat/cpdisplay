@@ -12,6 +12,8 @@
 #include <QString>
 #include <QHostAddress>
 
+#include "mapconsts.h"
+
 class QSettings;
 
 class HDDSettings : public QObject {
@@ -29,6 +31,9 @@ public:
    
    int            xplanePort() const { return m_xplanePort; }
    QHostAddress   xplaneHost() const { return m_xplaneHost; }
+   
+   MapOrientation mapOrientation() const { return m_mapOrientation; }
+   void        setMapOrientation(MapOrientation mo) { m_mapOrientation = mo; }
 
 public slots:
    void loadSettingsFile(QString _filename);
@@ -41,8 +46,13 @@ private:
    QString     m_settingsFile;
    
    // settings values for the HDD app
+   
+   // "xplane" group
    int            m_xplanePort;
    QHostAddress   m_xplaneHost;
+   
+   // "map" group
+   MapOrientation m_mapOrientation;
 };
 
 #endif	/* HDDSETTINGS_H */

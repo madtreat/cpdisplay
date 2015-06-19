@@ -13,8 +13,10 @@
 #include <QWidget>
 #include "mapconsts.h"
 
+class QPaintEvent;
 class QWebView;
 
+class HDDSettings;
 class MapSettings;
 class GeocodeDataManager;
 
@@ -23,7 +25,7 @@ class MapView : public QWidget {
    Q_OBJECT;
 
 public:
-   MapView(MapSettings* _settings, QWidget* _parent = 0);
+   MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent = 0);
    MapView(const MapView& orig) = delete;
    virtual ~MapView();
 
@@ -37,14 +39,20 @@ public slots:
    
    void setZoom(int level);
    void panToLocation(float lat, float lon);
+   void setHeading(float _heading) {heading = _heading;}
 
+protected:
+   void paintEvent(QPaintEvent*);
+   
 private:
+   HDDSettings*         hddSettings;
    MapSettings*         settings;
    bool                 enabled; // are the maps enabled?
    
    QWebView*            webView;
    GeocodeDataManager*  geocode;
    
+   int heading; // current heading value in degrees
 };
 
 #endif	/* MAPVIEW_ */

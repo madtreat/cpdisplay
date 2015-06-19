@@ -5,17 +5,21 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
+#include "hddsettings.h"
 #include "mapcontroller.h"
 #include "pfdcontroller.h"
 #include "altcontroller.h"
+#include "hsicontroller.h"
 
 
-HDDWindow::HDDWindow(QObject* _parent) 
-: QMainWindow()
+HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent) 
+: QMainWindow(),
+  hddSettings(_hddSettings)
 {
-   mapC = new MapController(this);
+   mapC = new MapController(hddSettings, this);
    pfdC = new PFDController(this);
    altC = new ALTController(this);
+   hsiC = new HSIController(this);
    
    layout = new QHBoxLayout();
    
@@ -59,9 +63,15 @@ void HDDWindow::setupToolbar()
    terrainButton->setMinimumHeight(80);
    toolbar->addWidget(terrainButton);
    
-   orientationButton = new QPushButton("Track Up");
+   orientationButton = new QPushButton("North Up");
    orientationButton->setEnabled(true);
    orientationButton->setMinimumHeight(80);
+   orientationButton->setCheckable(true);
+   orientationButton->setChecked(true);
+   if (hddSettings->mapOrientation() == TRACK_UP) {
+      orientationButton->setChecked(false);
+   }
+   connect(orientationButton, SIGNAL(toggled(bool)), this, SLOT(orientationButtonClicked(bool)));
    toolbar->addWidget(orientationButton);
    
    zoomInButton = new QPushButton("Zoom In");
@@ -83,6 +93,18 @@ void HDDWindow::setupToolbar()
    toolbar->addWidget(zoomOutButton);
    
    this->addToolBar(Qt::RightToolBarArea, toolbar);
+}
+
+void HDDWindow::orientationButtonClicked(bool checked)
+{
+   mapC->setOrientation(checked ? NORTH_UP : TRACK_UP);
+}
+
+void HDDWindow::compassUpdate(float heading)
+{
+   mapC->setHeading(heading);
+   pfdC->setHeading(heading);
+   hsiC->setHeading(heading);
 }
 
 void HDDWindow::latLonUpdate(float lat, float lon, int ac)

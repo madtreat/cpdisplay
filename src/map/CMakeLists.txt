@@ -15,10 +15,17 @@ set(HEADERS
    mapoverlay.h
 )
 
+set(RESOURCES
+   ../images/resources.qrc
+)
+qt5_add_resources(QRC ${RESOURCES})
+set_source_files_properties(${QRC} PROPERTIES GENERATED ON)
+
 
 add_library(${PROJECT_NAME} SHARED
    ${SOURCES}
    ${MOC_SRC}
+   ${QRC}
 )
 
 target_link_libraries(${PROJECT_NAME}

@@ -15,7 +15,7 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 {
    settings = _settings;
    sb = new SwitchBoard(settings);
-   window = new HDDWindow();
+   window = new HDDWindow(settings);
    
    connectSignals();
    
@@ -37,6 +37,7 @@ HDDController::~HDDController()
 void HDDController::connectSignals()
 {
    // connect sb signals to window slots
+   connect(sb, SIGNAL(compassUpdate(float)), window, SLOT(compassUpdate(float)));
    connect(sb, SIGNAL(latLonUpdate(float, float, int)), window, SLOT(latLonUpdate(float, float, int)));
    connect(sb, SIGNAL(altMSLUpdate(float)), window, SLOT(altMSLUpdate(float)));
    connect(sb, SIGNAL(altAGLUpdate(float)), window, SLOT(altAGLUpdate(float)));

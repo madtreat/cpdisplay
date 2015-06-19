@@ -10,13 +10,18 @@
 #include <QPainter>
 
 #include "mapsettings.h"
+#include "hddsettings.h"
 
-MapOverlay::MapOverlay(MapSettings* _settings, QWidget* _parent)
+MapOverlay::MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent)
 : QWidget(_parent),
-  settings(_settings)
+  hddSettings(_hddSettings),
+  mapSettings(_mapSettings),
+  heading(0)
 {
    setAttribute(Qt::WA_NoSystemBackground);
    setAttribute(Qt::WA_TransparentForMouseEvents);
+   
+   aircraftIcon = QImage(":/ac/icons/airplane.png").scaled(32, 32);
 }
 
 //MapOverlay::MapOverlay(const MapOverlay& orig)
@@ -40,5 +45,22 @@ void MapOverlay::panToLocation(float lat, float lon)
 void MapOverlay::paintEvent(QPaintEvent*)
 {
    QPainter p(this);
-//   p.fillRect(rect(), QColor(80, 80, 255, 128));
+   int centerX = width()/2;
+   int centerY = height()/2;
+   
+   // Draw the center airplane icon, using the current orientation setting
+   if (hddSettings->mapOrientation() == NORTH_UP) {
+      p.translate(centerX, centerY);
+      p.rotate(heading);
+      int x = 0/*centerX*/ - (aircraftIcon.width()/2);
+      int y = 0/*centerY*/ - (aircraftIcon.height()/2);
+      p.drawImage(QPoint(x,y), aircraftIcon);
+      p.resetTransform();
+   }
+   else {
+      // Draw the plane facing up
+      int x = centerX - (aircraftIcon.width()/2);
+      int y = centerY - (aircraftIcon.height()/2);
+      p.drawImage(QPoint(x,y), aircraftIcon);
+   }
 }

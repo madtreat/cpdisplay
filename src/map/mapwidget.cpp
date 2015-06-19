@@ -12,16 +12,18 @@
 #include "mapsettings.h"
 #include "mapview.h"
 #include "mapoverlay.h"
+#include "hddsettings.h"
 
-MapWidget::MapWidget(MapSettings* _settings, QWidget* _parent)
+MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent)
 : QWidget(_parent),
-  settings(_settings)
+  hddSettings(_hddSettings),
+  mapSettings(_mapSettings)
 {
    QGridLayout* layout = new QGridLayout(this);
-   view = new MapView(settings);
+   view = new MapView(hddSettings, mapSettings);
    layout->addWidget(view);
    
-   overlay = new MapOverlay(settings, view);
+   overlay = new MapOverlay(hddSettings, mapSettings, view);
    overlay->setGeometry(view->geometry());
 }
 
@@ -47,23 +49,16 @@ void MapWidget::panToLocation(float lat, float lon)
    overlay->panToLocation(lat, lon);
 }
 
-//void MapWidget::incrementZoom()
-//{
-//   if (settings->zoom() < ZOOM_MAX) {
-//      currentZoom++;
-//      updateZoomLevel(currentZoom);
-//   }
-//}
-//
-//void MapWidget::decrementZoom()
-//{
-//   if (settings->zoom() > ZOOM_MIN) {
-//      currentZoom--;
-//      updateZoomLevel(currentZoom);
-//   }
-//}
-
 void MapWidget::setOrientation(MapOrientation mo)
 {
-   // TODO: figure out how to change this
+   // The MapController::setOrientation() function directly updates the settings,
+   // which the overlay uses.  But the MapView class still needs to change the
+   // way it follows the aircraft.
+   
+}
+
+void MapWidget::setHeading(float heading)
+{
+   view->setHeading(heading);
+   overlay->setHeading(heading);
 }

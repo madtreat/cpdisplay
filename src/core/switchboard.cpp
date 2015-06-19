@@ -74,6 +74,10 @@ void SwitchBoard::processDatagram(QByteArray& data)
 void SwitchBoard::notifyAll(XPData* data)
 {
    switch (data->index) {
+      case MAG_COMPASS:
+         emit compassUpdate(data->values.at(0).toFloat());
+         break;
+         
       case LAT_LON_ALT:
          emit latLonUpdate(data->values.at(0).toFloat(), data->values.at(1).toFloat(), 0);
          emit altMSLUpdate(data->values.at(2).toFloat());

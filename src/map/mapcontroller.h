@@ -11,6 +11,7 @@
 #include <QObject>
 #include "mapconsts.h"
 
+class HDDSettings;
 class MapSettings;
 class MapWidget;
 
@@ -18,7 +19,7 @@ class MapController : public QObject {
    Q_OBJECT;
 
 public:
-   MapController(QObject* _parent = 0);
+   MapController(HDDSettings* _hddSettings, QObject* _parent = 0);
    MapController(const MapController& orig) = delete;
    virtual ~MapController();
    
@@ -30,6 +31,7 @@ public slots:
    void decreaseZoom();
    void panToLocation(float lat, float lon, int aircraft);
    void setOrientation(MapOrientation mo);
+   void setHeading(float heading);
    
 signals:
    /*
@@ -44,6 +46,7 @@ signals:
    void zoomEither(bool enable);
 
 private:
+   HDDSettings* hddSettings;
    MapSettings* settings;
    MapWidget* mapWidget;
    

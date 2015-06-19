@@ -12,11 +12,14 @@
 #include <QMessageBox>
 
 #include "geocode_data_manager.h"
+
+#include "hddsettings.h"
 #include "mapsettings.h"
 
 
-MapView::MapView(MapSettings* _settings, QWidget* _parent)
+MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent)
 : QWidget(_parent),
+  hddSettings(_hddSettings),
   settings(_settings)
 {
    geocode = new GeocodeDataManager(settings->apiKey(), this);
@@ -42,6 +45,19 @@ MapView::MapView(MapSettings* _settings, QWidget* _parent)
 
 MapView::~MapView()
 {
+}
+
+
+void MapView::paintEvent(QPaintEvent*)
+{
+   QPainter p(this);
+   int centerX = width()/2;
+   int centerY = height()/2;
+   
+   if (hddSettings->mapOrientation() == TRACK_UP) {
+      p.translate(centerX, centerY);
+      p.rotate(heading);
+   }
 }
 
 

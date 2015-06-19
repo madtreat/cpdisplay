@@ -9,15 +9,17 @@
 
 #include <QDebug>
 
+#include "hddsettings.h"
 #include "mapsettings.h"
 #include "mapwidget.h"
 
-MapController::MapController(QObject* _parent)
-: QObject(_parent)
+MapController::MapController(HDDSettings* _hddSettings, QObject* _parent)
+: QObject(_parent),
+  hddSettings(_hddSettings)
 {
    orientation = TRACK_UP;
    settings = new MapSettings(QString(), this);
-   mapWidget = new MapWidget(settings);
+   mapWidget = new MapWidget(hddSettings, settings);
    
    qDebug() << "Can enable maps?" << settings->canEnableMaps();
 
@@ -72,6 +74,11 @@ void MapController::panToLocation(float lat, float lon, int aircraft)
 
 void MapController::setOrientation(MapOrientation mo)
 {
-//   settings->setOrientation(mo);
+   hddSettings->setMapOrientation(mo);
    mapWidget->setOrientation(mo);
+}
+
+void MapController::setHeading(float heading)
+{
+   mapWidget->setHeading(heading);
 }

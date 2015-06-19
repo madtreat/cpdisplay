@@ -16,12 +16,14 @@ class MapSettings;
 class MapView;
 class MapOverlay;
 
+class HDDSettings;
+
 
 class MapWidget : public QWidget {
    Q_OBJECT;
 
 public:
-   MapWidget(MapSettings* _settings, QWidget* _parent = 0);
+   MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent = 0);
    MapWidget(const MapWidget& orig) = delete;
    virtual ~MapWidget();
 
@@ -29,12 +31,12 @@ public slots:
    void setZoom(int level);
    void panToLocation(float lat, float lon);
    void setOrientation(MapOrientation mo);
-//   void incrementZoom();
-//   void decrementZoom();
+   void setHeading(float heading);
    
 
 private:
-   MapSettings* settings;
+   HDDSettings* hddSettings;
+   MapSettings* mapSettings;
    MapView* view;
    MapOverlay* overlay;
 
