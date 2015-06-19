@@ -28,6 +28,11 @@ signals:
    void machNumUpdate(float mach);
    void vertVelUpdate(float vertvel);
 
+   void pitchUpdate(float pitch);
+   void rollUpdate(float roll);
+   void headingTrueUpdate(float heading);
+   void headingMagUpdate(float heading);
+
    void aoaAlphaUpdate(float aoaA);
    void aoaBetaUpdate(float aoaB);
    void hPathUpdate(float hpath);

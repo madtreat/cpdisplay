@@ -58,13 +58,26 @@ void HDDController::connectSignals()
    MapOverlay* overlay = window->getOverlay();
 
    // Speeds
-   connect(sb, SIGNAL(speedUpdate(float)), pfdC,      SLOT(setAirspeed(float)));
-   connect(sb, SIGNAL(speedUpdate(float)), asiC,      SLOT(setAirspeed(float)));
+   connect(sb, SIGNAL(speedUpdate(float)),   asiC,    SLOT(setAirspeed(float)));
+   connect(sb, SIGNAL(speedUpdate(float)),   pfdC,    SLOT(setAirspeed(float)));
 
    // Mach, Vertical Velocity
    connect(sb, SIGNAL(machNumUpdate(float)), pfdC,    SLOT(setMachNo(float)));
+
    connect(sb, SIGNAL(vertVelUpdate(float)), pfdC,    SLOT(setClimbRate(float)));
    connect(sb, SIGNAL(vertVelUpdate(float)), vsiC,    SLOT(setClimbRate(float)));
+
+   // Pitch, Roll, Heading
+   connect(sb, SIGNAL(pitchUpdate(float)),   adiC,    SLOT(setPitch(float)));
+   connect(sb, SIGNAL(pitchUpdate(float)),   pfdC,    SLOT(setPitch(float)));
+
+   connect(sb, SIGNAL(rollUpdate(float)),    adiC,    SLOT(setRoll(float)));
+   connect(sb, SIGNAL(rollUpdate(float)),    pfdC,    SLOT(setRoll(float)));
+
+   connect(sb, SIGNAL(headingMagUpdate(float)), mapView, SLOT(setHeading(float)));
+   connect(sb, SIGNAL(headingMagUpdate(float)), overlay, SLOT(setHeading(float)));
+   connect(sb, SIGNAL(headingMagUpdate(float)), hsiC,    SLOT(setHeading(float)));
+   connect(sb, SIGNAL(headingMagUpdate(float)), pfdC,    SLOT(setHeading(float)));
 
    // AOA, SideSlip
    connect(sb, SIGNAL(aoaAlphaUpdate(float)), pfdC,   SLOT(setDevH(float)));
@@ -76,11 +89,13 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(sideSlipUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
    connect(sb, SIGNAL(sideSlipUpdate(float)), tcdC,   SLOT(setSlipSkid(float)));
 
-   // Compass/Heading
+   // Compass != Heading
+   /*
    connect(sb, SIGNAL(compassUpdate(float)), mapView, SLOT(setHeading(float)));
    connect(sb, SIGNAL(compassUpdate(float)), overlay, SLOT(setHeading(float)));
    connect(sb, SIGNAL(compassUpdate(float)), pfdC,    SLOT(setHeading(float)));
    connect(sb, SIGNAL(compassUpdate(float)), hsiC,    SLOT(setHeading(float)));
+   // */
 
    // Positions (this AC and others)
    connect(sb, SIGNAL(latLonUpdate(float, float, int)), window, SLOT(latLonUpdate(float, float, int)));

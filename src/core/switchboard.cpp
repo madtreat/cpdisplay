@@ -83,6 +83,13 @@ void SwitchBoard::notifyAll(XPData* data)
          emit vertVelUpdate(data->values.at(2).toFloat());
          break;
 
+      case PITCH_ROLL_HEADINGS:
+         emit pitchUpdate(data->values.at(0).toFloat());
+         emit rollUpdate(data->values.at(1).toFloat());
+         emit headingTrueUpdate(data->values.at(2).toFloat());
+         emit headingMagUpdate(data->values.at(3).toFloat());
+         break;
+
       case AOA_SIDESLIP_PATHS:
          emit aoaAlphaUpdate(data->values.at(0).toFloat());
          emit aoaBetaUpdate(data->values.at(1).toFloat());
