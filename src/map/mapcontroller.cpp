@@ -78,7 +78,3 @@ void MapController::setOrientation(MapOrientation mo)
    mapWidget->setOrientation(mo);
 }
 
-void MapController::setHeading(float heading)
-{
-   mapWidget->setHeading(heading);
-}

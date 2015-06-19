@@ -57,8 +57,3 @@ void MapWidget::setOrientation(MapOrientation mo)
    
 }
 
-void MapWidget::setHeading(float heading)
-{
-   view->setHeading(heading);
-   overlay->setHeading(heading);
-}

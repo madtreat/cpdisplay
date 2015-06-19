@@ -74,6 +74,10 @@ void SwitchBoard::processDatagram(QByteArray& data)
 void SwitchBoard::notifyAll(XPData* data)
 {
    switch (data->index) {
+      case SPEEDS:
+         emit speedUpdate(data->values.at(0).toFloat());
+         break;
+
       case MAG_COMPASS:
          emit compassUpdate(data->values.at(0).toFloat());
          break;

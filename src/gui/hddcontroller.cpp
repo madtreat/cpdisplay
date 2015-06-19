@@ -10,6 +10,12 @@
 #include "switchboard.h"
 #include "window.h"
 
+#include "mapcontroller.h"
+#include "pfdcontroller.h"
+#include "altcontroller.h"
+#include "asicontroller.h"
+#include "hsicontroller.h"
+
 HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 : QObject(_parent)
 {
@@ -32,13 +38,36 @@ HDDController::~HDDController()
 
 
 /*
- * Connects the switchboard to the window.
+ * Connects the switchboard directly to the widgets.
  */
 void HDDController::connectSignals()
 {
-   // connect sb signals to window slots
-   connect(sb, SIGNAL(compassUpdate(float)), window, SLOT(compassUpdate(float)));
+   MapController* mapC = window->getMapC();
+   PFDController* pfdC = window->getPFDC();
+   ALTController* altC = window->getALTC();
+   ASIController* asiC = window->getASIC();
+   HSIController* hsiC = window->getHSIC();
+
+   MapView*    mapView = window->getMapView();
+   MapOverlay* overlay = window->getOverlay();
+
+   // Speeds
+   connect(sb, SIGNAL(speedUpdate(float)), pfdC,    SLOT(setAirspeed(float)));
+   connect(sb, SIGNAL(speedUpdate(float)), asiC,    SLOT(setAirspeed(float)));
+
+   // Compass/Heading
+   connect(sb, SIGNAL(compassUpdate(float)), mapView, SLOT(setHeading(float)));
+   connect(sb, SIGNAL(compassUpdate(float)), overlay, SLOT(setHeading(float)));
+   connect(sb, SIGNAL(compassUpdate(float)), pfdC,    SLOT(setHeading(float)));
+   connect(sb, SIGNAL(compassUpdate(float)), hsiC,    SLOT(setHeading(float)));
+
+   // Positions (this AC and others)
    connect(sb, SIGNAL(latLonUpdate(float, float, int)), window, SLOT(latLonUpdate(float, float, int)));
-   connect(sb, SIGNAL(altMSLUpdate(float)), window, SLOT(altMSLUpdate(float)));
-   connect(sb, SIGNAL(altAGLUpdate(float)), window, SLOT(altAGLUpdate(float)));
+
+   // Altitudes
+   connect(sb, SIGNAL(altMSLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
+   connect(sb, SIGNAL(altMSLUpdate(float)), altC,     SLOT(setAltitude(float)));
+
+   //connect(sb, SIGNAL(altAGLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
+   //connect(sb, SIGNAL(altAGLUpdate(float)), altC,     SLOT(setAltitude(float)));
 }

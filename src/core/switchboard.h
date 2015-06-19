@@ -23,6 +23,7 @@ public slots:
    void readPendingData();
    
 signals:
+   void speedUpdate(float speed);
    void compassUpdate(float heading);
    void latLonUpdate(float lat, float lon, int aircraft); // in GPS coords/deg
    void altMSLUpdate(float alt); // in feet

@@ -100,24 +100,8 @@ void HDDWindow::orientationButtonClicked(bool checked)
    mapC->setOrientation(checked ? NORTH_UP : TRACK_UP);
 }
 
-void HDDWindow::compassUpdate(float heading)
-{
-   mapC->setHeading(heading);
-   pfdC->setHeading(heading);
-   hsiC->setHeading(heading);
-}
-
 void HDDWindow::latLonUpdate(float lat, float lon, int ac)
 {
    mapC->panToLocation(lat, lon, ac);
 }
 
-void HDDWindow::altMSLUpdate(float alt)
-{
-   pfdC->setAltitude(alt);
-   altC->setAltitude(alt);
-}
-
-void HDDWindow::altAGLUpdate(float alt)
-{
-}

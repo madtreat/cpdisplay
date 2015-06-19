@@ -9,11 +9,16 @@
 #define MAPCONTROLLER_H
 
 #include <QObject>
+
 #include "mapconsts.h"
+#include "mapwidget.h"
+
 
 class HDDSettings;
 class MapSettings;
 class MapWidget;
+class MapView;
+class MapOverlay;
 
 class MapController : public QObject {
    Q_OBJECT;
@@ -23,7 +28,9 @@ public:
    MapController(const MapController& orig) = delete;
    virtual ~MapController();
    
-   MapWidget* getWidget() const { return mapWidget; }
+   MapWidget*  getWidget()  const { return mapWidget; }
+   MapView*    getMapView() const { return mapWidget->getMapView(); }
+   MapOverlay* getOverlay() const { return mapWidget->getOverlay(); }
 
 public slots:
    void setZoom(int level);
@@ -31,7 +38,6 @@ public slots:
    void decreaseZoom();
    void panToLocation(float lat, float lon, int aircraft);
    void setOrientation(MapOrientation mo);
-   void setHeading(float heading);
    
 signals:
    /*

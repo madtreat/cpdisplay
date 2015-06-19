@@ -11,10 +11,12 @@
 #include <QWidget>
 #include "mapconsts.h"
 
+#include "mapview.h"
+#include "mapoverlay.h"
 
 class MapSettings;
-class MapView;
-class MapOverlay;
+//class MapView;
+//class MapOverlay;
 
 class HDDSettings;
 
@@ -27,11 +29,13 @@ public:
    MapWidget(const MapWidget& orig) = delete;
    virtual ~MapWidget();
 
+   MapView*    getMapView() const { return view; }
+   MapOverlay* getOverlay() const { return overlay; }
+
 public slots:
    void setZoom(int level);
    void panToLocation(float lat, float lon);
    void setOrientation(MapOrientation mo);
-   void setHeading(float heading);
    
 
 private:

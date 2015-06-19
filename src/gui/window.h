@@ -1,13 +1,19 @@
 #include <QMainWindow>
 
+#include "mapcontroller.h"
+
 class QToolBar;
 class QPushButton;
 class QHBoxLayout;
 
 class HDDSettings;
-class MapController;
+class MapView;
+class mapOverlay;
+
+//class MapController;
 class PFDController;
 class ALTController;
+class ASIController;
 class HSIController;
 
 class HDDWindow : public QMainWindow {
@@ -16,16 +22,20 @@ class HDDWindow : public QMainWindow {
 public:
    HDDWindow(HDDSettings* _hddSettings, QObject* _parent=0);
    ~HDDWindow();
+
+   MapController* getMapC() const { return mapC; }
+   PFDController* getPFDC() const { return pfdC; }
+   ALTController* getALTC() const { return altC; }
+   ASIController* getASIC() const { return asiC; }
+   HSIController* getHSIC() const { return hsiC; }
    
-   void setupToolbar();
+   MapView*    getMapView() const { return mapC->getMapView(); }
+   MapOverlay* getOverlay() const { return mapC->getOverlay(); }
 
 public slots:
    void orientationButtonClicked(bool checked);
    
-   void compassUpdate(float heading);
    void latLonUpdate(float lat, float lon, int ac=0);
-   void altMSLUpdate(float alt);
-   void altAGLUpdate(float alt);
 
 private:
    HDDSettings* hddSettings;
@@ -33,6 +43,7 @@ private:
    MapController* mapC;
    PFDController* pfdC;
    ALTController* altC;
+   ASIController* asiC;
    HSIController* hsiC;
    
    // Main layout for central widget
@@ -49,4 +60,6 @@ private:
    QPushButton*   zoomInButton;
    QPushButton*   zoomOutButton;
 //   QPushButton*    homeButton;
+
+   void setupToolbar();
 };
