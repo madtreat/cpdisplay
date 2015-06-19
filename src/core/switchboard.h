@@ -28,6 +28,8 @@ signals:
    void machNumUpdate(float mach);
    void vertVelUpdate(float vertvel);
 
+   void pressureUpdate(float pressure);
+
    void pitchUpdate(float pitch);
    void rollUpdate(float roll);
    void headingTrueUpdate(float heading);

@@ -67,6 +67,10 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(vertVelUpdate(float)), pfdC,    SLOT(setClimbRate(float)));
    connect(sb, SIGNAL(vertVelUpdate(float)), vsiC,    SLOT(setClimbRate(float)));
 
+   // Pressure
+   connect(sb, SIGNAL(pressureUpdate(float)), altC,   SLOT(setPressure(float)));
+   connect(sb, SIGNAL(pressureUpdate(float)), pfdC,   SLOT(setPressure(float)));
+
    // Pitch, Roll, Heading
    connect(sb, SIGNAL(pitchUpdate(float)),   adiC,    SLOT(setPitch(float)));
    connect(sb, SIGNAL(pitchUpdate(float)),   pfdC,    SLOT(setPitch(float)));
