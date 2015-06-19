@@ -1,5 +1,6 @@
 <RCC>
    <qresource prefix="/ac">
       <file>icons/airplane.png</file>
+      <file>icons/airplane.128x128.png</file>
    </qresource>
 </RCC>

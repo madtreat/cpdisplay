@@ -21,7 +21,7 @@ MapOverlay::MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWi
    setAttribute(Qt::WA_NoSystemBackground);
    setAttribute(Qt::WA_TransparentForMouseEvents);
    
-   aircraftIcon = QImage(":/ac/icons/airplane.png").scaled(32, 32);
+   aircraftIcon = QImage(":/ac/icons/airplane.png");
 }
 
 //MapOverlay::MapOverlay(const MapOverlay& orig)

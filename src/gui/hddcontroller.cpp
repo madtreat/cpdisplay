@@ -85,6 +85,10 @@ void HDDController::connectSignals()
 
    // AOA, SideSlip
    connect(sb, SIGNAL(aoaSideSlipUpdate(float, float)), pfdC, SLOT(setFlightPathMarker(float, float)));
+
+   // these are not the values
+   //connect(sb, SIGNAL(hPathUpdate(float)),    pfdC,   SLOT(setDevH(float)));
+   //connect(sb, SIGNAL(vPathUpdate(float)),    pfdC,   SLOT(setDevV(float)));
    
    connect(sb, SIGNAL(slipSkidUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
    connect(sb, SIGNAL(slipSkidUpdate(float)), tcdC,   SLOT(setSlipSkid(float)));
@@ -100,7 +104,7 @@ void HDDController::connectSignals()
    // Positions (this AC and others)
    connect(sb, SIGNAL(latLonUpdate(float, float, int)), window, SLOT(latLonUpdate(float, float, int)));
 
-   // Altitudes
+   // Altitudes: using MSL, but AGL could be connected later
    connect(sb, SIGNAL(altMSLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
    connect(sb, SIGNAL(altMSLUpdate(float)), altC,     SLOT(setAltitude(float)));
 
