@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-#include "hddsettings.h"
+#include "core/hddsettings.h"
 #include "hddcontroller.h"
 
 int main(int argc, char* argv[]) {

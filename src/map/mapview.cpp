@@ -11,10 +11,10 @@
 #include <QWebElement>
 #include <QMessageBox>
 
-#include "geocode_data_manager.h"
+#include "qt-google-maps/geocode_data_manager.h"
+#include "qt-google-maps/mapsettings.h"
 
-#include "hddsettings.h"
-#include "mapsettings.h"
+#include "core/hddsettings.h"
 
 
 MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent)
@@ -31,6 +31,8 @@ MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _pa
    connect(webView, SIGNAL(loadStarted()), this, SLOT(startedLoading()));
    connect(webView, SIGNAL(loadProgress(int)), this, SLOT(loadingProgress(int)));
    connect(webView, SIGNAL(loadFinished(bool)), this, SLOT(finishedLoading(bool)));
+   
+   qDebug() << "WebView loading HTML file from" << settings->mapHtmlPath();
    webView->setUrl(QUrl::fromLocalFile(settings->mapHtmlPath()));
    
    if (settings->canEnableMaps()) {
@@ -48,18 +50,23 @@ MapView::~MapView()
 }
 
 
-void MapView::paintEvent(QPaintEvent*)
-{
-   QPainter p(this);
-   int centerX = width()/2;
-   int centerY = height()/2;
-   
-   if (hddSettings->mapOrientation() == TRACK_UP) {
-      p.translate(centerX, centerY);
-      p.rotate(heading);
-   }
-}
+//void MapView::paintEvent(QPaintEvent*)
+//{
+//   QPainter p(this);
+//   int centerX = width()/2;
+//   int centerY = height()/2;
+//   
+//   if (hddSettings->mapOrientation() == TRACK_UP) {
+//      p.translate(centerX, centerY);
+//      p.rotate(heading);
+//   }
+//}
 
+
+QVariant MapView::evaluateJS(QString js)
+{
+   return webView->page()->currentFrame()->documentElement().evaluateJavaScript(js);
+}
 
 void MapView::startedLoading()
 {
@@ -81,14 +88,13 @@ void MapView::showCoordinates(double lat, double lon, bool saveMarker)
 {
    qDebug() << "Form, showCoordinates" << lat << "," << lon;
    
-   QString str =
-           QString("var newLoc = new google.maps.LatLng(%1, %2); ").arg(lat).arg(lon) +
-           QString("map.setCenter(newLoc);") +
-           QString("map.setZoom(%1);").arg(settings->zoom());
+   QString str = QString("var newLoc = new google.maps.LatLng(%1, %2); ").arg(lat).arg(lon);
+   str += QString("map.setCenter(newLoc);");
+   str += QString("map.setZoom(%1);").arg(settings->zoom());
    
    qDebug() << str;
    
-   webView->page()->currentFrame()->documentElement().evaluateJavaScript(str);
+   evaluateJS(str);
    
 //   if (saveMarker)
 //      setMarker(lat, lon, ui->lePostalAddress->text());
@@ -102,11 +108,23 @@ void MapView::errorOccurred(const QString& error)
 void MapView::setZoom(int level)
 {
    QString str = QString("map.setZoom(%1);").arg(level);
-   webView->page()->currentFrame()->documentElement().evaluateJavaScript(str);
+   evaluateJS(str);
+   calculateDistanceScale();
 }
 
 void MapView::panToLocation(float lat, float lon)
 {
    QString str = QString("map.panTo(new google.maps.LatLng(%1, %2), 500);").arg(lat).arg(lon);
-   webView->page()->currentFrame()->documentElement().evaluateJavaScript(str);
+   evaluateJS(str);
+}
+
+void MapView::calculateDistanceScale()
+{
+   qDebug() << "Calculating distance scale...";
+   QString latlon1 = QString("map.getBounds().getNortEast()");
+   QString latlon2 = QString("map.getBounds().getSouthWest()");
+
+   QString str = QString("google.maps.geometry.spherical.computeDistanceBetween (%1, %2);").arg(latlon1).arg(latlon2);
+   QVariant diagDist = evaluateJS(str);
+   qDebug() << "diagDist =" << diagDist;
 }

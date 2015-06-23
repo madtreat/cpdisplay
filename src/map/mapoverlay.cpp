@@ -9,8 +9,8 @@
 
 #include <QPainter>
 
-#include "mapsettings.h"
-#include "hddsettings.h"
+#include "qt-google-maps/mapsettings.h"
+#include "core/hddsettings.h"
 
 MapOverlay::MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent)
 : QWidget(_parent),

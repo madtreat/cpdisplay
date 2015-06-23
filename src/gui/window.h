@@ -1,6 +1,6 @@
 #include <QMainWindow>
 
-#include "mapcontroller.h"
+#include "map/mapcontroller.h"
 
 class QToolBar;
 class QPushButton;
@@ -19,6 +19,10 @@ class PFDController;
 class TCDController;
 class VSIController;
 
+class CommsController;
+class EngineController;
+class TrafficController;
+
 class HDDWindow : public QMainWindow {
    Q_OBJECT
 
@@ -35,6 +39,10 @@ public:
    TCDController* getTCDC() const { return tcdC; }
    VSIController* getVSIC() const { return vsiC; }
    
+   CommsController*   getComC() const { return comC; }
+   EngineController*  getEngC() const { return engC; }
+   TrafficController* getTfcC() const { return tfcC; }
+   
    MapView*    getMapView() const { return mapC->getMapView(); }
    MapOverlay* getOverlay() const { return mapC->getOverlay(); }
 
@@ -47,6 +55,7 @@ public slots:
 private:
    HDDSettings* hddSettings;
    
+   // Widget controllers
    MapController* mapC;
    ADIController* adiC;
    ALTController* altC;
@@ -55,6 +64,10 @@ private:
    PFDController* pfdC;
    TCDController* tcdC;
    VSIController* vsiC;
+   
+   CommsController*   comC;
+   EngineController*  engC;
+   TrafficController* tfcC;
    
    // Main layout for central widget
    QGridLayout*   layout;

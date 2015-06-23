@@ -1,18 +1,14 @@
-project(hdd-core)
+project(hdd-comms)
 
 set(SOURCES
-   hddsettings.cpp
-   switchboard.cpp
-   xplanedata.cpp
+   commscontroller.cpp
+   commswidget.cpp
 )
 
 set(HEADERS
-   mapconsts.h
-   hddsettings.h
-   switchboard.h
-   xplanedata.h
+   commscontroller.h
+   commswidget.h
 )
-
 
 add_library(${PROJECT_NAME} SHARED
    ${SOURCES}
@@ -23,6 +19,7 @@ target_link_libraries(${PROJECT_NAME}
    ${Qt5Core_LIBRARIES}
    ${Qt5Widgets_LIBRARIES}
    ${Qt5Gui_LIBRARIES}
-   ${Qt5Network_LIBRARIES}
-#   hdd-utils
+
+   #hdd-utils
+   hdd-core
 )

@@ -10,7 +10,7 @@
 
 #include <QObject>
 
-#include "mapconsts.h"
+#include "core/mapconsts.h"
 #include "mapwidget.h"
 
 

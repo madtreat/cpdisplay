@@ -9,18 +9,22 @@
 
 #include <math.h>
 
-#include "hddsettings.h"
-#include "switchboard.h"
-#include "window.h"
+#include "core/hddsettings.h"
+#include "core/switchboard.h"
+#include "gui/window.h"
 
-#include "mapcontroller.h"
-#include "adicontroller.h"
-#include "altcontroller.h"
-#include "asicontroller.h"
-#include "hsicontroller.h"
-#include "pfdcontroller.h"
-#include "tcdcontroller.h"
-#include "vsicontroller.h"
+#include "map/mapcontroller.h"
+#include "instruments/adicontroller.h"
+#include "instruments/altcontroller.h"
+#include "instruments/asicontroller.h"
+#include "instruments/hsicontroller.h"
+#include "instruments/pfdcontroller.h"
+#include "instruments/tcdcontroller.h"
+#include "instruments/vsicontroller.h"
+
+#include "comms/commscontroller.h"
+#include "engine/enginecontroller.h"
+#include "traffic/trafficcontroller.h"
 
 HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 : QObject(_parent)
@@ -60,6 +64,10 @@ void HDDController::connectSignals()
    PFDController* pfdC = window->getPFDC();
    TCDController* tcdC = window->getTCDC();
    VSIController* vsiC = window->getVSIC();
+
+   CommsController* comC =   window->getComC();
+   EngineController* engC =  window->getEngC();
+   TrafficController* tfcC = window->getTfcC();
 
    MapView*    mapView = window->getMapView();
    MapOverlay* overlay = window->getOverlay();

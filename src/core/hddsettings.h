@@ -12,7 +12,7 @@
 #include <QString>
 #include <QHostAddress>
 
-#include "mapconsts.h"
+#include "core/mapconsts.h"
 
 class QSettings;
 

@@ -9,10 +9,10 @@
 
 #include <QGridLayout>
 
-#include "mapsettings.h"
+#include "qt-google-maps/mapsettings.h"
+#include "core/hddsettings.h"
 #include "mapview.h"
 #include "mapoverlay.h"
-#include "hddsettings.h"
 
 MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent)
 : QWidget(_parent),
@@ -26,7 +26,8 @@ MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidg
    overlay = new MapOverlay(hddSettings, mapSettings, view);
    overlay->setGeometry(view->geometry());
    
-   setMinimumSize(QSize(320, 320));
+   setMinimumSize(QSize(440, 440));
+   setContentsMargins(0, 0, 0, 0);
 }
 
 //MapWidget::MapWidget(const MapWidget& orig)

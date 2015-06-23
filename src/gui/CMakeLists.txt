@@ -29,4 +29,7 @@ target_link_libraries(${PROJECT_NAME}
    hdd-core
    hdd-instruments
    hdd-map
+   hdd-comms
+   hdd-engine
+   hdd-traffic
 )

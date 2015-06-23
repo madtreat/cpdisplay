@@ -11,7 +11,7 @@
 #define MAPVIEW_
 
 #include <QWidget>
-#include "mapconsts.h"
+#include "core/mapconsts.h"
 
 class QPaintEvent;
 class QWebView;
@@ -42,7 +42,7 @@ public slots:
    void setHeading(float _heading) {heading = _heading;}
 
 protected:
-   void paintEvent(QPaintEvent*);
+//   void paintEvent(QPaintEvent*);
    
 private:
    HDDSettings*         hddSettings;
@@ -53,6 +53,9 @@ private:
    GeocodeDataManager*  geocode;
    
    int heading; // current heading value in degrees
+
+   QVariant evaluateJS(QString js);
+   void calculateDistanceScale();
 };
 
 #endif	/* MAPVIEW_ */

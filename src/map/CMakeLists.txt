@@ -8,7 +8,6 @@ set(SOURCES
 )
 
 set(HEADERS
-   mapconsts.h
    mapcontroller.h
    mapwidget.h
    mapview.h
@@ -32,6 +31,8 @@ target_link_libraries(${PROJECT_NAME}
    ${Qt5Core_LIBRARIES}
    ${Qt5Widgets_LIBRARIES}
    ${Qt5Gui_LIBRARIES}
+   ${Qt5WebKit_LIBRARIES}
+   ${Qt5WebKitWidgets_LIBRARIES}
 
    qt-gmaps
 

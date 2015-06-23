@@ -9,8 +9,8 @@
 
 #include <QDebug>
 
-#include "hddsettings.h"
-#include "mapsettings.h"
+#include "core/hddsettings.h"
+#include "qt-google-maps/mapsettings.h"
 #include "mapwidget.h"
 
 MapController::MapController(HDDSettings* _hddSettings, QObject* _parent)

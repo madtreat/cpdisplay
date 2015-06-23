@@ -9,7 +9,7 @@
 #define MAPWIDGET_
 
 #include <QWidget>
-#include "mapconsts.h"
+#include "core/mapconsts.h"
 
 #include "mapview.h"
 #include "mapoverlay.h"

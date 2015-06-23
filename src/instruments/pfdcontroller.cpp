@@ -11,6 +11,7 @@ PFDController::PFDController(QObject* _parent)
 : QObject(_parent)
 {
    pfdWidget = new WidgetPFD();
+   pfdWidget->setContentsMargins(0, 0, 0, 0);
 }
 
 PFDController::PFDController(const PFDController& orig)
