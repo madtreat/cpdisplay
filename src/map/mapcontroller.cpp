@@ -59,7 +59,7 @@ void MapController::decreaseZoom()
    setZoom(newLevel);
 }
 
-void MapController::panToLocation(float lat, float lon, int aircraft)
+void MapController::panToLocation(float lat, float lon)
 {
    mapWidget->panToLocation(lat, lon);
 }

@@ -12,6 +12,7 @@
 
 class QLabel;
 
+class Aircraft;
 class HDDSettings;
 
 
@@ -24,10 +25,11 @@ public:
    virtual ~TrafficWidget();
 
 public slots:
-   
+   void displayAC(Aircraft* ac);
 
 private:
    HDDSettings* hddSettings;
+   Aircraft*    currentAC;
    
    // The textual labels that will be connected to XPlane
    QLabel* alt; // altitude

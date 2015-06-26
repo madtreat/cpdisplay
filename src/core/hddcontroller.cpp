@@ -9,8 +9,8 @@
 
 #include <math.h>
 
-#include "core/hddsettings.h"
-#include "core/switchboard.h"
+#include "hddsettings.h"
+#include "switchboard.h"
 #include "gui/window.h"
 
 #include "map/mapcontroller.h"
@@ -36,9 +36,9 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
    angVelUpdatedFlag = false;
    pitchUpdatedFlag = false;
    rollUpdatedFlag = false;
-   
+
    connectSignals();
-   
+
    window->show();
 }
 
@@ -72,14 +72,16 @@ void HDDController::connectSignals()
    MapView*    mapView = window->getMapView();
    MapOverlay* overlay = window->getOverlay();
    
-   CommsWidget* commsWidget = comC->getWidget();
+   CommsWidget* comW = comC->getWidget();
+   EngineWidget* engW = engC->getWidget();
+//   TrafficWidget* tfcW = tfcC->getWidget();
 
    // Self-calculated turn rate
    connect(this, SIGNAL(turnRateUpdate(float)), pfdC, SLOT(setTurnRate(float)));
    connect(this, SIGNAL(turnRateUpdate(float)), tcdC, SLOT(setTurnRate(float)));
    
    // Times
-   connect(sb, SIGNAL(timeUpdate(float, float)), commsWidget, SLOT(setTimes(float, float)));
+   connect(sb, SIGNAL(timeUpdate(float, float)), comW, SLOT(setTimes(float, float)));
 
    // Speeds
    connect(sb, SIGNAL(speedUpdate(float)),   asiC,    SLOT(setAirspeed(float)));
@@ -130,8 +132,8 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(compassUpdate(float)), hsiC,    SLOT(setHeading(float)));
    // */
 
-   // Positions (this AC and others)
-   connect(sb, SIGNAL(latLonUpdate(float, float, int)), window, SLOT(latLonUpdate(float, float, int)));
+   // Position (this AC)
+   connect(sb, SIGNAL(latLonUpdate(float, float)), window, SLOT(latLonUpdate(float, float)));
 
    // Altitudes: using MSL, but AGL could be connected later
    connect(sb, SIGNAL(altMSLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
@@ -139,15 +141,21 @@ void HDDController::connectSignals()
 
    //connect(sb, SIGNAL(altAGLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
    //connect(sb, SIGNAL(altAGLUpdate(float)), altC,     SLOT(setAltitude(float)));
+
+   // Position (other AC)
+   connect(sb, SIGNAL(acLatUpdate(float, int)), this, SLOT(updateACLat(float, int)));
+   connect(sb, SIGNAL(acLonUpdate(float, int)), this, SLOT(updateACLon(float, int)));
+   connect(sb, SIGNAL(acAltUpdate(float, int)), this, SLOT(updateACAlt(float, int)));
    
    // Comms and Navs
-   connect(sb, SIGNAL(com1Update(float, float)), commsWidget, SLOT(setCom1(float, float)));
-   connect(sb, SIGNAL(com2Update(float, float)), commsWidget, SLOT(setCom2(float, float)));
+   connect(sb, SIGNAL(com1Update(float, float)), comW, SLOT(setCom1(float, float)));
+   connect(sb, SIGNAL(com2Update(float, float)), comW, SLOT(setCom2(float, float)));
    //connect(sb, SIGNAL(comTransmitUpdate(float), commsWidget, SLOT(setComTransmit(float))));
    
-   connect(sb, SIGNAL(nav1Update(float, float)), commsWidget, SLOT(setNav1(float, float)));
-   connect(sb, SIGNAL(nav2Update(float, float)), commsWidget, SLOT(setNav2(float, float)));
+   connect(sb, SIGNAL(nav1Update(float, float)), comW, SLOT(setNav1(float, float)));
+   connect(sb, SIGNAL(nav2Update(float, float)), comW, SLOT(setNav2(float, float)));
 }
+
 
 float HDDController::calculateTurnRate(float q, float r, float pitch, float roll)
 {
@@ -195,3 +203,60 @@ void HDDController::tryCalculateTurnRate()
    }
 }
 
+void HDDController::updateACLat(float lat, int ac)
+{
+   // If this aircraft has not been identified yet, add it to the list
+   if (!acMap.contains(ac)) {
+      Aircraft* a = new Aircraft(ac, this);
+      a->setLatLonAlt(lat, 0.0, 0.0);
+      connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
+      acMap[ac] = a;
+   }
+   Aircraft* a = acMap.value(ac);
+   a->setLat(lat);
+   acMap[ac] = a; // update the map
+}
+
+void HDDController::updateACLon(float lon, int ac)
+{
+   // If this aircraft has not been identified yet, add it to the list
+   if (!acMap.contains(ac)) {
+      Aircraft* a = new Aircraft(ac, this);
+      a->setLatLonAlt(0.0, lon, 0.0);
+      connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
+      acMap[ac] = a;
+   }
+   Aircraft* a = acMap.value(ac);
+   a->setLon(lon);
+   acMap[ac] = a; // update the map
+}
+
+void HDDController::updateACAlt(float alt, int ac)
+{
+   // If this aircraft has not been identified yet, add it to the list
+   if (!acMap.contains(ac)) {
+      Aircraft* a = new Aircraft(ac, this);
+      a->setLatLonAlt(0.0, 0.0, alt);
+      connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
+      acMap[ac] = a;
+   }
+   Aircraft* a = acMap.value(ac);
+   a->setAlt(alt);
+   acMap[ac] = a; // update the map
+}
+
+/*
+ * This slot is called when any given aircraft (identified by id) has had its
+ * lat, lon and altitude updated.
+ * 
+ * Update the map so it can draw the AC.
+ * Update the TFC controller so it can update the displayed values if this AC
+ * is currently selected.
+ */
+void HDDController::acUpdated(int id)
+{
+   TrafficController* tfcC = window->getTfcC();
+   tfcC->setDisplayedAC(acMap.value(id));
+   
+   // TODO: update the map for drawing the AC
+}

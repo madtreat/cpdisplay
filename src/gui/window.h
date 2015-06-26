@@ -50,7 +50,7 @@ public slots:
    void pfdButtonClicked(bool checked);
    void orientationButtonClicked(bool checked);
    
-   void latLonUpdate(float lat, float lon, int ac=0);
+   void latLonUpdate(float lat, float lon);
 
 private:
    HDDSettings* hddSettings;

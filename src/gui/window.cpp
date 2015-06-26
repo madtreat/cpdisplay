@@ -178,8 +178,8 @@ void HDDWindow::orientationButtonClicked(bool checked)
    mapC->setOrientation(checked ? NORTH_UP : TRACK_UP);
 }
 
-void HDDWindow::latLonUpdate(float lat, float lon, int ac)
+void HDDWindow::latLonUpdate(float lat, float lon)
 {
-   mapC->panToLocation(lat, lon, ac);
+   mapC->panToLocation(lat, lon);
 }
 

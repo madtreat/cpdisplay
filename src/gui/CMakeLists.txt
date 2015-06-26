@@ -1,12 +1,10 @@
 project(hdd-gui)
 
 set(SOURCES
-   hddcontroller.cpp
    window.cpp
 )
 
 set(HEADERS
-   hddcontroller.h
    window.h
 )
 

@@ -11,6 +11,7 @@
 #include <QObject>
 
 #include "trafficwidget.h"
+#include "core/aircraft.h"
 
 
 class HDDSettings;
@@ -27,12 +28,16 @@ public:
    TrafficWidget*  getWidget()  const { return trafficWidget; }
 
 public slots:
+   void setDisplayedAC(Aircraft* ac);
    
 signals:
 
 private:
-   HDDSettings* hddSettings;
+   HDDSettings*   hddSettings;
    TrafficWidget* trafficWidget;
+   ACMap          acMap;
+   
+   int currentID; // currently displayed AC ID
 };
 
 #endif	/* TRAFFICCONTROLLER_H */

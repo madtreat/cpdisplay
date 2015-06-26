@@ -44,9 +44,13 @@ signals:
    void slipSkidUpdate(float ss);
 
    void compassUpdate(float heading);
-   void latLonUpdate(float lat, float lon, int aircraft); // in GPS coords/deg
+   void latLonUpdate(float lat, float lon); // in GPS coords/deg
    void altMSLUpdate(float alt); // in feet
    void altAGLUpdate(float alt); // in feet
+   
+   void acLatUpdate(float lat, int ac);
+   void acLonUpdate(float lon, int ac);
+   void acAltUpdate(float alt, int ac);
    
    void com1Update(float freq, float standby);
    void com2Update(float freq, float standby);

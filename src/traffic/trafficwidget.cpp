@@ -11,6 +11,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
+#include "core/aircraft.h"
 #include "core/hddsettings.h"
 
 TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, QWidget* _parent)
@@ -28,6 +29,16 @@ TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, QWidget* _parent)
 
 TrafficWidget::~TrafficWidget()
 {
+}
+
+void TrafficWidget::displayAC(Aircraft* ac)
+{
+   currentAC = ac;
+   alt->setText(QString("%1").arg(ac->getAlt()));
+   spd->setText(QString("%1").arg(ac->getSpd()));
+   hdg->setText(QString("%1").arg(ac->getHdg()));
+   rng->setText(QString("%1").arg(ac->getRng()));
+   ber->setText(QString("%1").arg(ac->getBer()));
 }
 
 void TrafficWidget::setupTrafficControls()

@@ -10,6 +10,8 @@
 
 #include <QObject>
 
+#include "aircraft.h"
+
 #define PI 3.14159265
 
 class HDDSettings;
@@ -32,6 +34,12 @@ public slots:
    void updatePitch(float p);
    void updateRoll(float r);
    void tryCalculateTurnRate();
+   
+   void updateACLat(float lat, int ac);
+   void updateACLon(float lon, int ac);
+   void updateACAlt(float alt, int ac);
+   
+   void acUpdated(int id);
 
 signals:
    void turnRateUpdate(float tr);
@@ -40,6 +48,7 @@ private:
    HDDSettings*   settings;
    SwitchBoard*   sb;
    HDDWindow*     window;
+   ACMap          acMap;
 
    // For calculating turn rate
    float angVelQ;

@@ -2,7 +2,7 @@
 #include <QDesktopWidget>
 
 #include "core/hddsettings.h"
-#include "hddcontroller.h"
+#include "core/hddcontroller.h"
 
 int main(int argc, char* argv[]) {
 //   Q_INIT_RESOURCE(qfi);

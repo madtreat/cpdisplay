@@ -17,6 +17,7 @@ TrafficController::TrafficController(HDDSettings* _hddSettings, QObject* _parent
   hddSettings(_hddSettings)
 {
    trafficWidget = new TrafficWidget(hddSettings);
+   currentID = 1;
 }
 
 //TrafficController::TrafficController(const TrafficController& orig)
@@ -25,4 +26,16 @@ TrafficController::TrafficController(HDDSettings* _hddSettings, QObject* _parent
 
 TrafficController::~TrafficController()
 {
+}
+
+void TrafficController::setDisplayedAC(Aircraft* ac)
+{
+   int id = ac->getID();
+   if (!acMap.contains(id)) {
+      acMap[id] = ac;
+   }
+   // TODO: update the tab widget or whatever
+   if (id == currentID) {
+      trafficWidget->displayAC(ac);
+   }
 }
