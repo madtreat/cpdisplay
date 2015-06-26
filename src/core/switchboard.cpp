@@ -74,6 +74,10 @@ void SwitchBoard::processDatagram(QByteArray& data)
 void SwitchBoard::notifyAll(XPData* data)
 {
    switch (data->index) {
+      case TIMES:
+         emit timeUpdate(data->values.at(5).toFloat(), data->values.at(6).toFloat());
+         break;
+         
       case SPEEDS:
          emit speedUpdate(data->values.at(0).toFloat());
          break;
@@ -124,6 +128,17 @@ void SwitchBoard::notifyAll(XPData* data)
          break;
          
       case ALL_ALT:
+         break;
+         
+      case COM_1_2_FREQ:
+         emit com1Update(data->values.at(0).toFloat(), data->values.at(1).toFloat());
+         emit com2Update(data->values.at(3).toFloat(), data->values.at(4).toFloat());
+         emit comTransmitUpdate(data->values.at(6).toFloat());
+         break;
+         
+      case NAV_1_2_FREQ:
+         emit nav1Update(data->values.at(0).toFloat(), data->values.at(1).toFloat());
+         emit nav2Update(data->values.at(4).toFloat(), data->values.at(5).toFloat());
          break;
          
       default:

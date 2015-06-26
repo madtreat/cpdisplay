@@ -31,6 +31,32 @@ CommsWidget::~CommsWidget()
 {
 }
 
+void CommsWidget::setTimes(float _zulu, float _local)
+{
+   gmt->setText(QString("%1").arg(_zulu));
+   local->setText(QString("%1").arg(_local));
+}
+
+void CommsWidget::setCom1(float freq, float standby)
+{
+   com1->setText(QString("%1").arg(freq));
+}
+
+void CommsWidget::setCom2(float freq, float standby)
+{
+   com2->setText(QString("%1").arg(freq));
+}
+
+void CommsWidget::setNav1(float freq, float standby)
+{
+   nav1->setText(QString("%1").arg(freq));
+}
+
+void CommsWidget::setNav2(float freq, float standby)
+{
+   nav2->setText(QString("%1").arg(freq));
+}
+
 void CommsWidget::setupCommsControls()
 {
    QGridLayout* layout  = new QGridLayout(this); // overall layout

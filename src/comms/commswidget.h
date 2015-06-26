@@ -24,7 +24,11 @@ public:
    virtual ~CommsWidget();
    
 public slots:
-   
+   void setTimes(float _zulu, float _local);
+   void setCom1(float freq, float standby);
+   void setCom2(float freq, float standby);
+   void setNav1(float freq, float standby);
+   void setNav2(float freq, float standby);
 
 private:
    HDDSettings* hddSettings;

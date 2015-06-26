@@ -71,10 +71,15 @@ void HDDController::connectSignals()
 
    MapView*    mapView = window->getMapView();
    MapOverlay* overlay = window->getOverlay();
+   
+   CommsWidget* commsWidget = comC->getWidget();
 
    // Self-calculated turn rate
    connect(this, SIGNAL(turnRateUpdate(float)), pfdC, SLOT(setTurnRate(float)));
    connect(this, SIGNAL(turnRateUpdate(float)), tcdC, SLOT(setTurnRate(float)));
+   
+   // Times
+   connect(sb, SIGNAL(timeUpdate(float, float)), commsWidget, SLOT(setTimes(float, float)));
 
    // Speeds
    connect(sb, SIGNAL(speedUpdate(float)),   asiC,    SLOT(setAirspeed(float)));
@@ -134,6 +139,14 @@ void HDDController::connectSignals()
 
    //connect(sb, SIGNAL(altAGLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
    //connect(sb, SIGNAL(altAGLUpdate(float)), altC,     SLOT(setAltitude(float)));
+   
+   // Comms and Navs
+   connect(sb, SIGNAL(com1Update(float, float)), commsWidget, SLOT(setCom1(float, float)));
+   connect(sb, SIGNAL(com2Update(float, float)), commsWidget, SLOT(setCom2(float, float)));
+   //connect(sb, SIGNAL(comTransmitUpdate(float), commsWidget, SLOT(setComTransmit(float))));
+   
+   connect(sb, SIGNAL(nav1Update(float, float)), commsWidget, SLOT(setNav1(float, float)));
+   connect(sb, SIGNAL(nav2Update(float, float)), commsWidget, SLOT(setNav2(float, float)));
 }
 
 float HDDController::calculateTurnRate(float q, float r, float pitch, float roll)

@@ -23,6 +23,7 @@ public slots:
    void readPendingData();
    
 signals:
+   void timeUpdate(float zulu, float local);
    void speedUpdate(float speed);
    
    void machNumUpdate(float mach);
@@ -46,6 +47,13 @@ signals:
    void latLonUpdate(float lat, float lon, int aircraft); // in GPS coords/deg
    void altMSLUpdate(float alt); // in feet
    void altAGLUpdate(float alt); // in feet
+   
+   void com1Update(float freq, float standby);
+   void com2Update(float freq, float standby);
+   void comTransmitUpdate(float freq);
+   
+   void nav1Update(float freq, float standby);
+   void nav2Update(float freq, float standby);
 
 private:
    HDDSettings* settings;

@@ -16,6 +16,8 @@
 
 enum XPDataIndex {
    FRAMERATE = 0,
+   TIMES = 1,
+   SIM_STATS = 2,
    
    SPEEDS = 3,
    MACH_VVI_GLOAD = 4,
@@ -69,6 +71,10 @@ enum XPDataIndex {
    
    // On/Off
 //   ELEC_FUEL_PUMP = 55,
+   
+   // Comms/Nav
+   COM_1_2_FREQ = 96,
+   NAV_1_2_FREQ = 97,
    
    // End; for loops
    NUM_DATA_INDEXES
