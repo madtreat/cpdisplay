@@ -36,6 +36,7 @@ Aircraft::~Aircraft()
 void Aircraft::tryEmitUpdate()
 {
    if (latUpdated && lonUpdated && altUpdated) {
+      // TODO: calculate spd, hdg, rng, ber
       emit acUpdated(id);
       latUpdated = false;
       lonUpdated = false;

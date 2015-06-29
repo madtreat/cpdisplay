@@ -28,6 +28,10 @@ public:
    MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent = 0);
    MapView(const MapView& orig) = delete;
    virtual ~MapView();
+   
+   QSize sizeHint() const;
+   void resize(int w, int h);
+   void resize(const QSize& size);
 
 public slots:
    void startedLoading();

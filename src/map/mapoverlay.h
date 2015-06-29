@@ -10,6 +10,10 @@
 
 #include <QWidget>
 #include <QImage>
+#include <QVector>
+#include <QLineF>
+
+#include "core/mapconsts.h"
 
 class QPaintEvent;
 
@@ -19,11 +23,16 @@ class HDDSettings;
 
 class MapOverlay : public QWidget {
    Q_OBJECT;
+   typedef QVector<QLineF> TickList;
 
 public:
    MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent = 0);
    MapOverlay(const MapOverlay& orig) = delete;
    virtual ~MapOverlay();
+   
+   QSize sizeHint() const;
+   void resize(int w, int h);
+   void resize(const QSize& size);
 
 public slots:
    void setZoom(int level);
@@ -31,13 +40,21 @@ public slots:
    void setHeading(float _heading) {heading = _heading;}
 
 protected:
+   QLineF getLine(double deg, int cx, int cy, int from, int to);
+   void initRangeTicks(int diameter=DEFAULT_MAP_WIDTH);
+   
    void paintEvent(QPaintEvent*);
+   void drawRangeCircle(QPainter& p);
+   void drawRangeCircleTicks(QPainter& p);
    
 private:
    HDDSettings* hddSettings;
    MapSettings* mapSettings;
    
-   int heading; // current heading value in degrees
+   double heading; // current heading value in degrees
+   
+   TickList northUpTicks; // list of pre-generated lines for when NORTH_UP
+   TickList trackUpTicks; // list of pre-generated lines for when TRACK_UP
    
    // icons/images
    QImage aircraftIcon;

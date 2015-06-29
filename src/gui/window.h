@@ -84,5 +84,6 @@ private:
    QPushButton*   zoomOutButton;
 //   QPushButton*    homeButton;
 
+   QPushButton* createToolButton(QString text, bool checkable);
    void setupToolbar();
 };

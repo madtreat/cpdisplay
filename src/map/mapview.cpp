@@ -15,6 +15,7 @@
 #include "qt-google-maps/mapsettings.h"
 
 #include "core/hddsettings.h"
+#include "core/mapconsts.h"
 
 
 MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent)
@@ -38,7 +39,7 @@ MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _pa
    if (settings->canEnableMaps()) {
       enabled = true;
    }
-   //setMinimumSize(QSize(320, 320));
+   setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
 }
 
 //MapView::MapView(const MapView& orig)
@@ -47,6 +48,35 @@ MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _pa
 
 MapView::~MapView()
 {
+}
+
+QSize MapView::sizeHint() const
+{
+   return QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+}
+
+void MapView::resize(int w, int h)
+{
+   resize(QSize(w, h));
+}
+
+void MapView::resize(const QSize& size)
+{
+   QWidget::resize(size);
+   qDebug() << "Resizing MapView to" << size;
+   // resize the map, keeping the current center
+   QString str = "var center = map.getCenter();";
+   str += "google.maps.event.trigger(map,\"'resize\");";
+   str += "map.setCenter(center);";
+   
+//   QVariant response = evaluateJS(str);
+//   qDebug() << "   JS response:" << response;
+   
+   // set the web page's size
+   qDebug() << "   Current viewport size:" << webView->page()->viewportSize();
+   qDebug() << "   Current webframe size:" << webView->page()->currentFrame()->contentsSize();
+   webView->page()->setViewportSize(size);
+   qDebug() << "       New viewport size:" << webView->page()->viewportSize();
 }
 
 
@@ -75,12 +105,13 @@ void MapView::startedLoading()
 
 void MapView::loadingProgress(int percent)
 {
-   qDebug() << "Loading progress:" << percent << "%";
+//   qDebug() << "Loading progress:" << percent << "%";
 }
 
 void MapView::finishedLoading(bool success)
 {
    qDebug() << "Finished loading URL, successful:" << success;
+   resize(size());
 }
 
 

@@ -28,6 +28,10 @@ public:
    MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent = 0);
    MapWidget(const MapWidget& orig) = delete;
    virtual ~MapWidget();
+   
+   QSize sizeHint() const;
+   void resize(int w, int h);
+   void resize(const QSize& size);
 
    MapView*    getMapView() const { return view; }
    MapOverlay* getOverlay() const { return overlay; }

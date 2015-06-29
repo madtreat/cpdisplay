@@ -50,71 +50,73 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    
    setupToolbar();
    
-   setMinimumSize(QSize(950, 400));
+   setMinimumSize(QSize(1000, 585));
 //   showWindow();
 }
 
 HDDWindow::~HDDWindow() {
 }
 
+/*
+ * Helper function for creating consistent toolbar buttons.
+ */
+QPushButton* HDDWindow::createToolButton(QString text, bool checkable)
+{
+   QPushButton* button = new QPushButton(text);
+   button->setMinimumSize(QSize(80, 80));
+   QSizePolicy sp(QSizePolicy::Fixed, QSizePolicy::Fixed);
+   button->setSizePolicy(sp);
+   
+   if (checkable) {
+      button->setCheckable(true);
+   }
+   
+   return button;
+}
+
 void HDDWindow::setupToolbar()
 {
    toolbar = new QToolBar(this);
+   toolbar->setContentsMargins(0, 0, 0, 0);
    toolbar->setOrientation(Qt::Vertical);// | Qt::Horizontal);
    
-   pfdButton = new QPushButton("PFD");
+   pfdButton = createToolButton("PFD", true);
    pfdButton->setEnabled(true);
-   pfdButton->setMinimumHeight(80);
-   pfdButton->setCheckable(true);
    pfdButton->setChecked(true);
-   pfdButton->setContentsMargins(0, 0, 0, 0);
    connect(pfdButton, SIGNAL(toggled(bool)), this, SLOT(pfdButtonClicked(bool)));
    toolbar->addWidget(pfdButton);
    
-   weatherButton = new QPushButton("WX");
+   weatherButton = createToolButton("WX", false);
    weatherButton->setEnabled(false);
-   weatherButton->setMinimumHeight(80);
-   weatherButton->setContentsMargins(0, 0, 0, 0);
    toolbar->addWidget(weatherButton);
    
-   trafficButton = new QPushButton("TFC");
+   trafficButton = createToolButton("TFC", false);
    trafficButton->setEnabled(false);
-   trafficButton->setMinimumHeight(80);
-   trafficButton->setContentsMargins(0, 0, 0, 0);
    toolbar->addWidget(trafficButton);
    
-   terrainButton = new QPushButton("TER");
+   terrainButton = createToolButton("TER", false);
    terrainButton->setEnabled(false);
-   terrainButton->setMinimumHeight(80);
-   pfdButton->setContentsMargins(0, 0, 0, 0);
    toolbar->addWidget(terrainButton);
    
-   orientationButton = new QPushButton("North Up");
+   orientationButton = createToolButton("North Up", true);
    orientationButton->setEnabled(true);
-   orientationButton->setMinimumHeight(80);
-   orientationButton->setCheckable(true);
    orientationButton->setChecked(true);
    if (hddSettings->mapOrientation() == TRACK_UP) {
       orientationButton->setChecked(false);
    }
-   orientationButton->setContentsMargins(0, 0, 0, 0);
    connect(orientationButton, SIGNAL(toggled(bool)), this, SLOT(orientationButtonClicked(bool)));
    toolbar->addWidget(orientationButton);
    
-   zoomInButton = new QPushButton("Zoom In");
+   zoomInButton = createToolButton("Zoom In", false);
    zoomInButton->setEnabled(true);
-   zoomInButton->setMinimumHeight(80);
-   zoomInButton->setContentsMargins(0, 0, 0, 0);
    connect(zoomInButton, SIGNAL(clicked()), mapC, SLOT(increaseZoom()));
    // If you are at the max zoom (very close shot of ground), disable zoom in button
    connect(mapC, SIGNAL(zoomMaxReached(bool)), zoomInButton, SLOT(setDisabled(bool)));
    connect(mapC, SIGNAL(zoomEither(bool)),     zoomInButton, SLOT(setEnabled(bool)));
    toolbar->addWidget(zoomInButton);
    
-   zoomOutButton = new QPushButton("Zoom Out");
+   zoomOutButton = createToolButton("Zoom Out", false);
    zoomOutButton->setEnabled(true);
-   zoomOutButton->setMinimumHeight(80);
-   zoomOutButton->setContentsMargins(0, 0, 0, 0);
    connect(zoomOutButton, SIGNAL(clicked()), mapC, SLOT(decreaseZoom()));
    // If you are at the minimum zoom (whole earth), disable zoom out button
    connect(mapC, SIGNAL(zoomMinReached(bool)), zoomOutButton, SLOT(setDisabled(bool)));

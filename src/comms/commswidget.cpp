@@ -33,8 +33,10 @@ CommsWidget::~CommsWidget()
 
 void CommsWidget::setTimes(float _zulu, float _local)
 {
-   gmt->setText(QString("%1").arg(_zulu));
-   local->setText(QString("%1").arg(_local));
+   QString zuluStr = QString("%1").arg(_zulu);
+   QString localStr = QString("%1").arg(_local);
+   gmt->setText(zuluStr);
+   local->setText(localStr);
 }
 
 void CommsWidget::setCom1(float freq, float standby)
