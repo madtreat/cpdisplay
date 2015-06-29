@@ -14,11 +14,11 @@
 #include <QLineF>
 
 #include "core/mapconsts.h"
+#include "core/hddsettings.h"
 
 class QPaintEvent;
 
 class MapSettings;
-class HDDSettings;
 
 
 class MapOverlay : public QWidget {
@@ -33,6 +33,8 @@ public:
    QSize sizeHint() const;
    void resize(int w, int h);
    void resize(const QSize& size);
+   
+   bool northUp() const { return hddSettings->mapOrientation() == NORTH_UP; }
 
 public slots:
    void setZoom(int level);
@@ -40,12 +42,11 @@ public slots:
    void setHeading(float _heading) {heading = _heading;}
 
 protected:
-   QLineF getLine(double deg, int cx, int cy, int from, int to);
+   QLineF getLine(double deg, int from, int to, int cx=0, int cy=0);
    void initRangeTicks(int diameter=DEFAULT_MAP_WIDTH);
    
    void paintEvent(QPaintEvent*);
    void drawRangeCircle(QPainter& p);
-   void drawRangeCircleTicks(QPainter& p);
    
 private:
    HDDSettings* hddSettings;
@@ -53,8 +54,7 @@ private:
    
    double heading; // current heading value in degrees
    
-   TickList northUpTicks; // list of pre-generated lines for when NORTH_UP
-   TickList trackUpTicks; // list of pre-generated lines for when TRACK_UP
+   TickList rangeCircleTicks; // list of pre-generated lines for when NORTH_UP
    
    // icons/images
    QImage aircraftIcon;

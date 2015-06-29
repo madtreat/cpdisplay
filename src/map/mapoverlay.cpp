@@ -84,15 +84,15 @@ void MapOverlay::panToLocation(float lat, float lon)
  * Returns a line object originating at the center of the overlay window, with
  * the following properties:
  *    deg  = the angle in degrees
- *    cx   = center point x in pixels
- *    cy   = center point y in pixels
  *    from = inside radius to draw in pixels
  *    to   = outside outside to draw in pixels
+ *    cx   = center point x in pixels; default = 0
+ *    cy   = center point y in pixels; default = 0
  * 
  * Basically, the line is centered at (cx, cy), and goes out at an angle deg, 
  * and is only drawn between the radius' from and to.
  */
-QLineF MapOverlay::getLine(double deg, int cx, int cy, int from, int to)
+QLineF MapOverlay::getLine(double deg, int from, int to, int cx, int cy)
 {
    // Convert angle to radians, also add 90 to orient it correctly
    // (0 deg is up, not right, as drawn by default)
@@ -118,8 +118,8 @@ QLineF MapOverlay::getLine(double deg, int cx, int cy, int from, int to)
 void MapOverlay::initRangeTicks(int diameter)
 {
    // Ensure the vector is empty
-   if (northUpTicks.size() > 0) {
-      northUpTicks.clear();
+   if (rangeCircleTicks.size() > 0) {
+      rangeCircleTicks.clear();
    }
    
    int mapRad = diameter / 2;
@@ -133,11 +133,9 @@ void MapOverlay::initRangeTicks(int diameter)
       if      (i % 10 == 0) { len = 12; }
       else if (i %  5 == 0) { len = 8;  }
       
-      QLineF line = getLine(i, cx, cy, mapRad - len, mapRad);
-      northUpTicks.append(line);
+      QLineF line = getLine(i, mapRad - len, mapRad);
+      rangeCircleTicks.append(line);
    }
-   
-   //// TRACK UP
 }
 
 
@@ -148,11 +146,11 @@ void MapOverlay::paintEvent(QPaintEvent*)
    int centerY = height()/2;
    
    // Draw the center airplane icon, using the current orientation setting
-   if (hddSettings->mapOrientation() == NORTH_UP) {
+   if (northUp()) {
       p.translate(centerX, centerY);
       p.rotate(heading);
-      int x = 0/*centerX*/ - (aircraftIcon.width()/2);
-      int y = 0/*centerY*/ - (aircraftIcon.height()/2);
+      int x = 0 - (aircraftIcon.width()/2);
+      int y = 0 - (aircraftIcon.height()/2);
       p.drawImage(QPoint(x,y), aircraftIcon);
       p.resetTransform();
    }
@@ -184,39 +182,20 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    p.drawArc(rect(), 0, 5760);
    
    // Draw the tick marks
+   p.translate(cx, cy);
+   if (northUp()) {
+      p.rotate(heading);
+   }
    pen.setWidth(1);
    p.setPen(pen);
-   drawRangeCircleTicks(p);
+   p.drawLines(rangeCircleTicks);
    
-   // Draw the heading
-   if (hddSettings->mapOrientation() == NORTH_UP) {
-      QLineF headingLine = getLine(heading, cx, cy, 20, cx);
-      p.drawLine(headingLine);
-   }
-   else {
-      QLineF headingLine = getLine(0, cx, cy, 20, cx);
-      p.drawLine(headingLine);
-   }
+   // Draw the heading, which will always be at 0 degrees, since we already
+   // rotated the whole painter, if was necessary
+   QLineF headingLine = getLine(0, 20, cx);
+   p.drawLine(headingLine);
    
+   // Reset for next drawing
    p.setPen(origPen);
-}
-
-/*
- * Draws tick marks on the range circle.
- */
-void MapOverlay::drawRangeCircleTicks(QPainter& p)
-{
-//   QPen pen(Qt::SolidLine);
-//   pen.setColor(Qt::yellow);
-//   pen.setWidth(1);
-//   p.setPen(pen);
-   
-   int cx = width()/2;  // center x
-   int cy = height()/2; // center y
-//   p.translate(centerX, centerY);
-   
-   if (hddSettings->mapOrientation() == NORTH_UP) {
-      p.drawLines(northUpTicks);
-   }
-//   p.resetTransform();
+   p.resetTransform();
 }
