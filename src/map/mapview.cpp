@@ -21,7 +21,8 @@
 MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent)
 : QWidget(_parent),
   hddSettings(_hddSettings),
-  settings(_settings)
+  settings(_settings),
+  heading(0.0)
 {
    geocode = new GeocodeDataManager(settings->apiKey(), this);
    connect(geocode, SIGNAL(coordinatesReady(double,double)),  this, SLOT(showCoordinates(double,double)));
@@ -63,7 +64,7 @@ void MapView::resize(int w, int h)
 void MapView::resize(const QSize& size)
 {
    QWidget::resize(size);
-   qDebug() << "Resizing MapView to" << size;
+//   qDebug() << "Resizing MapView to" << size;
    // resize the map, keeping the current center
    QString str = "var center = map.getCenter();";
    str += "google.maps.event.trigger(map,\"'resize\");";
@@ -73,24 +74,33 @@ void MapView::resize(const QSize& size)
 //   qDebug() << "   JS response:" << response;
    
    // set the web page's size
-   qDebug() << "   Current viewport size:" << webView->page()->viewportSize();
-   qDebug() << "   Current webframe size:" << webView->page()->currentFrame()->contentsSize();
+//   qDebug() << "   Current viewport size:" << webView->page()->viewportSize();
+//   qDebug() << "   Current webframe size:" << webView->page()->currentFrame()->contentsSize();
    webView->page()->setViewportSize(size);
-   qDebug() << "       New viewport size:" << webView->page()->viewportSize();
+//   qDebug() << "       New viewport size:" << webView->page()->viewportSize();
 }
 
 
-//void MapView::paintEvent(QPaintEvent*)
-//{
-//   QPainter p(this);
-//   int centerX = width()/2;
-//   int centerY = height()/2;
-//   
-//   if (hddSettings->mapOrientation() == TRACK_UP) {
-//      p.translate(centerX, centerY);
-//      p.rotate(heading);
-//   }
-//}
+//void MapView::paintEvent(QPaintEvent* event)
+void MapView::render()
+{
+   qDebug() << "MapView::paintEvent()";
+   QPainter p(this);
+   int centerX = width()/2;
+   int centerY = height()/2;
+   
+   if (!northUp()) {
+      qDebug() << "Painting rotated webview";
+      p.translate(centerX, centerY);
+      p.rotate(heading);
+      p.translate(-centerX, -centerY);
+      
+      webView->page()->currentFrame()->render(&p);
+//      webView::paintEvent(event);
+//      webView->repaint();
+      p.resetTransform();
+   }
+}
 
 
 QVariant MapView::evaluateJS(QString js)
@@ -147,6 +157,35 @@ void MapView::panToLocation(float lat, float lon)
 {
    QString str = QString("map.panTo(new google.maps.LatLng(%1, %2), 500);").arg(lat).arg(lon);
    evaluateJS(str);
+}
+
+void MapView::setOrientation(MapOrientation mo)
+{
+   qDebug() << "Settings MapView orientation to" << heading << "deg...";
+//   QString js = "qt.jQuery('div').each( function () { qt.jQuery(this).css('-webkit-transition', '-webkit-transform 2s'); qt.jQuery(this).css('-webkit-transform', 'rotate(";
+//   if (mo == NORTH_UP) {
+//      js += "0deg";
+//   }
+//   else {
+//      js += QString::number((int)heading) + "deg";
+//   }
+//   js += ")') } ); undefined";
+   
+//   QString css;
+//   css += "div#myDiv {";
+//   css += " -ms-transform: rotate(20deg); /* IE 9 */";
+//   css += " -webkit-transform: rotate(20deg); /* Safari */";
+//   css += " transform: rotate(20deg); /* Standard syntax */";
+//   css += "}";
+//   webView->settings()->setUserStyleSheetUrl(QUrl("/home/madtreat/sandbox/vscl/cpdisplay/config/track.css"));
+   
+   QString js = QString("map.setHeading(%1);").arg((int)heading);
+   evaluateJS(js);
+   
+   // Call the frame's evaluate function instead of the document element's
+   // so the whole thing gets rotated instead of just the google portion
+//   webView->page()->mainFrame()->evaluateJavaScript(js);
+//   qDebug() << "   done.";
 }
 
 void MapView::calculateDistanceScale()

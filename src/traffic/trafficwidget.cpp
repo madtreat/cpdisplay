@@ -10,14 +10,23 @@
 #include <QFormLayout>
 #include <QGridLayout>
 #include <QLabel>
+#include <QPushButton>
 
 #include "core/aircraft.h"
 #include "core/hddsettings.h"
 
-TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, QWidget* _parent)
+TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QWidget* _parent)
 : QWidget(_parent),
-  hddSettings(_hddSettings)
+  hddSettings(_hddSettings),
+  acMap(_acMap),
+  currentID(1)
 {
+   if (acMap->contains(currentID)) {
+      currentAC = acMap->value(currentID);
+   }
+   else {
+      currentAC = NULL;
+   }
    setupTrafficControls();
    
 //   setMinimumSize(QSize(320, 320));
@@ -34,19 +43,62 @@ TrafficWidget::~TrafficWidget()
 void TrafficWidget::displayAC(Aircraft* ac)
 {
    currentAC = ac;
+   currentID = ac->getID();
+   acLabel->setText(QString("Aircraft %1").arg(ac->getID()));
    alt->setText(QString("%1").arg(ac->getAlt()));
    spd->setText(QString("%1").arg(ac->getSpd()));
    hdg->setText(QString("%1").arg(ac->getHdg()));
    rng->setText(QString("%1").arg(ac->getRng()));
    ber->setText(QString("%1").arg(ac->getBer()));
+   emit displayedACChanged(currentID);
+}
+
+void TrafficWidget::displayAC(int acID)
+{
+   if (acMap->contains(acID)) {
+      displayAC(acMap->value(acID));
+   }
+   else {
+      // do nothing?
+   }
+}
+
+void TrafficWidget::showNextAC()
+{
+   currentID++;
+   if (!acMap->contains(currentID)) {
+      currentID = 1;
+   }
+   displayAC(currentID);
+}
+
+void TrafficWidget::showPrevAC()
+{
+   currentID--;
+   if (!acMap->contains(currentID)) {
+      currentID = acMap->size();
+   }
+   displayAC(currentID);
 }
 
 void TrafficWidget::setupTrafficControls()
 {
    QGridLayout* layout = new QGridLayout(this);
+   QGridLayout* layoutAC= new QGridLayout(); // Selected AC label
    QFormLayout* layoutL = new QFormLayout(); // left form
    QFormLayout* layoutC = new QFormLayout(); // center form
    QFormLayout* layoutR = new QFormLayout(); // right form
+   
+   acLabel = new QLabel("Aircraft 1");
+   acLabel->setAlignment(Qt::AlignHCenter);
+   nextButton = new QPushButton("Next AC");
+   prevButton = new QPushButton("Prev AC");
+   connect(nextButton, &QPushButton::released, this, &TrafficWidget::showNextAC);
+   connect(prevButton, &QPushButton::released, this, &TrafficWidget::showPrevAC);
+   
+   layoutAC->addWidget(prevButton, 0, 0);
+   layoutAC->addWidget(acLabel,    0, 1);
+   layoutAC->addWidget(nextButton, 0, 2);
    
    alt = new QLabel("0");
    spd = new QLabel("0");
@@ -62,7 +114,8 @@ void TrafficWidget::setupTrafficControls()
    layoutR->addRow(tr("RNG"),  rng);
    layoutR->addRow(tr("BER"),  ber);
    
-   layout->addLayout(layoutL, 0, 0);
-   layout->addLayout(layoutC, 0, 1);
-   layout->addLayout(layoutR, 0, 2);
+   layout->addLayout(layoutAC,0, 0, 1, 3);
+   layout->addLayout(layoutL, 1, 0);
+   layout->addLayout(layoutC, 1, 1);
+   layout->addLayout(layoutR, 1, 2);
 }

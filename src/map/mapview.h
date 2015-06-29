@@ -12,11 +12,12 @@
 
 #include <QWidget>
 #include "core/mapconsts.h"
+#include "core/hddsettings.h"
 
 class QPaintEvent;
 class QWebView;
 
-class HDDSettings;
+//class HDDSettings;
 class MapSettings;
 class GeocodeDataManager;
 
@@ -32,6 +33,8 @@ public:
    QSize sizeHint() const;
    void resize(int w, int h);
    void resize(const QSize& size);
+   
+   bool northUp() const { return hddSettings->mapOrientation() == NORTH_UP; }
 
 public slots:
    void startedLoading();
@@ -44,9 +47,12 @@ public slots:
    void setZoom(int level);
    void panToLocation(float lat, float lon);
    void setHeading(float _heading) {heading = _heading;}
+   
+   void setOrientation(MapOrientation mo);
 
 protected:
 //   void paintEvent(QPaintEvent*);
+   void render();
    
 private:
    HDDSettings*         hddSettings;
@@ -56,7 +62,8 @@ private:
    QWebView*            webView;
    GeocodeDataManager*  geocode;
    
-   int heading; // current heading value in degrees
+   double heading; // current heading value in degrees
+//   bool   northUp; // is NORTH_UP currently selected?
 
    QVariant evaluateJS(QString js);
    void calculateDistanceScale();

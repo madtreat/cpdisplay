@@ -89,6 +89,6 @@ void MapWidget::setOrientation(MapOrientation mo)
    // The MapController::setOrientation() function directly updates the settings,
    // which the overlay uses.  But the MapView class still needs to change the
    // way it follows the aircraft.
-   
+   view->setOrientation(mo);
 }
 

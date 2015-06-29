@@ -10,7 +10,10 @@
 
 #include <QWidget>
 
+#include "core/aircraft.h"
+
 class QLabel;
+class QPushButton;
 
 class Aircraft;
 class HDDSettings;
@@ -20,16 +23,28 @@ class TrafficWidget : public QWidget {
    Q_OBJECT;
 
 public:
-   TrafficWidget(HDDSettings* _hddSettings, QWidget* _parent = 0);
+   TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QWidget* _parent = 0);
    TrafficWidget(const TrafficWidget& orig) = delete;
    virtual ~TrafficWidget();
 
 public slots:
    void displayAC(Aircraft* ac);
+   void displayAC(int acID);
+   void showNextAC();
+   void showPrevAC();
+   
+signals:
+   void displayedACChanged(int id);
 
 private:
-   HDDSettings* hddSettings;
-   Aircraft*    currentAC;
+   HDDSettings*   hddSettings;
+   ACMap*         acMap;
+   Aircraft*      currentAC;
+   int            currentID;
+   
+   QLabel*        acLabel; // currently selected aircraft ID
+   QPushButton*   nextButton;
+   QPushButton*   prevButton;
    
    // The textual labels that will be connected to XPlane
    QLabel* alt; // altitude

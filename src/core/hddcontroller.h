@@ -48,7 +48,7 @@ private:
    HDDSettings*   settings;
    SwitchBoard*   sb;
    HDDWindow*     window;
-   ACMap          acMap;
+   ACMap*         acMap;
 
    // For calculating turn rate
    float angVelQ;

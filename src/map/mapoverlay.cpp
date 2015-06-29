@@ -181,9 +181,9 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    // circles are 0 -> (5760=16*360), in 1/16th deg (integer) increments
    p.drawArc(rect(), 0, 5760);
    
-   // Draw the tick marks
+   // Draw the tick marks, rotating if TRACK_UP
    p.translate(cx, cy);
-   if (northUp()) {
+   if (!northUp()) {
       p.rotate(heading);
    }
    pen.setWidth(1);
@@ -191,8 +191,12 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    p.drawLines(rangeCircleTicks);
    
    // Draw the heading, which will always be at 0 degrees, since we already
-   // rotated the whole painter, if was necessary
-   QLineF headingLine = getLine(0, 20, cx);
+   // rotated the whole painter, if it was necessary
+   if (!northUp()) {
+      // if TRACK_UP, reset the rotation for the heading line
+      p.rotate(-heading);
+   }
+   QLineF headingLine = getLine(northUp() ? heading : 0, 20, cx);
    p.drawLine(headingLine);
    
    // Reset for next drawing

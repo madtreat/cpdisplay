@@ -21,21 +21,21 @@ class TrafficController : public QObject {
    Q_OBJECT;
 
 public:
-   TrafficController(HDDSettings* _hddSettings, QObject* _parent = 0);
+   TrafficController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent = 0);
    TrafficController(const TrafficController& orig) = delete;
    virtual ~TrafficController();
    
    TrafficWidget*  getWidget()  const { return trafficWidget; }
 
 public slots:
+   void acUpdated(int id);
    void setDisplayedAC(Aircraft* ac);
-   
-signals:
+   void updateCurrentAC(int id);
 
 private:
    HDDSettings*   hddSettings;
    TrafficWidget* trafficWidget;
-   ACMap          acMap;
+   ACMap*         acMap;
    
    int currentID; // currently displayed AC ID
 };

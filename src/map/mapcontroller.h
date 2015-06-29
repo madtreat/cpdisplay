@@ -10,6 +10,7 @@
 
 #include <QObject>
 
+#include "core/aircraft.h"
 #include "core/mapconsts.h"
 #include "mapwidget.h"
 
@@ -24,7 +25,7 @@ class MapController : public QObject {
    Q_OBJECT;
 
 public:
-   MapController(HDDSettings* _hddSettings, QObject* _parent = 0);
+   MapController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent = 0);
    MapController(const MapController& orig) = delete;
    virtual ~MapController();
    
@@ -55,6 +56,8 @@ private:
    HDDSettings* hddSettings;
    MapSettings* settings;
    MapWidget* mapWidget;
+   
+   ACMap* acMap;
    
    MapOrientation orientation;
 };

@@ -1,5 +1,6 @@
 #include <QMainWindow>
 
+#include "core/aircraft.h"
 #include "map/mapcontroller.h"
 
 class QToolBar;
@@ -27,7 +28,7 @@ class HDDWindow : public QMainWindow {
    Q_OBJECT
 
 public:
-   HDDWindow(HDDSettings* _hddSettings, QObject* _parent=0);
+   HDDWindow(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent=0);
    ~HDDWindow();
 
    MapController* getMapC() const { return mapC; }
@@ -53,7 +54,8 @@ public slots:
    void latLonUpdate(float lat, float lon);
 
 private:
-   HDDSettings* hddSettings;
+   HDDSettings*   hddSettings;
+   ACMap*         acMap;
    
    // Widget controllers
    MapController* mapC;

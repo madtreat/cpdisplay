@@ -30,8 +30,10 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 : QObject(_parent)
 {
    settings = _settings;
+   acMap = new QMap<int, Aircraft*>();
+   
    sb = new SwitchBoard(settings);
-   window = new HDDWindow(settings);
+   window = new HDDWindow(settings, acMap, this);
 
    angVelUpdatedFlag = false;
    pitchUpdatedFlag = false;
@@ -206,43 +208,46 @@ void HDDController::tryCalculateTurnRate()
 void HDDController::updateACLat(float lat, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
-   if (!acMap.contains(ac)) {
+   if (!acMap->contains(ac)) {
       Aircraft* a = new Aircraft(ac, this);
       a->setLatLonAlt(lat, 0.0, 0.0);
       connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
-      acMap[ac] = a;
+      acMap->insert(ac, a);
+      return;
    }
-   Aircraft* a = acMap.value(ac);
+   Aircraft* a = acMap->value(ac);
    a->setLat(lat);
-   acMap[ac] = a; // update the map
+   acMap->insert(ac, a); // update the map
 }
 
 void HDDController::updateACLon(float lon, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
-   if (!acMap.contains(ac)) {
+   if (!acMap->contains(ac)) {
       Aircraft* a = new Aircraft(ac, this);
       a->setLatLonAlt(0.0, lon, 0.0);
       connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
-      acMap[ac] = a;
+      acMap->insert(ac, a);
+      return;
    }
-   Aircraft* a = acMap.value(ac);
+   Aircraft* a = acMap->value(ac);
    a->setLon(lon);
-   acMap[ac] = a; // update the map
+   acMap->insert(ac, a); // update the map
 }
 
 void HDDController::updateACAlt(float alt, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
-   if (!acMap.contains(ac)) {
+   if (!acMap->contains(ac)) {
       Aircraft* a = new Aircraft(ac, this);
       a->setLatLonAlt(0.0, 0.0, alt);
       connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
-      acMap[ac] = a;
+      acMap->insert(ac, a);
+      return;
    }
-   Aircraft* a = acMap.value(ac);
+   Aircraft* a = acMap->value(ac);
    a->setAlt(alt);
-   acMap[ac] = a; // update the map
+   acMap->insert(ac, a); // update the map
 }
 
 /*
@@ -256,7 +261,7 @@ void HDDController::updateACAlt(float alt, int ac)
 void HDDController::acUpdated(int id)
 {
    TrafficController* tfcC = window->getTfcC();
-   tfcC->setDisplayedAC(acMap.value(id));
+   tfcC->setDisplayedAC(acMap->value(id));
    
    // TODO: update the map for drawing the AC
 }

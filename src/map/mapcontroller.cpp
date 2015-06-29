@@ -9,13 +9,15 @@
 
 #include <QDebug>
 
+#include "core/aircraft.h"
 #include "core/hddsettings.h"
 #include "qt-google-maps/mapsettings.h"
 #include "mapwidget.h"
 
-MapController::MapController(HDDSettings* _hddSettings, QObject* _parent)
+MapController::MapController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent)
 : QObject(_parent),
-  hddSettings(_hddSettings)
+  hddSettings(_hddSettings),
+  acMap(_acMap)
 {
    orientation = TRACK_UP;
    settings = new MapSettings(QString(), this);

@@ -21,11 +21,12 @@
 #include "traffic/trafficcontroller.h"
 
 
-HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent) 
+HDDWindow::HDDWindow(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent) 
 : QMainWindow(),
-  hddSettings(_hddSettings)
+  hddSettings(_hddSettings),
+  acMap(_acMap)
 {
-   mapC = new MapController(hddSettings, this);
+   mapC = new MapController(hddSettings, acMap, this);
    adiC = new ADIController(this);
    altC = new ALTController(this);
    asiC = new ASIController(this);
@@ -36,15 +37,15 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    
    comC = new CommsController(hddSettings, this);
    engC = new EngineController(hddSettings, this);
-   tfcC = new TrafficController(hddSettings, this);
+   tfcC = new TrafficController(hddSettings, acMap, this);
    
    layout = new QGridLayout();
    
    centralWidget = new QWidget();
    centralWidget->setLayout(layout);
-   layout->addWidget((QWidget*) comC->getWidget(), 3, 1, 1, 3);
    layout->addWidget((QWidget*) pfdC->getWidget(), 0, 1, 3, 3);
    layout->addWidget((QWidget*) mapC->getWidget(), 0, 4, 3, 3);
+   layout->addWidget((QWidget*) comC->getWidget(), 3, 1, 1, 3);
    layout->addWidget((QWidget*) tfcC->getWidget(), 3, 4, 1, 3);
    setCentralWidget(centralWidget);
    
