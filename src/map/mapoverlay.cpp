@@ -107,7 +107,6 @@ QLineF MapOverlay::getLine(double deg, int from, int to, int cx, int cy)
    double y1 = cy + (to * sin(rad));
    
    // Second point is the aircraft position (0)
-   int offset = 20; // allow a gap around the aircraft itself
    double x2 = cx + (from * cos(rad));
    double y2 = cy + (from * sin(rad));
    
@@ -189,6 +188,26 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    pen.setWidth(1);
    p.setPen(pen);
    p.drawLines(rangeCircleTicks);
+   
+   // Draw the tick mark text, already rotated of TRACK_UP
+   for (int i = 0; i < 360; i += 30) {
+      // Convert angle to radians, also add 90 to orient it correctly
+      // (0 deg is up, not right, as drawn by default)
+      double drawAng = i - 90;
+      if (drawAng < 0) {
+         drawAng = i + 270;
+      }
+      double rad = (drawAng) * PI/180;
+      
+      // First point is on the radius circle
+      int radius = cx - 25;
+      int width = 8*QString::number(i).length();
+      // center is (0, 0) since we are already translated
+      double x1 = 0 + (radius * cos(rad)) - width/2; // shift left width/2 pixels
+      double y1 = 0 + (radius * sin(rad)) + 6; // lower 6 pixels
+      
+      p.drawText(x1, y1, QString::number(i));
+   }
    
    // Draw the heading, which will always be at 0 degrees, since we already
    // rotated the whole painter, if it was necessary
