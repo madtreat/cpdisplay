@@ -75,8 +75,8 @@ void TrafficWidget::showNextAC()
 void TrafficWidget::showPrevAC()
 {
    currentID--;
-   if (!acMap->contains(currentID)) {
-      currentID = acMap->size();
+   if (!acMap->contains(currentID) || currentID == 0) {
+      currentID = acMap->size()-1;
    }
    displayAC(currentID);
 }
