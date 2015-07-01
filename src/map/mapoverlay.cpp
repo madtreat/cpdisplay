@@ -211,12 +211,13 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    }
    
    // Draw the heading number
+   QString headingText = QString("%1").arg(heading, 1, 'f', 1);
    double hrad = getDrawAngleRad(northUp() ? heading : 0);
    int hradius = cx - 60;
-   int hwidth = 8*QString::number(heading).length();
+   int hwidth = 8 * headingText.length();
    double hx = 0 + (hradius * cos(hrad)) - hwidth/2; // shift left width/2 pixels
    double hy = 0 + (hradius * sin(hrad)) + 6; // lower 6 pixels
-   p.drawText(hx, hy, QString::number(heading));
+   p.drawText(hx, hy, headingText);
    
    // Draw the tick mark text
    for (int i = 0; i < 360; i += 30) {
