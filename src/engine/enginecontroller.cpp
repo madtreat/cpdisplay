@@ -12,11 +12,11 @@
 #include "core/hddsettings.h"
 #include "enginewidget.h"
 
-EngineController::EngineController(HDDSettings* _hddSettings, QObject* _parent)
+EngineController::EngineController(HDDSettings* _hddSettings, int _numThrottles, QObject* _parent)
 : QObject(_parent),
   hddSettings(_hddSettings)
 {
-   engineWidget = new EngineWidget(hddSettings);
+   engineWidget = new EngineWidget(hddSettings, _numThrottles);
 }
 
 //EngineController::EngineController(const EngineController& orig)

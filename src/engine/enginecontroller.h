@@ -20,7 +20,7 @@ class EngineController : public QObject {
    Q_OBJECT;
 
 public:
-   EngineController(HDDSettings* _hddSettings, QObject* _parent = 0);
+   EngineController(HDDSettings* _hddSettings, int _numThrottles, QObject* _parent = 0);
    EngineController(const EngineController& orig) = delete;
    virtual ~EngineController();
    

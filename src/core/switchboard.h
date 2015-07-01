@@ -52,6 +52,14 @@ signals:
    void acLonUpdate(float lon, int ac);
    void acAltUpdate(float alt, int ac);
    
+   void throttleCommandUpdate(float throttle, int engNum);
+   void throttleActualUpdate(float throttle, int engNum);
+   
+   void engPowerUpdate(float power, int engNum);
+   void engThrustUpdate(float thrust, int engNum);
+   void engTorqueUpdate(float torque, int engNum);
+   void engRPMUpdate(float rpm, int engNum);
+   
    void com1Update(float freq, float standby);
    void com2Update(float freq, float standby);
    void comTransmitUpdate(float freq);

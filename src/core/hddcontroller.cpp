@@ -149,6 +149,16 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(acLonUpdate(float, int)), this, SLOT(updateACLon(float, int)));
    connect(sb, SIGNAL(acAltUpdate(float, int)), this, SLOT(updateACAlt(float, int)));
    
+   // Throttle settings and actual values
+   connect(sb, SIGNAL(throttleCommandUpdate(float, int)), engW, SLOT(updateThrottleCommand(float, int)));
+   connect(sb, SIGNAL(throttleActualUpdate(float, int)), engW, SLOT(updateThrottleActual(float, int)));
+   
+   // Engine settings
+   connect(sb, SIGNAL(engPowerUpdate(float, int)), engW, SLOT(updateEngPower(float, int)));
+   connect(sb, SIGNAL(engThrustUpdate(float, int)), engW, SLOT(updateEngThrust(float, int)));
+   connect(sb, SIGNAL(engTorqueUpdate(float, int)), engW, SLOT(updateEngTorque(float, int)));
+   connect(sb, SIGNAL(engRPMUpdate(float, int)), engW, SLOT(updateEngRPM(float, int)));
+   
    // Comms and Navs
    connect(sb, SIGNAL(com1Update(float, float)), comW, SLOT(setCom1(float, float)));
    connect(sb, SIGNAL(com2Update(float, float)), comW, SLOT(setCom2(float, float)));

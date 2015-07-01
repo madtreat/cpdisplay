@@ -122,33 +122,66 @@ void SwitchBoard::notifyAll(XPData* data)
          
       // For ALL_LAT, ALL_LON, ALL_ALT, the first value (at 0) is this aircraft
       case ALL_LAT:
-         emit acLatUpdate(VALUE(1), 1);
-         emit acLatUpdate(VALUE(2), 2);
-         emit acLatUpdate(VALUE(3), 3);
-         emit acLatUpdate(VALUE(4), 4);
-         emit acLatUpdate(VALUE(5), 5);
-         emit acLatUpdate(VALUE(6), 6);
-         emit acLatUpdate(VALUE(7), 7);
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit acLatUpdate(VALUE(i), i);
+         }
          break;
          
       case ALL_LON:
-         emit acLonUpdate(VALUE(1), 1);
-         emit acLonUpdate(VALUE(2), 2);
-         emit acLonUpdate(VALUE(3), 3);
-         emit acLonUpdate(VALUE(4), 4);
-         emit acLonUpdate(VALUE(5), 5);
-         emit acLonUpdate(VALUE(6), 6);
-         emit acLonUpdate(VALUE(7), 7);
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit acLonUpdate(VALUE(i), i);
+         }
          break;
          
       case ALL_ALT:
-         emit acAltUpdate(VALUE(1), 1);
-         emit acAltUpdate(VALUE(2), 2);
-         emit acAltUpdate(VALUE(3), 3);
-         emit acAltUpdate(VALUE(4), 4);
-         emit acAltUpdate(VALUE(5), 5);
-         emit acAltUpdate(VALUE(6), 6);
-         emit acAltUpdate(VALUE(7), 7);
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit acAltUpdate(VALUE(i), i);
+         }
+         break;
+         
+      case THROTTLE_COMMAND:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit throttleCommandUpdate(VALUE(i), i);
+         }
+         break;
+         
+      case THROTTLE_ACTUAL:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit throttleActualUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case ENG_POWER:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit engPowerUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case ENG_THRUST:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit engThrustUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case ENG_TORQUE:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit engTorqueUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case ENG_RPM:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit engRPMUpdate(VALUE(i), i);
+         }
          break;
          
       case COM_1_2_FREQ:

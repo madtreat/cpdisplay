@@ -35,23 +35,26 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent)
    tcdC = new TCDController(this);
    vsiC = new VSIController(this);
    
+   int numEngines = 2;
    comC = new CommsController(hddSettings, this);
-   engC = new EngineController(hddSettings, this);
+   engC = new EngineController(hddSettings, numEngines, this);
    tfcC = new TrafficController(hddSettings, acMap, this);
    
    layout = new QGridLayout();
    
    centralWidget = new QWidget();
    centralWidget->setLayout(layout);
-   layout->addWidget((QWidget*) pfdC->getWidget(), 0, 1, 3, 3);
-   layout->addWidget((QWidget*) mapC->getWidget(), 0, 4, 3, 3);
-   layout->addWidget((QWidget*) comC->getWidget(), 3, 1, 1, 3);
-   layout->addWidget((QWidget*) tfcC->getWidget(), 3, 4, 1, 3);
+   centralWidget->setContentsMargins(0, 0, 0, 0);
+   layout->addWidget((QWidget*) engC->getWidget(), 0, 0, 6, numEngines);
+   layout->addWidget((QWidget*) pfdC->getWidget(), 0, 1+numEngines, 6, 6);
+   layout->addWidget((QWidget*) mapC->getWidget(), 0, 7+numEngines, 6, 6);
+   layout->addWidget((QWidget*) comC->getWidget(), 6, 1+numEngines, 1, 6);
+   layout->addWidget((QWidget*) tfcC->getWidget(), 6, 7+numEngines, 1, 6);
    setCentralWidget(centralWidget);
    
    setupToolbar();
    
-   setMinimumSize(QSize(1000, 585));
+   setMinimumSize(QSize(1160, 585));
 //   showWindow();
 }
 

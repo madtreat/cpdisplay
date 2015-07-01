@@ -45,6 +45,11 @@ enum XPDataIndex {
    ALL_LON = 23,
    ALL_ALT = 24,
    
+   // Throttle
+   THROTTLE_COMMAND = 25,
+   THROTTLE_ACTUAL = 26,
+   
+   // Engine/Prop
    ENG_POWER = 34,
    ENG_THRUST = 35,
    ENG_TORQUE = 36,

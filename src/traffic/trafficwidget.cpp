@@ -45,11 +45,11 @@ void TrafficWidget::displayAC(Aircraft* ac)
    currentAC = ac;
    currentID = ac->getID();
    acLabel->setText(QString("Aircraft %1").arg(ac->getID()));
-   alt->setText(QString("%1").arg(ac->getAlt()));
-   spd->setText(QString("%1").arg(ac->getSpd()));
-   hdg->setText(QString("%1").arg(ac->getHdg()));
-   rng->setText(QString("%1").arg(ac->getRng()));
-   ber->setText(QString("%1").arg(ac->getBer()));
+   alt->setText(QString("%1").arg(ac->getAlt(), 1, 'f', 1));
+   spd->setText(QString("%1").arg(ac->getSpd(), 1, 'f', 1));
+   hdg->setText(QString("%1").arg(ac->getHdg(), 1, 'f', 1));
+   rng->setText(QString("%1").arg(ac->getRng(), 1, 'f', 1));
+   ber->setText(QString("%1").arg(ac->getBer(), 1, 'f', 1));
    emit displayedACChanged(currentID);
 }
 
@@ -97,8 +97,8 @@ void TrafficWidget::setupTrafficControls()
    connect(prevButton, &QPushButton::released, this, &TrafficWidget::showPrevAC);
    
    layoutAC->addWidget(prevButton, 0, 0);
-   layoutAC->addWidget(acLabel,    0, 1);
-   layoutAC->addWidget(nextButton, 0, 2);
+   layoutAC->addWidget(acLabel,    0, 2);
+   layoutAC->addWidget(nextButton, 0, 4);
    
    alt = new QLabel("0");
    spd = new QLabel("0");
@@ -114,8 +114,8 @@ void TrafficWidget::setupTrafficControls()
    layoutR->addRow(tr("RNG"),  rng);
    layoutR->addRow(tr("BER"),  ber);
    
-   layout->addLayout(layoutAC,0, 0, 1, 3);
-   layout->addLayout(layoutL, 1, 0);
-   layout->addLayout(layoutC, 1, 1);
-   layout->addLayout(layoutR, 1, 2);
+   layout->addLayout(layoutL, 0, 0);
+   layout->addLayout(layoutC, 0, 2);
+   layout->addLayout(layoutR, 0, 4);
+   layout->addLayout(layoutAC,1, 0, 1, 6);
 }
