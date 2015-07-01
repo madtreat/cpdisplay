@@ -212,7 +212,7 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    
    // Draw the heading number
    double hrad = getDrawAngleRad(northUp() ? heading : 0);
-   int hradius = cx - 45;
+   int hradius = cx - 60;
    int hwidth = 8*QString::number(heading).length();
    double hx = 0 + (hradius * cos(hrad)) - hwidth/2; // shift left width/2 pixels
    double hy = 0 + (hradius * sin(hrad)) + 6; // lower 6 pixels
