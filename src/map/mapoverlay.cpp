@@ -183,19 +183,30 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    // Draw the tick marks, rotating if TRACK_UP
    p.translate(cx, cy);
    if (!northUp()) {
-      p.rotate(heading);
+      p.rotate(-heading);
    }
    pen.setWidth(1);
    p.setPen(pen);
    p.drawLines(rangeCircleTicks);
    
-   // Draw the tick mark text, already rotated of TRACK_UP
+   // Draw the heading
+//   QLineF headingLine = getLine(northUp() ? heading : 0, 20, cx);
+   QLineF headingLine = getLine(heading, 20, cx);
+   p.drawLine(headingLine);
+   
+   // Draw the tick mark text, already rotated if TRACK_UP
+   // rotated the whole painter, if it was necessary
+   if (!northUp()) {
+      // if TRACK_UP, reset the rotation for the heading line
+      p.rotate(heading);
+   }
    for (int i = 0; i < 360; i += 30) {
       // Convert angle to radians, also add 90 to orient it correctly
       // (0 deg is up, not right, as drawn by default)
-      double drawAng = i - 90;
+      double ang = northUp() ? i : i - heading;
+      double drawAng = ang - 90;
       if (drawAng < 0) {
-         drawAng = i + 270;
+         drawAng = ang + 270;
       }
       double rad = (drawAng) * PI/180;
       
@@ -208,15 +219,6 @@ void MapOverlay::drawRangeCircle(QPainter& p)
       
       p.drawText(x1, y1, QString::number(i));
    }
-   
-   // Draw the heading, which will always be at 0 degrees, since we already
-   // rotated the whole painter, if it was necessary
-   if (!northUp()) {
-      // if TRACK_UP, reset the rotation for the heading line
-      p.rotate(-heading);
-   }
-   QLineF headingLine = getLine(northUp() ? heading : 0, 20, cx);
-   p.drawLine(headingLine);
    
    // Reset for next drawing
    p.setPen(origPen);
