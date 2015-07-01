@@ -81,6 +81,23 @@ void MapOverlay::panToLocation(float lat, float lon)
 
 
 /*
+ * Returns the draw angle in radians, which just wraps around the circle.
+ * The angle must be given in degrees.
+ */
+double MapOverlay::getDrawAngleRad(double deg)
+{
+   // Convert angle to radians, also add 90 to orient it correctly
+   // (0 deg is up, not right, as drawn by default)
+   double drawAng = deg - 90;
+   if (drawAng < 0) {
+      drawAng = deg + 270;
+   }
+   double rad = (drawAng) * PI/180;
+   return rad;
+}
+
+
+/*
  * Returns a line object originating at the center of the overlay window, with
  * the following properties:
  *    deg  = the angle in degrees
@@ -94,13 +111,7 @@ void MapOverlay::panToLocation(float lat, float lon)
  */
 QLineF MapOverlay::getLine(double deg, int from, int to, int cx, int cy)
 {
-   // Convert angle to radians, also add 90 to orient it correctly
-   // (0 deg is up, not right, as drawn by default)
-   double drawAng = deg - 90;
-   if (drawAng < 0) {
-      drawAng = deg + 270;
-   }
-   double rad = (drawAng) * PI/180;
+   double rad = getDrawAngleRad(deg);
    
    // First point is on the radius circle
    double x1 = cx + (to * cos(rad));
@@ -189,26 +200,30 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    p.setPen(pen);
    p.drawLines(rangeCircleTicks);
    
-   // Draw the heading
-//   QLineF headingLine = getLine(northUp() ? heading : 0, 20, cx);
+   // Draw the heading line
    QLineF headingLine = getLine(heading, 20, cx);
    p.drawLine(headingLine);
    
-   // Draw the tick mark text, already rotated if TRACK_UP
-   // rotated the whole painter, if it was necessary
+   // Do some fancy un-rotating and angle - heading for proper textual display
    if (!northUp()) {
       // if TRACK_UP, reset the rotation for the heading line
       p.rotate(heading);
    }
+   
+   // Draw the heading number
+   double hrad = getDrawAngleRad(northUp() ? heading : 0);
+   int hradius = cx - 45;
+   int hwidth = 8*QString::number(heading).length();
+   double hx = 0 + (hradius * cos(hrad)) - hwidth/2; // shift left width/2 pixels
+   double hy = 0 + (hradius * sin(hrad)) + 6; // lower 6 pixels
+   p.drawText(hx, hy, QString::number(heading));
+   
+   // Draw the tick mark text
    for (int i = 0; i < 360; i += 30) {
       // Convert angle to radians, also add 90 to orient it correctly
       // (0 deg is up, not right, as drawn by default)
       double ang = northUp() ? i : i - heading;
-      double drawAng = ang - 90;
-      if (drawAng < 0) {
-         drawAng = ang + 270;
-      }
-      double rad = (drawAng) * PI/180;
+      double rad = getDrawAngleRad(ang);
       
       // First point is on the radius circle
       int radius = cx - 25;

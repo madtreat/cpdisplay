@@ -42,6 +42,7 @@ public slots:
    void setHeading(float _heading) {heading = _heading;}
 
 protected:
+   double getDrawAngleRad(double deg);
    QLineF getLine(double deg, int from, int to, int cx=0, int cy=0);
    void initRangeTicks(int diameter=DEFAULT_MAP_WIDTH);
    
