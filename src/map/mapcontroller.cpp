@@ -20,7 +20,7 @@ MapController::MapController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* 
   acMap(_acMap)
 {
    orientation = TRACK_UP;
-   settings = new MapSettings(QString(), this);
+   settings = new MapSettings("maps.ini", this);
    mapWidget = new MapWidget(hddSettings, settings);
    
    qDebug() << "Can enable maps?" << settings->canEnableMaps();

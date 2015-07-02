@@ -82,6 +82,7 @@ void MapWidget::panToLocation(float lat, float lon)
 {
    view->panToLocation(lat, lon);
    overlay->panToLocation(lat, lon);
+   overlay->repaint();
 }
 
 void MapWidget::setOrientation(MapOrientation mo)

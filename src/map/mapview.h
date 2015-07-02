@@ -45,14 +45,10 @@ public slots:
    void errorOccurred(const QString& error);
    
    void setZoom(int level);
-   void panToLocation(float lat, float lon);
-   void setHeading(float _heading) {heading = _heading;}
+   void panToLocation(float _lat, float _lon);
+   void setHeading(float _heading);
    
    void setOrientation(MapOrientation mo);
-
-protected:
-//   void paintEvent(QPaintEvent*);
-   void render();
    
 private:
    HDDSettings*         hddSettings;
@@ -63,7 +59,9 @@ private:
    GeocodeDataManager*  geocode;
    
    double heading; // current heading value in degrees
-//   bool   northUp; // is NORTH_UP currently selected?
+   MapOrientation orientation; // currently selected orientation
+   double lat; // current lat
+   double lon; // current lon
 
    QVariant evaluateJS(QString js);
    void calculateDistanceScale();

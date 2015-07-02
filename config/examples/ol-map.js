@@ -1,0 +1,1 @@
+../../ext/qt-google-maps/config/ol-map.js

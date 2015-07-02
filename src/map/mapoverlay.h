@@ -39,7 +39,7 @@ public:
 public slots:
    void setZoom(int level);
    void panToLocation(float lat, float lon);
-   void setHeading(float _heading) {heading = _heading;}
+   void setHeading(float _heading) {heading = _heading; repaint();}
 
 protected:
    double getDrawAngleRad(double deg);
