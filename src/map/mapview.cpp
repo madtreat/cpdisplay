@@ -82,6 +82,10 @@ void MapView::resize(const QSize& size)
    // set the web page's size
 //   qDebug() << "   Current viewport size:" << webView->page()->viewportSize();
 //   qDebug() << "   Current webframe size:" << webView->page()->currentFrame()->contentsSize();
+   
+   // The page's viewport size contains the whole HTML document, so this can be
+   // used to resize at least the visible map to transition correctly on move
+   // and zoom events and generally, for the visible map to look right.
    webView->page()->setViewportSize(size);
 //   qDebug() << "       New viewport size:" << webView->page()->viewportSize();
 }
