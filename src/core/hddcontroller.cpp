@@ -177,6 +177,20 @@ float HDDController::calculateTurnRate(float q, float r, float pitch, float roll
    return turnRateDPS;
 }
 
+Aircraft* HDDController::createAircraft(int id, float lat, float lon, float alt)
+{
+   MapController* mapC = window->getMapC();
+   TrafficController* tfcC = window->getTfcC();
+   
+   Aircraft* a = new Aircraft(id, this);
+   a->setLatLonAlt(lat, lon, alt);
+   connect(a, SIGNAL(acUpdated(int)), tfcC, SLOT(acUpdated(int)));
+   connect(a, SIGNAL(acUpdated(int)), mapC, SLOT(acUpdated(int)));
+//   connect(a, SIGNAL(rngBerUpdated(int)), mapC, SLOT(updateACPos(int)));
+   acMap->insert(id, a);
+   return a;
+}
+
 void HDDController::updateAngVel(float q, float p, float r)
 {
    angVelQ = q;
@@ -219,10 +233,7 @@ void HDDController::updateACLat(float lat, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
    if (!acMap->contains(ac)) {
-      Aircraft* a = new Aircraft(ac, this);
-      a->setLatLonAlt(lat, 0.0, 0.0);
-      connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
-      acMap->insert(ac, a);
+      createAircraft(ac, lat, 0.0, 0.0);
       return;
    }
    Aircraft* a = acMap->value(ac);
@@ -234,10 +245,7 @@ void HDDController::updateACLon(float lon, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
    if (!acMap->contains(ac)) {
-      Aircraft* a = new Aircraft(ac, this);
-      a->setLatLonAlt(0.0, lon, 0.0);
-      connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
-      acMap->insert(ac, a);
+      createAircraft(ac, 0.0, lon, 0.0);
       return;
    }
    Aircraft* a = acMap->value(ac);
@@ -249,10 +257,7 @@ void HDDController::updateACAlt(float alt, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
    if (!acMap->contains(ac)) {
-      Aircraft* a = new Aircraft(ac, this);
-      a->setLatLonAlt(0.0, 0.0, alt);
-      connect(a, SIGNAL(acUpdated(int)), this, SLOT(acUpdated(int)));
-      acMap->insert(ac, a);
+      createAircraft(ac, 0.0, 0.0, alt);
       return;
    }
    Aircraft* a = acMap->value(ac);
@@ -270,8 +275,6 @@ void HDDController::updateACAlt(float alt, int ac)
  */
 void HDDController::acUpdated(int id)
 {
-   TrafficController* tfcC = window->getTfcC();
-   tfcC->acUpdated(id);
    
    // TODO: update the map for drawing the AC
 }

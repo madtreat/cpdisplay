@@ -31,6 +31,9 @@ public:
    float getHdg() const { return hdg; }
    float getRng() const { return rng; }
    float getBer() const { return ber; }
+   
+   bool hasBeenDisplayed() const { return displayed; }
+   void setHasBeenDisplayed() { displayed = true; }
 
 public slots:
    void setLat(float _lat);
@@ -42,9 +45,11 @@ public slots:
 
 signals:
    void acUpdated(int id);
+   void rngBerUpdated(int id);
 
 private:
    int   id;  // aircraft id
+   bool  displayed; // has this aircraft been displayed on the map yet?
    
    float lat; // latitude
    float lon; // longitude

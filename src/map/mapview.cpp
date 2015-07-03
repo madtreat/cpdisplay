@@ -14,14 +14,16 @@
 #include "qt-google-maps/geocode_data_manager.h"
 #include "qt-google-maps/mapsettings.h"
 
+#include "core/aircraft.h"
 #include "core/hddsettings.h"
 #include "core/mapconsts.h"
 
 
-MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent)
+MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent)
 : QWidget(_parent),
   hddSettings(_hddSettings),
   settings(_settings),
+  acMap(_acMap),
   heading(0.0),
   lat(0.0),
   lon(0.0)
@@ -95,6 +97,17 @@ QVariant MapView::evaluateJS(QString js)
 {
 //   return webView->page()->currentFrame()->documentElement().evaluateJavaScript(js);
    return webView->page()->mainFrame()->evaluateJavaScript(js);
+}
+
+void MapView::calculateDistanceScale()
+{
+   qDebug() << "Calculating distance scale...";
+   QString latlon1 = QString("map.getBounds().getNorthEast()");
+   QString latlon2 = QString("map.getBounds().getSouthWest()");
+
+   QString str = QString("google.maps.geometry.spherical.computeDistanceBetween (%1, %2);").arg(latlon1).arg(latlon2);
+   QVariant diagDist = evaluateJS(str);
+   qDebug() << "diagDist =" << diagDist;
 }
 
 void MapView::startedLoading()
@@ -173,13 +186,23 @@ void MapView::showSatMap(bool show)
    evaluateJS(str);
 }
 
-void MapView::calculateDistanceScale()
+/*
+ * Update the icons displayed on the map itself
+ */
+void MapView::updateAC(int id)
 {
-   qDebug() << "Calculating distance scale...";
-   QString latlon1 = QString("map.getBounds().getNorthEast()");
-   QString latlon2 = QString("map.getBounds().getSouthWest()");
-
-   QString str = QString("google.maps.geometry.spherical.computeDistanceBetween (%1, %2);").arg(latlon1).arg(latlon2);
-   QVariant diagDist = evaluateJS(str);
-   qDebug() << "diagDist =" << diagDist;
+   if (id == 0) return; // dont draw this ac
+   Aircraft* a = acMap->value(id);
+   QString str;
+   if (a->hasBeenDisplayed()) {
+//      str = QString("updateAircraft");
+      str = QString("addNewAircraft");
+   }
+   else {
+      str = QString("addNewAircraft");
+      a->setHasBeenDisplayed();
+   }
+   str += QString("(%1, %2, %3, %4, %5, %6);").arg(a->getID()).arg(a->getLat()).arg(a->getLon()).arg(a->getRng()).arg(a->getBer()).arg(a->getAlt());
+//   qDebug() << "Updating AC Map Icon:" << str;
+   evaluateJS(str);
 }

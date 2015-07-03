@@ -72,3 +72,9 @@ void MapController::setOrientation(MapOrientation mo)
    mapWidget->setOrientation(mo);
 }
 
+void MapController::acUpdated(int id)
+{
+   // The map overlay draws uses the values directly from acMap, so it does not
+   // need to be notified, but the map view does.
+   getMapView()->updateAC(id);
+}

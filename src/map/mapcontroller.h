@@ -39,6 +39,7 @@ public slots:
    void decreaseZoom();
    void panToLocation(float lat, float lon);
    void setOrientation(MapOrientation mo);
+   void acUpdated(int id);
    
 signals:
    /*

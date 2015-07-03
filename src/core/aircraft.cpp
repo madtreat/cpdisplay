@@ -9,7 +9,8 @@
 
 Aircraft::Aircraft(int _id, QObject* _parent)
 : QObject(_parent),
-  id(_id)
+  id(_id),
+  displayed(false)
 {
    lat = 0.0;
    lon = 0.0;
@@ -81,4 +82,5 @@ void Aircraft::setRngBer(double _rng, double _ber)
 {
    rng = _rng;
    ber = _ber;
+   emit rngBerUpdated(id);
 }

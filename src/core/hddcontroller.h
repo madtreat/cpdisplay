@@ -28,6 +28,8 @@ public:
 
    float deg2rad(float deg) { return deg*PI/180; }
    float calculateTurnRate(float q, float r, float pitch, float roll);
+   
+   Aircraft* createAircraft(int id, float lat, float lon, float alt);
 
 public slots:
    void updateAngVel(float q, float p, float r);

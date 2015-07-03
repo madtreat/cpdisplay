@@ -31,7 +31,7 @@ MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap
    setSizePolicy(sp);
    
    
-   view = new MapView(hddSettings, mapSettings);
+   view = new MapView(hddSettings, mapSettings, acMap);
    layout->addWidget(view);
    view->setSizePolicy(sp);
    

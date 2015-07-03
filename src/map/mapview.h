@@ -11,6 +11,7 @@
 #define MAPVIEW_
 
 #include <QWidget>
+#include "core/aircraft.h"
 #include "core/mapconsts.h"
 #include "core/hddsettings.h"
 
@@ -26,7 +27,7 @@ class MapView : public QWidget {
    Q_OBJECT;
 
 public:
-   MapView(HDDSettings* _hddSettings, MapSettings* _settings, QWidget* _parent = 0);
+   MapView(HDDSettings* _hddSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent = 0);
    MapView(const MapView& orig) = delete;
    virtual ~MapView();
    
@@ -52,10 +53,13 @@ public slots:
    
    void showSatMap(bool show);
    
+   void updateAC(int id);
+   
 private:
    HDDSettings*         hddSettings;
    MapSettings*         settings;
    bool                 enabled; // are the maps enabled?
+   ACMap*               acMap;
    
    QWebView*            webView;
    GeocodeDataManager*  geocode;
