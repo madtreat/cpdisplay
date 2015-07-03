@@ -20,6 +20,6 @@ target_link_libraries(${PROJECT_NAME}
    ${Qt5Widgets_LIBRARIES}
    ${Qt5Gui_LIBRARIES}
 
-   #hdd-utils
+   hdd-utils
    hdd-core
 )

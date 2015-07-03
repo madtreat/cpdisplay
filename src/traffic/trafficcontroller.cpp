@@ -9,6 +9,7 @@
 
 #include <QDebug>
 
+#include "utils/geodist.h"
 #include "core/hddsettings.h"
 #include "trafficwidget.h"
 
@@ -34,25 +35,26 @@ TrafficController::~TrafficController()
  * This slot is called when any given aircraft (identified by id) has had its
  * lat, lon and altitude updated.
  * 
- * Update the map so it can draw the AC.
- * Update the TFC controller so it can update the displayed values if this AC
- * is currently selected.
+ * Update the aircraft's range and bearing from this cockpit's position.
+ * If this is the currently displayed aircraft, update the values in the widget.
  */
 void TrafficController::acUpdated(int id)
 {
    
+   Aircraft* ac0 = acMap->value(0);  // This cockpit/AC
+   Aircraft* ac  = acMap->value(id); // The updated AC
+   double rng = geo::distance(ac0->getLat(), ac0->getLon(), ac->getLat(), ac->getLon());
+   double ber = geo::bearing(ac0->getLat(), ac0->getLon(), ac->getLat(), ac->getLon());
+   ac->setRngBer(rng, ber);
+   
+   if (id == currentID) {
+      setDisplayedAC(acMap->value(id));
+   }
 }
 
 void TrafficController::setDisplayedAC(Aircraft* ac)
 {
-   int id = ac->getID();
-   if (!acMap->contains(id)) {
-      acMap->insert(id, ac);
-   }
-   // TODO: update the tab widget or whatever
-   if (id == currentID) {
-      trafficWidget->displayAC(ac);
-   }
+   trafficWidget->displayAC(ac);
 }
 
 void TrafficController::updateCurrentAC(int id)

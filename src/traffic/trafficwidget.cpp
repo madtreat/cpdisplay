@@ -90,7 +90,7 @@ void TrafficWidget::setupTrafficControls()
    QFormLayout* layoutR = new QFormLayout(); // right form
    
    acLabel = new QLabel("Aircraft 1");
-   acLabel->setAlignment(Qt::AlignHCenter);
+   acLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
    nextButton = new QPushButton("Next AC");
    prevButton = new QPushButton("Prev AC");
    connect(nextButton, &QPushButton::released, this, &TrafficWidget::showNextAC);

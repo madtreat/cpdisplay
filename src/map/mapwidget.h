@@ -9,6 +9,7 @@
 #define MAPWIDGET_
 
 #include <QWidget>
+#include "core/aircraft.h"
 #include "core/mapconsts.h"
 
 #include "mapview.h"
@@ -25,7 +26,7 @@ class MapWidget : public QWidget {
    Q_OBJECT;
 
 public:
-   MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent = 0);
+   MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent = 0);
    MapWidget(const MapWidget& orig) = delete;
    virtual ~MapWidget();
    
@@ -47,6 +48,8 @@ private:
    MapSettings* mapSettings;
    MapView* view;
    MapOverlay* overlay;
+   
+   ACMap* acMap;
 
 };
 

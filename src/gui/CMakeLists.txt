@@ -23,7 +23,7 @@ target_link_libraries(${PROJECT_NAME}
    qfi-core
    qfi-ui
 
-   #hdd-utils
+   hdd-utils
    hdd-core
    hdd-instruments
    hdd-map

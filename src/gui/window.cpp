@@ -98,8 +98,10 @@ void HDDWindow::setupToolbar()
    trafficButton->setEnabled(false);
    toolbar->addWidget(trafficButton);
    
-   terrainButton = createToolButton("TER", false);
-   terrainButton->setEnabled(false);
+   terrainButton = createToolButton("SAT", true);
+   terrainButton->setEnabled(true);
+   terrainButton->setChecked(true);
+   connect(terrainButton, SIGNAL(toggled(bool)), getMapView(), SLOT(showSatMap(bool)));
    toolbar->addWidget(terrainButton);
    
    orientationButton = createToolButton("North Up", true);

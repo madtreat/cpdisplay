@@ -50,6 +50,8 @@ public slots:
    
    void setOrientation(MapOrientation mo);
    
+   void showSatMap(bool show);
+   
 private:
    HDDSettings*         hddSettings;
    MapSettings*         settings;

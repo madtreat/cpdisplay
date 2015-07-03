@@ -161,6 +161,18 @@ void MapView::setOrientation(MapOrientation mo)
    setHeading(heading);
 }
 
+void MapView::showSatMap(bool show)
+{
+   QString str;
+   if (show) {
+      str = "addSatLayer();";
+   }
+   else {
+      str = "removeSatLayer();";
+   }
+   evaluateJS(str);
+}
+
 void MapView::calculateDistanceScale()
 {
    qDebug() << "Calculating distance scale...";

@@ -271,7 +271,7 @@ void HDDController::updateACAlt(float alt, int ac)
 void HDDController::acUpdated(int id)
 {
    TrafficController* tfcC = window->getTfcC();
-   tfcC->setDisplayedAC(acMap->value(id));
+   tfcC->acUpdated(id);
    
    // TODO: update the map for drawing the AC
 }

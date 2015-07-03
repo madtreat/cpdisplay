@@ -16,10 +16,11 @@
 #include "mapview.h"
 #include "mapoverlay.h"
 
-MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent)
+MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent)
 : QWidget(_parent),
   hddSettings(_hddSettings),
-  mapSettings(_mapSettings)
+  mapSettings(_mapSettings),
+  acMap(_acMap)
 {
 //   LayoutSquare* layout = new LayoutSquare(this);
    QGridLayout* layout = new QGridLayout(this);
@@ -34,7 +35,7 @@ MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidg
    layout->addWidget(view);
    view->setSizePolicy(sp);
    
-   overlay = new MapOverlay(hddSettings, mapSettings, view);
+   overlay = new MapOverlay(hddSettings, mapSettings, acMap, view);
    overlay->setGeometry(view->geometry());
 //   overlay->setSizePolicy(sp);
    

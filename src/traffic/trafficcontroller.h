@@ -31,6 +31,9 @@ public slots:
    void acUpdated(int id);
    void setDisplayedAC(Aircraft* ac);
    void updateCurrentAC(int id);
+   
+signals:
+   void acRngBerUpdated(int id);
 
 private:
    HDDSettings*   hddSettings;

@@ -13,6 +13,7 @@
 #include <QVector>
 #include <QLineF>
 
+#include "core/aircraft.h"
 #include "core/mapconsts.h"
 #include "core/hddsettings.h"
 
@@ -24,9 +25,11 @@ class MapSettings;
 class MapOverlay : public QWidget {
    Q_OBJECT;
    typedef QVector<QLineF> TickList;
+   // compass radius = map_width/2 - COMPASS_PADDING
+   static const int COMPASS_PADDING = 20;
 
 public:
-   MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, QWidget* _parent = 0);
+   MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent = 0);
    MapOverlay(const MapOverlay& orig) = delete;
    virtual ~MapOverlay();
    
@@ -52,6 +55,8 @@ protected:
 private:
    HDDSettings* hddSettings;
    MapSettings* mapSettings;
+   
+   ACMap* acMap;
    
    double heading; // current heading value in degrees
    

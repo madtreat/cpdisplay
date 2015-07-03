@@ -37,6 +37,8 @@ public slots:
    void setLon(float _lon);
    void setAlt(float _alt);
    void setLatLonAlt(float _lat, float _lon, float _alt);
+   
+   void setRngBer(double _rng, double _ber);
 
 signals:
    void acUpdated(int id);

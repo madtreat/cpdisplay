@@ -77,3 +77,8 @@ void Aircraft::setLatLonAlt(float _lat, float _lon, float _alt)
    altUpdated = false;
 }
 
+void Aircraft::setRngBer(double _rng, double _ber)
+{
+   rng = _rng;
+   ber = _ber;
+}
