@@ -94,22 +94,49 @@ function zoomTo(level) {
    view.setZoom(level);
 }
 
+/*
+ * Rotates the map around the provided lat/lon coords by deg degrees.
+ * 
+ * @param {type} deg
+ * @param {type} lat
+ * @param {type} lon
+ */
 function rotate(deg, lat, lon) {
    view.rotate(deg*Math.PI/180, getCoords(lat, lon));
 }
 
+/*
+ * Makes the satellite layer invisible and shows the street map.
+ */
 function removeSatLayer() {
    satLayer.set('visible', false);
    hybLayer.set('visible', false);
    osmLayer.set('visible', true);
 }
 
+/*
+ * Makes the satellite layer visible with a hybrid layer on top to include
+ * all major map features (countries, states, cities, roads, airports, etc.),
+ * and hides the street map.
+ */
 function addSatLayer() {
    osmLayer.set('visible', false);
    satLayer.set('visible', true);
    hybLayer.set('visible', true);
 }
 
+/*
+ * Updates the aircraft's feature data, which is displayed in the popup when
+ * clicking or tapping on an aircraft.
+ * 
+ * @param {type} id  - aircraft ic
+ * @param {type} lat - latitude
+ * @param {type} lon - longitude
+ * @param {type} rng - distance to aircraft
+ * @param {type} ber - bearing to aircraft
+ * @param {type} alt - aircraft altitude
+ * @param {type} hdg - aircraft heading (in degrees)
+ */
 function updateAircraft(id, lat, lon, rng, ber, alt, hdg) {
    var feature = acFeatures[id-1];
    if (feature) {
@@ -125,6 +152,7 @@ function updateAircraft(id, lat, lon, rng, ber, alt, hdg) {
 }
 
 /*
+ * Draws an aircraft as an icon VectorLayer on the map.
  * 
  * @param {type} id  - aircraft ic
  * @param {type} lat - latitude
@@ -133,7 +161,6 @@ function updateAircraft(id, lat, lon, rng, ber, alt, hdg) {
  * @param {type} ber - bearing to aircraft
  * @param {type} alt - aircraft altitude
  * @param {type} hdg - aircraft heading (in degrees)
- * @returns {undefined}
  */
 function addNewAircraft(id, lat, lon, rng, ber, alt, hdg) {
    if (acIDs.indexOf(id) >= 0) {
