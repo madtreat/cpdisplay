@@ -4,6 +4,8 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QDebug>
+#include <QFile>
+//#include <QLatin1String>
 
 #include "core/hddsettings.h"
 
@@ -39,6 +41,11 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent)
    comC = new CommsController(hddSettings, this);
    engC = new EngineController(hddSettings, numEngines, this);
    tfcC = new TrafficController(hddSettings, acMap, this);
+   
+   QFile ss(":/style/style.css");
+   ss.open(QFile::ReadOnly);
+   QString style = QLatin1String(ss.readAll());
+   setStyleSheet(style);
    
    layout = new QGridLayout();
    layout->setContentsMargins(0, 0, 0, 0);

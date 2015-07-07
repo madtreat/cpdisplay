@@ -1,0 +1,48 @@
+/* 
+    Created on : Jul 7, 2015, 10:13:09 AM
+    Author     : Madison Treat <madison.treat@tamu.edu>
+*/
+
+QMainWindow, 
+QPushButton,
+QWebView,
+QToolBar {
+   background-color: black;
+}
+
+QToolBar,
+QPushButton::checked,
+QLabel {
+   /*color: darkgreen;*/
+   color: green;
+}
+
+QPushButton {
+   border: 2px solid gray;
+   border-radius: 6px;
+   background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+      stop: 0 gray, stop: 1 darkslategray);
+   color: black;
+}
+
+QPushButton::disabled {
+   background-color: darkgray;
+   color: gray;
+}
+
+QPushButton::pressed {
+   background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+      stop: 0 darkslategray, stop: 1 gray);
+}
+
+QPushButton::checked {
+   background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+      stop: 0 darkgreen, stop: 1 black);
+   /*color: green;*/
+}
+
+QPushButton::checked::pressed {
+   background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+      stop: 0 black, stop: 1 darkgreen);
+   /*color: green;*/
+}

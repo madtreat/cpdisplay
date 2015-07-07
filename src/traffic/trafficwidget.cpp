@@ -107,12 +107,12 @@ void TrafficWidget::setupTrafficControls()
    rng = new QLabel("0");
    ber = new QLabel("0");
    
-   layoutL->addRow(tr("ALT"),  alt);
-   layoutL->addRow(tr("SPD"),  spd);
-   layoutC->addRow(tr("HDG"),  hdg);
-   layoutC->addRow(tr("TYPE"), typ);
-   layoutR->addRow(tr("RNG"),  rng);
-   layoutR->addRow(tr("BER"),  ber);
+   layoutL->addRow(tr("ALT:"),  alt);
+   layoutL->addRow(tr("SPD:"),  spd);
+   layoutC->addRow(tr("HDG:"),  hdg);
+   layoutC->addRow(tr("TYPE:"), typ);
+   layoutR->addRow(tr("RNG:"),  rng);
+   layoutR->addRow(tr("BER:"),  ber);
    
    layout->addLayout(layoutL, 0, 0);
    layout->addLayout(layoutC, 0, 2);

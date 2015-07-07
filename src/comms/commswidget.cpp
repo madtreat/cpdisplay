@@ -73,12 +73,12 @@ void CommsWidget::setupCommsControls()
    gmt  = new QLabel("0:00:00");
    local= new QLabel("0:00:00");
    
-   layoutL->addRow(tr("COM 1"), com1);
-   layoutL->addRow(tr("COM 2"), com2);
-   layoutC->addRow(tr("NAV 1"), nav1);
-   layoutC->addRow(tr("NAV 2"), nav2);
-   layoutR->addRow(tr("GMT"), gmt);
-   layoutR->addRow(tr("local"), local);
+   layoutL->addRow(tr("COM 1:"), com1);
+   layoutL->addRow(tr("COM 2:"), com2);
+   layoutC->addRow(tr("NAV 1:"), nav1);
+   layoutC->addRow(tr("NAV 2:"), nav2);
+   layoutR->addRow(tr("GMT:"), gmt);
+   layoutR->addRow(tr("local:"), local);
    
    layout->addLayout(layoutL, 0, 0);
    layout->addLayout(layoutC, 0, 1);
