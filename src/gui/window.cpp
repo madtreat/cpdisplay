@@ -35,12 +35,13 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent)
    tcdC = new TCDController(this);
    vsiC = new VSIController(this);
    
-   int numEngines = 2;
+   numEngines = 2;
    comC = new CommsController(hddSettings, this);
    engC = new EngineController(hddSettings, numEngines, this);
    tfcC = new TrafficController(hddSettings, acMap, this);
    
    layout = new QGridLayout();
+   layout->setContentsMargins(0, 0, 0, 0);
    
    centralWidget = new QWidget();
    centralWidget->setLayout(layout);
@@ -158,7 +159,7 @@ void HDDWindow::pfdButtonClicked(bool checked)
       tcdW->hide();
       vsiW->hide();
 
-      layout->addWidget(pfdW, 0, 1, 3, 3);
+      layout->addWidget(pfdW, 0, 1+numEngines, 6, 6);
       pfdW->show();
    }
    // Disply other instruments if unchecked
@@ -166,12 +167,12 @@ void HDDWindow::pfdButtonClicked(bool checked)
       layout->removeWidget(pfdW);
       pfdW->hide();
       
-      layout->addWidget(asiW, 0, 1);
-      layout->addWidget(adiW, 0, 2);
-      layout->addWidget(altW, 0, 3);
-      layout->addWidget(tcdW, 1, 1);
-      layout->addWidget(hsiW, 1, 2);
-      layout->addWidget(vsiW, 1, 3);
+      layout->addWidget(asiW, 0, 1+numEngines, 2, 2);
+      layout->addWidget(adiW, 0, 3+numEngines, 2, 2);
+      layout->addWidget(altW, 0, 5+numEngines, 2, 2);
+      layout->addWidget(tcdW, 3, 1+numEngines, 2, 2);
+      layout->addWidget(hsiW, 3, 3+numEngines, 2, 2);
+      layout->addWidget(vsiW, 3, 5+numEngines, 2, 2);
       adiW->show();
       altW->show();
       asiW->show();

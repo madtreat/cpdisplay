@@ -52,10 +52,11 @@ public slots:
    void orientationButtonClicked(bool checked);
    
    void latLonUpdate(float lat, float lon);
-
+   
 private:
    HDDSettings*   hddSettings;
    ACMap*         acMap;
+   int            numEngines;
    
    // Widget controllers
    MapController* mapC;

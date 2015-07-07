@@ -8,6 +8,7 @@
 #include "mapwidget.h"
 
 #include <QGridLayout>
+#include <QResizeEvent>
 
 #include "qfi/ui/LayoutSquare.h"
 #include "qt-google-maps/mapsettings.h"
@@ -58,6 +59,11 @@ MapWidget::~MapWidget()
 QSize MapWidget::sizeHint() const
 {
    return QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+}
+
+void MapWidget::resizeEvent(QResizeEvent* event)
+{
+   resize(event->size());
 }
 
 void MapWidget::resize(int w, int h)

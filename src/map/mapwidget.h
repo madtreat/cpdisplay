@@ -15,6 +15,8 @@
 #include "mapview.h"
 #include "mapoverlay.h"
 
+class QResizeEvent;
+
 class MapSettings;
 //class MapView;
 //class MapOverlay;
@@ -42,6 +44,8 @@ public slots:
    void panToLocation(float lat, float lon);
    void setOrientation(MapOrientation mo);
    
+protected:
+   void resizeEvent(QResizeEvent* event);
 
 private:
    HDDSettings* hddSettings;

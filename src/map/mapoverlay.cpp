@@ -64,7 +64,7 @@ void MapOverlay::resize(const QSize& size)
    QWidget::resize(size);
    
    // Update the range ticks
-   initRangeTicks(size.width());
+   initRangeTicks(min(size.width(), size.height()));
 }
 
 
@@ -182,7 +182,7 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    QPen origPen = p.pen();
    int cx = width()/2;  // center x
    int cy = height()/2; // center y
-   int cradius = cx - COMPASS_PADDING; // circle radius - give some padding for drawing outside it
+   int cradius = min(cx, cy) - COMPASS_PADDING; // circle radius - give some padding for drawing outside it
    
    QPen pen(Qt::SolidLine);
    pen.setColor(Qt::yellow);
@@ -191,8 +191,11 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    
    // Draw the range circle
    // circles are 0 -> (5760=16*360), in 1/16th deg (integer) increments
-   QRect rangeCircle = rect();
-   rangeCircle.adjust(COMPASS_PADDING, COMPASS_PADDING, -COMPASS_PADDING, -COMPASS_PADDING);
+   QRect mapr = rect();
+   QRect rangeCircle = mapr;
+   int hAdjust = cx - cradius;//COMPASS_PADDING;
+   int vAdjust = cy - cradius;//COMPASS_PADDING;
+   rangeCircle.adjust(hAdjust, vAdjust, -hAdjust, -vAdjust);
    p.drawArc(rangeCircle, 0, 5760);
    
    // Draw the tick marks, rotating if TRACK_UP
