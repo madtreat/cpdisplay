@@ -209,3 +209,17 @@ function addNewAircraft(id, lat, lon, rng, ber, alt, hdg) {
       acPopupOverlays.push(popup);
    }
 }
+
+function clearAircraft() {
+   $(acIDs).each(function(index) {
+      map.removeLayer(acIconLayers[index]);
+      map.removeOverlay(acPopupOverlays[index]);
+   });
+}
+
+function showAircraft() {
+   $(acIDs).each(function(index) {
+      map.addLayer(acIconLayers[index]);
+      map.addOverlay(acPopupOverlays[index]);
+   });
+}

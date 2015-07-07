@@ -54,6 +54,7 @@ public slots:
    void showSatMap(bool show);
    
    void updateAC(int id);
+   void displayTraffic(bool show);
    
 private:
    HDDSettings*         hddSettings;
@@ -68,6 +69,7 @@ private:
    MapOrientation orientation; // currently selected orientation
    double lat; // current lat
    double lon; // current lon
+   bool   showTraffic; // currently displaying traffic?
 
    QVariant evaluateJS(QString js);
    void calculateDistanceScale();

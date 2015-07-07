@@ -43,6 +43,7 @@ public slots:
    void setZoom(int level);
    void panToLocation(float lat, float lon);
    void setHeading(float _heading) {heading = _heading; repaint();}
+   void displayTraffic(bool show);
 
 protected:
    double getDrawAngleRad(double deg);
@@ -59,6 +60,7 @@ private:
    ACMap* acMap;
    
    double heading; // current heading value in degrees
+   bool   showTraffic; // currently displaying traffic?
    
    TickList rangeCircleTicks; // list of pre-generated lines for when NORTH_UP
    

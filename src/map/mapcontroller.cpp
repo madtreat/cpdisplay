@@ -78,3 +78,9 @@ void MapController::acUpdated(int id)
    // need to be notified, but the map view does.
    getMapView()->updateAC(id);
 }
+
+void MapController::displayTraffic(bool show)
+{
+   mapWidget->getMapView()->displayTraffic(show);
+   mapWidget->getOverlay()->displayTraffic(show);
+}

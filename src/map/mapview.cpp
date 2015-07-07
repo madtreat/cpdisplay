@@ -26,7 +26,8 @@ MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, ACMap* _acMa
   acMap(_acMap),
   heading(0.0),
   lat(0.0),
-  lon(0.0)
+  lon(0.0),
+  showTraffic(false)
 {
    geocode = new GeocodeDataManager(settings->apiKey(), this);
    connect(geocode, SIGNAL(coordinatesReady(double,double)),  this, SLOT(showCoordinates(double,double)));
@@ -192,7 +193,7 @@ void MapView::showSatMap(bool show)
  */
 void MapView::updateAC(int id)
 {
-   if (id == 0) return; // dont draw this ac
+   if (id == 0 || !showTraffic) return; // dont draw this ac
    Aircraft* a = acMap->value(id);
    QString str;
    if (a->hasBeenDisplayed()) {
@@ -205,5 +206,18 @@ void MapView::updateAC(int id)
    }
    str += QString("(%1, %2, %3, %4, %5, %6, %7);").arg(a->getID()).arg(a->getLat()).arg(a->getLon()).arg(a->getRng()).arg(a->getBer()).arg(a->getAlt()).arg(a->getHdg());
 //   qDebug() << "Updating AC Map Icon:" << str;
+   evaluateJS(str);
+}
+
+void MapView::displayTraffic(bool show)
+{
+   showTraffic = show;
+   QString str;
+   if (showTraffic) {
+      str = "showAircraft();";
+   }
+   else {
+      str = "clearAircraft();";
+   }
    evaluateJS(str);
 }

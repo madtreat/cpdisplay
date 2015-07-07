@@ -94,22 +94,24 @@ void HDDWindow::setupToolbar()
    
    pfdButton = createToolButton("PFD", true);
    pfdButton->setEnabled(true);
-   pfdButton->setChecked(true);
    connect(pfdButton, SIGNAL(toggled(bool)), this, SLOT(pfdButtonClicked(bool)));
+   pfdButton->setChecked(true);
    toolbar->addWidget(pfdButton);
    
    weatherButton = createToolButton("WX", false);
    weatherButton->setEnabled(false);
    toolbar->addWidget(weatherButton);
    
-   trafficButton = createToolButton("TFC", false);
-   trafficButton->setEnabled(false);
+   trafficButton = createToolButton("TFC", true);
+   trafficButton->setEnabled(true);
+   connect(trafficButton, SIGNAL(toggled(bool)), mapC, SLOT(displayTraffic(bool)));
+   trafficButton->setChecked(true);
    toolbar->addWidget(trafficButton);
    
    terrainButton = createToolButton("SAT", true);
    terrainButton->setEnabled(true);
-   terrainButton->setChecked(true);
    connect(terrainButton, SIGNAL(toggled(bool)), getMapView(), SLOT(showSatMap(bool)));
+   terrainButton->setChecked(true);
    toolbar->addWidget(terrainButton);
    
    orientationButton = createToolButton("North Up", true);

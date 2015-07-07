@@ -24,7 +24,8 @@ MapOverlay::MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACM
   hddSettings(_hddSettings),
   mapSettings(_mapSettings),
   acMap(_acMap),
-  heading(0.0)
+  heading(0.0),
+  showTraffic(false)
 {
    initRangeTicks();
    
@@ -77,6 +78,12 @@ void MapOverlay::setZoom(int level)
 void MapOverlay::panToLocation(float lat, float lon)
 {
    // TODO: change circle position or something
+}
+
+
+void MapOverlay::displayTraffic(bool show)
+{
+   showTraffic = show;
 }
 
 
@@ -243,31 +250,30 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    }
    
    // Draw traffic markers on the compass (skip ac 0 = this one)
-//   pen.setColor(Qt::yellow);
-//   p.setPen(pen);
-   for (int i = 1; i < acMap->size(); i++) {
-      Aircraft* ac = acMap->value(i);
-      double ber = ac->getBer();
-      double ang = northUp() ? ber : ber - heading;
-      double rad = getDrawAngleRad(ang);
-      
-      // The text to display for this AC
-//      QString text = QString("%1: %2").arg(i).arg(ber, 1, 'f', 1);
-      QString text = QString("%1").arg(i);
-      
-      // Draw a line on the compass to mark this ac
-      int length = 5;
-      int radius = cradius + length;
-      QLineF acLine = getLine(ang, cradius, radius);
-      p.drawLine(acLine);
-      
-      // Draw the text on the compass
-      radius += 2*length;
-      int width = 8*text.length();
-      double x1 = 0 + (radius * cos(rad)) - width/2; // shift left width/2 pixels
-      double y1 = 0 + (radius * sin(rad)) + 6; // lower 6 pixels
-      
-      p.drawText(x1, y1, text);
+   if (showTraffic) {
+      for (int i = 1; i < acMap->size(); i++) {
+         Aircraft* ac = acMap->value(i);
+         double ber = ac->getBer();
+         double ang = northUp() ? ber : ber - heading;
+         double rad = getDrawAngleRad(ang);
+         
+         // The text to display for this AC
+         QString text = QString("%1").arg(i);
+         
+         // Draw a line on the compass to mark this ac
+         int length = 5;
+         int radius = cradius + length;
+         QLineF acLine = getLine(ang, cradius, radius);
+         p.drawLine(acLine);
+         
+         // Draw the text on the compass
+         radius += 2*length;
+         int width = 8*text.length();
+         double x1 = 0 + (radius * cos(rad)) - width/2; // shift left width/2 pixels
+         double y1 = 0 + (radius * sin(rad)) + 6; // lower 6 pixels
+         
+         p.drawText(x1, y1, text);
+      }
    }
    
    // Reset for next drawing
