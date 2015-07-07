@@ -102,13 +102,13 @@ QVariant MapView::evaluateJS(QString js)
 
 void MapView::calculateDistanceScale()
 {
-   qDebug() << "Calculating distance scale...";
+//   qDebug() << "Calculating distance scale...";
    QString latlon1 = QString("map.getBounds().getNorthEast()");
    QString latlon2 = QString("map.getBounds().getSouthWest()");
 
    QString str = QString("google.maps.geometry.spherical.computeDistanceBetween (%1, %2);").arg(latlon1).arg(latlon2);
    QVariant diagDist = evaluateJS(str);
-   qDebug() << "diagDist =" << diagDist;
+//   qDebug() << "diagDist =" << diagDist;
 }
 
 void MapView::startedLoading()
@@ -203,7 +203,7 @@ void MapView::updateAC(int id)
       str = QString("addNewAircraft");
       a->setHasBeenDisplayed();
    }
-   str += QString("(%1, %2, %3, %4, %5, %6);").arg(a->getID()).arg(a->getLat()).arg(a->getLon()).arg(a->getRng()).arg(a->getBer()).arg(a->getAlt());
+   str += QString("(%1, %2, %3, %4, %5, %6, %7);").arg(a->getID()).arg(a->getLat()).arg(a->getLon()).arg(a->getRng()).arg(a->getBer()).arg(a->getAlt()).arg(a->getHdg());
 //   qDebug() << "Updating AC Map Icon:" << str;
    evaluateJS(str);
 }

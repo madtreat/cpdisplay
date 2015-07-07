@@ -81,6 +81,6 @@ void CommsWidget::setupCommsControls()
    layoutR->addRow(tr("local:"), local);
    
    layout->addLayout(layoutL, 0, 0);
-   layout->addLayout(layoutC, 0, 1);
-   layout->addLayout(layoutR, 0, 2);
+   layout->addLayout(layoutC, 0, 2);
+   layout->addLayout(layoutR, 0, 4);
 }

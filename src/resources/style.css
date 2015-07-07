@@ -4,6 +4,7 @@
 */
 
 QMainWindow, 
+QWidget,
 QPushButton,
 QWebView,
 QToolBar {
@@ -45,4 +46,16 @@ QPushButton::checked::pressed {
    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
       stop: 0 black, stop: 1 darkgreen);
    /*color: green;*/
+}
+
+QProgressBar {
+   border: 2px solid gray;
+   border-radius: 6px;
+   text-align: center;
+   background-color: darkslategray;
+   width: 30px;
+}
+
+QProgressBar::chunk {
+   background-color: green;
 }

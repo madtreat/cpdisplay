@@ -174,12 +174,12 @@ void HDDWindow::pfdButtonClicked(bool checked)
       layout->removeWidget(pfdW);
       pfdW->hide();
       
-      layout->addWidget(asiW, 0, 1+numEngines, 2, 2);
-      layout->addWidget(adiW, 0, 3+numEngines, 2, 2);
-      layout->addWidget(altW, 0, 5+numEngines, 2, 2);
-      layout->addWidget(tcdW, 3, 1+numEngines, 2, 2);
-      layout->addWidget(hsiW, 3, 3+numEngines, 2, 2);
-      layout->addWidget(vsiW, 3, 5+numEngines, 2, 2);
+      layout->addWidget(asiW, 1, 1+numEngines, 2, 2);
+      layout->addWidget(adiW, 1, 3+numEngines, 2, 2);
+      layout->addWidget(altW, 1, 5+numEngines, 2, 2);
+      layout->addWidget(tcdW, 4, 1+numEngines, 2, 2);
+      layout->addWidget(hsiW, 4, 3+numEngines, 2, 2);
+      layout->addWidget(vsiW, 4, 5+numEngines, 2, 2);
       adiW->show();
       altW->show();
       asiW->show();

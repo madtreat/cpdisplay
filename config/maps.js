@@ -110,7 +110,7 @@ function addSatLayer() {
    hybLayer.set('visible', true);
 }
 
-function updateAircraft(id, lat, lon, rng, ber, alt) {
+function updateAircraft(id, lat, lon, rng, ber, alt, hdg) {
    var feature = acFeatures[id-1];
    if (feature) {
       feature.setGeometry(new ol.geom.Point(getCoords(lat, lon)));
@@ -118,14 +118,26 @@ function updateAircraft(id, lat, lon, rng, ber, alt) {
       feature.set('rng', rng);
       feature.set('ber', ber);
       feature.set('alt', alt);
+      feature.set('hdg', hdg);
       
       acIconLayers[id-1].refresh({force:true});
    }
 }
 
-function addNewAircraft(id, lat, lon, rng, ber, alt) {
+/*
+ * 
+ * @param {type} id  - aircraft ic
+ * @param {type} lat - latitude
+ * @param {type} lon - longitude
+ * @param {type} rng - distance to aircraft
+ * @param {type} ber - bearing to aircraft
+ * @param {type} alt - aircraft altitude
+ * @param {type} hdg - aircraft heading (in degrees)
+ * @returns {undefined}
+ */
+function addNewAircraft(id, lat, lon, rng, ber, alt, hdg) {
    if (acIDs.indexOf(id) >= 0) {
-      updateAircraft(id, lat, lon, rng, ber, alt);
+      updateAircraft(id, lat, lon, rng, ber, alt, hdg);
    }
    else {
       acIDs.push(id);
@@ -134,7 +146,8 @@ function addNewAircraft(id, lat, lon, rng, ber, alt) {
          id: id,
          rng: rng,
          ber: ber,
-         alt: alt
+         alt: alt,
+         hdg: hdg
       });
       var iconStyle = new ol.style.Style({
          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
@@ -142,7 +155,8 @@ function addNewAircraft(id, lat, lon, rng, ber, alt) {
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
             opacity: 0.75,
-            src: '../src/images/icons/airplane.png'
+            rotation: hdg * Math.pi/180,
+            src: '../src/resources/icons/airplane.png'
          }))
       });
       iconFeature.setStyle(iconStyle);

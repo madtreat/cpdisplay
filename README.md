@@ -22,6 +22,17 @@ account with both
   * Used for the Primary Flight Display and other instruments
 
 
+X-Plane 10
+==========
+Tested on X-Plane 10.36
+
+This program reads UDP data from X-Plane, and thus to function properly, the following
+UDP data should be enabled in the "Data Input & Output" window, along with the
+checkbox to enable "internet" output.
+
+1, 3, 4, 15-26, 34-37, 96, 97
+
+
 Instructions
 ============
 The easiest way to download and build this project is using Git and CMake
