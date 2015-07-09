@@ -9,9 +9,9 @@
 
 #include <math.h>
 
-#include "hddsettings.h"
-#include "switchboard.h"
-#include "gui/window.h"
+#include "core/hddsettings.h"
+#include "core/switchboard.h"
+#include "utils/geodist.h"
 
 #include "map/mapcontroller.h"
 #include "instruments/adicontroller.h"
@@ -26,6 +26,7 @@
 #include "engine/enginecontroller.h"
 #include "traffic/trafficcontroller.h"
 
+
 HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 : QObject(_parent)
 {
@@ -33,7 +34,21 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
    acMap = new QMap<int, Aircraft*>();
    
    sb = new SwitchBoard(settings);
-   window = new HDDWindow(settings, acMap, this);
+//   window = new HDDWindow(settings, acMap, this);
+   
+   mapC = new MapController(settings, acMap, this);
+   adiC = new ADIController(this);
+   altC = new ALTController(this);
+   asiC = new ASIController(this);
+   hsiC = new HSIController(this);
+   pfdC = new PFDController(this);
+   tcdC = new TCDController(this);
+   vsiC = new VSIController(this);
+   
+   numEngines = 2;
+   comC = new CommsController(settings, this);
+   engC = new EngineController(settings, numEngines, this);
+   tfcC = new TrafficController(settings, acMap, this);
 
    angVelUpdatedFlag = false;
    pitchUpdatedFlag = false;
@@ -41,7 +56,7 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 
    connectSignals();
 
-   window->show();
+//   window->show();
 }
 
 //HDDController::HDDController(const HDDController& orig)
@@ -58,21 +73,8 @@ HDDController::~HDDController()
  */
 void HDDController::connectSignals()
 {
-   MapController* mapC = window->getMapC();
-   ADIController* adiC = window->getADIC();
-   ALTController* altC = window->getALTC();
-   ASIController* asiC = window->getASIC();
-   HSIController* hsiC = window->getHSIC();
-   PFDController* pfdC = window->getPFDC();
-   TCDController* tcdC = window->getTCDC();
-   VSIController* vsiC = window->getVSIC();
-
-   CommsController* comC =   window->getComC();
-   EngineController* engC =  window->getEngC();
-   TrafficController* tfcC = window->getTfcC();
-
-   MapView*    mapView = window->getMapView();
-   MapOverlay* overlay = window->getOverlay();
+   MapView*    mapView = getMapView();
+   MapOverlay* overlay = getOverlay();
    
    CommsWidget* comW = comC->getWidget();
    EngineWidget* engW = engC->getWidget();
@@ -135,7 +137,7 @@ void HDDController::connectSignals()
    // */
 
    // Position (this AC)
-   connect(sb, SIGNAL(latLonUpdate(float, float)), window, SLOT(latLonUpdate(float, float)));
+   connect(sb, SIGNAL(latLonUpdate(float, float)), mapC, SLOT(panToLocation(float, float)));
 
    // Altitudes: using MSL, but AGL could be connected later
    connect(sb, SIGNAL(altMSLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
@@ -179,9 +181,6 @@ float HDDController::calculateTurnRate(float q, float r, float pitch, float roll
 
 Aircraft* HDDController::createAircraft(int id, float lat, float lon, float alt)
 {
-   MapController* mapC = window->getMapC();
-   TrafficController* tfcC = window->getTfcC();
-   
    Aircraft* a = new Aircraft(id, this);
    a->setLatLonAlt(lat, lon, alt);
    connect(a, SIGNAL(acUpdated(int)), tfcC, SLOT(acUpdated(int)));

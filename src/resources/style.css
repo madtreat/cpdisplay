@@ -11,6 +11,10 @@ QToolBar {
    background-color: black;
 }
 
+QToolBar {
+   border: 1px solid darkgray;
+}
+
 QToolBar,
 QPushButton::checked,
 QLabel {

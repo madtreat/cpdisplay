@@ -36,6 +36,6 @@ target_link_libraries(${PROJECT_NAME}
 
    qt-gmaps
 
-   #hdd-utils
+   hdd-utils
    #hdd-core
 )

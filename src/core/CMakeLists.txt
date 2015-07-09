@@ -2,7 +2,7 @@ project(hdd-core)
 
 set(SOURCES
    aircraft.cpp
-   hddcontroller.cpp
+#   hddcontroller.cpp
    hddsettings.cpp
    switchboard.cpp
    xplanedata.cpp
@@ -11,7 +11,7 @@ set(SOURCES
 set(HEADERS
    aircraft.h
    mapconsts.h
-   hddcontroller.h
+#   hddcontroller.h
    hddsettings.h
    switchboard.h
    xplanedata.h
@@ -32,5 +32,10 @@ target_link_libraries(${PROJECT_NAME}
    qfi-core
    qfi-ui
 
-#   hdd-utils
+   hdd-utils
+#   hdd-comms
+#   hdd-engine
+#   hdd-instruments
+#   hdd-map
+#   hdd-traffic
 )
