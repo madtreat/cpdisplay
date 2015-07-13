@@ -31,6 +31,7 @@ target_link_libraries(${PROJECT_NAME}
 
    qfi-core
    qfi-ui
+   qt-layout
 
    hdd-utils
    hdd-core

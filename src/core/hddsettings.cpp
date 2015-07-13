@@ -58,6 +58,9 @@ void HDDSettings::loadSettingsFile(QString _filename)
    }
    settings = new QSettings(_filename, QSettings::IniFormat);
    
+   // Load general settings
+   m_layoutProfile = m_configDir + "/" + settings->value("profile").toString();
+   
    // Load X-Plane 10 settings
    settings->beginGroup("xplane");
    m_xplanePort = settings->value("xplane_port").toInt();
@@ -68,7 +71,6 @@ void HDDSettings::loadSettingsFile(QString _filename)
    else {
       m_xplaneHost = QHostAddress(host);
    }
-   //m_xplaneHost = QHostAddress(settings->value("xplane_host").toString());
    settings->endGroup(); // "xplane"
    
    // Load Map settings

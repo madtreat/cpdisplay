@@ -23,14 +23,16 @@ public:
    HDDSettings(QString _filename=0, QObject* _parent = 0);
    HDDSettings(const HDDSettings& orig) = delete;
    virtual ~HDDSettings();
+    
+   QString     configDir()       const { return m_configDir;      }
+   QString     appRootDir()      const { return m_appRootDir;     }
+   QString     userHomeDir()     const { return m_userHomeDir;    }
+   QString     settingsFile()    const { return m_settingsFile;   }
    
-   QString     configDir()    const { return m_configDir;      }
-   QString     appRootDir()   const { return m_appRootDir;     }
-   QString     userHomeDir()  const { return m_userHomeDir;    }
-   QString     settingsFile() const { return m_settingsFile;   }
+   QString     layoutProfile()   const { return m_layoutProfile;  }
    
-   int            xplanePort() const { return m_xplanePort; }
-   QHostAddress   xplaneHost() const { return m_xplaneHost; }
+   int            xplanePort()   const { return m_xplanePort;     }
+   QHostAddress   xplaneHost()   const { return m_xplaneHost;     }
    
    MapOrientation mapOrientation() const { return m_mapOrientation; }
    void        setMapOrientation(MapOrientation mo) { m_mapOrientation = mo; }
@@ -46,6 +48,7 @@ private:
    QString     m_settingsFile;
    
    // settings values for the HDD app
+   QString     m_layoutProfile; // LayoutProfile config file
    
    // "xplane" group
    int            m_xplanePort;

@@ -9,24 +9,15 @@
 #define ENGINEWIDGET_
 
 #include <QWidget>
-#include <QProgressBar>
-#include <QLabel>
+#include "throttlewidget.h"
 
 class HDDSettings;
-
-typedef QList<QProgressBar*> Throttles;
-
-struct ThrottleWidget {
-   QLabel* label;
-   QProgressBar* throttle;
-};
-
 
 class EngineWidget : public QWidget {
    Q_OBJECT;
 
 public:
-   EngineWidget(HDDSettings* _hddSettings, int _numThrottles=2, QWidget* _parent = 0);
+   EngineWidget(HDDSettings* _hddSettings, int _numEngines=2, QWidget* _parent = 0);
    EngineWidget(const EngineWidget& orig) = delete;
    virtual ~EngineWidget();
 
@@ -40,11 +31,10 @@ public slots:
 
 private:
    HDDSettings* hddSettings;
-   int numThrottles;
+   int numEngines;
 
-   Throttles throttles;
+   ThrottleList throttles;
    
-   ThrottleWidget* createThrottle(int engNum, int max, int value);
    void setupEngineControls();
 };
 

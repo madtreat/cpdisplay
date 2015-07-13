@@ -1,3 +1,6 @@
 [submodule "ext/qt-google-maps"]
 	path = ext/qt-google-maps
 	url = git@github.tamu.edu:mtreat/qt-google-maps.git
+[submodule "ext/qt-layout"]
+	path = ext/qt-layout
+	url = git@github.tamu.edu:mtreat/qt-layout.git

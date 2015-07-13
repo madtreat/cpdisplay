@@ -3,11 +3,13 @@ project(hdd-engine)
 set(SOURCES
    enginecontroller.cpp
    enginewidget.cpp
+   throttlewidget.cpp
 )
 
 set(HEADERS
    enginecontroller.h
    enginewidget.h
+   throttlewidget.h
 )
 
 add_library(${PROJECT_NAME} SHARED

@@ -92,7 +92,9 @@ void TrafficWidget::setupTrafficControls()
    acLabel = new QLabel("Aircraft 1");
    acLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
    nextButton = new QPushButton("Next AC");
+   nextButton->setMinimumSize(QSize(40, 40));
    prevButton = new QPushButton("Prev AC");
+   prevButton->setMinimumSize(QSize(40, 40));
    connect(nextButton, &QPushButton::released, this, &TrafficWidget::showNextAC);
    connect(prevButton, &QPushButton::released, this, &TrafficWidget::showPrevAC);
    

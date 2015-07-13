@@ -12,14 +12,14 @@
 
 #include "core/hddsettings.h"
 
-EngineWidget::EngineWidget(HDDSettings* _hddSettings, int _numThrottles, QWidget* _parent)
+EngineWidget::EngineWidget(HDDSettings* _hddSettings, int _numEngines, QWidget* _parent)
 : QWidget(_parent),
   hddSettings(_hddSettings),
-  numThrottles(_numThrottles)
+  numEngines(_numEngines)
 {
    setupEngineControls();
    
-   setMinimumSize(QSize(320, 320));
+   setMinimumSize(QSize(65, 320));
 }
 
 //EngineWidget::EngineWidget(const EngineWidget& orig)
@@ -30,44 +30,33 @@ EngineWidget::~EngineWidget()
 {
 }
 
-ThrottleWidget* EngineWidget::createThrottle(int engNum, int max, int value)
-{
-   ThrottleWidget* widget = new ThrottleWidget();
-   
-   QLabel* label = new QLabel(QString("ENG %1").arg(engNum));
-   label->setMinimumWidth(50);
-   widget->label = label;
-   
-   QProgressBar* throttle = new QProgressBar();
-   throttle->setOrientation(Qt::Vertical);
-   throttle->setTextDirection(QProgressBar::BottomToTop);
-   throttle->setMinimumWidth(10);
-   throttle->setMinimum(0);
-   throttle->setMaximum(max);
-   throttle->setValue(value);
-   widget->throttle = throttle;
-   
-   return widget;
-}
-
 void EngineWidget::setupEngineControls()
 {
    QGridLayout* layout = new QGridLayout(this);
    layout->setContentsMargins(0, 0, 0, 0);
    
-   for (int i = 0; i < numThrottles; i++) {
-      ThrottleWidget* throttle = createThrottle(i, 100, 0);
-      throttles.append(throttle->throttle);
+   // This loop will create throttles in pairs, to keep them grouped better on the main layout
+   for (int i = 0; i < numEngines/2; i++) {
+      QHBoxLayout* pairLayout = new QHBoxLayout();
+      ThrottleWidget* lt = new ThrottleWidget(i*2, 100, 0); // left throttle of pair
+      pairLayout->addWidget(lt);
+      throttles.append(lt);
       
-      layout->addWidget(throttle->label, 0, i, 1, 1);
-      layout->addWidget(throttle->throttle, 1, i, 5, 1);
+      // If numEngines is even, add a second throttle to this pair
+      if (numEngines % 2 == 0) {
+         ThrottleWidget* rt = new ThrottleWidget((i*2)+1, 100, 0); // right throttle of pair
+         pairLayout->addWidget(rt);
+         throttles.append(rt);
+      }
+      
+      layout->addLayout(pairLayout, 0, i, 3, 1);
    }
 }
 
 void EngineWidget::updateThrottleCommand(float throttle, int engNum)
 {
    // If this throttle is unknown, or if the throttle is 0.75 (the default if it does not exist)
-   if (engNum > numThrottles || throttle == 0.75) {
+   if (engNum > numEngines-1 || throttle == 0.75) {
 //      QProgressBar* throttle = createThrottle(100, (int) throttle);
 //      throttles.append(throttle);
       return;

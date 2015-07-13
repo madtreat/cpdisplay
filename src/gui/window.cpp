@@ -2,10 +2,16 @@
 
 #include <QToolBar>
 #include <QPushButton>
-#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QDebug>
 #include <QFile>
+#include <QWidget>
 //#include <QLatin1String>
+
+#include "qt-layout/layoutitem.h"
+#include "qt-layout/layoutprofile.h"
+#include "qt-layout/layoutmanager.h"
 
 #include "hddcontroller.h"
 #include "core/hddsettings.h"
@@ -36,26 +42,43 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    QString style = QLatin1String(ss.readAll());
    setStyleSheet(style);
    
-   layout = new QGridLayout();
-   layout->setContentsMargins(0, 0, 0, 0);
+   layoutProfile = new LayoutProfile(hddSettings->layoutProfile());
+   layoutManager = new LayoutManager();
    
-   centralWidget = new QWidget();
-   centralWidget->setLayout(layout);
-   centralWidget->setContentsMargins(0, 0, 0, 0);
-   layout->addWidget((QWidget*) hddC->getEngC()->getWidget(), 0, 0, 6, hddC->getNumEngines());
-   layout->addWidget((QWidget*) hddC->getPFDC()->getWidget(), 0, 1+hddC->getNumEngines(), 6, 6);
-   layout->addWidget((QWidget*) hddC->getMapC()->getWidget(), 0, 7+hddC->getNumEngines(), 6, 6);
-   layout->addWidget((QWidget*) hddC->getComC()->getWidget(), 6, 1+hddC->getNumEngines(), 1, 6);
-   layout->addWidget((QWidget*) hddC->getTfcC()->getWidget(), 6, 7+hddC->getNumEngines(), 1, 6);
-   setCentralWidget(centralWidget);
-   
+   setupPFDAltGuages();
    setupToolbar();
    
-   setMinimumSize(QSize(1160, 585));
-//   showWindow();
+   QMap<int, QWidget*> widgetMap;
+   widgetMap.insert(1, hddC->getPFDC()->getWidget());
+   widgetMap.insert(2, hddC->getMapC()->getWidget());
+   widgetMap.insert(3, hddC->getEngC()->getWidget());
+   widgetMap.insert(4, hddC->getTfcC()->getWidget());
+   widgetMap.insert(5, hddC->getComC()->getWidget());
+   widgetMap.insert(6, toolbar);
+   widgetMap.insert(7, pfdAltGuages);
+   
+   for (int i = 0; i < layoutProfile->numItems(); i++) {
+      LayoutItem* item = layoutProfile->itemAt(i);
+      if (!item) {
+         qWarning() << "Warning: null item";
+         continue;
+      }
+      item->widget = widgetMap.value(i+1);
+      layoutMap.insert(i+1, item);
+      layoutManager->addWidget(item);
+   }
+   
+   setCentralWidget(layoutManager);
+   
+   setMinimumSize(QSize(1160, 590));
 }
 
-HDDWindow::~HDDWindow() {
+HDDWindow::~HDDWindow()
+{
+   delete hddSettings;
+   delete hddC;
+   delete acMap;
+   delete layoutManager;
 }
 
 /*
@@ -100,6 +123,7 @@ void HDDWindow::setupToolbar()
    terrainButton = createToolButton("SAT", true);
    terrainButton->setEnabled(true);
    connect(terrainButton, SIGNAL(toggled(bool)), hddC->getMapView(), SLOT(showSatMap(bool)));
+   connect(terrainButton, SIGNAL(toggled(bool)), hddC->getOverlay(), SLOT(satButtonClicked(bool)));
    terrainButton->setChecked(true);
    toolbar->addWidget(terrainButton);
    
@@ -128,55 +152,58 @@ void HDDWindow::setupToolbar()
    connect(hddC->getMapC(), SIGNAL(zoomEither(bool)),     zoomOutButton, SLOT(setEnabled(bool)));
    toolbar->addWidget(zoomOutButton);
    
-   this->addToolBar(Qt::RightToolBarArea, toolbar);
+//   this->addToolBar(Qt::RightToolBarArea, toolbar);
 }
 
-void HDDWindow::pfdButtonClicked(bool checked)
+void HDDWindow::setupPFDAltGuages()
 {
-   QWidget* mapW = (QWidget*) hddC->getMapC()->getWidget();
    QWidget* adiW = (QWidget*) hddC->getADIC()->getWidget();
    QWidget* altW = (QWidget*) hddC->getALTC()->getWidget();
    QWidget* asiW = (QWidget*) hddC->getASIC()->getWidget();
    QWidget* hsiW = (QWidget*) hddC->getHSIC()->getWidget();
-   QWidget* pfdW = (QWidget*) hddC->getPFDC()->getWidget();
    QWidget* tcdW = (QWidget*) hddC->getTCDC()->getWidget();
    QWidget* vsiW = (QWidget*) hddC->getVSIC()->getWidget();
    
+   pfdAltGuages = new QWidget(this);
+   QVBoxLayout* vbLayout = new QVBoxLayout(pfdAltGuages);
+   QHBoxLayout* topRow = new QHBoxLayout();
+   QHBoxLayout* botRow = new QHBoxLayout();
+   
+   topRow->addWidget(asiW);
+   topRow->addWidget(adiW);
+   topRow->addWidget(altW);
+   botRow->addWidget(tcdW);
+   botRow->addWidget(hsiW);
+   botRow->addWidget(vsiW);
+   
+   vbLayout->addLayout(topRow);
+   vbLayout->addLayout(botRow);
+}
+
+void HDDWindow::pfdButtonClicked(bool checked)
+{
+   LayoutItem* pfd = layoutProfile->getItemByName("PFDWidget");
+   LayoutItem* pfdAlt = layoutProfile->getItemByName("PFDAltGuages");
+   if (pfd == NULL || pfd->widget == NULL) {
+//      qWarning() << "Warning: PFDWidget LayoutItem was not found in the profile.";
+      return;
+   }
+   if (pfdAlt == NULL || pfdAlt->widget == NULL) {
+//      qWarning() << "Warning: PFDAltWidget LayoutItem was not found in the profile.";
+      return;
+   }
+   
    // Display PFD if checked
    if (checked) {
-      layout->removeWidget(adiW);
-      layout->removeWidget(altW);
-      layout->removeWidget(asiW);
-      layout->removeWidget(hsiW);
-      layout->removeWidget(tcdW);
-      layout->removeWidget(vsiW);
-      adiW->hide();
-      altW->hide();
-      asiW->hide();
-      hsiW->hide();
-      tcdW->hide();
-      vsiW->hide();
-
-      layout->addWidget(pfdW, 0, 1+hddC->getNumEngines(), 6, 6);
-      pfdW->show();
+      layoutManager->replaceItem(pfdAlt, pfd);
+//      pfd->widget->show();
+//      pfdAlt->widget->hide();
    }
-   // Disply other instruments if unchecked
+   // Display other instruments if unchecked
    else {
-      layout->removeWidget(pfdW);
-      pfdW->hide();
-      
-      layout->addWidget(asiW, 1, 1+hddC->getNumEngines(), 2, 2);
-      layout->addWidget(adiW, 1, 3+hddC->getNumEngines(), 2, 2);
-      layout->addWidget(altW, 1, 5+hddC->getNumEngines(), 2, 2);
-      layout->addWidget(tcdW, 4, 1+hddC->getNumEngines(), 2, 2);
-      layout->addWidget(hsiW, 4, 3+hddC->getNumEngines(), 2, 2);
-      layout->addWidget(vsiW, 4, 5+hddC->getNumEngines(), 2, 2);
-      adiW->show();
-      altW->show();
-      asiW->show();
-      hsiW->show();
-      tcdW->show();
-      vsiW->show();
+      layoutManager->replaceItem(pfd, pfdAlt);
+//      pfd->widget->hide();
+//      pfdAlt->widget->show();
    }
 }
 

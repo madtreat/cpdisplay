@@ -5,8 +5,10 @@
 
 class QToolBar;
 class QPushButton;
-class QGridLayout;
 
+class LayoutItem;
+class LayoutProfile;
+class LayoutManager;
 class HDDSettings;
 class HDDController;
 
@@ -28,8 +30,12 @@ private:
    int            numEngines;
    
    // Main layout for central widget
-   QGridLayout*   layout;
-   QWidget*       centralWidget;
+   LayoutProfile* layoutProfile;
+   LayoutManager* layoutManager;
+   QMap<int, LayoutItem*> layoutMap;
+   
+   // PFD Alternate - guages instead of PFD
+   QWidget*       pfdAltGuages;
    
    // The toolbar and buttons
    QToolBar*      toolbar;
@@ -44,4 +50,5 @@ private:
 
    QPushButton* createToolButton(QString text, bool checkable);
    void setupToolbar();
+   void setupPFDAltGuages();
 };
