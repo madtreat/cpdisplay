@@ -44,6 +44,7 @@ public slots:
    void panToLocation(float lat, float lon);
    void setHeading(float _heading) {heading = _heading; repaint();}
    void displayTraffic(bool show);
+   void satButtonClicked(bool checked);
 
 protected:
    double getDrawAngleRad(double deg);
@@ -57,10 +58,11 @@ private:
    HDDSettings* hddSettings;
    MapSettings* mapSettings;
    
-   ACMap* acMap;
+   ACMap*   acMap;
    
-   double heading; // current heading value in degrees
-   bool   showTraffic; // currently displaying traffic?
+   double   heading; // current heading value in degrees
+   bool     showTraffic; // currently displaying traffic?
+   bool     satMapActive; // is the satellite map currently active?
    
    TickList rangeCircleTicks; // list of pre-generated lines for when NORTH_UP
    
