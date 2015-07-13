@@ -152,6 +152,8 @@ void HDDWindow::setupToolbar()
    connect(hddC->getMapC(), SIGNAL(zoomEither(bool)),     zoomOutButton, SLOT(setEnabled(bool)));
    toolbar->addWidget(zoomOutButton);
    
+   // No longer using the toolbar directly in the QMainWindow so it can be
+   // inserted into the LayoutManager.
 //   this->addToolBar(Qt::RightToolBarArea, toolbar);
 }
 
@@ -196,14 +198,10 @@ void HDDWindow::pfdButtonClicked(bool checked)
    // Display PFD if checked
    if (checked) {
       layoutManager->replaceItem(pfdAlt, pfd);
-//      pfd->widget->show();
-//      pfdAlt->widget->hide();
    }
    // Display other instruments if unchecked
    else {
       layoutManager->replaceItem(pfd, pfdAlt);
-//      pfd->widget->hide();
-//      pfdAlt->widget->show();
    }
 }
 
