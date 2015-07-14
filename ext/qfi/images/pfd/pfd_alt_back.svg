@@ -13,7 +13,7 @@
    height="175"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="pfd_alt_back.svg">
   <defs
      id="defs4" />
@@ -25,16 +25,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.9999999"
-     inkscape:cx="206.47307"
+     inkscape:cx="118.47307"
      inkscape:cy="166.9"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1005"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1196"
+     inkscape:window-height="1878"
+     inkscape:window-x="2400"
+     inkscape:window-y="40"
+     inkscape:window-maximized="0"
      inkscape:snap-object-midpoints="false"
      inkscape:snap-smooth-nodes="false"
      inkscape:object-paths="false"
@@ -63,7 +63,7 @@
      id="layer1"
      transform="translate(0,-877.3622)">
     <rect
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none"
+       style="fill:#4d4d4d;fill-opacity:0.39215687;stroke:none"
        id="rect3611-2-7-3-5"
        width="40"
        height="175"

@@ -13,7 +13,7 @@
    height="2"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="pfd_adi_barv.svg">
   <defs
      id="defs4" />
@@ -24,17 +24,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.12499999"
-     inkscape:cx="-2965.7788"
-     inkscape:cy="122.16808"
+     inkscape:zoom="0.08"
+     inkscape:cx="4633.8369"
+     inkscape:cy="960.68126"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
-     inkscape:window-x="-4"
-     inkscape:window-y="-6"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1196"
+     inkscape:window-height="1878"
+     inkscape:window-x="2400"
+     inkscape:window-y="40"
+     inkscape:window-maximized="0"
      inkscape:snap-object-midpoints="true"
      inkscape:snap-smooth-nodes="false"
      inkscape:object-paths="false"
@@ -63,7 +63,7 @@
      id="layer1"
      transform="translate(0,-1050.3622)">
     <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
+       style="fill:none;fill-opacity:1;stroke:none"
        id="rect7899-8"
        width="2"
        height="80"
