@@ -4,3 +4,6 @@
 [submodule "ext/qt-layout"]
 	path = ext/qt-layout
 	url = git@github.tamu.edu:mtreat/qt-layout.git
+[submodule "src/resources/sprites"]
+	path = src/resources/sprites
+	url = git@github.tamu.edu:vscl/sprites.git
