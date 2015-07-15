@@ -14,6 +14,18 @@
 #include <QObject>
 #include <QMap>
 
+enum AircraftType {
+   BOMBER = 0,
+   CIVIL,
+   FIGHTER,
+   GENERAL_AVIATION,
+   GLIDER,
+   HELO,
+   TRANSPORT,
+   UAS,
+   NUM_AIRCRAFT_TYPES
+};
+
 class Aircraft : public QObject {
    Q_OBJECT;
 
@@ -48,6 +60,7 @@ signals:
    void rngBerUpdated(int id);
 
 private:
+   AircraftType type;
    int   id;  // aircraft id
    bool  displayed; // has this aircraft been displayed on the map yet?
    

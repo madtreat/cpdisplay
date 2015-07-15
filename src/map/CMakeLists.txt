@@ -33,6 +33,7 @@ target_link_libraries(${PROJECT_NAME}
    ${Qt5Gui_LIBRARIES}
    ${Qt5WebKit_LIBRARIES}
    ${Qt5WebKitWidgets_LIBRARIES}
+   ${Qt5Svg_LIBRARIES}
 
    qt-gmaps
 

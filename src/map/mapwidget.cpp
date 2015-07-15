@@ -31,19 +31,15 @@ MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap
    sp.setHeightForWidth(true);
    setSizePolicy(sp);
    
-   
    view = new MapView(hddSettings, mapSettings, acMap);
    layout->addWidget(view);
    view->setSizePolicy(sp);
    
    overlay = new MapOverlay(hddSettings, mapSettings, acMap, view);
    overlay->setGeometry(view->geometry());
-//   overlay->setSizePolicy(sp);
-   
-//   setLayout(layout);
+
    setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
    resize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
-   qDebug() << "MapWidget size:" << size();
 }
 
 //MapWidget::MapWidget(const MapWidget& orig)

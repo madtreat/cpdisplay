@@ -12,6 +12,7 @@
 #include <QImage>
 #include <QVector>
 #include <QLineF>
+#include <QGraphicsSvgItem>
 
 #include "core/aircraft.h"
 #include "core/mapconsts.h"
@@ -45,6 +46,7 @@ public slots:
    void setHeading(float _heading) {heading = _heading; repaint();}
    void displayTraffic(bool show);
    void satButtonClicked(bool checked);
+   void setAircraftType(AircraftType type);
 
 protected:
    double getDrawAngleRad(double deg);
@@ -55,19 +57,24 @@ protected:
    void drawRangeCircle(QPainter& p);
    
 private:
-   HDDSettings* hddSettings;
-   MapSettings* mapSettings;
+   HDDSettings*   hddSettings;
+   MapSettings*   mapSettings;
    
-   ACMap*   acMap;
+   ACMap*         acMap;
    
+   AircraftType   type;
    double   heading; // current heading value in degrees
    bool     showTraffic; // currently displaying traffic?
    bool     satMapActive; // is the satellite map currently active?
+   Qt::GlobalColor overlayColor;
    
    TickList rangeCircleTicks; // list of pre-generated lines for when NORTH_UP
    
    // icons/images
    QImage aircraftIcon;
+   QString ownshipPath; // filepath
+   QGraphicsSvgItem* ownship; // raw SVG aircraft image
+   QImage ownshipIcon; // rendered from the ownship SVG item
 };
 
 #endif	/* MAPOVERLAY_ */

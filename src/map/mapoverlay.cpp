@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <math.h>
 #include <QPainter>
+#include <QSvgRenderer>
 
 #include "qt-google-maps/mapsettings.h"
 #include "utils/geodist.h"
@@ -34,6 +35,8 @@ MapOverlay::MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACM
    setAttribute(Qt::WA_TransparentForMouseEvents);
    
    aircraftIcon = QImage(":/ac/icons/airplane.png");
+   
+   setAircraftType(GENERAL_AVIATION);
    setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
 }
 
@@ -43,6 +46,7 @@ MapOverlay::MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACM
 
 MapOverlay::~MapOverlay()
 {
+   delete ownship;
 }
 
 
@@ -168,9 +172,9 @@ void MapOverlay::paintEvent(QPaintEvent*)
    if (northUp()) {
       p.translate(centerX, centerY);
       p.rotate(heading);
-      int x = 0 - (aircraftIcon.width()/2);
-      int y = 0 - (aircraftIcon.height()/2);
-      p.drawImage(QPoint(x,y), aircraftIcon);
+      int x = 0 - (ownshipIcon.width()/2);
+      int y = 0 - (ownshipIcon.height()/2);
+      p.drawImage(QPoint(x,y), ownshipIcon);
       p.resetTransform();
    }
    else {
@@ -193,7 +197,7 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    int cradius = min(cx, cy) - COMPASS_PADDING; // circle radius - give some padding for drawing outside it
    
    QPen pen(Qt::SolidLine);
-   pen.setColor(satMapActive ? Qt::yellow : Qt::darkRed);
+   pen.setColor(overlayColor);
    pen.setWidth(2);
    p.setPen(pen);
    
@@ -285,4 +289,60 @@ void MapOverlay::drawRangeCircle(QPainter& p)
 void MapOverlay::satButtonClicked(bool checked)
 {
    satMapActive = checked;
+   overlayColor = checked ? Qt::yellow : Qt::darkMagenta;
+}
+
+void MapOverlay::setAircraftType(AircraftType _type)
+{
+   type = _type;
+   
+   ownshipPath = ":/ac/sprites/ownship/";
+   QSize iconSize(32, 32);
+   switch(type) {
+      case BOMBER:
+         ownshipPath += "bomber";
+         iconSize = QSize(20, 32);
+         break;
+      case CIVIL:
+         ownshipPath += "civil";
+         iconSize = QSize(32, 24);
+         break;
+      case FIGHTER:
+         ownshipPath += "fighter";
+         iconSize = QSize(32, 20);
+         break;
+      case GENERAL_AVIATION:
+         ownshipPath += "ga";
+         iconSize = QSize(32, 22);
+         break;
+      case GLIDER:
+         ownshipPath += "glider";
+         iconSize = QSize(16, 36);
+         break;
+      case HELO:
+         ownshipPath += "helo";
+         iconSize = QSize(36, 30);
+         break;
+      case TRANSPORT:
+         ownshipPath += "transport";
+         iconSize = QSize(32, 32);
+         break;
+      case UAS:
+         ownshipPath += "uas";
+         iconSize = QSize(16, 32);
+         break;
+      default:
+         break;
+   }
+   ownshipPath += ".svg";
+   
+   ownship = new QGraphicsSvgItem(ownshipPath);
+   
+   ownshipIcon = QImage(iconSize, QImage::Format_ARGB32);
+   ownshipIcon.fill(0x00aa0033);
+   
+   QPainter imageP(&ownshipIcon);
+   QSvgRenderer renderer(ownshipPath);
+   renderer.render(&imageP);
+//   ownshipIcon.fill(overlayColor);
 }
