@@ -2,6 +2,32 @@
    <qresource prefix="/ac">
       <file>icons/airplane.png</file>
       <file>icons/airplane.128x128.png</file>
+      <file>sprites/ownship/bomber.svg</file>
+      <file>sprites/ownship/civil.svg</file>
+      <file>sprites/ownship/fighter.svg</file>
+      <file>sprites/ownship/ga.svg</file>
+      <file>sprites/ownship/glider.svg</file>
+      <file>sprites/ownship/helo.svg</file>
+      <file>sprites/ownship/transport.svg</file>
+      <file>sprites/ownship/uas.svg</file>
+      <file>sprites/tcas/nonthreat.svg</file>
+      <file>sprites/tcas/prox_above.svg</file>
+      <file>sprites/tcas/prox_below.svg</file>
+      <file>sprites/tcas/proximate.svg</file>
+      <file>sprites/tcas/ra_above.svg</file>
+      <file>sprites/tcas/ra_below.svg</file>
+      <file>sprites/tcas/resolution_advisory.svg</file>
+      <file>sprites/tcas/ta_above.svg</file>
+      <file>sprites/tcas/ta_below.svg</file>
+      <file>sprites/tcas/traffic_advisory.svg</file>
+      <file>sprites/traffic/bomber.svg</file>
+      <file>sprites/traffic/civil.svg</file>
+      <file>sprites/traffic/fighter.svg</file>
+      <file>sprites/traffic/ga.svg</file>
+      <file>sprites/traffic/glider.svg</file>
+      <file>sprites/traffic/helo.svg</file>
+      <file>sprites/traffic/transport.svg</file>
+      <file>sprites/traffic/uas.svg</file>
    </qresource>
    <qresource prefix="/style">
       <file>style.css</file>
