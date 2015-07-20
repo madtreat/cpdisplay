@@ -32,7 +32,7 @@ EngineWidget::~EngineWidget()
 
 void EngineWidget::setupEngineControls()
 {
-   QGridLayout* layout = new QGridLayout(this);
+   QHBoxLayout* layout = new QHBoxLayout(this);
    layout->setContentsMargins(0, 0, 0, 0);
    
    // This loop will create throttles in pairs, to keep them grouped better on the main layout
@@ -49,8 +49,9 @@ void EngineWidget::setupEngineControls()
          throttles.append(rt);
       }
       
-      layout->addLayout(pairLayout, 0, i, 3, 1);
+      layout->addLayout(pairLayout);
    }
+   layout->addStretch(2);
 }
 
 void EngineWidget::updateThrottleCommand(float throttle, int engNum)

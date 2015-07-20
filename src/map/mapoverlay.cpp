@@ -179,9 +179,9 @@ void MapOverlay::paintEvent(QPaintEvent*)
    }
    else {
       // Draw the plane facing up
-      int x = centerX - (aircraftIcon.width()/2);
-      int y = centerY - (aircraftIcon.height()/2);
-      p.drawImage(QPoint(x,y), aircraftIcon);
+      int x = centerX - (ownshipIcon.width()/2);
+      int y = centerY - (ownshipIcon.height()/2);
+      p.drawImage(QPoint(x,y), ownshipIcon);
    }
    
    // Draw the range circle

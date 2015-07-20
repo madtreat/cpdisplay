@@ -16,7 +16,8 @@ ThrottleWidget::ThrottleWidget(int _engNum, int _max, int _value, QWidget* _pare
   value(_value)
 {
    label = new QLabel(QString("ENG %1").arg(engineNum+1));
-   label->setMinimumWidth(50);
+   //label->setMinimumWidth(50);
+   label->setMaximumSize(QSize(40, 20));
    
    throttle = new QProgressBar();
    throttle->setOrientation(Qt::Vertical);
