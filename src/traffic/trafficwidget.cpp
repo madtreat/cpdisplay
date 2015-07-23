@@ -15,8 +15,8 @@
 #include "core/aircraft.h"
 #include "core/hddsettings.h"
 
-TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QWidget* _parent)
-: QWidget(_parent),
+TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QFrame* _parent)
+: QFrame(_parent),
   hddSettings(_hddSettings),
   acMap(_acMap),
   currentID(1)
@@ -30,6 +30,7 @@ TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QWidget* 
    setupTrafficControls();
    
 //   setMinimumSize(QSize(320, 320));
+   setObjectName("border");
 }
 
 //TrafficWidget::TrafficWidget(const TrafficWidget& orig)

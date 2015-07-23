@@ -12,6 +12,9 @@ class LayoutManager;
 class HDDSettings;
 class HDDController;
 
+class CommsWidget;
+
+
 class HDDWindow : public QMainWindow {
    Q_OBJECT
 
@@ -33,6 +36,9 @@ private:
    LayoutProfile* layoutProfile;
    LayoutManager* layoutManager;
    QMap<int, LayoutItem*> layoutMap;
+   
+   // Individual widgets
+   CommsWidget*   comW;
    
    // PFD Alternate - guages instead of PFD
    QWidget*       pfdAltGuages;

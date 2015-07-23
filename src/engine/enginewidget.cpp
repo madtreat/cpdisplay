@@ -12,14 +12,15 @@
 
 #include "core/hddsettings.h"
 
-EngineWidget::EngineWidget(HDDSettings* _hddSettings, int _numEngines, QWidget* _parent)
-: QWidget(_parent),
+EngineWidget::EngineWidget(HDDSettings* _hddSettings, int _numEngines, QFrame* _parent)
+: QFrame(_parent),
   hddSettings(_hddSettings),
   numEngines(_numEngines)
 {
    setupEngineControls();
    
    setMinimumSize(QSize(65, 320));
+   setObjectName("border");
 }
 
 //EngineWidget::EngineWidget(const EngineWidget& orig)

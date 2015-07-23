@@ -26,6 +26,7 @@
 #include "instruments/vsicontroller.h"
 
 #include "comms/commscontroller.h"
+#include "comms/commswidget.h"
 #include "engine/enginecontroller.h"
 #include "traffic/trafficcontroller.h"
 
@@ -45,15 +46,18 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    layoutProfile = new LayoutProfile(hddSettings->layoutProfile());
    layoutManager = new LayoutManager();
    
+   comW = new CommsWidget(hddSettings, hddC->getComC());
+   
    setupPFDAltGuages();
    setupToolbar();
+//   pfdButtonClicked(true); // Hide the alt guages after creation;
    
    QMap<int, QWidget*> widgetMap;
    widgetMap.insert(1, hddC->getPFDC()->getWidget());
    widgetMap.insert(2, hddC->getMapC()->getWidget());
    widgetMap.insert(3, hddC->getEngC()->getWidget());
    widgetMap.insert(4, hddC->getTfcC()->getWidget());
-   widgetMap.insert(5, hddC->getComC()->getWidget());
+   widgetMap.insert(5, comW);
    widgetMap.insert(6, toolbar);
    widgetMap.insert(7, pfdAltGuages);
    
@@ -75,10 +79,10 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
 
 HDDWindow::~HDDWindow()
 {
-   delete hddSettings;
    delete hddC;
    delete acMap;
    delete layoutManager;
+   delete hddSettings;
 }
 
 /*

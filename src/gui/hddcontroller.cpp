@@ -76,7 +76,6 @@ void HDDController::connectSignals()
    MapView*    mapView = getMapView();
    MapOverlay* overlay = getOverlay();
    
-   CommsWidget* comW = comC->getWidget();
    EngineWidget* engW = engC->getWidget();
 //   TrafficWidget* tfcW = tfcC->getWidget();
 
@@ -85,7 +84,7 @@ void HDDController::connectSignals()
    connect(this, SIGNAL(turnRateUpdate(float)), tcdC, SLOT(setTurnRate(float)));
    
    // Times
-   connect(sb, SIGNAL(timeUpdate(float, float)), comW, SLOT(setTimes(float, float)));
+   connect(sb, SIGNAL(timeUpdate(float, float)), comC, SLOT(setTimes(float, float)));
 
    // Speeds
    connect(sb, SIGNAL(speedUpdate(float)),   asiC,    SLOT(setAirspeed(float)));
@@ -162,12 +161,12 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(engRPMUpdate(float, int)), engW, SLOT(updateEngRPM(float, int)));
    
    // Comms and Navs
-   connect(sb, SIGNAL(com1Update(float, float)), comW, SLOT(setCom1(float, float)));
-   connect(sb, SIGNAL(com2Update(float, float)), comW, SLOT(setCom2(float, float)));
+   connect(sb, SIGNAL(com1Update(float, float)), comC, SLOT(setCom1(float, float)));
+   connect(sb, SIGNAL(com2Update(float, float)), comC, SLOT(setCom2(float, float)));
    //connect(sb, SIGNAL(comTransmitUpdate(float), commsWidget, SLOT(setComTransmit(float))));
    
-   connect(sb, SIGNAL(nav1Update(float, float)), comW, SLOT(setNav1(float, float)));
-   connect(sb, SIGNAL(nav2Update(float, float)), comW, SLOT(setNav2(float, float)));
+   connect(sb, SIGNAL(nav1Update(float, float)), comC, SLOT(setNav1(float, float)));
+   connect(sb, SIGNAL(nav2Update(float, float)), comC, SLOT(setNav2(float, float)));
 }
 
 

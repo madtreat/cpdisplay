@@ -8,16 +8,16 @@
 #ifndef ENGINEWIDGET_
 #define ENGINEWIDGET_
 
-#include <QWidget>
+#include <QFrame>
 #include "throttlewidget.h"
 
 class HDDSettings;
 
-class EngineWidget : public QWidget {
+class EngineWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   EngineWidget(HDDSettings* _hddSettings, int _numEngines=2, QWidget* _parent = 0);
+   EngineWidget(HDDSettings* _hddSettings, int _numEngines=2, QFrame* _parent = 0);
    EngineWidget(const EngineWidget& orig) = delete;
    virtual ~EngineWidget();
 

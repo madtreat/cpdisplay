@@ -8,19 +8,24 @@
 #include "commswidget.h"
 
 #include <QFormLayout>
-#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 
 #include "core/hddsettings.h"
+#include "commscontroller.h"
+#include "commsline.h"
 
-CommsWidget::CommsWidget(HDDSettings* _hddSettings, QWidget* _parent)
-: QWidget(_parent),
-  hddSettings(_hddSettings)
+CommsWidget::CommsWidget(HDDSettings* _hddSettings, CommsController* _comC, QFrame* _parent)
+: QFrame(_parent),
+//  m_border(true),
+  hddSettings(_hddSettings),
+  comC(_comC)
 {
    setupCommsControls();
    
-//   setMinimumSize(QSize(140, 210));
    setContentsMargins(0, 0, 0, 0);
+   setObjectName("border");
 }
 
 //CommsWidget::CommsWidget(const CommsWidget& orig)
@@ -35,52 +40,39 @@ void CommsWidget::setTimes(float _zulu, float _local)
 {
    QString zuluStr = QString("%1").arg(_zulu);
    QString localStr = QString("%1").arg(_local);
-   gmt->setText(zuluStr);
-   local->setText(localStr);
-}
-
-void CommsWidget::setCom1(float freq, float standby)
-{
-   com1->setText(QString("%1").arg(freq));
-}
-
-void CommsWidget::setCom2(float freq, float standby)
-{
-   com2->setText(QString("%1").arg(freq));
-}
-
-void CommsWidget::setNav1(float freq, float standby)
-{
-   nav1->setText(QString("%1").arg(freq));
-}
-
-void CommsWidget::setNav2(float freq, float standby)
-{
-   nav2->setText(QString("%1").arg(freq));
+//   gmt->setText(zuluStr);
+//   local->setText(localStr);
 }
 
 void CommsWidget::setupCommsControls()
 {
-   QGridLayout* layout  = new QGridLayout(this); // overall layout
-   QFormLayout* layoutL = new QFormLayout(); // left form
-   QFormLayout* layoutC = new QFormLayout(); // center form
-   QFormLayout* layoutR = new QFormLayout(); // right form
+   QVBoxLayout* layout = new QVBoxLayout(this);
+   layout->setContentsMargins(0, 0, 0, 0);
+   QHBoxLayout* header = new QHBoxLayout();
    
-   com1 = new QLabel("0.00");
-   com2 = new QLabel("0.00");
-   nav1 = new QLabel("0.00");
-   nav2 = new QLabel("0.00");
-   gmt  = new QLabel("0:00:00");
-   local= new QLabel("0:00:00");
+   QLabel* activeLabel = new QLabel("Active");
+   QLabel* standbyLabel = new QLabel("Standby");
+   header->addStretch(2);
+   header->addWidget(activeLabel);
+   header->addStretch(3);
+   header->addWidget(standbyLabel);
+   header->addStretch(1);
    
-   layoutL->addRow(tr("COM 1:"), com1);
-   layoutL->addRow(tr("COM 2:"), com2);
-   layoutC->addRow(tr("NAV 1:"), nav1);
-   layoutC->addRow(tr("NAV 2:"), nav2);
-   layoutR->addRow(tr("GMT:"), gmt);
-   layoutR->addRow(tr("local:"), local);
+   com1 = new CommsLine(comC, COM1);
+   com2 = new CommsLine(comC, COM2);
+   nav1 = new CommsLine(comC, NAV1);
+   nav2 = new CommsLine(comC, NAV2);
    
-   layout->addLayout(layoutL, 0, 0);
-   layout->addLayout(layoutC, 0, 2);
-   layout->addLayout(layoutR, 0, 4);
+   layout->addLayout(header);
+   layout->addWidget(com1);
+   layout->addWidget(com2);
+   layout->addWidget(nav1);
+   layout->addWidget(nav2);
+   
+//   QFormLayout* layoutR = new QFormLayout(); // right form
+//   
+//   gmt  = new QLabel("0:00:00");
+//   local= new QLabel("0:00:00");
+//   layoutR->addRow(tr("GMT:"), gmt);
+//   layoutR->addRow(tr("local:"), local);
 }

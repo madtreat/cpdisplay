@@ -11,8 +11,17 @@ QToolBar {
    background-color: black;
 }
 
-QToolBar {
-   border: 1px dashed darkgray;
+QFrame#border,
+Ui--WidgetPFD,
+QLabel {
+   background-color: #111;
+}
+
+QFrame#border,
+Ui--WidgetPFD
+{
+   border: 2px solid dimgray;
+   border-radius: 8px;
 }
 
 QToolBar,
@@ -23,7 +32,7 @@ QLabel {
 }
 
 QPushButton {
-   border: 2px solid gray;
+   border: 2px solid dimgray;
    border-radius: 6px;
    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
       stop: 0 gray, stop: 1 darkslategray);
@@ -53,7 +62,7 @@ QPushButton::checked::pressed {
 }
 
 QProgressBar {
-   border: 2px solid gray;
+   border: 2px solid dimgray;
    border-radius: 6px;
    text-align: center;
    background-color: darkslategray;
@@ -62,4 +71,20 @@ QProgressBar {
 
 QProgressBar::chunk {
    background-color: green;
+}
+
+QSpinBox,
+QDoubleSpinBox {
+   background-color: #444;
+   color: lightgray;
+}
+
+QDoubleSpinBox::up-button {
+   subcontrol-position: right;
+   height: 20px;
+}
+
+QDoubleSpinBox::down-button {
+   subcontrol-position: left;
+   height: 20px;
 }

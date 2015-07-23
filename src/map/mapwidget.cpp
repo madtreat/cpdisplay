@@ -17,8 +17,8 @@
 #include "mapview.h"
 #include "mapoverlay.h"
 
-MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent)
-: QWidget(_parent),
+MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QFrame* _parent)
+: QFrame(_parent),
   hddSettings(_hddSettings),
   mapSettings(_mapSettings),
   acMap(_acMap)
@@ -40,6 +40,7 @@ MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap
 
    setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
    resize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+//   setObjectName("border");
 }
 
 //MapWidget::MapWidget(const MapWidget& orig)

@@ -2,11 +2,13 @@ project(hdd-comms)
 
 set(SOURCES
    commscontroller.cpp
+   commsline.cpp
    commswidget.cpp
 )
 
 set(HEADERS
    commscontroller.h
+   commsline.h
    commswidget.h
 )
 

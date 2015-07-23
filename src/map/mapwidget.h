@@ -8,7 +8,7 @@
 #ifndef MAPWIDGET_
 #define MAPWIDGET_
 
-#include <QWidget>
+#include <QFrame>
 #include "core/aircraft.h"
 #include "core/mapconsts.h"
 
@@ -24,11 +24,11 @@ class MapSettings;
 class HDDSettings;
 
 
-class MapWidget : public QWidget {
+class MapWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent = 0);
+   MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QFrame* _parent = 0);
    MapWidget(const MapWidget& orig) = delete;
    virtual ~MapWidget();
    

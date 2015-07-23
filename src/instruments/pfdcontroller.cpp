@@ -15,6 +15,7 @@ PFDController::PFDController(QObject* _parent)
    pfdWidget->setContentsMargins(0, 0, 0, 0);
    pfdWidget->setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
    pfdWidget->resize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+   pfdWidget->setObjectName("border");
 }
 
 PFDController::PFDController(const PFDController& orig)

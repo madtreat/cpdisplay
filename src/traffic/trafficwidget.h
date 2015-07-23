@@ -8,7 +8,7 @@
 #ifndef TRAFFICWIDGET_
 #define TRAFFICWIDGET_
 
-#include <QWidget>
+#include <QFrame>
 
 #include "core/aircraft.h"
 
@@ -19,11 +19,11 @@ class Aircraft;
 class HDDSettings;
 
 
-class TrafficWidget : public QWidget {
+class TrafficWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QWidget* _parent = 0);
+   TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QFrame* _parent = 0);
    TrafficWidget(const TrafficWidget& orig) = delete;
    virtual ~TrafficWidget();
 
