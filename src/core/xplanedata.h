@@ -14,6 +14,12 @@
 #include <QVariant>
 #include <QDebug>
 
+//#include "xplanedref.h"
+
+
+/*
+ * XPlane dataref indices for simple UDP output values.
+ */
 enum XPDataIndex {
    FRAMERATE = 0,
    TIMES = 1,
@@ -86,6 +92,43 @@ enum XPDataIndex {
 };
 
 
+
+/*
+ * XPlane 10.40+ dataref constants and types.
+ */
+typedef char xpchr;
+typedef uint32_t xpint;
+typedef float xpflt;
+typedef double xpdbl;
+
+const int VEH_DIM = 20;
+const int STR_DIM = 500;
+const int ID_DIM = 5;
+
+
+/*
+ * XPlane 10.40+ dataref structs.
+ */
+// Length: ID_DIM
+const char RREF_PREFIX[5] = {'R', 'R', 'E', 'F', 0};
+
+// Prefix this struct with RREF_PREFIX and send to xplane host on port 49000
+struct xp_dref_in {
+   xpint freq; // frequency of output from xplane
+   xpint code; // id/code of output from xplane (for internal mapping)
+   xpchr data[400]; // dataref string with optional "[xxx]" index for array vals
+};
+
+struct xp_dref_out {
+   xpint code; // the id/code defined in xp_dref_in
+   xpflt data; // output data from xplane
+};
+
+
+
+/*
+ * XPlane (pre-10.40) output data.
+ */
 enum XPDataType {
    DOUBLE = 0,
    FLOAT,
@@ -97,8 +140,9 @@ enum XPDataType {
 QByteArray reverse(const QByteArray& ba);
 
 
+// Output from xplane comes to this struct.
 // Create an object, then call parseRawData() to fill in the values.
-struct XPData {
+struct XPOutputData {
    XPDataIndex index;
    XPDataType  type;
    // There should be 8 integer or double values

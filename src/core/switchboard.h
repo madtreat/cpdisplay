@@ -9,7 +9,7 @@
 
 class QUdpSocket;
 class HDDSettings;
-class XPData;
+class XPOutputData;
 
 class SwitchBoard : public QObject {
    Q_OBJECT
@@ -69,9 +69,10 @@ signals:
 
 private:
    HDDSettings* settings;
-   QUdpSocket* xplane;
+   QUdpSocket* xplaneOutput;
+   QUdpSocket* xplaneInput;
    
-   void initSocket();
+   void initSockets();
    void processDatagram(QByteArray& data);
-   void notifyAll(XPData* data);
+   void notifyAll(XPOutputData* data);
 };

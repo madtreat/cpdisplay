@@ -3,18 +3,23 @@
     Author     : Madison Treat <madison.treat@tamu.edu>
 */
 
-QMainWindow, 
-QWidget,
-QPushButton,
-QWebView,
-QToolBar {
+QMainWindow {/*,*/
+/*QWidget,*/
+/*QPushButton,*/
+/*QWebView {*/
    background-color: black;
+   background: url(':/style/bg/metal-1-200x200.jpg') repeat;
+/*   background: url(':/style/bg/metal-2-160x160.jpg') repeat;*/
+/*   background: url(':/style/bg/metal-3-960x600.png') repeat;*/
 }
 
 QFrame#border,
 Ui--WidgetPFD,
-QLabel {
-   background-color: #111;
+/*QLabel,*/
+QToolBar {
+   background-color: #222;
+/*   background: url(':/style/bg/metal-1-200x200.jpg') repeat;*/
+/*   background: url(':/style/bg/metal-2-160x160.jpg') repeat;*/
 }
 
 QFrame#border,

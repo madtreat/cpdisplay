@@ -13,6 +13,7 @@ set(HEADERS
    hddsettings.h
    switchboard.h
    xplanedata.h
+   xplanedref.h
 )
 
 

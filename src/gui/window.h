@@ -44,7 +44,8 @@ private:
    QWidget*       pfdAltGuages;
    
    // The toolbar and buttons
-   QToolBar*      toolbar;
+//   QToolBar*      toolbar;
+   QFrame*        toolbar;
    QPushButton*   pfdButton;
    QPushButton*   weatherButton;
    QPushButton*   trafficButton;

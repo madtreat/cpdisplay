@@ -9,12 +9,26 @@
 
 #include "hddsettings.h"
 #include "xplanedata.h"
+#include "xplanedref.h"
 
 SwitchBoard::SwitchBoard(HDDSettings* _settings, QObject* _parent)
 : QObject(_parent)
 {
    settings = _settings;
-   initSocket();
+   initSockets();
+
+   xp_dref_in dref;
+   dref.freq = 20;
+   dref.code = 1001;
+   //dref.data = XPDR_AC_NUM_ENG;
+
+   const int len = ID_DIM + sizeof(xp_dref_in);
+   char* data = new char[len]();//[len];
+   memset(data, 0, len);
+   memcpy(data, RREF_PREFIX, ID_DIM);
+   memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
+
+   xplaneOutput->writeDatagram(data, len, settings->xplaneHost(), 49000);
 }
 
 
@@ -23,24 +37,28 @@ SwitchBoard::~SwitchBoard()
 }
 
 
-void SwitchBoard::initSocket()
+void SwitchBoard::initSockets()
 {
-   xplane = new QUdpSocket(this);
-   //xplane->bind(settings->xplaneHost(), settings->xplanePort());
-   xplane->bind(settings->xplanePort(), QUdpSocket::ShareAddress);
+   xplaneOutput = new QUdpSocket(this);
+   //xplaneOutput->bind(settings->xplaneHost(), settings->xplanePort());
+   xplaneOutput->bind(settings->xplanePort(), QUdpSocket::ShareAddress);
    
-   connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
+   connect(xplaneOutput, SIGNAL(readyRead()), this, SLOT(readPendingData()));
+
+   xplaneInput = new QUdpSocket(this);
+   xplaneInput->bind(settings->xplaneHost(), 49000, QUdpSocket::ShareAddress);
+   // connect?
 }
 
 void SwitchBoard::readPendingData()
 {
-   while (xplane->hasPendingDatagrams()) {
+   while (xplaneOutput->hasPendingDatagrams()) {
       QByteArray datagram;
-      datagram.resize(xplane->pendingDatagramSize());
+      datagram.resize(xplaneOutput->pendingDatagramSize());
       QHostAddress sender;
       quint16 senderPort;
       
-      xplane->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+      xplaneOutput->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
       
       processDatagram(datagram);
    }
@@ -60,7 +78,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
    for (int i = 0; i < numValues; i++) {
       // Get the 36 bytes starting at i*36
       QByteArray valueBytes = values.mid(i*36, 36);
-      XPData* data = new XPData();
+      XPOutputData* data = new XPOutputData();
       data->parseRawData(valueBytes);
       
       notifyAll(data);
@@ -72,7 +90,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
  * that other objects can be connected to.
  */
 #define VALUE(pos) data->values.at(pos).toFloat()
-void SwitchBoard::notifyAll(XPData* data)
+void SwitchBoard::notifyAll(XPOutputData* data)
 {
    switch (data->index) {
       case TIMES:
@@ -196,6 +214,7 @@ void SwitchBoard::notifyAll(XPData* data)
          break;
          
       default:
+         qDebug() << "Unknown data receievd:" << data->index << VALUE(0);
          break;
    }
    

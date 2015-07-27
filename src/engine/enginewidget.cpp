@@ -19,7 +19,7 @@ EngineWidget::EngineWidget(HDDSettings* _hddSettings, int _numEngines, QFrame* _
 {
    setupEngineControls();
    
-   setMinimumSize(QSize(65, 320));
+   setMinimumSize(QSize(65, 180));
    setObjectName("border");
 }
 

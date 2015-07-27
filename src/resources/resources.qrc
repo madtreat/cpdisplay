@@ -31,5 +31,8 @@
    </qresource>
    <qresource prefix="/style">
       <file>style.css</file>
+      <file>bg/metal-1-200x200.jpg</file>
+      <file>bg/metal-2-160x160.jpg</file>
+      <file>bg/metal-3-960x600.png</file>
    </qresource>
 </RCC>

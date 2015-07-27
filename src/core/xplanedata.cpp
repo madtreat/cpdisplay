@@ -23,7 +23,7 @@ QByteArray reverse(const QByteArray &ba) {
  * so the first byte should always be sufficient.
  * This does, however, matter for the actual data.
  */
-void XPData::parseRawData(QByteArray raw)
+void XPOutputData::parseRawData(QByteArray raw)
 {
    QByteArray indexRaw = raw.mid(0, 4);      // returns first 4 bytes
    QByteArray valuesRaw = raw.remove(0, 4);  // removes first 4 bytes
@@ -55,7 +55,7 @@ void XPData::parseRawData(QByteArray raw)
 //   return os;
 //}
 
-void XPData::print()
+void XPOutputData::print()
 {
    qDebug() << "XPData index:" << (int) index << "of type" << (int) type;
    for (int i = 0; i < values.size(); i++) {

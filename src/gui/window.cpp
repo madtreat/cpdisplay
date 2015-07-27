@@ -104,32 +104,33 @@ QPushButton* HDDWindow::createToolButton(QString text, bool checkable)
 
 void HDDWindow::setupToolbar()
 {
-   toolbar = new QToolBar(this);
-   toolbar->setContentsMargins(0, 0, 0, 0);
-   toolbar->setOrientation(Qt::Vertical);// | Qt::Horizontal);
-   
+   toolbar = new QFrame(this);
+   QVBoxLayout* tblayout = new QVBoxLayout(toolbar);
+   tblayout->setContentsMargins(0, 0, 0, 0);
+//   toolbar->setOrientation(Qt::Vertical);// | Qt::Horizontal);
+
    pfdButton = createToolButton("PFD", true);
    pfdButton->setEnabled(true);
    connect(pfdButton, SIGNAL(toggled(bool)), this, SLOT(pfdButtonClicked(bool)));
    pfdButton->setChecked(true);
-   toolbar->addWidget(pfdButton);
+   tblayout->addWidget(pfdButton);
    
    weatherButton = createToolButton("WX", false);
    weatherButton->setEnabled(false);
-   toolbar->addWidget(weatherButton);
+   tblayout->addWidget(weatherButton);
    
    trafficButton = createToolButton("TFC", true);
    trafficButton->setEnabled(true);
    connect(trafficButton, SIGNAL(toggled(bool)), hddC->getMapC(), SLOT(displayTraffic(bool)));
    trafficButton->setChecked(true);
-   toolbar->addWidget(trafficButton);
+   tblayout->addWidget(trafficButton);
    
    terrainButton = createToolButton("SAT", true);
    terrainButton->setEnabled(true);
    connect(terrainButton, SIGNAL(toggled(bool)), hddC->getMapView(), SLOT(showSatMap(bool)));
    connect(terrainButton, SIGNAL(toggled(bool)), hddC->getOverlay(), SLOT(satButtonClicked(bool)));
    terrainButton->setChecked(true);
-   toolbar->addWidget(terrainButton);
+   tblayout->addWidget(terrainButton);
    
    orientationButton = createToolButton("North Up", true);
    orientationButton->setEnabled(true);
@@ -138,7 +139,7 @@ void HDDWindow::setupToolbar()
       orientationButton->setChecked(false);
    }
    connect(orientationButton, SIGNAL(toggled(bool)), this, SLOT(orientationButtonClicked(bool)));
-   toolbar->addWidget(orientationButton);
+   tblayout->addWidget(orientationButton);
    
    zoomInButton = createToolButton("Zoom In", false);
    zoomInButton->setEnabled(true);
@@ -146,7 +147,7 @@ void HDDWindow::setupToolbar()
    // If you are at the max zoom (very close shot of ground), disable zoom in button
    connect(hddC->getMapC(), SIGNAL(zoomMaxReached(bool)), zoomInButton, SLOT(setDisabled(bool)));
    connect(hddC->getMapC(), SIGNAL(zoomEither(bool)),     zoomInButton, SLOT(setEnabled(bool)));
-   toolbar->addWidget(zoomInButton);
+   tblayout->addWidget(zoomInButton);
    
    zoomOutButton = createToolButton("Zoom Out", false);
    zoomOutButton->setEnabled(true);
@@ -154,7 +155,7 @@ void HDDWindow::setupToolbar()
    // If you are at the minimum zoom (whole earth), disable zoom out button
    connect(hddC->getMapC(), SIGNAL(zoomMinReached(bool)), zoomOutButton, SLOT(setDisabled(bool)));
    connect(hddC->getMapC(), SIGNAL(zoomEither(bool)),     zoomOutButton, SLOT(setEnabled(bool)));
-   toolbar->addWidget(zoomOutButton);
+   tblayout->addWidget(zoomOutButton);
    
    // No longer using the toolbar directly in the QMainWindow so it can be
    // inserted into the LayoutManager.
