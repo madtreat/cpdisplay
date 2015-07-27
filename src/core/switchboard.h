@@ -69,8 +69,7 @@ signals:
 
 private:
    HDDSettings* settings;
-   QUdpSocket* xplaneOutput;
-   QUdpSocket* xplaneInput;
+   QUdpSocket* xplane;
    
    void initSockets();
    void processDatagram(QByteArray& data);

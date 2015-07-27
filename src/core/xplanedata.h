@@ -96,10 +96,10 @@ enum XPDataIndex {
 /*
  * XPlane 10.40+ dataref constants and types.
  */
-typedef char xpchr;
-typedef uint32_t xpint;
-typedef float xpflt;
-typedef double xpdbl;
+typedef char      xpchr;
+typedef uint32_t  xpint;
+typedef float     xpflt;
+typedef double    xpdbl;
 
 const int VEH_DIM = 20;
 const int STR_DIM = 500;

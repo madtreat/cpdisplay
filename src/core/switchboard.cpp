@@ -18,9 +18,11 @@ SwitchBoard::SwitchBoard(HDDSettings* _settings, QObject* _parent)
    initSockets();
 
    xp_dref_in dref;
-   dref.freq = 20;
-   dref.code = 1001;
+   dref.freq = 1;
+   dref.code = 1011;
    //dref.data = XPDR_AC_NUM_ENG;
+   memset(&dref.data, 0, sizeof(dref.data));
+   memcpy(&dref.data, XPDR_AC_NUM_ENG, QString(XPDR_AC_NUM_ENG).size());
 
    const int len = ID_DIM + sizeof(xp_dref_in);
    char* data = new char[len]();//[len];
@@ -28,7 +30,8 @@ SwitchBoard::SwitchBoard(HDDSettings* _settings, QObject* _parent)
    memcpy(data, RREF_PREFIX, ID_DIM);
    memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
 
-   xplaneOutput->writeDatagram(data, len, settings->xplaneHost(), 49000);
+   xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
+qDebug() << "Send test datagram to xplane host:" << settings->xplaneHost();
 }
 
 
@@ -39,26 +42,22 @@ SwitchBoard::~SwitchBoard()
 
 void SwitchBoard::initSockets()
 {
-   xplaneOutput = new QUdpSocket(this);
-   //xplaneOutput->bind(settings->xplaneHost(), settings->xplanePort());
-   xplaneOutput->bind(settings->xplanePort(), QUdpSocket::ShareAddress);
+   xplane = new QUdpSocket(this);
+   //xplane->bind(settings->xplaneHost(), settings->xplanePort());
+   xplane->bind(settings->xplanePort(), QUdpSocket::ShareAddress);
    
-   connect(xplaneOutput, SIGNAL(readyRead()), this, SLOT(readPendingData()));
-
-   xplaneInput = new QUdpSocket(this);
-   xplaneInput->bind(settings->xplaneHost(), 49000, QUdpSocket::ShareAddress);
-   // connect?
+   connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
 }
 
 void SwitchBoard::readPendingData()
 {
-   while (xplaneOutput->hasPendingDatagrams()) {
+   while (xplane->hasPendingDatagrams()) {
       QByteArray datagram;
-      datagram.resize(xplaneOutput->pendingDatagramSize());
+      datagram.resize(xplane->pendingDatagramSize());
       QHostAddress sender;
       quint16 senderPort;
       
-      xplaneOutput->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+      xplane->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
       
       processDatagram(datagram);
    }
@@ -69,6 +68,10 @@ void SwitchBoard::processDatagram(QByteArray& data)
    // Remove the first 5 bytes to get the raw values
    QByteArray header = data.mid(0, 5);
    QByteArray values = data.remove(0, 5);
+
+   xp_dref_out* dref = (struct xp_dref_out*) values.data();
+
+   qDebug() << "data received:" << header << dref->code << dref->data;
    
    // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
    int numValues = values.size()/36;

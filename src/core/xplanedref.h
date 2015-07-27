@@ -9,6 +9,6 @@
 #define XPLANEDREF_H
 
 const char* XPDR_AC_TYPE = "";
-const char* XPDR_AC_NUM_ENG = "sim/aircraft/engines/acf_num_engines";
+const char* XPDR_AC_NUM_ENG = "sim/aircraft/engine/acf_num_engines";
 
 #endif
