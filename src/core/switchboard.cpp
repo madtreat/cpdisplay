@@ -3,35 +3,21 @@
 #include <netinet/in.h>
 #include <bitset>
 #include <iostream>
+#include <unistd.h>
+
 #include <QUdpSocket>
 #include <QByteArray>
 #include <QDebug>
 
 #include "hddsettings.h"
-#include "xplanedata.h"
-#include "xplanedref.h"
 
 SwitchBoard::SwitchBoard(HDDSettings* _settings, QObject* _parent)
 : QObject(_parent)
 {
    settings = _settings;
-   initSockets();
+   initSocket();
 
-   xp_dref_in dref;
-   dref.freq = 1;
-   dref.code = 1011;
-   //dref.data = XPDR_AC_NUM_ENG;
-   memset(&dref.data, 0, sizeof(dref.data));
-   memcpy(&dref.data, XPDR_AC_NUM_ENG, QString(XPDR_AC_NUM_ENG).size());
-
-   const int len = ID_DIM + sizeof(xp_dref_in);
-   char* data = new char[len]();//[len];
-   memset(data, 0, len);
-   memcpy(data, RREF_PREFIX, ID_DIM);
-   memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
-
-   xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
-qDebug() << "Send test datagram to xplane host:" << settings->xplaneHost();
+   requestDatarefsFromXPlane();
 }
 
 
@@ -40,7 +26,7 @@ SwitchBoard::~SwitchBoard()
 }
 
 
-void SwitchBoard::initSockets()
+void SwitchBoard::initSocket()
 {
    xplane = new QUdpSocket(this);
    //xplane->bind(settings->xplaneHost(), settings->xplanePort());
@@ -63,6 +49,49 @@ void SwitchBoard::readPendingData()
    }
 }
 
+/*
+ * Sends the RREF message to XPlane to request all necessary datarefs.
+ */
+#define DRMAP_INSERT(INDEX, STR, SIGNAL, FREQ) \
+   drmap.insert(INDEX, new DRefValue(XPDR_OFFSET+INDEX, STR, &SwitchBoard::SIGNAL, FREQ));
+void SwitchBoard::requestDatarefsFromXPlane()
+{
+   //DRMAP_INSERT(AC_TYPE,         XPDR_AC_TYPE,          acTypeUpdate);
+   DRMAP_INSERT(AC_TAIL_NUM,     XPDR_AC_TAIL_NUM,      acTailNumUpdate,      1);
+   DRMAP_INSERT(AC_NUM_ENGINES,  XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,   1);
+   DRMAP_INSERT(RAD_COM1_FREQ,   XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,  2);
+   DRMAP_INSERT(RAD_COM1_STDBY,  XPDR_RADIO_COM1_STDBY, radioCom1StdbyUpdate, 2);
+   DRMAP_INSERT(RAD_COM2_FREQ,   XPDR_RADIO_COM2_FREQ,  radioCom2FreqUpdate,  2);
+   DRMAP_INSERT(RAD_COM2_STDBY,  XPDR_RADIO_COM2_STDBY, radioCom2StdbyUpdate, 2);
+   DRMAP_INSERT(RAD_NAV1_FREQ,   XPDR_RADIO_NAV1_FREQ,  radioNav1FreqUpdate,  2);
+   DRMAP_INSERT(RAD_NAV1_STDBY,  XPDR_RADIO_NAV1_STDBY, radioNav1StdbyUpdate, 2);
+   DRMAP_INSERT(RAD_NAV2_FREQ,   XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,  2);
+   DRMAP_INSERT(RAD_NAV2_STDBY,  XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate, 2);
+
+   foreach (XPDataIndex i, drmap.keys()) {
+      DRefValue* val = drmap.value(i);
+      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << drmap.value(i)->str;
+
+      xp_dref_in dref;
+      dref.freq = (xpint) val->freq;
+      dref.code = (xpint) val->xpIndex;
+      memset(&dref.data, 0, sizeof(dref.data));
+      memcpy(&dref.data, val->str, QString(val->str).size());
+      
+      const int len = ID_DIM + sizeof(xp_dref_in);
+      char* data = new char[len]();
+      memset(data, 0, len);
+      memcpy(data, RREF_PREFIX, ID_DIM);
+      memcpy(data + ID_DIM, &dref, sizeof(xp_dref_in));
+      
+      xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
+      delete data;
+
+      // sleep to ensure the packets do not bunch up
+      //usleep(3000000);
+   }
+}
+
 void SwitchBoard::processDatagram(QByteArray& data)
 {
    // Remove the first 5 bytes to get the raw values
@@ -72,8 +101,13 @@ void SwitchBoard::processDatagram(QByteArray& data)
    xp_dref_out* dref = (struct xp_dref_out*) values.data();
 
    qDebug() << "data received:" << header << dref->code << dref->data;
+
+   notifyAll(dref);
    
+   // XPlane < 10.40:
+
    // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
+   /*
    int numValues = values.size()/36;
 //   qDebug() << "Processing datagram of size:" << data.size() << numValues;
    
@@ -86,15 +120,36 @@ void SwitchBoard::processDatagram(QByteArray& data)
       
       notifyAll(data);
    }
+   // */
 }
 
 /*
+ * XPlane 10.40+ version
+ * 
  * Notify everyone of new data.  This parses the data's values and emits signals
  * that other objects can be connected to.
  */
-#define VALUE(pos) data->values.at(pos).toFloat()
+void SwitchBoard::notifyAll(xp_dref_out* dref)
+{
+   DRefValue* val = drmap.value((XPDataIndex) (dref->code - XPDR_OFFSET));
+   if (val) {
+      func_pointer signal = val->signal;
+      emit (this->*(val->signal))(dref->data);
+   }
+   else {
+      qWarning() << "Warning: invalid data from xplane";
+   }
+}
+
+/*
+ * XPlane < 10.40 version
+ * 
+ * Notify everyone of new data.  This parses the data's values and emits signals
+ * that other objects can be connected to.
+ */
 void SwitchBoard::notifyAll(XPOutputData* data)
 {
+   #define VALUE(pos) data->values.at(pos).toFloat()
    switch (data->index) {
       case TIMES:
          emit timeUpdate(VALUE(5), VALUE(6));
@@ -220,5 +275,4 @@ void SwitchBoard::notifyAll(XPOutputData* data)
          qDebug() << "Unknown data receievd:" << data->index << VALUE(0);
          break;
    }
-   
 }

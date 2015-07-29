@@ -14,13 +14,12 @@
 #include <QVariant>
 #include <QDebug>
 
-//#include "xplanedref.h"
-
 
 /*
  * XPlane dataref indices for simple UDP output values.
  */
 enum XPDataIndex {
+   // XPlane < 10.40 or raw UDP from XPlane if selected
    FRAMERATE = 0,
    TIMES = 1,
    SIM_STATS = 2,
@@ -87,8 +86,29 @@ enum XPDataIndex {
    COM_1_2_FREQ = 96,
    NAV_1_2_FREQ = 97,
    
-   // End; for loops
-   NUM_DATA_INDEXES
+   // End; for looping
+   NUM_DATA_INDEXES = 134,
+
+   /*
+    * Custom Dataref Indices (XPlane 10.40+)
+    */
+
+   // Aircraft info
+   AC_TYPE,          // 135
+   AC_TAIL_NUM,      // 136
+   AC_NUM_ENGINES,   // 137
+   
+   // Radios
+   RAD_COM1_FREQ,    // 138
+   RAD_COM1_STDBY,   // 139
+   RAD_COM2_FREQ,    // 140
+   RAD_COM2_STDBY,   // 141
+   RAD_NAV1_FREQ,    // 142
+   RAD_NAV1_STDBY,   // 143
+   RAD_NAV2_FREQ,    // 144
+   RAD_NAV2_STDBY,   // 145
+
+   NUM_TOTAL_DATA_INDEXES
 };
 
 

@@ -5,6 +5,10 @@
  */
 
 #include <QObject>
+#include <QMap>
+
+#include "xplanedata.h"
+#include "xplanedref.h"
 
 
 class QUdpSocket;
@@ -13,6 +17,31 @@ class XPOutputData;
 
 class SwitchBoard : public QObject {
    Q_OBJECT
+
+   static const int XPDR_OFFSET = 1000;
+
+   // Typdef a generic signal function pointer
+   typedef void (SwitchBoard::*func_pointer)(float);
+   // Define the value struct for the Dataref Map drmap
+   struct DRefValue {
+      int            xpIndex; // XPDataIndex + XPDR_OFFSET;
+      const char*    str;     // The string representation of the dataref
+      func_pointer   signal;  // The SwitchBoard signal to be emitted
+      int            freq;    // Frequency of response
+
+      DRefValue(int _index, const char* _str, func_pointer _fn, int _freq) {
+         xpIndex = _index;
+         str = _str;
+         signal = _fn;
+         freq = _freq;
+      }
+      DRefValue(const DRefValue& rhs) {
+         xpIndex = rhs.xpIndex;
+         str = rhs.str;
+         signal = rhs.signal;
+         freq = rhs.freq;
+      }
+   };
 
 public:
    SwitchBoard(HDDSettings* _settings, QObject* _parent=0);
@@ -23,6 +52,23 @@ public slots:
    void readPendingData();
    
 signals:
+   void notConnected(); // not connected to XPlane
+
+   // XPlane 10.40+ versions:
+   void acTailNumUpdate(float tail);
+   void acNumEnginesUpdate(float num);
+
+   void radioCom1FreqUpdate(float freq);
+   void radioCom1StdbyUpdate(float freq);
+   void radioCom2FreqUpdate(float freq);
+   void radioCom2StdbyUpdate(float freq);
+   void radioNav1FreqUpdate(float freq);
+   void radioNav1StdbyUpdate(float freq);
+   void radioNav2FreqUpdate(float freq);
+   void radioNav2StdbyUpdate(float freq);
+
+
+   // XPlane < 10.40 versions:
    void timeUpdate(float zulu, float local);
    void speedUpdate(float speed);
    
@@ -70,8 +116,12 @@ signals:
 private:
    HDDSettings* settings;
    QUdpSocket* xplane;
+
+   QMap<XPDataIndex, DRefValue*> drmap;
    
-   void initSockets();
+   void initSocket();
+   void requestDatarefsFromXPlane();
    void processDatagram(QByteArray& data);
+   void notifyAll(xp_dref_out* data);
    void notifyAll(XPOutputData* data);
 };

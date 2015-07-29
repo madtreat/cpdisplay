@@ -79,6 +79,16 @@ void HDDController::connectSignals()
    EngineWidget* engW = engC->getWidget();
 //   TrafficWidget* tfcW = tfcC->getWidget();
 
+
+   /*
+    * These connections are for xplane 10.40+ dataref requests (RREF results).
+    */
+   connect(sb, SIGNAL(acTailNumUpdate(float)), this, SLOT(setTailNum(float)));
+   connect(sb, SIGNAL(acNumEnginesUpdate(float)), this, SLOT(setNumEngines(float)));
+
+   /*
+    * Everything below is for the raw UDP output from xplane, if selected.
+    */
    // Self-calculated turn rate
    connect(this, SIGNAL(turnRateUpdate(float)), pfdC, SLOT(setTurnRate(float)));
    connect(this, SIGNAL(turnRateUpdate(float)), tcdC, SLOT(setTurnRate(float)));
