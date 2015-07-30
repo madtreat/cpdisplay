@@ -116,10 +116,10 @@ enum XPDataIndex {
 /*
  * XPlane 10.40+ dataref constants and types.
  */
-typedef char      xpchr;
-typedef uint32_t  xpint;
-typedef float     xpflt;
-typedef double    xpdbl;
+typedef unsigned char   xpchr;
+typedef uint32_t        xpint;
+typedef float           xpflt;
+typedef double          xpdbl;
 
 const int VEH_DIM = 20;
 const int STR_DIM = 500;
@@ -130,7 +130,8 @@ const int ID_DIM = 5;
  * XPlane 10.40+ dataref structs.
  */
 // Length: ID_DIM
-const char RREF_PREFIX[5] = {'R', 'R', 'E', 'F', 0};
+const char RREF_PREFIX[ID_DIM] = {'R', 'R', 'E', 'F', 0};
+const char DSEL_PREFIX[ID_DIM] = {'D', 'S', 'E', 'L', 0};
 
 // Prefix this struct with RREF_PREFIX and send to xplane host on port 49000
 struct xp_dref_in {
@@ -142,6 +143,12 @@ struct xp_dref_in {
 struct xp_dref_out {
    xpint code; // the id/code defined in xp_dref_in
    xpflt data; // output data from xplane
+};
+
+// Prefix this struct with DSEL_PREFIX to request UDP output for the specified
+// indices in xplane.
+struct xp_dsel_in {
+   xpint* data;//[400];
 };
 
 

@@ -4,9 +4,11 @@
 #include <bitset>
 #include <iostream>
 #include <unistd.h>
+#include <string.h>
 
 #include <QUdpSocket>
 #include <QByteArray>
+#include <QList>
 #include <QDebug>
 
 #include "hddsettings.h"
@@ -56,8 +58,8 @@ void SwitchBoard::readPendingData()
    drmap.insert(INDEX, new DRefValue(XPDR_OFFSET+INDEX, STR, &SwitchBoard::SIGNAL, FREQ));
 void SwitchBoard::requestDatarefsFromXPlane()
 {
-   //DRMAP_INSERT(AC_TYPE,         XPDR_AC_TYPE,          acTypeUpdate);
-   DRMAP_INSERT(AC_TAIL_NUM,     XPDR_AC_TAIL_NUM,      acTailNumUpdate,      1);
+   //DRMAP_INSERT(AC_TYPE,         XPDR_AC_TYPE,          acTypeUpdate,         1);
+   DRMAP_INSERT(AC_TAIL_NUM,     XPDR_AC_TAIL_NUM_X,    acTailNumUpdate,      1);
    DRMAP_INSERT(AC_NUM_ENGINES,  XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,   1);
    DRMAP_INSERT(RAD_COM1_FREQ,   XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,  2);
    DRMAP_INSERT(RAD_COM1_STDBY,  XPDR_RADIO_COM1_STDBY, radioCom1StdbyUpdate, 2);
@@ -70,44 +72,88 @@ void SwitchBoard::requestDatarefsFromXPlane()
 
    foreach (XPDataIndex i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
-      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << drmap.value(i)->str;
+      QString vstr = val->str;
+      if (vstr.contains("__X__")) {
+         vstr.replace("__X__", "1");
+      }
+      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
 
       xp_dref_in dref;
       dref.freq = (xpint) val->freq;
       dref.code = (xpint) val->xpIndex;
       memset(&dref.data, 0, sizeof(dref.data));
-      memcpy(&dref.data, val->str, QString(val->str).size());
+      memcpy(&dref.data, vstr.toLocal8Bit().data(), vstr.size());
       
       const int len = ID_DIM + sizeof(xp_dref_in);
-      char* data = new char[len]();
-      memset(data, 0, len);
-      memcpy(data, RREF_PREFIX, ID_DIM);
-      memcpy(data + ID_DIM, &dref, sizeof(xp_dref_in));
+      //char* data = new char[len]();
+      char data[len];
+      memset(&data, 0, len);
+      memcpy(&data, RREF_PREFIX, ID_DIM);
+      memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
       
       xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
-      delete data;
+      //delete data;
 
       // sleep to ensure the packets do not bunch up
-      //usleep(3000000);
+      //usleep(2000000);
    }
+
+   // Turn on UDP output
+   QList<XPDataIndex> indexes;
+   //indexes.append((XPDataIndex) 1);
+   indexes.append((XPDataIndex) 3);
+   indexes.append((XPDataIndex) 4);
+   /*
+   indexes.append((XPDataIndex) 15);
+   indexes.append((XPDataIndex) 16);
+   indexes.append((XPDataIndex) 17);
+   indexes.append((XPDataIndex) 18);
+   indexes.append((XPDataIndex) 19);
+   indexes.append((XPDataIndex) 20);
+   indexes.append((XPDataIndex) 21);
+   indexes.append((XPDataIndex) 22);
+   indexes.append((XPDataIndex) 23);
+   indexes.append((XPDataIndex) 24);
+   indexes.append((XPDataIndex) 25);
+   indexes.append((XPDataIndex) 26);
+   // */
+
+   // DSEL_PREFIX + 1 + i*8-bit ints + 1 + 0
+   // == DSEL0 + 1___1 + 0
+   int cs = sizeof(xpchr);
+   const int len2 = ID_DIM + cs*indexes.size() + 2*cs;
+   char dsel[len2];
+   memset(&dsel, 1, len2);
+   memcpy(&dsel, DSEL_PREFIX, ID_DIM);
+   memset(&dsel[ID_DIM], 1, cs);
+   //memset(&dsel[len2-2], 1, cs);
+
+   for (int i = 0; i < indexes.size(); i++) {
+      memset(&dsel[ID_DIM+1+(i*cs)], (xpint) indexes.at(i), cs);
+   }
+   qDebug() << "dsel data:" << dsel;
+   xplane->writeDatagram(dsel, len2, settings->xplaneHost(), 49000);
 }
 
 void SwitchBoard::processDatagram(QByteArray& data)
 {
    // Remove the first 5 bytes to get the raw values
-   QByteArray header = data.mid(0, 5);
-   QByteArray values = data.remove(0, 5);
+   QByteArray header = data.mid(0, ID_DIM);
+   QByteArray values = data.remove(0, ID_DIM);
 
-   xp_dref_out* dref = (struct xp_dref_out*) values.data();
+   xp_dref_out* dref;// = (struct xp_dref_out*) values.data();
 
-   qDebug() << "data received:" << header << dref->code << dref->data;
+   if (dref) {
+      qDebug() << "data received:" << header << dref->code << dref->data;
 
-   notifyAll(dref);
+      notifyAll(dref);
+   }
+
    
    // XPlane < 10.40:
 
    // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
-   /*
+   //*
    int numValues = values.size()/36;
 //   qDebug() << "Processing datagram of size:" << data.size() << numValues;
    
@@ -115,10 +161,10 @@ void SwitchBoard::processDatagram(QByteArray& data)
    for (int i = 0; i < numValues; i++) {
       // Get the 36 bytes starting at i*36
       QByteArray valueBytes = values.mid(i*36, 36);
-      XPOutputData* data = new XPOutputData();
-      data->parseRawData(valueBytes);
+      XPOutputData* outData = new XPOutputData();
+      outData->parseRawData(valueBytes);
       
-      notifyAll(data);
+      notifyAll(outData);
    }
    // */
 }
@@ -272,7 +318,7 @@ void SwitchBoard::notifyAll(XPOutputData* data)
          break;
          
       default:
-         qDebug() << "Unknown data receievd:" << data->index << VALUE(0);
+         //qDebug() << "Unknown data receievd:" << data->index << VALUE(0);
          break;
    }
 }

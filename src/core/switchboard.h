@@ -25,11 +25,11 @@ class SwitchBoard : public QObject {
    // Define the value struct for the Dataref Map drmap
    struct DRefValue {
       int            xpIndex; // XPDataIndex + XPDR_OFFSET;
-      const char*    str;     // The string representation of the dataref
+      QString        str;     // The string representation of the dataref
       func_pointer   signal;  // The SwitchBoard signal to be emitted
       int            freq;    // Frequency of response
 
-      DRefValue(int _index, const char* _str, func_pointer _fn, int _freq) {
+      DRefValue(int _index, QString _str, func_pointer _fn, int _freq) {
          xpIndex = _index;
          str = _str;
          signal = _fn;

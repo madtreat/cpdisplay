@@ -12,7 +12,7 @@
 #define XPLANEDREF_H
 
 //const char* XPDR_AC_TYPE = "";
-static const char* XPDR_AC_TAIL_NUM        = "sim/aircraft/view/acf_tailnum";
+static const char* XPDR_AC_TAIL_NUM_X      = "sim/aircraft/view/acf_tailnum[__X__]";
 static const char* XPDR_AC_NUM_ENGINES     = "sim/aircraft/engine/acf_num_engines";
 
 // Radios
