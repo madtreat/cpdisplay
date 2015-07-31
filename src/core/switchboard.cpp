@@ -19,7 +19,7 @@ SwitchBoard::SwitchBoard(HDDSettings* _settings, QObject* _parent)
    settings = _settings;
    initSocket();
 
-   requestDatarefsFromXPlane();
+//   requestDatarefsFromXPlane();
 }
 
 
@@ -32,7 +32,7 @@ void SwitchBoard::initSocket()
 {
    xplane = new QUdpSocket(this);
    //xplane->bind(settings->xplaneHost(), settings->xplanePort());
-   xplane->bind(settings->xplanePort(), QUdpSocket::ShareAddress);
+   xplane->bind(settings->xplaneHost(), settings->xplanePort(), QUdpSocket::ShareAddress);
    
    connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
 }
@@ -141,7 +141,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
    QByteArray header = data.mid(0, ID_DIM);
    QByteArray values = data.remove(0, ID_DIM);
 
-   xp_dref_out* dref;// = (struct xp_dref_out*) values.data();
+   xp_dref_out* dref = NULL;// = (struct xp_dref_out*) values.data();
 
    if (dref) {
       qDebug() << "data received:" << header << dref->code << dref->data;
@@ -155,7 +155,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
    // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
    //*
    int numValues = values.size()/36;
-//   qDebug() << "Processing datagram of size:" << data.size() << numValues;
+   //qDebug() << "Processing datagram of size:" << data.size() << numValues;
    
    // Separate each value
    for (int i = 0; i < numValues; i++) {
@@ -303,6 +303,20 @@ void SwitchBoard::notifyAll(XPOutputData* data)
          for (int i = 0; i < 8; i++) {
             if (VALUE(i) != 0.0)
                emit engRPMUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case ENG_OIL_PRESSURE:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit engOilPressureUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case ENG_OIL_TEMP:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit engOilTempUpdate(VALUE(i), i);
          }
          break;
          

@@ -106,6 +106,9 @@ signals:
    void engTorqueUpdate(float torque, int engNum);
    void engRPMUpdate(float rpm, int engNum);
    
+   void engOilPressureUpdate(float pressure, int engNum);
+   void engOilTempUpdate(float temp, int engNum);
+   
    void com1Update(float freq, float standby);
    void com2Update(float freq, float standby);
    void comTransmitUpdate(float freq);

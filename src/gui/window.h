@@ -13,6 +13,7 @@ class HDDSettings;
 class HDDController;
 
 class CommsWidget;
+class EngineWidget;
 
 
 class HDDWindow : public QMainWindow {
@@ -39,6 +40,7 @@ private:
    
    // Individual widgets
    CommsWidget*   comW;
+   EngineWidget*  engW;
    
    // PFD Alternate - guages instead of PFD
    QWidget*       pfdAltGuages;

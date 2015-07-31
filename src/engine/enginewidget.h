@@ -11,29 +11,30 @@
 #include <QFrame>
 #include "throttlewidget.h"
 
+
 class HDDSettings;
+class EngineController;
+class EngineDialWidget;
+
 
 class EngineWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   EngineWidget(HDDSettings* _hddSettings, int _numEngines=2, QFrame* _parent = 0);
+   EngineWidget(HDDSettings* _hddSettings, EngineController* _engC, int _numEngines=2, QFrame* _parent = 0);
    EngineWidget(const EngineWidget& orig) = delete;
    virtual ~EngineWidget();
 
 public slots:
-   void updateThrottleCommand(float throttle, int engNum);
-   void updateThrottleActual(float throttle, int engNum);
-   void updateEngPower(float power, int engNum);
-   void updateEngThrust(float thrust, int engNum);
-   void updateEngTorque(float torque, int engNum);
-   void updateEngRPM(float rpm, int engNum);
 
 private:
    HDDSettings* hddSettings;
+   EngineController* engC;
    int numEngines;
 
-   ThrottleList throttles;
+   ThrottleList      throttles;
+   EngineDialWidget* oilTWidget; // temp
+   EngineDialWidget* oilPWidget; // pressure
    
    void setupEngineControls();
 };

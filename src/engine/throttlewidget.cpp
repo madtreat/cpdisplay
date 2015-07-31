@@ -9,12 +9,18 @@
 #include <QProgressBar>
 #include <QLabel>
 
-ThrottleWidget::ThrottleWidget(int _engNum, int _max, int _value, QWidget* _parent)
+#include "enginecontroller.h"
+
+
+ThrottleWidget::ThrottleWidget(EngineController* _engC, int _engNum, int _max, int _value, QWidget* _parent)
 : QWidget(_parent),
+  engC(_engC),
   engineNum(_engNum),
   maxVal(_max),
   value(_value)
 {
+   connect(engC, &EngineController::throttleUpdate, this, &ThrottleWidget::setValue);
+   
    label = new QLabel(QString("ENG %1").arg(engineNum+1));
    //label->setMinimumWidth(50);
    label->setMaximumSize(QSize(40, 20));
@@ -41,8 +47,11 @@ ThrottleWidget::~ThrottleWidget()
 {
 }
 
-void ThrottleWidget::setValue(int _value)
+void ThrottleWidget::setValue(int _value, int _engNum)
 {
-   value = _value;
-   throttle->setValue(value);
+   // Only update if it was meant for this engine
+   if (_engNum == engineNum) {
+      value = _value;
+      throttle->setValue(value);
+   }
 }

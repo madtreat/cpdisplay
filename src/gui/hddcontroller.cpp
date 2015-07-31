@@ -76,7 +76,7 @@ void HDDController::connectSignals()
    MapView*    mapView = getMapView();
    MapOverlay* overlay = getOverlay();
    
-   EngineWidget* engW = engC->getWidget();
+//   EngineWidget* engW = engC->getWidget();
 //   TrafficWidget* tfcW = tfcC->getWidget();
 
 
@@ -161,14 +161,17 @@ void HDDController::connectSignals()
    connect(sb, SIGNAL(acAltUpdate(float, int)), this, SLOT(updateACAlt(float, int)));
    
    // Throttle settings and actual values
-   connect(sb, SIGNAL(throttleCommandUpdate(float, int)), engW, SLOT(updateThrottleCommand(float, int)));
-   connect(sb, SIGNAL(throttleActualUpdate(float, int)), engW, SLOT(updateThrottleActual(float, int)));
+   connect(sb, SIGNAL(throttleCommandUpdate(float, int)), engC, SLOT(updateThrottleCommand(float, int)));
+   connect(sb, SIGNAL(throttleActualUpdate(float, int)), engC, SLOT(updateThrottleActual(float, int)));
    
    // Engine settings
-   connect(sb, SIGNAL(engPowerUpdate(float, int)), engW, SLOT(updateEngPower(float, int)));
-   connect(sb, SIGNAL(engThrustUpdate(float, int)), engW, SLOT(updateEngThrust(float, int)));
-   connect(sb, SIGNAL(engTorqueUpdate(float, int)), engW, SLOT(updateEngTorque(float, int)));
-   connect(sb, SIGNAL(engRPMUpdate(float, int)), engW, SLOT(updateEngRPM(float, int)));
+   connect(sb, SIGNAL(engPowerUpdate(float, int)), engC, SLOT(updateEngPower(float, int)));
+   connect(sb, SIGNAL(engThrustUpdate(float, int)), engC, SLOT(updateEngThrust(float, int)));
+   connect(sb, SIGNAL(engTorqueUpdate(float, int)), engC, SLOT(updateEngTorque(float, int)));
+   connect(sb, SIGNAL(engRPMUpdate(float, int)), engC, SLOT(updateEngRPM(float, int)));
+   
+   connect(sb, SIGNAL(engOilPressureUpdate(float, int)), engC, SLOT(updateOilPressure(float, int)));
+   connect(sb, SIGNAL(engOilTempUpdate(float, int)), engC, SLOT(updateOilTemp(float, int)));
    
    // Comms and Navs
    connect(sb, SIGNAL(com1Update(float, float)), comC, SLOT(setCom1(float, float)));

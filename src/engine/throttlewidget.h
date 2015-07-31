@@ -15,18 +15,21 @@
 class QProgressBar;
 class QLabel;
 
+class EngineController;
+
 class ThrottleWidget : public QWidget {
    Q_OBJECT;
    
 public:
-   ThrottleWidget(int _engNum, int _max, int _value, QWidget* _parent=0);
+   ThrottleWidget(EngineController* _engC, int _engNum, int _max, int _value, QWidget* _parent=0);
    ThrottleWidget(const ThrottleWidget& orig) = delete;
    virtual ~ThrottleWidget();
    
 public slots:
-   void setValue(int _value);
+   void setValue(int _value, int _engNum);
    
 private:
+   EngineController* engC;
    int engineNum;
    int maxVal;
    int value;

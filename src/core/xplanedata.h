@@ -63,6 +63,10 @@ enum XPDataIndex {
    PROP_PITCH = 39,
    PROPWASH_JETWASH = 40,
    
+   // Oil
+   ENG_OIL_PRESSURE = 49,
+   ENG_OIL_TEMP = 50,
+   
    N1 = 41,
    N2 = 42,
    MP = 43,

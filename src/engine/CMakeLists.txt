@@ -2,12 +2,17 @@ project(hdd-engine)
 
 set(SOURCES
    enginecontroller.cpp
+   enginedial.cpp
+   enginedialwidget.cpp
    enginewidget.cpp
    throttlewidget.cpp
 )
 
 set(HEADERS
+   engineconsts.h
    enginecontroller.h
+   enginedial.h
+   enginedialwidget.h
    enginewidget.h
    throttlewidget.h
 )

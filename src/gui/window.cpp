@@ -28,6 +28,7 @@
 #include "comms/commscontroller.h"
 #include "comms/commswidget.h"
 #include "engine/enginecontroller.h"
+#include "engine/enginewidget.h"
 #include "traffic/trafficcontroller.h"
 
 
@@ -46,6 +47,7 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    layoutProfile = new LayoutProfile(hddSettings->layoutProfile());
    layoutManager = new LayoutManager();
    
+   engW = new EngineWidget(hddSettings, hddC->getEngC());
    comW = new CommsWidget(hddSettings, hddC->getComC());
    
    setupPFDAltGuages();
@@ -55,7 +57,7 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    QMap<int, QWidget*> widgetMap;
    widgetMap.insert(1, hddC->getPFDC()->getWidget());
    widgetMap.insert(2, hddC->getMapC()->getWidget());
-   widgetMap.insert(3, hddC->getEngC()->getWidget());
+   widgetMap.insert(3, engW);
    widgetMap.insert(4, hddC->getTfcC()->getWidget());
    widgetMap.insert(5, comW);
    widgetMap.insert(6, toolbar);
@@ -74,7 +76,7 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    
    setCentralWidget(layoutManager);
    
-   setMinimumSize(QSize(1160, 590));
+   setMinimumSize(QSize(1344, 756));
 }
 
 HDDWindow::~HDDWindow()

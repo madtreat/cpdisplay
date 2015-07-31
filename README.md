@@ -30,7 +30,7 @@ This program reads UDP data from X-Plane, and thus to function properly, the fol
 UDP data should be enabled in the "Data Input & Output" window, along with the
 checkbox to enable "internet" output.
 
-1, 3, 4, 15-26, 34-37, 96, 97
+1, 3, 4, 15-26, 34-37, 49-50, 96, 97
 
 
 Instructions
