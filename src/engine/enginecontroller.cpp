@@ -11,6 +11,7 @@
 
 #include "core/hddsettings.h"
 
+
 EngineController::EngineController(HDDSettings* _hddSettings, int _numEngines, QObject* _parent)
 : QObject(_parent),
   hddSettings(_hddSettings),
@@ -41,8 +42,6 @@ void EngineController::updateThrottleCommand(float throttle, int engNum)
 //      throttles.append(throttle);
       return;
    }
-//   qDebug() << "Updating engine" << engNum << "to" << 100*throttle;
-//   throttles.at(engNum)->setValue((int) 100*throttle);
    emit throttleUpdate((int) 100*throttle, engNum);
 }
 
@@ -68,19 +67,15 @@ void EngineController::updateEngTorque(float torque, int engNum)
 
 void EngineController::updateEngRPM(float rpm, int engNum)
 {
-   
+   emit engRPMUpdate(rpm, engNum);
 }
 
 void EngineController::updateOilTemp(float temp, int engNum)
 {
-   if (engNum == 0) {
-      emit oilTUpdate(temp);
-   }
+   emit oilTUpdate(temp, engNum);
 }
 
 void EngineController::updateOilPressure(float pressure, int engNum)
 {
-   if (engNum == 0) {
-      emit oilPUpdate(pressure);
-   }
+   emit oilPUpdate(pressure, engNum);
 }

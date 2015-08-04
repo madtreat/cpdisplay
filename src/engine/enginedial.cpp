@@ -6,34 +6,59 @@
  */
 
 #include "enginedial.h"
+#include "enginecontroller.h"
 
 #include <QPainter>
 #include <QPolygon>
+#include <QDebug>
 
 
-EngineDial::EngineDial(EngineDialType _type, QWidget* _parent)
+EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _type, int _min, int _max, int _value, QWidget* _parent)
 : QDial(_parent),
-  type(_type)
+  engC(_engC),
+  type(_type),
+  valueMax(_max),
+  valueMin(_min),
+  engNum(_engNum)
 {
-   if (type == OIL_TEMP) {
+   int stepSize = 0;
+   if (type == DIAL_OIL_TEMP) {
       typeText = "Oil T";
-      valueTextBase = "_X_ deg C";
+      valueTextBase = QString("_X_ %1C").arg(QChar(0260));
+      stepSize = 10;
+      
+      connect(engC, &EngineController::oilTUpdate, this, &EngineDial::setValue);
    }
-   else if (type == OIL_PRESSURE) {
+   else if (type == DIAL_OIL_PRESSURE) {
       typeText = "Oil P";
       valueTextBase = "_X_ psi";
+      stepSize = 10;
+      
+      connect(engC, &EngineController::oilPUpdate, this, &EngineDial::setValue);
    }
-   else if (type == ENG_RPM) {
+   else if (type == DIAL_ENG_RPM) {
       typeText = "ENG RPM";
-      valueTextBase = "_X_";
+      valueTextBase = "_X_ Hz";
+      stepSize = 200;
+      
+      connect(engC, &EngineController::engRPMUpdate, this, &EngineDial::setValue);
    }
    
    tickIncrement = 0.0;
-   tickDegIncrement = 30;
+   tickDegIncrement = 21;
    tickDegMin = 0;
    tickDegMax = 210;
+   tickRatio = 0.0;
    
    circleBuffer = 20;
+   
+   setRange(valueMin, valueMax);
+   setValue(_value, engNum);
+   setWrapping(false);
+   setNotchesVisible(true);
+   setSingleStep(stepSize);
+   setEnabled(false);
+   setMinimumSize(QSize(120, 120));
 }
 
 //EngineDial::EngineDial(const EngineDial& orig)
@@ -44,20 +69,25 @@ EngineDial::~EngineDial()
 {
 }
 
+void EngineDial::setValue(float _value, int _engNum)
+{
+   if (_engNum == engNum) {
+//      qDebug() << "Updating ENG" << engNum << "type:" << type << "value:" << _value;
+      QDial::setValue((int) _value);
+   }
+}
+
 void EngineDial::paintEvent(QPaintEvent*)
 {
    QPainter p(this);
+   int range = valueMax - valueMin;
    if (tickIncrement == 0.0) {
-      int max = maximum();
-      int min = minimum();
-      int range = max - min;
-      double ratio = tickDegIncrement / (tickDegMax - tickDegMin);
-      
-      tickIncrement = range * ratio;
+      tickRatio = tickDegIncrement / (tickDegMax - tickDegMin);
+      tickIncrement = range * tickRatio;
    }
    
    int extent = (width() > height()) ? height() : width();
-   extent -= circleBuffer;
+   extent -= 2*circleBuffer;
    
    p.translate((width()-extent)/2, (height()-extent)/2);
    p.setPen(QColor(105, 105, 105));
@@ -68,32 +98,57 @@ void EngineDial::paintEvent(QPaintEvent*)
    p.drawArc(0, 0, extent, extent, 15*16, (tickDegMax-tickDegMin)*16);
    
    // Draw dial identification and value text
-   p.setPen(QColor(0, 128, 0, 255));
-   QString valueText = valueTextBase.replace("_X_", QString::number(value()));
+   p.setPen(QColor(105, 105, 105));
+//   p.setPen(Qt::white);
+   QString valueText = QString(valueTextBase);
+   valueText.replace("_X_", QString::number(value()));
    p.drawText(extent/2-4, extent/2+18, typeText);
-   p.drawText(extent/2-18, extent/2+32, valueText);
+   p.drawText(extent/2-4, extent/2+32, valueText);
    
    // Draw tickmarks
+   p.setPen(QColor(0, 128, 0, 255));
    p.translate(extent/2, extent/2);
    for (int i = tickDegMin; i <= tickDegMax; i += tickDegIncrement) {
       p.save();
       p.rotate(i + DIAL_OFFSET);
       p.drawLine(extent*0.4, 0, extent*0.48, 0);
-      if (i == 0 || i == tickDegMax) {
-         QString value = QString::number(i);//(i/tickDegIncrement) * tickIncrement);
-         p.drawText(extent*0.6, 0, value);
-      }
       p.restore();
    }
    
+   // Draw min and max value
+   p.setPen(Qt::darkGreen);
+   QString valueStr = QString::number(valueMin);
+   int textX = -(extent/2 + 6*valueStr.size() - 4);
+   int textY = extent/2;
+   p.drawText(textX, textY, valueStr);
+   
+   p.setPen(Qt::red);
+   valueStr = QString::number(valueMax);
+   textX = extent - 2*circleBuffer - 10;
+   textY = +4;
+   p.drawText(textX, textY, valueStr);
+   
    // Draw the needle
    p.setPen(Qt::NoPen);
-   p.setBrush(QColor(0, 128, 0, 120));
-   p.rotate(value() + DIAL_OFFSET);
+   double percent = (value()-valueMin) / (double) range;
+   if ( percent >= 0.9 ) {
+      p.setBrush(QColor(255, 0, 0, 120));
+   }
+   else if ( percent >= 0.8 ) {
+      p.setBrush(QColor(255, 255, 0, 120));
+   }
+   else {
+      p.setBrush(QColor(0, 255, 0, 120));
+   }
+   
+   p.save();
+   float rotation = (tickDegMax-tickDegMin)*percent + DIAL_OFFSET;
+   p.rotate(rotation);
    QPolygon polygon;
    polygon << QPoint(-extent*0.05, extent*0.05)
            << QPoint(-extent*0.05, -extent*0.05)
            << QPoint(extent*0.46, 0);
    p.drawPolygon(polygon);
+   p.restore();
 }
 

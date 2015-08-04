@@ -23,8 +23,6 @@ public:
    EngineController(HDDSettings* _hddSettings, int _numEngines, QObject* _parent = 0);
    EngineController(const EngineController& orig) = delete;
    virtual ~EngineController();
-   
-//   EngineWidget*  getWidget()  const { return engineWidget; }
 
 public slots:
    void updateNumEngines(int numEng);
@@ -40,12 +38,12 @@ public slots:
    
 signals:
    void throttleUpdate(int value, int engNum);
-   void oilTUpdate(float _value);
-   void oilPUpdate(float _value);
+   void oilTUpdate(float _value, int engNum);
+   void oilPUpdate(float _value, int engNum);
+   void engRPMUpdate(float _value, int engNum);
 
 private:
    HDDSettings* hddSettings;
-//   EngineWidget* engineWidget;
    int numEngines;
    
 };

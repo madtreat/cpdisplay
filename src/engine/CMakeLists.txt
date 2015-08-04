@@ -3,8 +3,8 @@ project(hdd-engine)
 set(SOURCES
    enginecontroller.cpp
    enginedial.cpp
-   enginedialwidget.cpp
    enginewidget.cpp
+   singleenginewidget.cpp
    throttlewidget.cpp
 )
 
@@ -12,8 +12,8 @@ set(HEADERS
    engineconsts.h
    enginecontroller.h
    enginedial.h
-   enginedialwidget.h
    enginewidget.h
+   singleenginewidget.cpp
    throttlewidget.h
 )
 

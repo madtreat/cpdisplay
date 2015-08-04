@@ -14,7 +14,7 @@
 
 #include "core/hddsettings.h"
 #include "enginecontroller.h"
-#include "enginedialwidget.h"
+#include "singleenginewidget.h"
 
 
 EngineWidget::EngineWidget(HDDSettings* _hddSettings, EngineController* _engC, int _numEngines, QFrame* _parent)
@@ -43,31 +43,11 @@ void EngineWidget::setupEngineControls()
    layout->setContentsMargins(0, 0, 0, 0);
    
    // This loop will create throttles in pairs, to keep them grouped better on the main layout
-   for (int i = 0; i < numEngines/2; i++) {
-      QHBoxLayout* pairLayout = new QHBoxLayout();
-      ThrottleWidget* lt = new ThrottleWidget(engC, i*2, 100, 0); // left throttle of pair
-      pairLayout->addWidget(lt);
-      throttles.append(lt);
-      
-      // If numEngines is even, add a second throttle to this pair
-      if (numEngines % 2 == 0) {
-         ThrottleWidget* rt = new ThrottleWidget(engC, (i*2)+1, 100, 0); // right throttle of pair
-         pairLayout->addWidget(rt);
-         throttles.append(rt);
-      }
-      
-      layout->addLayout(pairLayout);
+   for (int i = 0; i < numEngines; i++) {
+      SingleEngineWidget* eng = new SingleEngineWidget(hddSettings, engC, i);
+      engines.append(eng);
+      layout->addWidget(eng);
    }
-   
-   // Add the oil widgets
-   oilTWidget = new EngineDialWidget(engC, OIL_TEMP, 20, 180, 0);
-   oilPWidget = new EngineDialWidget(engC, OIL_PRESSURE, 40, 120, 0);
-   
-   QVBoxLayout* oilLayout = new QVBoxLayout();
-   oilLayout->setContentsMargins(0, 0, 0, 0);
-   oilLayout->addWidget(oilTWidget);
-   oilLayout->addWidget(oilPWidget);
-   layout->addLayout(oilLayout);
    
    layout->addStretch(2);
 }

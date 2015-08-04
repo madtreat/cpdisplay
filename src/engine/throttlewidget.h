@@ -17,6 +17,7 @@ class QLabel;
 
 class EngineController;
 
+
 class ThrottleWidget : public QWidget {
    Q_OBJECT;
    
@@ -38,8 +39,6 @@ private:
    QLabel* label;
    QProgressBar* throttle;
 };
-
-typedef QList<ThrottleWidget*> ThrottleList;
 
 #endif	/* THROTTLEWIDGET_H */
 

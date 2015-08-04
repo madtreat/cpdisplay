@@ -9,12 +9,12 @@
 #define ENGINEWIDGET_
 
 #include <QFrame>
-#include "throttlewidget.h"
 
+#include "engineconsts.h"
 
 class HDDSettings;
 class EngineController;
-class EngineDialWidget;
+class EngineDial;
 
 
 class EngineWidget : public QFrame {
@@ -25,16 +25,14 @@ public:
    EngineWidget(const EngineWidget& orig) = delete;
    virtual ~EngineWidget();
 
-public slots:
+//public slots:
 
 private:
    HDDSettings* hddSettings;
    EngineController* engC;
    int numEngines;
-
-   ThrottleList      throttles;
-   EngineDialWidget* oilTWidget; // temp
-   EngineDialWidget* oilPWidget; // pressure
+   
+   Engines engines;
    
    void setupEngineControls();
 };

@@ -14,32 +14,43 @@
 #include "engineconsts.h"
 
 
+class EngineController;
+
+
 class EngineDial : public QDial {
    Q_OBJECT;
    
    static const int DIAL_OFFSET = 135;
 
 public:
-   EngineDial(EngineDialType _type, QWidget* _parent = 0);
+   EngineDial(EngineController* _engC, int _engNum, EngineDialType _type, int _min, int _max, int _value, QWidget* _parent = 0);
    EngineDial(const EngineDial& orig) = delete;
    virtual ~EngineDial();
 
 public slots:
+   void setValue(float value, int _engNum);
    
 protected:
    void paintEvent(QPaintEvent*);
 
 private:
-   EngineDialType type;
-   QString typeText;
-   QString valueTextBase;
+   EngineController* engC;
+   EngineDialType    type;
+   int               engNum;
+   
+   int valueMin;
+   int valueMax;
    
    double tickIncrement; // each tick represents X value
-   int tickDegIncrement; // each tick represents X degrees
+   double tickRatio;     // ratio of value to rotation degrees
+   int tickDegIncrement; // each tick represents X rotation degrees
    int tickDegMin;
    int tickDegMax;
    
    int circleBuffer; // buffer from edge of box to circle
+   
+   QString typeText;
+   QString valueTextBase;
 
 };
 
