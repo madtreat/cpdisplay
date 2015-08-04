@@ -39,6 +39,8 @@ private:
    EngineDial*       oilP; // pressure gauge
    EngineDial*       oilT; // temperature gauge
    EngineDial*       engRPM; // RPM gauge
+   
+   void setVisibleWidgets();
 };
 
 #endif	/* SINGLEENGINEWIDGET_H */

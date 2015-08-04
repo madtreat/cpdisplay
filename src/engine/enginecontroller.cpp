@@ -12,9 +12,10 @@
 #include "core/hddsettings.h"
 
 
-EngineController::EngineController(HDDSettings* _hddSettings, int _numEngines, QObject* _parent)
+EngineController::EngineController(HDDSettings* _hddSettings, AircraftEngineType _engType, int _numEngines, QObject* _parent)
 : QObject(_parent),
   hddSettings(_hddSettings),
+  engType(_engType),
   numEngines(_numEngines)
 {
 //   engineWidget = new EngineWidget(hddSettings, _numThrottles);
@@ -26,6 +27,12 @@ EngineController::EngineController(HDDSettings* _hddSettings, int _numEngines, Q
 
 EngineController::~EngineController()
 {
+}
+
+void EngineController::updateEngineType(AircraftEngineType type)
+{
+   engType = type;
+   emit engineTypeUpdate(engType);
 }
 
 void EngineController::updateNumEngines(int numEng)

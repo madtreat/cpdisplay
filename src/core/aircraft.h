@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QMap>
 
+
 enum AircraftType {
    BOMBER = 0,
    CIVIL,
@@ -25,6 +26,14 @@ enum AircraftType {
    UAS,
    NUM_AIRCRAFT_TYPES
 };
+
+
+enum AircraftEngineType {
+   AC_ENG_PROP = 0,
+   AC_ENG_JET,
+   AC_ENG_TURBOJET
+};
+
 
 class Aircraft : public QObject {
    Q_OBJECT;
@@ -61,6 +70,7 @@ signals:
 
 private:
    AircraftType type;
+   AircraftEngineType engType;
    int   id;  // aircraft id
    bool  displayed; // has this aircraft been displayed on the map yet?
    

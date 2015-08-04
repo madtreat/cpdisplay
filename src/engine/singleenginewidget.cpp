@@ -32,6 +32,8 @@ SingleEngineWidget::SingleEngineWidget(HDDSettings* _hddSettings, EngineControll
    oilP = new EngineDial(engC, engNum, DIAL_OIL_PRESSURE, 40, 120, 0);
    engRPM = new EngineDial(engC, engNum, DIAL_ENG_RPM, 0, 5000, 0);
    
+   setVisibleWidgets();
+   
    layout->addWidget(throttle);
    layout->addWidget(oilT);
    layout->addWidget(oilP);
@@ -64,5 +66,25 @@ void SingleEngineWidget::setEngRPM(float rpm, int _engNum)
 {
    if (_engNum == engNum) {
       engRPM->setValue(rpm, engNum);
+   }
+}
+
+void SingleEngineWidget::setVisibleWidgets()
+{
+   switch(engC->getEngineType()) {
+      case AC_ENG_PROP:
+         engRPM->setVisible(true);
+         break;
+         
+      case AC_ENG_JET:
+         engRPM->setVisible(false);
+         break;
+         
+      case AC_ENG_TURBOJET:
+         engRPM->setVisible(true);
+         break;
+         
+      default:
+         break;
    }
 }

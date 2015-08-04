@@ -99,18 +99,19 @@ enum XPDataIndex {
 
    // Aircraft info
    AC_TYPE,          // 135
-   AC_TAIL_NUM,      // 136
-   AC_NUM_ENGINES,   // 137
+   AC_TAIL_NUM,
+   AC_ENGINE_TYPE,
+   AC_NUM_ENGINES,
    
    // Radios
-   RAD_COM1_FREQ,    // 138
-   RAD_COM1_STDBY,   // 139
-   RAD_COM2_FREQ,    // 140
-   RAD_COM2_STDBY,   // 141
-   RAD_NAV1_FREQ,    // 142
-   RAD_NAV1_STDBY,   // 143
-   RAD_NAV2_FREQ,    // 144
-   RAD_NAV2_STDBY,   // 145
+   RAD_COM1_FREQ,
+   RAD_COM1_STDBY,
+   RAD_COM2_FREQ,
+   RAD_COM2_STDBY,
+   RAD_NAV1_FREQ,
+   RAD_NAV1_STDBY,
+   RAD_NAV2_FREQ,
+   RAD_NAV2_STDBY,
 
    NUM_TOTAL_DATA_INDEXES
 };

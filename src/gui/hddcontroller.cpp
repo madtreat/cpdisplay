@@ -47,7 +47,7 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
    
    numEngines = 2;
    comC = new CommsController(settings, this);
-   engC = new EngineController(settings, numEngines, this);
+   engC = new EngineController(settings, AC_ENG_JET, numEngines, this);
    tfcC = new TrafficController(settings, acMap, this);
 
    angVelUpdatedFlag = false;
