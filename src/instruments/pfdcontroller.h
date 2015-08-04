@@ -8,6 +8,9 @@
  * source (X-Plane).
  */
 
+#ifndef PFDCONTROLLER_H
+#define PFDCONTROLLER_H
+
 #include <QObject>
 #include <QWidget>
 
@@ -44,3 +47,7 @@ public slots:
 private:
    WidgetPFD* pfdWidget;
 };
+
+typedef PFDController PFDC;
+
+#endif

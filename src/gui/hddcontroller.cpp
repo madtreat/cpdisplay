@@ -83,103 +83,115 @@ void HDDController::connectSignals()
    /*
     * These connections are for xplane 10.40+ dataref requests (RREF results).
     */
-   connect(sb, SIGNAL(acTailNumUpdate(float)), this, SLOT(setTailNum(float)));
-   connect(sb, SIGNAL(acNumEnginesUpdate(float)), this, SLOT(setNumEngines(float)));
+   connect(sb, &SWB::acTailNumUpdate,     this, &HDDC::setTailNum);
+   connect(sb, &SWB::acNumEnginesUpdate,  this, &HDDC::setNumEngines);
 
    /*
     * Everything below is for the raw UDP output from xplane, if selected.
     */
    // Self-calculated turn rate
-   connect(this, SIGNAL(turnRateUpdate(float)), pfdC, SLOT(setTurnRate(float)));
-   connect(this, SIGNAL(turnRateUpdate(float)), tcdC, SLOT(setTurnRate(float)));
+   connect(this, &HDDC::turnRateUpdate, pfdC, &PFDC::setTurnRate);
+   connect(this, &HDDC::turnRateUpdate, tcdC, &TCDC::setTurnRate);
    
    // Times
-   connect(sb, SIGNAL(timeUpdate(float, float)), comC, SLOT(setTimes(float, float)));
+   connect(sb, &SWB::timeUpdate, comC, &COMC::setTimes);
 
    // Speeds
-   connect(sb, SIGNAL(speedUpdate(float)),   asiC,    SLOT(setAirspeed(float)));
-   connect(sb, SIGNAL(speedUpdate(float)),   pfdC,    SLOT(setAirspeed(float)));
+   connect(sb, &SWB::speedUpdate,   asiC,    &ASIC::setAirspeed);
+   connect(sb, &SWB::speedUpdate,   pfdC,    &PFDC::setAirspeed);
 
    // Mach, Vertical Velocity
-   connect(sb, SIGNAL(machNumUpdate(float)), pfdC,    SLOT(setMachNo(float)));
+   connect(sb, &SWB::machNumUpdate, pfdC,    &PFDC::setMachNo);
 
-   connect(sb, SIGNAL(vertVelUpdate(float)), pfdC,    SLOT(setClimbRate(float)));
-   connect(sb, SIGNAL(vertVelUpdate(float)), vsiC,    SLOT(setClimbRate(float)));
+   connect(sb, &SWB::vertVelUpdate, pfdC,    &PFDC::setClimbRate);
+   connect(sb, &SWB::vertVelUpdate, vsiC,    &VSIC::setClimbRate);
 
    // Pressure
-   connect(sb, SIGNAL(pressureUpdate(float)), altC,   SLOT(setPressure(float)));
-   connect(sb, SIGNAL(pressureUpdate(float)), pfdC,   SLOT(setPressure(float)));
+   connect(sb, &SWB::pressureUpdate, altC,   &ALTC::setPressure);
+   connect(sb, &SWB::pressureUpdate, pfdC,   &PFDC::setPressure);
 
    // Angular Velocities (Q, P, R)
-   connect(sb, SIGNAL(angVelUpdate(float, float, float)), this, SLOT(updateAngVel(float, float, float)));
+   connect(sb, &SWB::angVelUpdate, this, &HDDC::updateAngVel);
 
    // Pitch, Roll, Heading
-   connect(sb, SIGNAL(pitchUpdate(float)),   this,    SLOT(updatePitch(float)));
-   connect(sb, SIGNAL(pitchUpdate(float)),   adiC,    SLOT(setPitch(float)));
-   connect(sb, SIGNAL(pitchUpdate(float)),   pfdC,    SLOT(setPitch(float)));
+   connect(sb, &SWB::pitchUpdate,   this,    &HDDC::updatePitch);
+   connect(sb, &SWB::pitchUpdate,   adiC,    &ADIC::setPitch);
+   connect(sb, &SWB::pitchUpdate,   pfdC,    &PFDC::setPitch);
 
-   connect(sb, SIGNAL(rollUpdate(float)),    this,    SLOT(updateRoll(float)));
-   connect(sb, SIGNAL(rollUpdate(float)),    adiC,    SLOT(setRoll(float)));
-   connect(sb, SIGNAL(rollUpdate(float)),    pfdC,    SLOT(setRoll(float)));
+   connect(sb, &SWB::rollUpdate,    this,    &HDDC::updateRoll);
+   connect(sb, &SWB::rollUpdate,    adiC,    &ADIC::setRoll);
+   connect(sb, &SWB::rollUpdate,    pfdC,    &PFDC::setRoll);
 
-   connect(sb, SIGNAL(headingMagUpdate(float)), mapView, SLOT(setHeading(float)));
-   connect(sb, SIGNAL(headingMagUpdate(float)), overlay, SLOT(setHeading(float)));
-   connect(sb, SIGNAL(headingMagUpdate(float)), hsiC,    SLOT(setHeading(float)));
-   connect(sb, SIGNAL(headingMagUpdate(float)), pfdC,    SLOT(setHeading(float)));
+   connect(sb, &SWB::headingMagUpdate, mapView, &MapView::setHeading);
+   connect(sb, &SWB::headingMagUpdate, overlay, &MapOverlay::setHeading);
+   connect(sb, &SWB::headingMagUpdate, hsiC,    &HSIC::setHeading);
+   connect(sb, &SWB::headingMagUpdate, pfdC,    &PFDC::setHeading);
 
    // AOA, SideSlip
    connect(sb, SIGNAL(aoaSideSlipUpdate(float, float)), pfdC, SLOT(setFlightPathMarker(float, float)));
 
    // these are not the values
-   //connect(sb, SIGNAL(hPathUpdate(float)),    pfdC,   SLOT(setDevH(float)));
-   //connect(sb, SIGNAL(vPathUpdate(float)),    pfdC,   SLOT(setDevV(float)));
+   //connect(sb, &SWB::hPathUpdate,    pfdC,   &PFDC::setDevH);
+   //connect(sb, &SWB::vPathUpdate,    pfdC,   &PFDC::setDevV);
    
-   connect(sb, SIGNAL(slipSkidUpdate(float)), pfdC,   SLOT(setSlipSkid(float)));
-   connect(sb, SIGNAL(slipSkidUpdate(float)), tcdC,   SLOT(setSlipSkid(float)));
+   connect(sb, &SWB::slipSkidUpdate, pfdC,   &PFDC::setSlipSkid);
+   connect(sb, &SWB::slipSkidUpdate, tcdC,   &TCDC::setSlipSkid);
 
    // Compass != Heading
    /*
-   connect(sb, SIGNAL(compassUpdate(float)), mapView, SLOT(setHeading(float)));
-   connect(sb, SIGNAL(compassUpdate(float)), overlay, SLOT(setHeading(float)));
-   connect(sb, SIGNAL(compassUpdate(float)), pfdC,    SLOT(setHeading(float)));
-   connect(sb, SIGNAL(compassUpdate(float)), hsiC,    SLOT(setHeading(float)));
+   connect(sb, &SWB::compassUpdate, mapView, &MapView::setHeading);
+   connect(sb, &SWB::compassUpdate, overlay, &MapOverlay::setHeading);
+   connect(sb, &SWB::compassUpdate, pfdC,    &PFDC::setHeading);
+   connect(sb, &SWB::compassUpdate, hsiC,    &HSIC::setHeading);
    // */
 
    // Position (this AC)
-   connect(sb, SIGNAL(latLonUpdate(float, float)), mapC, SLOT(panToLocation(float, float)));
+   connect(sb, &SWB::latLonUpdate, mapC, &MAPC::panToLocation);
 
    // Altitudes: using MSL, but AGL could be connected later
-   connect(sb, SIGNAL(altMSLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
-   connect(sb, SIGNAL(altMSLUpdate(float)), altC,     SLOT(setAltitude(float)));
+   connect(sb, &SWB::altMSLUpdate, pfdC,     &PFDC::setAltitude);
+   connect(sb, &SWB::altMSLUpdate, altC,     &ALTC::setAltitude);
 
-   //connect(sb, SIGNAL(altAGLUpdate(float)), pfdC,     SLOT(setAltitude(float)));
-   //connect(sb, SIGNAL(altAGLUpdate(float)), altC,     SLOT(setAltitude(float)));
+   //connect(sb, &SWB::altAGLUpdate, pfdC,     &PFDC::setAltitude);
+   //connect(sb, &SWB::altAGLUpdate, altC,     &ALTC::setAltitude);
 
    // Position (other AC)
-   connect(sb, SIGNAL(acLatUpdate(float, int)), this, SLOT(updateACLat(float, int)));
-   connect(sb, SIGNAL(acLonUpdate(float, int)), this, SLOT(updateACLon(float, int)));
-   connect(sb, SIGNAL(acAltUpdate(float, int)), this, SLOT(updateACAlt(float, int)));
+   connect(sb, &SWB::acLatUpdate, this, &HDDC::updateACLat);
+   connect(sb, &SWB::acLonUpdate, this, &HDDC::updateACLon);
+   connect(sb, &SWB::acAltUpdate, this, &HDDC::updateACAlt);
    
    // Throttle settings and actual values
-   connect(sb, SIGNAL(throttleCommandUpdate(float, int)), engC, SLOT(updateThrottleCommand(float, int)));
-   connect(sb, SIGNAL(throttleActualUpdate(float, int)), engC, SLOT(updateThrottleActual(float, int)));
+   connect(sb, &SWB::throttleCommandUpdate,   engC, &ENGC::updateThrottleCommand);
+   connect(sb, &SWB::throttleActualUpdate,    engC, &ENGC::updateThrottleActual);
    
    // Engine settings
-   connect(sb, SIGNAL(engPowerUpdate(float, int)), engC, SLOT(updateEngPower(float, int)));
-   connect(sb, SIGNAL(engThrustUpdate(float, int)), engC, SLOT(updateEngThrust(float, int)));
-   connect(sb, SIGNAL(engTorqueUpdate(float, int)), engC, SLOT(updateEngTorque(float, int)));
-   connect(sb, SIGNAL(engRPMUpdate(float, int)), engC, SLOT(updateEngRPM(float, int)));
+   connect(sb, &SWB::engPowerUpdate,    engC, &ENGC::updateEngPower);
+   connect(sb, &SWB::engThrustUpdate,   engC, &ENGC::updateEngThrust);
+   connect(sb, &SWB::engTorqueUpdate,   engC, &ENGC::updateEngTorque);
+   connect(sb, &SWB::engRPMUpdate,      engC, &ENGC::updateEngRPM);
+   connect(sb, &SWB::propRPMUpdate,     engC, &ENGC::updatePropRPM);
+   connect(sb, &SWB::propPitchUpdate,   engC, &ENGC::updatePropPitch);
+   connect(sb, &SWB::propwashUpdate,    engC, &ENGC::updatePropwash);
    
-   connect(sb, SIGNAL(engOilPressureUpdate(float, int)), engC, SLOT(updateOilPressure(float, int)));
-   connect(sb, SIGNAL(engOilTempUpdate(float, int)), engC, SLOT(updateOilTemp(float, int)));
+   connect(sb, &SWB::n1Update,    engC, &ENGC::updateN1);
+   connect(sb, &SWB::n2Update,    engC, &ENGC::updateN2);
+   connect(sb, &SWB::mpUpdate,    engC, &ENGC::updateMP);
+   connect(sb, &SWB::eprUpdate,   engC, &ENGC::updateEPR);
+   connect(sb, &SWB::ffUpdate,    engC, &ENGC::updateFF);
+   connect(sb, &SWB::ittUpdate,   engC, &ENGC::updateITT);
+   connect(sb, &SWB::egtUpdate,   engC, &ENGC::updateEGT);
+   connect(sb, &SWB::chtUpdate,   engC, &ENGC::updateCHT);
+   
+   connect(sb, &SWB::engOilPressureUpdate, engC, &ENGC::updateOilPressure);
+   connect(sb, &SWB::engOilTempUpdate,     engC, &ENGC::updateOilTemp);
    
    // Comms and Navs
-   connect(sb, SIGNAL(com1Update(float, float)), comC, SLOT(setCom1(float, float)));
-   connect(sb, SIGNAL(com2Update(float, float)), comC, SLOT(setCom2(float, float)));
-   //connect(sb, SIGNAL(comTransmitUpdate(float), commsWidget, SLOT(setComTransmit(float))));
+   connect(sb, &SWB::com1Update, comC, &COMC::setCom1);
+   connect(sb, &SWB::com2Update, comC, &COMC::setCom2);
+   //connect(sb, &SWB::comTransmitUpdate, comC, &COMC::setComTransmit);
    
-   connect(sb, SIGNAL(nav1Update(float, float)), comC, SLOT(setNav1(float, float)));
-   connect(sb, SIGNAL(nav2Update(float, float)), comC, SLOT(setNav2(float, float)));
+   connect(sb, &SWB::nav1Update, comC, &COMC::setNav1);
+   connect(sb, &SWB::nav2Update, comC, &COMC::setNav2);
 }
 
 

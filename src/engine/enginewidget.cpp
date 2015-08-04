@@ -43,8 +43,10 @@ void EngineWidget::setupEngineControls()
    layout->setContentsMargins(0, 0, 0, 0);
    
    // This loop will create throttles in pairs, to keep them grouped better on the main layout
-   for (int i = 0; i < numEngines; i++) {
+   for (int i = 0; i < ENGINES_MAX; i++) {
       SingleEngineWidget* eng = new SingleEngineWidget(hddSettings, engC, i);
+      eng->setVisible(i < numEngines);
+      
       engines.append(eng);
       layout->addWidget(eng);
    }

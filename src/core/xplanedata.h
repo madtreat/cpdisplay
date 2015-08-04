@@ -61,11 +61,7 @@ enum XPDataIndex {
    ENG_RPM = 37,
    PROP_RPM = 38,
    PROP_PITCH = 39,
-   PROPWASH_JETWASH = 40,
-   
-   // Oil
-   ENG_OIL_PRESSURE = 49,
-   ENG_OIL_TEMP = 50,
+   PROPWASH = 40,
    
    N1 = 41,
    N2 = 42,

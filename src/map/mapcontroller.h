@@ -64,5 +64,7 @@ private:
    MapOrientation orientation;
 };
 
+typedef MapController MAPC;
+
 #endif	/* MAPCONTROLLER_H */
 

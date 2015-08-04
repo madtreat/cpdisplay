@@ -14,9 +14,14 @@
 enum EngineDialType {
    DIAL_OIL_TEMP,
    DIAL_OIL_PRESSURE,
-   DIAL_ENG_RPM
+   DIAL_ENG_RPM,
+   DIAL_PROP_RPM,
+   DIAL_EPR,
+   DIAL_EGT
 };
 
+
+static const int ENGINES_MAX = 8;
 
 class ThrottleWidget;
 typedef QList<ThrottleWidget*> ThrottleList;

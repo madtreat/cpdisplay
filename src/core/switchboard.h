@@ -4,6 +4,9 @@
    (the individual widgets for displaying).
  */
 
+#ifndef SWITCHBOARD_H
+#define SWITCHBOARD_H
+
 #include <QObject>
 #include <QMap>
 
@@ -105,6 +108,18 @@ signals:
    void engThrustUpdate(float thrust, int engNum);
    void engTorqueUpdate(float torque, int engNum);
    void engRPMUpdate(float rpm, int engNum);
+   void propRPMUpdate(float rpm, int engNum);
+   void propPitchUpdate(float pitch, int engNum);
+   void propwashUpdate(float pwash, int engNum);
+   
+   void n1Update(float n1, int engNum);
+   void n2Update(float n2, int engNum);
+   void mpUpdate(float mp, int engNum);
+   void eprUpdate(float epr, int engNum);
+   void ffUpdate(float ff, int engNum);
+   void ittUpdate(float itt, int engNum);
+   void egtUpdate(float egt, int engNum);
+   void chtUpdate(float cht, int engNum);
    
    void engOilPressureUpdate(float pressure, int engNum);
    void engOilTempUpdate(float temp, int engNum);
@@ -128,3 +143,7 @@ private:
    void notifyAll(xp_dref_out* data);
    void notifyAll(XPOutputData* data);
 };
+
+typedef SwitchBoard SWB;
+
+#endif

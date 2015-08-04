@@ -118,5 +118,7 @@ private:
    void connectSignals();
 };
 
+typedef HDDController HDDC;
+
 #endif	/* HDDCONTROLLER_H */
 

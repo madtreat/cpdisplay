@@ -32,5 +32,7 @@ private:
    WidgetHSI* hsiWidget;
 };
 
+typedef HSIController HSIC;
+
 #endif	/* HSICONTROLLER_H */
 

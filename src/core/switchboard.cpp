@@ -306,14 +306,91 @@ void SwitchBoard::notifyAll(XPOutputData* data)
          }
          break;
       
-      case ENG_OIL_PRESSURE:
+      case PROP_RPM:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit propRPMUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case PROP_PITCH:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit propPitchUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case PROPWASH:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit propwashUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case N1:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit n1Update(VALUE(i), i);
+         }
+         break;
+      
+      case N2:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit n2Update(VALUE(i), i);
+         }
+         break;
+      
+      case MP:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit mpUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case EPR:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit eprUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case FF:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit ffUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case ITT:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit ittUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case EGT:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit egtUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case CHT:
+         for (int i = 0; i < 8; i++) {
+            if (VALUE(i) != 0.0)
+               emit chtUpdate(VALUE(i), i);
+         }
+         break;
+      
+      case OIL_PRESSURE:
          for (int i = 0; i < 8; i++) {
             if (VALUE(i) != 0.0)
                emit engOilPressureUpdate(VALUE(i), i);
          }
          break;
       
-      case ENG_OIL_TEMP:
+      case OIL_TEMP:
          for (int i = 0; i < 8; i++) {
             if (VALUE(i) != 0.0)
                emit engOilTempUpdate(VALUE(i), i);

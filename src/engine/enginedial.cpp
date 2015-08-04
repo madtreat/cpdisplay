@@ -10,6 +10,7 @@
 
 #include <QPainter>
 #include <QPolygon>
+#include <QTimer>
 #include <QDebug>
 
 
@@ -43,6 +44,30 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
       
       connect(engC, &EngineController::engRPMUpdate, this, &EngineDial::setValue);
    }
+   else if (type == DIAL_PROP_RPM) {
+      typeText = "Prop RPM";
+      valueTextBase = "_X_ Hz";
+      stepSize = 200;
+      
+      connect(engC, &EngineController::propRPMUpdate, this, &EngineDial::setValue);
+   }
+   else if (type == DIAL_EPR) {
+      typeText = "EPR";
+      valueTextBase = "_X_ part";
+      stepSize = 1;
+      
+      connect(engC, &EngineController::eprUpdate, this, &EngineDial::setValue);
+      QTimer* repaintTimer = new QTimer(this);
+      connect(repaintTimer, SIGNAL(timeout()), this, SLOT(update()));
+      repaintTimer->start(1000);
+   }
+   else if (type == DIAL_EGT) {
+      typeText = "EGT";
+      valueTextBase = QString("_X_ %1C").arg(QChar(0260));
+      stepSize = 200;
+      
+      connect(engC, &EngineController::egtUpdate, this, &EngineDial::setValue);
+   }
    
    tickIncrement = 0.0;
    tickDegIncrement = 21;
@@ -74,6 +99,7 @@ void EngineDial::setValue(float _value, int _engNum)
    if (_engNum == engNum) {
 //      qDebug() << "Updating ENG" << engNum << "type:" << type << "value:" << _value;
       QDial::setValue((int) _value);
+      valueFloat = _value;
    }
 }
 
@@ -101,7 +127,14 @@ void EngineDial::paintEvent(QPaintEvent*)
    p.setPen(QColor(105, 105, 105));
 //   p.setPen(Qt::white);
    QString valueText = QString(valueTextBase);
-   valueText.replace("_X_", QString::number(value()));
+   QString valStr;
+   if (type == DIAL_EPR) {
+      valStr = QString("%1").arg(valueFloat, 3, 'f', 2, '0');
+   }
+   else {
+      valStr = QString("%1").arg(value());
+   }
+   valueText.replace("_X_", valStr);
    p.drawText(extent/2-4, extent/2+18, typeText);
    p.drawText(extent/2-4, extent/2+32, valueText);
    
@@ -130,7 +163,7 @@ void EngineDial::paintEvent(QPaintEvent*)
    
    // Draw the needle
    p.setPen(Qt::NoPen);
-   double percent = (value()-valueMin) / (double) range;
+   double percent = (valueFloat-valueMin) / (double) range;
    if ( percent >= 0.9 ) {
       p.setBrush(QColor(255, 0, 0, 120));
    }

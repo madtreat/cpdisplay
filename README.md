@@ -30,7 +30,7 @@ This program reads UDP data from X-Plane, and thus to function properly, the fol
 UDP data should be enabled in the "Data Input & Output" window, along with the
 checkbox to enable "internet" output.
 
-1, 3, 4, 15-26, 34-37, 49-50, 96, 97
+1, 3, 4, 15-26, 34-50, 96, 97
 
 
 Instructions
@@ -51,3 +51,4 @@ $ ../bin/[executable]
 The executable can be run from anywhere, as long as the config directory exists
 in the same structural location on the file system ( [project root]/bin/executable
 and [project root]/config/[files] )
+

@@ -43,5 +43,7 @@ private:
    int currentID; // currently displayed AC ID
 };
 
+typedef TrafficController TFCC;
+
 #endif	/* TRAFFICCONTROLLER_H */
 

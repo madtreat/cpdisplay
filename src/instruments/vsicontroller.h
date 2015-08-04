@@ -32,5 +32,7 @@ private:
    WidgetVSI* vsiWidget;
 };
 
+typedef VSIController VSIC;
+
 #endif	/* VSICONTROLLER_H */
 

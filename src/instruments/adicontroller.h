@@ -33,5 +33,7 @@ private:
    WidgetADI* adiWidget;
 };
 
+typedef ADIController ADIC;
+
 #endif	/* ADICONTROLLER_H */
 

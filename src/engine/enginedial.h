@@ -40,6 +40,7 @@ private:
    
    int valueMin;
    int valueMax;
+   float valueFloat;
    
    double tickIncrement; // each tick represents X value
    double tickRatio;     // ratio of value to rotation degrees

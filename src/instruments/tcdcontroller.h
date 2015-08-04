@@ -33,5 +33,7 @@ private:
    WidgetTC* tcdWidget;
 };
 
+typedef TCDController TCDC;
+
 #endif	/* TCDCONTROLLER_H */
 

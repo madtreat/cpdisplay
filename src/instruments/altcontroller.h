@@ -33,5 +33,7 @@ private:
    WidgetALT* altWidget;
 };
 
+typedef ALTController ALTC;
+
 #endif	/* ALTCONTROLLER_H */
 

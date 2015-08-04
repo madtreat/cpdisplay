@@ -36,7 +36,6 @@ private:
    int value;
    
    QVBoxLayout* layout;
-   QLabel* label;
    QProgressBar* throttle;
 };
 

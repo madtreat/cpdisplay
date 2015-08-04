@@ -29,6 +29,13 @@ Ui--WidgetPFD
    border-radius: 8px;
 }
 
+QFrame#border-light,
+QLabel#border-light,
+QWidget#border-light {
+   border: 1px solid dimgray;
+   border-radius: 8px;
+}
+
 QToolBar,
 QPushButton::checked,
 QLabel {

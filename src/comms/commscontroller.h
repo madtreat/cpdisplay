@@ -61,5 +61,7 @@ private:
    float timeLocal;
 };
 
+typedef CommsController COMC;
+
 #endif	/* COMMSCONTROLLER_H */
 

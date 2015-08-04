@@ -32,5 +32,7 @@ private:
    WidgetASI* asiWidget;
 };
 
+typedef ASIController ASIC;
+
 #endif	/* ASICONTROLLER_H */
 
