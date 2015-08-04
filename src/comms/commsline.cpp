@@ -80,6 +80,7 @@ QDoubleSpinBox* CommsLine::createFreqSpinBox()
    spin->setSingleStep(com ? 0.025 : 0.05);
    spin->setWrapping(true);
    spin->setMinimumHeight(20);
+   spin->setMinimumWidth(90);
    return spin;
 }
 
