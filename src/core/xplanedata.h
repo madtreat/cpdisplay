@@ -131,8 +131,8 @@ const int ID_DIM = 5;
  * XPlane 10.40+ dataref structs.
  */
 // Length: ID_DIM
-const char RREF_PREFIX[ID_DIM] = {'R', 'R', 'E', 'F', 0};
-const char DSEL_PREFIX[ID_DIM] = {'D', 'S', 'E', 'L', 0};
+const char RREF_PREFIX[ID_DIM] = {'R', 'R', 'E', 'F', 'O'};
+const char DSEL_PREFIX[ID_DIM] = {'D', 'S', 'E', 'L', 'O'};
 
 // Prefix this struct with RREF_PREFIX and send to xplane host on port 49000
 struct xp_dref_in {

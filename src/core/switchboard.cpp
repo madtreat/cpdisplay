@@ -58,6 +58,9 @@ void SwitchBoard::readPendingData()
    drmap.insert(INDEX, new DRefValue(XPDR_OFFSET+INDEX, STR, &SwitchBoard::SIGNAL, FREQ));
 void SwitchBoard::requestDatarefsFromXPlane()
 {
+   // Request datarefs from xplane (does not work in < 10.40b7: known bug:
+   // http://forums.x-plane.org/index.php?showtopic=87772)
+
    //DRMAP_INSERT(AC_TYPE,         XPDR_AC_TYPE,          acTypeUpdate,         1);
    DRMAP_INSERT(AC_TAIL_NUM,     XPDR_AC_TAIL_NUM_X,    acTailNumUpdate,      1);
    DRMAP_INSERT(AC_NUM_ENGINES,  XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,   1);
@@ -91,14 +94,16 @@ void SwitchBoard::requestDatarefsFromXPlane()
       memcpy(&data, RREF_PREFIX, ID_DIM);
       memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
       
-      // xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
+      xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
       //delete data;
 
       // sleep to ensure the packets do not bunch up
       //usleep(2000000);
    }
 
+
    // Turn on UDP output
+   // This works (the DSEL packet to xplane), at least in 10.40b7
    QList<XPDataIndex> indexes;
    indexes.append((XPDataIndex) 1);
    indexes.append((XPDataIndex) 3);
@@ -144,7 +149,6 @@ void SwitchBoard::requestDatarefsFromXPlane()
    int cs = sizeof(xpint);
    const int len2 = ID_DIM + cs*indexes.size() + 3; // unpadded
    const int len3 = (len2%4 == 0) ? len2 : len2 + len2%4;
-   qDebug() << "len2 / len3:" << len2 << "/" << len3;
    char dsel[len3];
    memset(&dsel, 0, len3);
    memcpy(&dsel, DSEL_PREFIX, ID_DIM);
@@ -154,7 +158,6 @@ void SwitchBoard::requestDatarefsFromXPlane()
    for (int i = 0; i < indexes.size(); i++) {
       memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
    }
-   qDebug() << "dsel data:" << dsel;
    xplane->writeDatagram(dsel, len2, settings->xplaneHost(), 49000);
 }
 
@@ -164,29 +167,43 @@ void SwitchBoard::processDatagram(QByteArray& data)
    QByteArray header = data.mid(0, ID_DIM);
    QByteArray values = data.remove(0, ID_DIM);
 
-   xp_dref_out* dref = NULL;//(struct xp_dref_out*) values.data();
+   // XPlane >= 10.40b7:
 
-   if (dref) {
-      qDebug() << "data received:" << header << dref->code << dref->data;
+   // Note the RREFO ends with a capitol O, not the number zero (0)
+   if (header == "RREFO") {
+      int size = sizeof(xp_dref_out);
+      int numValues = values.size()/size;
+      qDebug() << "Received RREFO with" << numValues << "values:";
 
-      notifyAll(dref);
+      for (int i = 0; i < numValues; i++) {
+         xp_dref_out* dref = (struct xp_dref_out*) values.mid(i*size, size).data();
+         qDebug() << "   data received:" << header << dref->code << dref->data << "/ pointer:" << dref;
+
+         notifyAll(dref);
+         // delete dref;
+      }
+      qDebug() << "drmap:" << drmap;
+      qDebug() << "--- --- --- --- ---";
    }
 
-   
-   // XPlane < 10.40:
 
-   // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
-   int numValues = values.size()/36;
-   //qDebug() << "Processing datagram of size:" << data.size() << numValues;
-   
-   // Separate each value
-   for (int i = 0; i < numValues; i++) {
-      // Get the 36 bytes starting at i*36
-      QByteArray valueBytes = values.mid(i*36, 36);
-      XPOutputData* outData = new XPOutputData();
-      outData->parseRawData(valueBytes);
+   // XPlane < 10.40, or raw UDP output:
+
+   if (header == "DATA@") {
+      // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
+      int size = 36;
+      int numValues = values.size()/size;
+      //qDebug() << "Received DATA@ with" << numValues << "values:";
       
-      notifyAll(outData);
+      // Separate each value
+      for (int i = 0; i < numValues; i++) {
+         // Get the size bytes starting at i*size
+         QByteArray valueBytes = values.mid(i*size, size);
+         XPOutputData* outData = new XPOutputData();
+         outData->parseRawData(valueBytes);
+         
+         notifyAll(outData);
+      }
    }
 }
 
@@ -199,6 +216,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
 void SwitchBoard::notifyAll(xp_dref_out* dref)
 {
    DRefValue* val = drmap.value((XPDataIndex) (dref->code - XPDR_OFFSET));
+   qDebug() << "   - dref:" << dref->code << dref->data << "/ pointer:" << dref << "/ val:" << val;
    if (val) {
       func_pointer signal = val->signal;
       emit (this->*(val->signal))(dref->data);

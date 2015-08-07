@@ -21,7 +21,7 @@ class XPOutputData;
 class SwitchBoard : public QObject {
    Q_OBJECT
 
-   static const int XPDR_OFFSET = 500;
+   static const int XPDR_OFFSET = 0;//500;//512
 
    // Typdef a generic signal function pointer
    typedef void (SwitchBoard::*func_pointer)(float);
