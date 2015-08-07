@@ -67,8 +67,6 @@ public:
    Aircraft* createAircraft(int id, float lat, float lon, float alt);
 
 public slots:
-   void setTailNum(float tail) { qDebug() << "TailNum:" << tail; }
-   void setNumEngines(float eng) { qDebug() << "NumEngines:" << eng; }
    void updateAngVel(float q, float p, float r);
    void updatePitch(float p);
    void updateRoll(float r);

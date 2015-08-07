@@ -55,7 +55,7 @@ void SwitchBoard::readPendingData()
  * Sends the RREF message to XPlane to request all necessary datarefs.
  */
 #define DRMAP_INSERT(INDEX, STR, SIGNAL, FREQ) \
-   drmap.insert(INDEX, new DRefValue(XPDR_OFFSET+INDEX, STR, &SwitchBoard::SIGNAL, FREQ));
+   drmap.insert(INDEX, new DRefValue(INDEX, STR, &SwitchBoard::SIGNAL, FREQ));
 void SwitchBoard::requestDatarefsFromXPlane()
 {
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
@@ -173,17 +173,22 @@ void SwitchBoard::processDatagram(QByteArray& data)
    if (header == "RREFO") {
       int size = sizeof(xp_dref_out);
       int numValues = values.size()/size;
-      qDebug() << "Received RREFO with" << numValues << "values:";
+      //qDebug() << "Received RREFO with" << numValues << "values:";
 
       for (int i = 0; i < numValues; i++) {
          xp_dref_out* dref = (struct xp_dref_out*) values.mid(i*size, size).data();
-         qDebug() << "   data received:" << header << dref->code << dref->data << "/ pointer:" << dref;
+         xpint code  = dref->code;
+         xpflt value = dref->data;
+         /*
+          * Somehow, calling dref->code after dref->data turns the value at 
+          * dref->code into some erroneous data, so variables store the code
+          * and value directly, as soon as the dref object is constructed.
+          */
+         //qDebug() << "   data received:" << header << dref->code << dref->data;
 
-         notifyAll(dref);
-         // delete dref;
+         notifyAll((XPDataIndex) code, value);
       }
-      qDebug() << "drmap:" << drmap;
-      qDebug() << "--- --- --- --- ---";
+      // qDebug() << "--- --- --- --- ---";
    }
 
 
@@ -207,27 +212,28 @@ void SwitchBoard::processDatagram(QByteArray& data)
    }
 }
 
+
 /*
  * XPlane 10.40+ version
  * 
  * Notify everyone of new data.  This parses the data's values and emits signals
  * that other objects can be connected to.
  */
-void SwitchBoard::notifyAll(xp_dref_out* dref)
+void SwitchBoard::notifyAll(XPDataIndex code, xpflt value)
 {
-   DRefValue* val = drmap.value((XPDataIndex) (dref->code - XPDR_OFFSET));
-   qDebug() << "   - dref:" << dref->code << dref->data << "/ pointer:" << dref << "/ val:" << val;
+   DRefValue* val = drmap.value(code);
    if (val) {
       func_pointer signal = val->signal;
-      emit (this->*(val->signal))(dref->data);
+      emit (this->*(val->signal))(value);
    }
    else {
       qWarning() << "Warning: invalid data from xplane";
    }
 }
 
+
 /*
- * XPlane < 10.40 version
+ * XPlane < 10.40 / raw UDP output version
  * 
  * Notify everyone of new data.  This parses the data's values and emits signals
  * that other objects can be connected to.

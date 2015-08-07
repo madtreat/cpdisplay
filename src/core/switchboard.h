@@ -21,13 +21,12 @@ class XPOutputData;
 class SwitchBoard : public QObject {
    Q_OBJECT
 
-   static const int XPDR_OFFSET = 0;//500;//512
-
    // Typdef a generic signal function pointer
    typedef void (SwitchBoard::*func_pointer)(float);
    // Define the value struct for the Dataref Map drmap
    struct DRefValue {
-      int            xpIndex; // XPDataIndex + XPDR_OFFSET;
+      int            xpIndex; // The index as defined by the application
+                              //   (simple version: xpIndex == XPDataIndex)
       QString        str;     // The string representation of the dataref
       func_pointer   signal;  // The SwitchBoard signal to be emitted
       int            freq;    // Frequency of response
@@ -71,7 +70,7 @@ signals:
    void radioNav2StdbyUpdate(float freq);
 
 
-   // XPlane < 10.40 versions:
+   // XPlane < 10.40 / raw UDP output versions:
    void timeUpdate(float zulu, float local);
    void speedUpdate(float speed);
    
@@ -140,7 +139,7 @@ private:
    void initSocket();
    void requestDatarefsFromXPlane();
    void processDatagram(QByteArray& data);
-   void notifyAll(xp_dref_out* data);
+   void notifyAll(XPDataIndex code, xpflt value);
    void notifyAll(XPOutputData* data);
 };
 

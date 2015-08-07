@@ -83,8 +83,9 @@ void HDDController::connectSignals()
    /*
     * These connections are for xplane 10.40+ dataref requests (RREF results).
     */
-   connect(sb, &SWB::acTailNumUpdate,     this, &HDDC::setTailNum);
-   connect(sb, &SWB::acNumEnginesUpdate,  this, &HDDC::setNumEngines);
+   // TODO: direct these to the appropriate place
+   // connect(sb, &SWB::acTailNumUpdate,     this, &HDDC::setTailNum);
+   // connect(sb, &SWB::acNumEnginesUpdate,  this, &HDDC::setNumEngines);
 
    /*
     * Everything below is for the raw UDP output from xplane, if selected.
