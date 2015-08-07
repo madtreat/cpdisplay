@@ -12,7 +12,7 @@
 #include <QFormLayout>
 #include <QLabel>
 
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 
 #include "engineconsts.h"
 #include "enginecontroller.h"
@@ -20,9 +20,9 @@
 #include "throttlewidget.h"
 
 
-SingleEngineWidget::SingleEngineWidget(HDDSettings* _hddSettings, EngineController* _engC, int _engNum, QFrame* _parent)
+SingleEngineWidget::SingleEngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _engNum, QFrame* _parent)
 : QFrame(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   engC(_engC),
   engNum(_engNum)
 {

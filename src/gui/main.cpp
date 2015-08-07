@@ -1,17 +1,17 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-#include "core/hddsettings.h"
-//#include "hddcontroller.h"
+#include "core/cpdsettings.h"
+//#include "cpdcontroller.h"
 #include "window.h"
 
 int main(int argc, char* argv[]) {
    QApplication app(argc, argv);
    
    qDebug() << "Initializing...";
-   HDDSettings* settings = new HDDSettings(QString());// replace default constructor if supplied by command line
+   CPDSettings* settings = new CPDSettings(QString());// replace default constructor if supplied by command line
    
-   HDDWindow window(settings);
+   CPDWindow window(settings);
    window.show();//FullScreen();
 
    return app.exec();

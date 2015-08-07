@@ -12,14 +12,14 @@
 
 #include "qfi/ui/LayoutSquare.h"
 #include "qt-google-maps/mapsettings.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "core/mapconsts.h"
 #include "mapview.h"
 #include "mapoverlay.h"
 
-MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QFrame* _parent)
+MapWidget::MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap* _acMap, QFrame* _parent)
 : QFrame(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   mapSettings(_mapSettings),
   acMap(_acMap)
 {
@@ -31,11 +31,11 @@ MapWidget::MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap
    sp.setHeightForWidth(true);
    setSizePolicy(sp);
    
-   view = new MapView(hddSettings, mapSettings, acMap);
+   view = new MapView(cpdSettings, mapSettings, acMap);
    layout->addWidget(view);
    view->setSizePolicy(sp);
    
-   overlay = new MapOverlay(hddSettings, mapSettings, acMap, view);
+   overlay = new MapOverlay(cpdSettings, mapSettings, acMap, view);
    overlay->setGeometry(view->geometry());
 
    setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));

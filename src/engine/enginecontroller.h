@@ -14,14 +14,14 @@
 #include "enginewidget.h"
 
 
-class HDDSettings;
+class CPDSettings;
 class EngineWidget;
 
 class EngineController : public QObject {
    Q_OBJECT;
 
 public:
-   EngineController(HDDSettings* _hddSettings, AircraftEngineType _engType, int _numEngines, QObject* _parent = 0);
+   EngineController(CPDSettings* _cpdSettings, AircraftEngineType _engType, int _numEngines, QObject* _parent = 0);
    EngineController(const EngineController& orig) = delete;
    virtual ~EngineController();
    
@@ -73,7 +73,7 @@ signals:
    void oilTUpdate(float _value, int engNum);
 
 private:
-   HDDSettings* hddSettings;
+   CPDSettings* cpdSettings;
    AircraftEngineType engType;
    int numEngines;
    

@@ -11,9 +11,9 @@
 #include <QList>
 #include <QDebug>
 
-#include "hddsettings.h"
+#include "cpdsettings.h"
 
-SwitchBoard::SwitchBoard(HDDSettings* _settings, QObject* _parent)
+SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
 : QObject(_parent)
 {
    settings = _settings;

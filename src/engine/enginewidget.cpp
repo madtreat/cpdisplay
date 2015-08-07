@@ -12,14 +12,14 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "enginecontroller.h"
 #include "singleenginewidget.h"
 
 
-EngineWidget::EngineWidget(HDDSettings* _hddSettings, EngineController* _engC, int _numEngines, QFrame* _parent)
+EngineWidget::EngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines, QFrame* _parent)
 : QFrame(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   engC(_engC),
   numEngines(_numEngines)
 {
@@ -44,7 +44,7 @@ void EngineWidget::setupEngineControls()
    
    // This loop will create throttles in pairs, to keep them grouped better on the main layout
    for (int i = 0; i < ENGINES_MAX; i++) {
-      SingleEngineWidget* eng = new SingleEngineWidget(hddSettings, engC, i);
+      SingleEngineWidget* eng = new SingleEngineWidget(cpdSettings, engC, i);
       eng->setVisible(i < numEngines);
       
       engines.append(eng);

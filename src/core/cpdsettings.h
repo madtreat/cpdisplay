@@ -1,12 +1,12 @@
 /* 
- * File:   hddsettings.h
+ * File:   cpdsettings.h
  * Author: Madison Treat <madison.treat@tamu.edu>
  *
  * Created on June 15, 2015, 6:40 PM
  */
 
-#ifndef HDDSETTINGS_H
-#define HDDSETTINGS_H
+#ifndef CPDSETTINGS_H
+#define CPDSETTINGS_H
 
 #include <QObject>
 #include <QString>
@@ -16,14 +16,14 @@
 
 class QSettings;
 
-class HDDSettings : public QObject {
+class CPDSettings : public QObject {
    Q_OBJECT;
 
 public:
-   HDDSettings(QString _filename=0, QObject* _parent = 0);
-   HDDSettings(const HDDSettings& orig) = delete;
-   virtual ~HDDSettings();
-    
+   CPDSettings(QString _filename=0, QObject* _parent = 0);
+   CPDSettings(const CPDSettings& orig) = delete;
+   virtual ~CPDSettings();
+   
    QString     configDir()       const { return m_configDir;      }
    QString     appRootDir()      const { return m_appRootDir;     }
    QString     userHomeDir()     const { return m_userHomeDir;    }
@@ -47,7 +47,7 @@ private:
    QString     m_userHomeDir;
    QString     m_settingsFile;
    
-   // settings values for the HDD app
+   // Settings values for the Cockpit Display app
    QString     m_layoutProfile; // LayoutProfile config file
    
    // "xplane" group
@@ -58,5 +58,5 @@ private:
    MapOrientation m_mapOrientation;
 };
 
-#endif	/* HDDSETTINGS_H */
+#endif	/* CPDSETTINGS_H */
 

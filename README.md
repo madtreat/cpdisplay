@@ -32,7 +32,9 @@ This program reads UDP data from X-Plane, and thus to function properly, the fol
 
 Note <sup>*1*</sup>: As of August 7, 2015, when flying on X-Plane 10.40b7, you no longer have to manually select each UDP output packet, since the new Dataref API allows selections to be made from another application.  The SwitchBoard class now does this for you, so all you have to do is turn on UDP output in X-Plane and send it to the computer running the Cockpit Display.
 
-Note <sup>*2*</sup>: To turn on the UDP output in X-Plane, go to the "Settings" menu, then click "Net Connections".  In the Net Connections window, click on the "Data" tab.  Check the box for "IP of data receiver" and set the IP address to the (IPv4) address of the computer running your Cockpit Display, and set the port number to match the port found in the [hdd-settings.ini](hdd-settings.ini) config file.  Also make sure that config file has the correct (IPv4) address for the computer running X-Plane so it can send the data requests.
+Note <sup>*2*</sup>: To turn on the UDP output in X-Plane, go to the "Settings" menu, then click "Net Connections".  In the Net Connections window, click on the "Data" tab.  Check the box for "IP of data receiver" and set the IP address to the (IPv4) address of the computer running your Cockpit Display, and set the port number to match the port found in the [cpd-settings.ini](cpd-settings.ini) config file.  Also make sure that config file has the correct (IPv4) address for the computer running X-Plane so it can send the data requests.
+
+Note <sup>*2*</sup> continued: To turn on the specific data (for X-Plane versions < 10.40b7), go to the "Settings" menu and click "Data Input & Output".  In the "Data Input & Output" window, under the "Data Set" tab, select the first checkbox in the row for all of the above data indices (the internet checkbox).  Also make sure the "enable: []internet" checkbox at the top right is selected.
 
 
 Instructions

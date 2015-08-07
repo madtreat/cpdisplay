@@ -1,4 +1,4 @@
-project(hdd-engine)
+project(cpd-engine)
 
 set(SOURCES
    enginecontroller.cpp
@@ -27,6 +27,6 @@ target_link_libraries(${PROJECT_NAME}
    ${Qt5Widgets_LIBRARIES}
    ${Qt5Gui_LIBRARIES}
 
-   #hdd-utils
-   hdd-core
+   #cpd-utils
+   cpd-core
 )

@@ -16,7 +16,7 @@
 
 #include "core/aircraft.h"
 #include "core/mapconsts.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 
 class QPaintEvent;
 
@@ -30,7 +30,7 @@ class MapOverlay : public QWidget {
    static const int COMPASS_PADDING = 20;
 
 public:
-   MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent = 0);
+   MapOverlay(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent = 0);
    MapOverlay(const MapOverlay& orig) = delete;
    virtual ~MapOverlay();
    
@@ -38,7 +38,7 @@ public:
    void resize(int w, int h);
    void resize(const QSize& size);
    
-   bool northUp() const { return hddSettings->mapOrientation() == NORTH_UP; }
+   bool northUp() const { return cpdSettings->mapOrientation() == NORTH_UP; }
 
 public slots:
    void setZoom(int level);
@@ -57,7 +57,7 @@ protected:
    void drawRangeCircle(QPainter& p);
    
 private:
-   HDDSettings*   hddSettings;
+   CPDSettings*   cpdSettings;
    MapSettings*   mapSettings;
    
    ACMap*         acMap;

@@ -13,12 +13,12 @@
 #include <QWidget>
 #include "core/aircraft.h"
 #include "core/mapconsts.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 
 class QPaintEvent;
 class QWebView;
 
-//class HDDSettings;
+//class CPDSettings;
 class MapSettings;
 class GeocodeDataManager;
 
@@ -27,7 +27,7 @@ class MapView : public QWidget {
    Q_OBJECT;
 
 public:
-   MapView(HDDSettings* _hddSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent = 0);
+   MapView(CPDSettings* _cpdSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent = 0);
    MapView(const MapView& orig) = delete;
    virtual ~MapView();
    
@@ -35,7 +35,7 @@ public:
    void resize(int w, int h);
    void resize(const QSize& size);
    
-   bool northUp() const { return hddSettings->mapOrientation() == NORTH_UP; }
+   bool northUp() const { return cpdSettings->mapOrientation() == NORTH_UP; }
 
 public slots:
    void startedLoading();
@@ -57,7 +57,7 @@ public slots:
    void displayTraffic(bool show);
    
 private:
-   HDDSettings*         hddSettings;
+   CPDSettings*         cpdSettings;
    MapSettings*         settings;
    bool                 enabled; // are the maps enabled?
    ACMap*               acMap;

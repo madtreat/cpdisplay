@@ -14,15 +14,15 @@
 
 #include "qt-google-maps/mapsettings.h"
 #include "utils/geodist.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "core/mapconsts.h"
 
 
 using namespace std;
 
-MapOverlay::MapOverlay(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent)
+MapOverlay::MapOverlay(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap* _acMap, QWidget* _parent)
 : QWidget(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   mapSettings(_mapSettings),
   acMap(_acMap),
   heading(0.0),

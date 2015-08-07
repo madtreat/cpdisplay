@@ -15,7 +15,7 @@
 
 
 class QUdpSocket;
-class HDDSettings;
+class CPDSettings;
 class XPOutputData;
 
 class SwitchBoard : public QObject {
@@ -46,7 +46,7 @@ class SwitchBoard : public QObject {
    };
 
 public:
-   SwitchBoard(HDDSettings* _settings, QObject* _parent=0);
+   SwitchBoard(CPDSettings* _settings, QObject* _parent=0);
    SwitchBoard(const SwitchBoard& orig) = delete;
    ~SwitchBoard();
    
@@ -131,7 +131,7 @@ signals:
    void nav2Update(float freq, float standby);
 
 private:
-   HDDSettings* settings;
+   CPDSettings* settings;
    QUdpSocket* xplane;
 
    QMap<XPDataIndex, DRefValue*> drmap;

@@ -15,13 +15,13 @@
 #include "qt-google-maps/mapsettings.h"
 
 #include "core/aircraft.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "core/mapconsts.h"
 
 
-MapView::MapView(HDDSettings* _hddSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent)
+MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent)
 : QWidget(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   settings(_settings),
   acMap(_acMap),
   heading(0.0),

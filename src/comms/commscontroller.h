@@ -13,7 +13,7 @@
 #include "comms.h"
 //#include "commswidget.h"
 
-class HDDSettings;
+class CPDSettings;
 class CommsWidget;
 
 
@@ -21,7 +21,7 @@ class CommsController : public QObject {
    Q_OBJECT;
 
 public:
-   CommsController(HDDSettings* _hddSettings, QObject* _parent = 0);
+   CommsController(CPDSettings* _cpdSettings, QObject* _parent = 0);
    CommsController(const CommsController& orig) = delete;
    virtual ~CommsController();
    
@@ -44,7 +44,7 @@ signals:
    void comUpdate(CommType ct, float active, float standby);
 
 private:
-   HDDSettings* hddSettings;
+   CPDSettings* cpdSettings;
 //   CommsWidget* commsWidget;
    
    // Comms frequencies

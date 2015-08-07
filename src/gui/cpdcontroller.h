@@ -1,12 +1,12 @@
 /* 
- * File:   hddcontroller.h
+ * File:   cpdcontroller.h
  * Author: Madison Treat <madison.treat@tamu.edu>
  *
  * Created on June 15, 2015, 6:40 PM
  */
 
-#ifndef HDDCONTROLLER_H
-#define HDDCONTROLLER_H
+#ifndef CPDCONTROLLER_H
+#define CPDCONTROLLER_H
 
 #include <QObject>
 
@@ -15,9 +15,8 @@
 
 #define PI 3.14159265
 
-class HDDSettings;
+class CPDSettings;
 class SwitchBoard;
-class HDDWindow;
 
 //class MapController;
 class MapView;
@@ -35,13 +34,13 @@ class CommsController;
 class EngineController;
 class TrafficController;
 
-class HDDController : public QObject {
+class CPDController : public QObject {
    Q_OBJECT;
 
 public:
-   HDDController(HDDSettings* _settings, QObject* _parent = 0);
-   HDDController(const HDDController& orig) = delete;
-   virtual ~HDDController();
+   CPDController(CPDSettings* _settings, QObject* _parent = 0);
+   CPDController(const CPDController& orig) = delete;
+   virtual ~CPDController();
 
    ACMap* getACMap() const { return acMap; }
    int    getNumEngines() const { return numEngines; }
@@ -82,9 +81,8 @@ signals:
    void turnRateUpdate(float tr);
 
 private:
-   HDDSettings*   settings;
+   CPDSettings*   settings;
    SwitchBoard*   sb;
-//   HDDWindow*     window;
    ACMap*         acMap;
    int            numEngines;
    
@@ -116,7 +114,7 @@ private:
    void connectSignals();
 };
 
-typedef HDDController HDDC;
+typedef CPDController CPDC;
 
-#endif	/* HDDCONTROLLER_H */
+#endif	/* CPDCONTROLLER_H */
 

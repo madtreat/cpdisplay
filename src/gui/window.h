@@ -9,27 +9,27 @@ class QPushButton;
 class LayoutItem;
 class LayoutProfile;
 class LayoutManager;
-class HDDSettings;
-class HDDController;
+class CPDSettings;
+class CPDController;
 
 class CommsWidget;
 class EngineWidget;
 
 
-class HDDWindow : public QMainWindow {
+class CPDWindow : public QMainWindow {
    Q_OBJECT
 
 public:
-   HDDWindow(HDDSettings* _hddSettings, QObject* _parent=0);
-   ~HDDWindow();
+   CPDWindow(CPDSettings* _cpdSettings, QObject* _parent=0);
+   ~CPDWindow();
 
 public slots:
    void pfdButtonClicked(bool checked);
    void orientationButtonClicked(bool checked);
    
 private:
-   HDDSettings*   hddSettings;
-   HDDController* hddC;
+   CPDSettings*   cpdSettings;
+   CPDController* cpdC;
    ACMap*         acMap;
    int            numEngines;
    

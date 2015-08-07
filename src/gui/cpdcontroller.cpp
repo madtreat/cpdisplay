@@ -1,15 +1,15 @@
 /* 
- * File:   hddcontroller.cpp
+ * File:   cpdcontroller.cpp
  * Author: Madison Treat <madison.treat@tamu.edu>
  * 
  * Created on June 15, 2015, 6:39 PM
  */
 
-#include "hddcontroller.h"
+#include "cpdcontroller.h"
 
 #include <math.h>
 
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "core/switchboard.h"
 #include "utils/geodist.h"
 
@@ -27,14 +27,13 @@
 #include "traffic/trafficcontroller.h"
 
 
-HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
+CPDController::CPDController(CPDSettings* _settings, QObject* _parent)
 : QObject(_parent)
 {
    settings = _settings;
    acMap = new QMap<int, Aircraft*>();
    
    sb = new SwitchBoard(settings);
-//   window = new HDDWindow(settings, acMap, this);
    
    mapC = new MapController(settings, acMap, this);
    adiC = new ADIController(this);
@@ -59,11 +58,11 @@ HDDController::HDDController(HDDSettings* _settings, QObject* _parent)
 //   window->show();
 }
 
-//HDDController::HDDController(const HDDController& orig)
+//CPDController::CPDController(const CPDController& orig)
 //{
 //}
 
-HDDController::~HDDController()
+CPDController::~CPDController()
 {
 }
 
@@ -71,7 +70,7 @@ HDDController::~HDDController()
 /*
  * Connects the switchboard directly to the widgets.
  */
-void HDDController::connectSignals()
+void CPDController::connectSignals()
 {
    MapView*    mapView = getMapView();
    MapOverlay* overlay = getOverlay();
@@ -84,15 +83,15 @@ void HDDController::connectSignals()
     * These connections are for xplane 10.40+ dataref requests (RREF results).
     */
    // TODO: direct these to the appropriate place
-   // connect(sb, &SWB::acTailNumUpdate,     this, &HDDC::setTailNum);
-   // connect(sb, &SWB::acNumEnginesUpdate,  this, &HDDC::setNumEngines);
+   // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
+   // connect(sb, &SWB::acNumEnginesUpdate,  this, &CPDC::setNumEngines);
 
    /*
     * Everything below is for the raw UDP output from xplane, if selected.
     */
    // Self-calculated turn rate
-   connect(this, &HDDC::turnRateUpdate, pfdC, &PFDC::setTurnRate);
-   connect(this, &HDDC::turnRateUpdate, tcdC, &TCDC::setTurnRate);
+   connect(this, &CPDC::turnRateUpdate, pfdC, &PFDC::setTurnRate);
+   connect(this, &CPDC::turnRateUpdate, tcdC, &TCDC::setTurnRate);
    
    // Times
    connect(sb, &SWB::timeUpdate, comC, &COMC::setTimes);
@@ -112,14 +111,14 @@ void HDDController::connectSignals()
    connect(sb, &SWB::pressureUpdate, pfdC,   &PFDC::setPressure);
 
    // Angular Velocities (Q, P, R)
-   connect(sb, &SWB::angVelUpdate, this, &HDDC::updateAngVel);
+   connect(sb, &SWB::angVelUpdate, this, &CPDC::updateAngVel);
 
    // Pitch, Roll, Heading
-   connect(sb, &SWB::pitchUpdate,   this,    &HDDC::updatePitch);
+   connect(sb, &SWB::pitchUpdate,   this,    &CPDC::updatePitch);
    connect(sb, &SWB::pitchUpdate,   adiC,    &ADIC::setPitch);
    connect(sb, &SWB::pitchUpdate,   pfdC,    &PFDC::setPitch);
 
-   connect(sb, &SWB::rollUpdate,    this,    &HDDC::updateRoll);
+   connect(sb, &SWB::rollUpdate,    this,    &CPDC::updateRoll);
    connect(sb, &SWB::rollUpdate,    adiC,    &ADIC::setRoll);
    connect(sb, &SWB::rollUpdate,    pfdC,    &PFDC::setRoll);
 
@@ -157,9 +156,9 @@ void HDDController::connectSignals()
    //connect(sb, &SWB::altAGLUpdate, altC,     &ALTC::setAltitude);
 
    // Position (other AC)
-   connect(sb, &SWB::acLatUpdate, this, &HDDC::updateACLat);
-   connect(sb, &SWB::acLonUpdate, this, &HDDC::updateACLon);
-   connect(sb, &SWB::acAltUpdate, this, &HDDC::updateACAlt);
+   connect(sb, &SWB::acLatUpdate, this, &CPDC::updateACLat);
+   connect(sb, &SWB::acLonUpdate, this, &CPDC::updateACLon);
+   connect(sb, &SWB::acAltUpdate, this, &CPDC::updateACAlt);
    
    // Throttle settings and actual values
    connect(sb, &SWB::throttleCommandUpdate,   engC, &ENGC::updateThrottleCommand);
@@ -196,7 +195,7 @@ void HDDController::connectSignals()
 }
 
 
-float HDDController::calculateTurnRate(float q, float r, float pitch, float roll)
+float CPDController::calculateTurnRate(float q, float r, float pitch, float roll)
 {
    // Calculate Turn Rate in rad/s
    float turnRateRPS = ( 1/cos(deg2rad(pitch)) ) * ( sin(deg2rad(roll)) * q + cos(deg2rad(roll)) * r );
@@ -204,7 +203,7 @@ float HDDController::calculateTurnRate(float q, float r, float pitch, float roll
    return turnRateDPS;
 }
 
-Aircraft* HDDController::createAircraft(int id, float lat, float lon, float alt)
+Aircraft* CPDController::createAircraft(int id, float lat, float lon, float alt)
 {
    Aircraft* a = new Aircraft(id, this);
    a->setLatLonAlt(lat, lon, alt);
@@ -215,7 +214,7 @@ Aircraft* HDDController::createAircraft(int id, float lat, float lon, float alt)
    return a;
 }
 
-void HDDController::updateAngVel(float q, float p, float r)
+void CPDController::updateAngVel(float q, float p, float r)
 {
    angVelQ = q;
    angVelP = p;
@@ -224,14 +223,14 @@ void HDDController::updateAngVel(float q, float p, float r)
    tryCalculateTurnRate();
 }
 
-void HDDController::updatePitch(float p)
+void CPDController::updatePitch(float p)
 {
    pitch = p;
    pitchUpdatedFlag = true;
    tryCalculateTurnRate();
 }
 
-void HDDController::updateRoll(float r)
+void CPDController::updateRoll(float r)
 {
    roll = r;
    rollUpdatedFlag = true;
@@ -241,7 +240,7 @@ void HDDController::updateRoll(float r)
 /*
  * Attempts to update the turn rate, but only works if all 3 flags are true.
  */
-void HDDController::tryCalculateTurnRate()
+void CPDController::tryCalculateTurnRate()
 {
    if (angVelUpdatedFlag && pitchUpdatedFlag && rollUpdatedFlag) {
       float turnRate = calculateTurnRate(angVelQ, angVelR, pitch, roll);
@@ -253,7 +252,7 @@ void HDDController::tryCalculateTurnRate()
    }
 }
 
-void HDDController::updateACLat(float lat, int ac)
+void CPDController::updateACLat(float lat, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
    if (!acMap->contains(ac)) {
@@ -265,7 +264,7 @@ void HDDController::updateACLat(float lat, int ac)
    acMap->insert(ac, a); // update the map
 }
 
-void HDDController::updateACLon(float lon, int ac)
+void CPDController::updateACLon(float lon, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
    if (!acMap->contains(ac)) {
@@ -277,7 +276,7 @@ void HDDController::updateACLon(float lon, int ac)
    acMap->insert(ac, a); // update the map
 }
 
-void HDDController::updateACAlt(float alt, int ac)
+void CPDController::updateACAlt(float alt, int ac)
 {
    // If this aircraft has not been identified yet, add it to the list
    if (!acMap->contains(ac)) {
@@ -297,7 +296,7 @@ void HDDController::updateACAlt(float alt, int ac)
  * Update the TFC controller so it can update the displayed values if this AC
  * is currently selected.
  */
-void HDDController::acUpdated(int id)
+void CPDController::acUpdated(int id)
 {
    
    // TODO: update the map for drawing the AC

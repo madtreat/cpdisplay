@@ -10,18 +10,18 @@
 #include <QDebug>
 
 #include "core/aircraft.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "qt-google-maps/mapsettings.h"
 #include "mapwidget.h"
 
-MapController::MapController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent)
+MapController::MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent)
 : QObject(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   acMap(_acMap)
 {
    orientation = TRACK_UP;
    settings = new MapSettings("maps.ini", this);
-   mapWidget = new MapWidget(hddSettings, settings, acMap);
+   mapWidget = new MapWidget(cpdSettings, settings, acMap);
    
    qDebug() << "Can enable maps?" << settings->canEnableMaps();
 }
@@ -68,7 +68,7 @@ void MapController::panToLocation(float lat, float lon)
 
 void MapController::setOrientation(MapOrientation mo)
 {
-   hddSettings->setMapOrientation(mo);
+   cpdSettings->setMapOrientation(mo);
    mapWidget->setOrientation(mo);
 }
 

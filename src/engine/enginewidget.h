@@ -12,7 +12,7 @@
 
 #include "engineconsts.h"
 
-class HDDSettings;
+class CPDSettings;
 class EngineController;
 class EngineDial;
 
@@ -21,14 +21,14 @@ class EngineWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   EngineWidget(HDDSettings* _hddSettings, EngineController* _engC, int _numEngines=2, QFrame* _parent = 0);
+   EngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines=2, QFrame* _parent = 0);
    EngineWidget(const EngineWidget& orig) = delete;
    virtual ~EngineWidget();
 
 //public slots:
 
 private:
-   HDDSettings* hddSettings;
+   CPDSettings* cpdSettings;
    EngineController* engC;
    int numEngines;
    

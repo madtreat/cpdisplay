@@ -1,9 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
-PROJECT(hdd)
+PROJECT(cpd)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-LIST(APPEND CMAKE_MODULE_PATH ${hdd_SOURCE_DIR}/cmake_modules)
+LIST(APPEND CMAKE_MODULE_PATH ${cpd_SOURCE_DIR}/cmake_modules)
 
 IF(POLICY CMP0043)
 CMAKE_POLICY(SET CMP0043 OLD)
@@ -12,24 +12,24 @@ ENDIF(POLICY CMP0043)
 ################################################################################
 # Version
 ################################################################################
-SET(hdd_MAJOR_VERSION 0)
-SET(hdd_MINOR_VERSION 1)
-SET(hdd_PATCH_VERSION 0)
-SET(hdd_VERSION ${hdd_MAJOR_VERSION}.${hdd_MINOR_VERSION}.${hdd_PATCH_VERSION})
+SET(cpd_MAJOR_VERSION 0)
+SET(cpd_MINOR_VERSION 1)
+SET(cpd_PATCH_VERSION 0)
+SET(cpd_VERSION ${cpd_MAJOR_VERSION}.${cpd_MINOR_VERSION}.${cpd_PATCH_VERSION})
 
 
 ################################################################################
 # Set the output directory for the build executables and libraries
 ################################################################################
-SET(hdd_RUNTIME_OUTPUT_DIRECTORY ${hdd_SOURCE_DIR}/bin CACHE PATH "Target for the binaries")
+SET(cpd_RUNTIME_OUTPUT_DIRECTORY ${cpd_SOURCE_DIR}/bin CACHE PATH "Target for the binaries")
 IF(WIN32)
-   SET(hdd_LIBRARY_OUTPUT_DIRECTORY ${hdd_SOURCE_DIR}/bin CACHE PATH "Target for the libraries")
+   SET(cpd_LIBRARY_OUTPUT_DIRECTORY ${cpd_SOURCE_DIR}/bin CACHE PATH "Target for the libraries")
 ELSE(WIN32)
-   SET(hdd_LIBRARY_OUTPUT_DIRECTORY ${hdd_SOURCE_DIR}/lib CACHE PATH "Target for the libraries")
+   SET(cpd_LIBRARY_OUTPUT_DIRECTORY ${cpd_SOURCE_DIR}/lib CACHE PATH "Target for the libraries")
 ENDIF(WIN32)
-SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${hdd_LIBRARY_OUTPUT_DIRECTORY})
-SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${hdd_LIBRARY_OUTPUT_DIRECTORY})
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${hdd_RUNTIME_OUTPUT_DIRECTORY})
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${cpd_LIBRARY_OUTPUT_DIRECTORY})
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${cpd_LIBRARY_OUTPUT_DIRECTORY})
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${cpd_RUNTIME_OUTPUT_DIRECTORY})
 
 
 ################################################################################
@@ -174,6 +174,6 @@ SET(QTLAYOUT_HEADER_DIR ${QTLAYOUT_DIR})
 ADD_SUBDIRECTORY(ext/qt-layout)
 
 
-# Project: HDD (Head Down Display)
+# Project: CPD (Cockpit Display)
 ADD_SUBDIRECTORY(src)
 

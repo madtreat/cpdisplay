@@ -21,14 +21,14 @@ class MapSettings;
 //class MapView;
 //class MapOverlay;
 
-class HDDSettings;
+class CPDSettings;
 
 
 class MapWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   MapWidget(HDDSettings* _hddSettings, MapSettings* _mapSettings, ACMap* _acMap, QFrame* _parent = 0);
+   MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap* _acMap, QFrame* _parent = 0);
    MapWidget(const MapWidget& orig) = delete;
    virtual ~MapWidget();
    
@@ -48,7 +48,7 @@ protected:
    void resizeEvent(QResizeEvent* event);
 
 private:
-   HDDSettings* hddSettings;
+   CPDSettings* cpdSettings;
    MapSettings* mapSettings;
    MapView* view;
    MapOverlay* overlay;

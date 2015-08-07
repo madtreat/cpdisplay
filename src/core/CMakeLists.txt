@@ -1,8 +1,8 @@
-project(hdd-core)
+project(cpd-core)
 
 set(SOURCES
    aircraft.cpp
-   hddsettings.cpp
+   cpdsettings.cpp
    switchboard.cpp
    xplanedata.cpp
 )
@@ -10,7 +10,7 @@ set(SOURCES
 set(HEADERS
    aircraft.h
    mapconsts.h
-   hddsettings.h
+   cpdsettings.h
    switchboard.h
    xplanedata.h
    xplanedref.h
@@ -31,5 +31,5 @@ target_link_libraries(${PROJECT_NAME}
    qfi-core
    qfi-ui
 
-   hdd-utils
+   cpd-utils
 )

@@ -16,14 +16,14 @@ class QLabel;
 class QPushButton;
 
 class Aircraft;
-class HDDSettings;
+class CPDSettings;
 
 
 class TrafficWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QFrame* _parent = 0);
+   TrafficWidget(CPDSettings* _cpdSettings, ACMap* _acMap, QFrame* _parent = 0);
    TrafficWidget(const TrafficWidget& orig) = delete;
    virtual ~TrafficWidget();
 
@@ -37,7 +37,7 @@ signals:
    void displayedACChanged(int id);
 
 private:
-   HDDSettings*   hddSettings;
+   CPDSettings*   cpdSettings;
    ACMap*         acMap;
    Aircraft*      currentAC;
    int            currentID;

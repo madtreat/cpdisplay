@@ -9,16 +9,16 @@
 
 #include <QDebug>
 
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 
 
-EngineController::EngineController(HDDSettings* _hddSettings, AircraftEngineType _engType, int _numEngines, QObject* _parent)
+EngineController::EngineController(CPDSettings* _cpdSettings, AircraftEngineType _engType, int _numEngines, QObject* _parent)
 : QObject(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   engType(_engType),
   numEngines(_numEngines)
 {
-//   engineWidget = new EngineWidget(hddSettings, _numThrottles);
+//   engineWidget = new EngineWidget(cpdSettings, _numThrottles);
 }
 
 //EngineController::EngineController(const EngineController& orig)

@@ -1,4 +1,4 @@
-project(hdd-map)
+project(cpd-map)
 
 set(SOURCES
    mapcontroller.cpp
@@ -37,6 +37,6 @@ target_link_libraries(${PROJECT_NAME}
 
    qt-gmaps
 
-   hdd-utils
-   #hdd-core
+   cpd-utils
+   #cpd-core
 )

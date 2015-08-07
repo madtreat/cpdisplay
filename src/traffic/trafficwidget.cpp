@@ -13,11 +13,11 @@
 #include <QPushButton>
 
 #include "core/aircraft.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 
-TrafficWidget::TrafficWidget(HDDSettings* _hddSettings, ACMap* _acMap, QFrame* _parent)
+TrafficWidget::TrafficWidget(CPDSettings* _cpdSettings, ACMap* _acMap, QFrame* _parent)
 : QFrame(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   acMap(_acMap),
   currentID(1)
 {

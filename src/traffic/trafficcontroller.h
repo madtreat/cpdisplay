@@ -14,14 +14,14 @@
 #include "core/aircraft.h"
 
 
-class HDDSettings;
+class CPDSettings;
 class TrafficWidget;
 
 class TrafficController : public QObject {
    Q_OBJECT;
 
 public:
-   TrafficController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent = 0);
+   TrafficController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent = 0);
    TrafficController(const TrafficController& orig) = delete;
    virtual ~TrafficController();
    
@@ -36,7 +36,7 @@ signals:
    void acRngBerUpdated(int id);
 
 private:
-   HDDSettings*   hddSettings;
+   CPDSettings*   cpdSettings;
    TrafficWidget* trafficWidget;
    ACMap*         acMap;
    

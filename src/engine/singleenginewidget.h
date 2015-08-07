@@ -19,7 +19,7 @@ class QHBoxLayout;
 class QFormLayout;
 class QWidget;
 
-class HDDSettings;
+class CPDSettings;
 class EngineController;
 class ThrottleWidget;
 class EngineDial;
@@ -29,7 +29,7 @@ class SingleEngineWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   SingleEngineWidget(HDDSettings* _hddSettings, EngineController* _engC, int _engNum, QFrame* _parent = 0);
+   SingleEngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _engNum, QFrame* _parent = 0);
    SingleEngineWidget(const SingleEngineWidget& orig) = delete;
    virtual ~SingleEngineWidget();
 
@@ -52,7 +52,7 @@ public slots:
    void setOilTemp(float value, int _engNum);
 
 private:
-   HDDSettings*      hddSettings;
+   CPDSettings*      cpdSettings;
    EngineController* engC;
    int               engNum;
    

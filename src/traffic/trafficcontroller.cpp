@@ -10,15 +10,15 @@
 #include <QDebug>
 
 #include "utils/geodist.h"
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "trafficwidget.h"
 
-TrafficController::TrafficController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent)
+TrafficController::TrafficController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent)
 : QObject(_parent),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   acMap(_acMap)
 {
-   trafficWidget = new TrafficWidget(hddSettings, acMap);
+   trafficWidget = new TrafficWidget(cpdSettings, acMap);
    connect(trafficWidget, &TrafficWidget::displayedACChanged, this, &TrafficController::updateCurrentAC);
    currentID = 1;
 }

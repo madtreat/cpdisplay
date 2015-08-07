@@ -1,18 +1,18 @@
 /* 
- * File:   hddsettings.cpp
+ * File:   cpdsettings.cpp
  * Author: Madison Treat <madison.treat@tamu.edu>
  * 
  * Created on June 15, 2015, 6:39 PM
  */
 
-#include "hddsettings.h"
+#include "cpdsettings.h"
 
 #include <QCoreApplication>
 #include <QSettings>
 #include <QFile>
 #include <QDir>
 
-HDDSettings::HDDSettings(QString _filename, QObject* _parent)
+CPDSettings::CPDSettings(QString _filename, QObject* _parent)
 : QObject(_parent)
 {
    settings = NULL;
@@ -26,7 +26,7 @@ HDDSettings::HDDSettings(QString _filename, QObject* _parent)
    m_configDir = appRoot.absolutePath() + "/config";
    
    if (m_settingsFile == "") {
-      m_settingsFile = m_configDir + "/hdd-settings.ini";
+      m_settingsFile = m_configDir + "/cpd-settings.ini";
    }
    
    if (!QFile::exists(m_settingsFile)) {
@@ -36,19 +36,19 @@ HDDSettings::HDDSettings(QString _filename, QObject* _parent)
    qDebug() << "Loading settings file:\n  " << m_settingsFile;
    
    loadSettingsFile(m_settingsFile);
-   qDebug() << "   Done loading hdd settings.";
+   qDebug() << "   Done loading Cockpit Display settings.";
 }
 
-//HDDSettings::HDDSettings(const HDDSettings& orig)
+//CPDSettings::CPDSettings(const CPDSettings& orig)
 //{
 //}
 
-HDDSettings::~HDDSettings()
+CPDSettings::~CPDSettings()
 {
 }
 
 
-void HDDSettings::loadSettingsFile(QString _filename)
+void CPDSettings::loadSettingsFile(QString _filename)
 {
    // If the settings pointer already exists, delete it to start fresh on a new
    // file, since this can potentially be called multiple times in an application.

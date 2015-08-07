@@ -15,7 +15,7 @@
 #include "mapwidget.h"
 
 
-class HDDSettings;
+class CPDSettings;
 class MapSettings;
 class MapWidget;
 class MapView;
@@ -25,7 +25,7 @@ class MapController : public QObject {
    Q_OBJECT;
 
 public:
-   MapController(HDDSettings* _hddSettings, ACMap* _acMap, QObject* _parent = 0);
+   MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent = 0);
    MapController(const MapController& orig) = delete;
    virtual ~MapController();
    
@@ -55,7 +55,7 @@ signals:
    void zoomEither(bool enable);
 
 private:
-   HDDSettings* hddSettings;
+   CPDSettings* cpdSettings;
    MapSettings* settings;
    MapWidget* mapWidget;
    

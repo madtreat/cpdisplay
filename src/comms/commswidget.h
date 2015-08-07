@@ -15,7 +15,7 @@
 
 class QLabel;
 
-class HDDSettings;
+class CPDSettings;
 class CommsController;
 class CommsLine;
 
@@ -24,7 +24,7 @@ class CommsWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   CommsWidget(HDDSettings* _hddSettings, CommsController* _comC, QFrame* _parent = 0);
+   CommsWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFrame* _parent = 0);
    CommsWidget(const CommsWidget& orig) = delete;
    virtual ~CommsWidget();
    
@@ -32,7 +32,7 @@ public slots:
    void setTimes(float _zulu, float _local);
 
 private:
-   HDDSettings* hddSettings;
+   CPDSettings* cpdSettings;
    CommsController* comC;
    
    // The textual labels that will be connected to XPlane

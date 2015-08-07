@@ -12,14 +12,14 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "commscontroller.h"
 #include "commsline.h"
 
-CommsWidget::CommsWidget(HDDSettings* _hddSettings, CommsController* _comC, QFrame* _parent)
+CommsWidget::CommsWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFrame* _parent)
 : QFrame(_parent),
 //  m_border(true),
-  hddSettings(_hddSettings),
+  cpdSettings(_cpdSettings),
   comC(_comC)
 {
    setupCommsControls();

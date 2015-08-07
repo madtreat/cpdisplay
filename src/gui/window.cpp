@@ -13,8 +13,8 @@
 #include "qt-layout/layoutprofile.h"
 #include "qt-layout/layoutmanager.h"
 
-#include "hddcontroller.h"
-#include "core/hddsettings.h"
+#include "cpdcontroller.h"
+#include "core/cpdsettings.h"
 
 #include "map/mapcontroller.h"
 #include "instruments/adicontroller.h"
@@ -32,33 +32,33 @@
 #include "traffic/trafficcontroller.h"
 
 
-HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent) 
+CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent) 
 : QMainWindow(),
-  hddSettings(_hddSettings)
+  cpdSettings(_cpdSettings)
 {
-   hddC = new HDDController(hddSettings, this);
-   acMap = hddC->getACMap();
+   cpdC = new CPDController(cpdSettings, this);
+   acMap = cpdC->getACMap();
    
    QFile ss(":/style/style.css");
    ss.open(QFile::ReadOnly);
    QString style = QLatin1String(ss.readAll());
    setStyleSheet(style);
    
-   layoutProfile = new LayoutProfile(hddSettings->layoutProfile());
+   layoutProfile = new LayoutProfile(cpdSettings->layoutProfile());
    layoutManager = new LayoutManager();
    
-   engW = new EngineWidget(hddSettings, hddC->getEngC());
-   comW = new CommsWidget(hddSettings, hddC->getComC());
+   engW = new EngineWidget(cpdSettings, cpdC->getEngC());
+   comW = new CommsWidget(cpdSettings, cpdC->getComC());
    
    setupPFDAltGuages();
    setupToolbar();
 //   pfdButtonClicked(true); // Hide the alt guages after creation;
    
    QMap<int, QWidget*> widgetMap;
-   widgetMap.insert(1, hddC->getPFDC()->getWidget());
-   widgetMap.insert(2, hddC->getMapC()->getWidget());
+   widgetMap.insert(1, cpdC->getPFDC()->getWidget());
+   widgetMap.insert(2, cpdC->getMapC()->getWidget());
    widgetMap.insert(3, engW);
-   widgetMap.insert(4, hddC->getTfcC()->getWidget());
+   widgetMap.insert(4, cpdC->getTfcC()->getWidget());
    widgetMap.insert(5, comW);
    widgetMap.insert(6, toolbar);
    widgetMap.insert(7, pfdAltGuages);
@@ -79,18 +79,18 @@ HDDWindow::HDDWindow(HDDSettings* _hddSettings, QObject* _parent)
    setMinimumSize(QSize(1344, 756));
 }
 
-HDDWindow::~HDDWindow()
+CPDWindow::~CPDWindow()
 {
-   delete hddC;
+   delete cpdC;
    delete acMap;
    delete layoutManager;
-   delete hddSettings;
+   delete cpdSettings;
 }
 
 /*
  * Helper function for creating consistent toolbar buttons.
  */
-QPushButton* HDDWindow::createToolButton(QString text, bool checkable)
+QPushButton* CPDWindow::createToolButton(QString text, bool checkable)
 {
    QPushButton* button = new QPushButton(text);
    button->setMinimumSize(QSize(80, 80));
@@ -104,7 +104,7 @@ QPushButton* HDDWindow::createToolButton(QString text, bool checkable)
    return button;
 }
 
-void HDDWindow::setupToolbar()
+void CPDWindow::setupToolbar()
 {
    toolbar = new QFrame(this);
    QVBoxLayout* tblayout = new QVBoxLayout(toolbar);
@@ -123,21 +123,21 @@ void HDDWindow::setupToolbar()
    
    trafficButton = createToolButton("TFC", true);
    trafficButton->setEnabled(true);
-   connect(trafficButton, SIGNAL(toggled(bool)), hddC->getMapC(), SLOT(displayTraffic(bool)));
+   connect(trafficButton, SIGNAL(toggled(bool)), cpdC->getMapC(), SLOT(displayTraffic(bool)));
    trafficButton->setChecked(true);
    tblayout->addWidget(trafficButton);
    
    terrainButton = createToolButton("SAT", true);
    terrainButton->setEnabled(true);
-   connect(terrainButton, SIGNAL(toggled(bool)), hddC->getMapView(), SLOT(showSatMap(bool)));
-   connect(terrainButton, SIGNAL(toggled(bool)), hddC->getOverlay(), SLOT(satButtonClicked(bool)));
+   connect(terrainButton, SIGNAL(toggled(bool)), cpdC->getMapView(), SLOT(showSatMap(bool)));
+   connect(terrainButton, SIGNAL(toggled(bool)), cpdC->getOverlay(), SLOT(satButtonClicked(bool)));
    terrainButton->setChecked(true);
    tblayout->addWidget(terrainButton);
    
    orientationButton = createToolButton("North Up", true);
    orientationButton->setEnabled(true);
    orientationButton->setChecked(true);
-   if (hddSettings->mapOrientation() == TRACK_UP) {
+   if (cpdSettings->mapOrientation() == TRACK_UP) {
       orientationButton->setChecked(false);
    }
    connect(orientationButton, SIGNAL(toggled(bool)), this, SLOT(orientationButtonClicked(bool)));
@@ -145,18 +145,18 @@ void HDDWindow::setupToolbar()
    
    zoomInButton = createToolButton("Zoom In", false);
    zoomInButton->setEnabled(true);
-   connect(zoomInButton, SIGNAL(clicked()), hddC->getMapC(), SLOT(increaseZoom()));
+   connect(zoomInButton, SIGNAL(clicked()), cpdC->getMapC(), SLOT(increaseZoom()));
    // If you are at the max zoom (very close shot of ground), disable zoom in button
-   connect(hddC->getMapC(), SIGNAL(zoomMaxReached(bool)), zoomInButton, SLOT(setDisabled(bool)));
-   connect(hddC->getMapC(), SIGNAL(zoomEither(bool)),     zoomInButton, SLOT(setEnabled(bool)));
+   connect(cpdC->getMapC(), SIGNAL(zoomMaxReached(bool)), zoomInButton, SLOT(setDisabled(bool)));
+   connect(cpdC->getMapC(), SIGNAL(zoomEither(bool)),     zoomInButton, SLOT(setEnabled(bool)));
    tblayout->addWidget(zoomInButton);
    
    zoomOutButton = createToolButton("Zoom Out", false);
    zoomOutButton->setEnabled(true);
-   connect(zoomOutButton, SIGNAL(clicked()), hddC->getMapC(), SLOT(decreaseZoom()));
+   connect(zoomOutButton, SIGNAL(clicked()), cpdC->getMapC(), SLOT(decreaseZoom()));
    // If you are at the minimum zoom (whole earth), disable zoom out button
-   connect(hddC->getMapC(), SIGNAL(zoomMinReached(bool)), zoomOutButton, SLOT(setDisabled(bool)));
-   connect(hddC->getMapC(), SIGNAL(zoomEither(bool)),     zoomOutButton, SLOT(setEnabled(bool)));
+   connect(cpdC->getMapC(), SIGNAL(zoomMinReached(bool)), zoomOutButton, SLOT(setDisabled(bool)));
+   connect(cpdC->getMapC(), SIGNAL(zoomEither(bool)),     zoomOutButton, SLOT(setEnabled(bool)));
    tblayout->addWidget(zoomOutButton);
    
    // No longer using the toolbar directly in the QMainWindow so it can be
@@ -164,14 +164,14 @@ void HDDWindow::setupToolbar()
 //   this->addToolBar(Qt::RightToolBarArea, toolbar);
 }
 
-void HDDWindow::setupPFDAltGuages()
+void CPDWindow::setupPFDAltGuages()
 {
-   QWidget* adiW = (QWidget*) hddC->getADIC()->getWidget();
-   QWidget* altW = (QWidget*) hddC->getALTC()->getWidget();
-   QWidget* asiW = (QWidget*) hddC->getASIC()->getWidget();
-   QWidget* hsiW = (QWidget*) hddC->getHSIC()->getWidget();
-   QWidget* tcdW = (QWidget*) hddC->getTCDC()->getWidget();
-   QWidget* vsiW = (QWidget*) hddC->getVSIC()->getWidget();
+   QWidget* adiW = (QWidget*) cpdC->getADIC()->getWidget();
+   QWidget* altW = (QWidget*) cpdC->getALTC()->getWidget();
+   QWidget* asiW = (QWidget*) cpdC->getASIC()->getWidget();
+   QWidget* hsiW = (QWidget*) cpdC->getHSIC()->getWidget();
+   QWidget* tcdW = (QWidget*) cpdC->getTCDC()->getWidget();
+   QWidget* vsiW = (QWidget*) cpdC->getVSIC()->getWidget();
    
    pfdAltGuages = new QWidget(this);
    QVBoxLayout* vbLayout = new QVBoxLayout(pfdAltGuages);
@@ -189,7 +189,7 @@ void HDDWindow::setupPFDAltGuages()
    vbLayout->addLayout(botRow);
 }
 
-void HDDWindow::pfdButtonClicked(bool checked)
+void CPDWindow::pfdButtonClicked(bool checked)
 {
    LayoutItem* pfd = layoutProfile->getItemByName("PFDWidget");
    LayoutItem* pfdAlt = layoutProfile->getItemByName("PFDAltGuages");
@@ -212,8 +212,8 @@ void HDDWindow::pfdButtonClicked(bool checked)
    }
 }
 
-void HDDWindow::orientationButtonClicked(bool checked)
+void CPDWindow::orientationButtonClicked(bool checked)
 {
-   hddC->getMapC()->setOrientation(checked ? NORTH_UP : TRACK_UP);
+   cpdC->getMapC()->setOrientation(checked ? NORTH_UP : TRACK_UP);
 }
 

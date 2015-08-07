@@ -1,4 +1,4 @@
-project(hdd-utils)
+project(cpd-utils)
 
 set(SOURCES
    geodist.cpp

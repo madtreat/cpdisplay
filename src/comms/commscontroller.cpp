@@ -9,14 +9,14 @@
 
 #include <QDebug>
 
-#include "core/hddsettings.h"
+#include "core/cpdsettings.h"
 #include "commswidget.h"
 
-CommsController::CommsController(HDDSettings* _hddSettings, QObject* _parent)
+CommsController::CommsController(CPDSettings* _cpdSettings, QObject* _parent)
 : QObject(_parent),
-  hddSettings(_hddSettings)
+  cpdSettings(_cpdSettings)
 {
-//   commsWidget = new CommsWidget(hddSettings);
+//   commsWidget = new CommsWidget(cpdSettings);
 }
 
 //CommsController::CommsController(const CommsController& orig)

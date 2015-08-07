@@ -1,12 +1,12 @@
-project(hdd-gui)
+project(cpd-gui)
 
 set(SOURCES
-   hddcontroller.cpp
+   cpdcontroller.cpp
    window.cpp
 )
 
 set(HEADERS
-   hddcontroller.h
+   cpdcontroller.h
    window.h
 )
 
@@ -33,11 +33,11 @@ target_link_libraries(${PROJECT_NAME}
    qfi-ui
    qt-layout
 
-   hdd-utils
-   hdd-core
-   hdd-instruments
-   hdd-map
-   hdd-comms
-   hdd-engine
-   hdd-traffic
+   cpd-utils
+   cpd-core
+   cpd-instruments
+   cpd-map
+   cpd-comms
+   cpd-engine
+   cpd-traffic
 )
