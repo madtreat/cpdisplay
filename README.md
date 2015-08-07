@@ -24,13 +24,15 @@ account with both
 
 X-Plane 10
 ==========
-Tested on X-Plane 10.36
+Tested on X-Plane 10.36 and 10.40b7
 
-This program reads UDP data from X-Plane, and thus to function properly, the following
-UDP data should be enabled in the "Data Input & Output" window, along with the
-checkbox to enable "internet" output.
+This program reads UDP data from X-Plane, and thus to function properly, the following UDP data should be enabled in the "Data Input & Output" window<sup>*1*</sup>, along with the checkbox to enable "internet" output (instructions below). <sup>*2*</sup>
 
 1, 3, 4, 15-26, 34-50, 96, 97
+
+Note <sup>*1*</sup>: As of August 7, 2015, when flying on X-Plane 10.40b7, you no longer have to manually select each UDP output packet, since the new Dataref API allows selections to be made from another application.  The SwitchBoard class now does this for you, so all you have to do is turn on UDP output in X-Plane and send it to the computer running the Cockpit Display.
+
+Note <sup>*2*</sup>: To turn on the UDP output in X-Plane, go to the "Settings" menu, then click "Net Connections".  In the Net Connections window, click on the "Data" tab.  Check the box for "IP of data receiver" and set the IP address to the (IPv4) address of the computer running your Cockpit Display, and set the port number to match the port found in the [hdd-settings.ini](hdd-settings.ini) config file.  Also make sure that config file has the correct (IPv4) address for the computer running X-Plane so it can send the data requests.
 
 
 Instructions
@@ -48,7 +50,5 @@ $ make
 $ ../bin/[executable]
 ```
 
-The executable can be run from anywhere, as long as the config directory exists
-in the same structural location on the file system ( [project root]/bin/executable
-and [project root]/config/[files] )
+The executable can be run from anywhere, as long as the config directory exists in the same structural location on the file system ( [project root]/bin/executable and [project root]/config/[files] )
 
