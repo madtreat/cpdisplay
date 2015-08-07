@@ -12,7 +12,7 @@ ENDIF(POLICY CMP0043)
 ################################################################################
 # Version
 ################################################################################
-SET(cpd_MAJOR_VERSION 0)
+SET(cpd_MAJOR_VERSION 1)
 SET(cpd_MINOR_VERSION 1)
 SET(cpd_PATCH_VERSION 0)
 SET(cpd_VERSION ${cpd_MAJOR_VERSION}.${cpd_MINOR_VERSION}.${cpd_PATCH_VERSION})
