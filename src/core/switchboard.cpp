@@ -19,7 +19,7 @@ SwitchBoard::SwitchBoard(HDDSettings* _settings, QObject* _parent)
    settings = _settings;
    initSocket();
 
-//   requestDatarefsFromXPlane();
+  requestDatarefsFromXPlane();
 }
 
 
@@ -91,7 +91,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
       memcpy(&data, RREF_PREFIX, ID_DIM);
       memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
       
-      xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
+      // xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
       //delete data;
 
       // sleep to ensure the packets do not bunch up
@@ -100,10 +100,10 @@ void SwitchBoard::requestDatarefsFromXPlane()
 
    // Turn on UDP output
    QList<XPDataIndex> indexes;
-   //indexes.append((XPDataIndex) 1);
+   indexes.append((XPDataIndex) 1);
    indexes.append((XPDataIndex) 3);
    indexes.append((XPDataIndex) 4);
-   /*
+
    indexes.append((XPDataIndex) 15);
    indexes.append((XPDataIndex) 16);
    indexes.append((XPDataIndex) 17);
@@ -116,20 +116,43 @@ void SwitchBoard::requestDatarefsFromXPlane()
    indexes.append((XPDataIndex) 24);
    indexes.append((XPDataIndex) 25);
    indexes.append((XPDataIndex) 26);
-   // */
+   
+   indexes.append((XPDataIndex) 34);
+   indexes.append((XPDataIndex) 35);
+   indexes.append((XPDataIndex) 36);
+   indexes.append((XPDataIndex) 37);
+   indexes.append((XPDataIndex) 38);
+   indexes.append((XPDataIndex) 39);
+   indexes.append((XPDataIndex) 40);
+   indexes.append((XPDataIndex) 41);
+   indexes.append((XPDataIndex) 42);
+   indexes.append((XPDataIndex) 43);
+   indexes.append((XPDataIndex) 44);
+   indexes.append((XPDataIndex) 45);
+   indexes.append((XPDataIndex) 46);
+   indexes.append((XPDataIndex) 47);
+   indexes.append((XPDataIndex) 48);
+   indexes.append((XPDataIndex) 49);
+   indexes.append((XPDataIndex) 50);
+
+   indexes.append((XPDataIndex) 96);
+   indexes.append((XPDataIndex) 97);
+
 
    // DSEL_PREFIX + 1 + i*8-bit ints + 1 + 0
-   // == DSEL0 + 1___1 + 0
-   int cs = sizeof(xpchr);
-   const int len2 = ID_DIM + cs*indexes.size() + 2*cs;
-   char dsel[len2];
-   memset(&dsel, 1, len2);
+   // == DSEL0 + ___ + 0
+   int cs = sizeof(xpint);
+   const int len2 = ID_DIM + cs*indexes.size() + 3; // unpadded
+   const int len3 = (len2%4 == 0) ? len2 : len2 + len2%4;
+   qDebug() << "len2 / len3:" << len2 << "/" << len3;
+   char dsel[len3];
+   memset(&dsel, 0, len3);
    memcpy(&dsel, DSEL_PREFIX, ID_DIM);
-   memset(&dsel[ID_DIM], 1, cs);
-   //memset(&dsel[len2-2], 1, cs);
+   // memset(&dsel[ID_DIM], 1, cs); // 0 char
+   // memset(&dsel[len2-2], 1, cs); // 1 char
 
    for (int i = 0; i < indexes.size(); i++) {
-      memset(&dsel[ID_DIM+1+(i*cs)], (xpint) indexes.at(i), cs);
+      memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
    }
    qDebug() << "dsel data:" << dsel;
    xplane->writeDatagram(dsel, len2, settings->xplaneHost(), 49000);
@@ -141,7 +164,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
    QByteArray header = data.mid(0, ID_DIM);
    QByteArray values = data.remove(0, ID_DIM);
 
-   xp_dref_out* dref = NULL;// = (struct xp_dref_out*) values.data();
+   xp_dref_out* dref = NULL;//(struct xp_dref_out*) values.data();
 
    if (dref) {
       qDebug() << "data received:" << header << dref->code << dref->data;
@@ -153,7 +176,6 @@ void SwitchBoard::processDatagram(QByteArray& data)
    // XPlane < 10.40:
 
    // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
-   //*
    int numValues = values.size()/36;
    //qDebug() << "Processing datagram of size:" << data.size() << numValues;
    
@@ -166,7 +188,6 @@ void SwitchBoard::processDatagram(QByteArray& data)
       
       notifyAll(outData);
    }
-   // */
 }
 
 /*
