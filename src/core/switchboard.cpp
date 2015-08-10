@@ -19,7 +19,7 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
    settings = _settings;
    initSocket();
 
-  requestDatarefsFromXPlane();
+   requestDatarefsFromXPlane();
 }
 
 
@@ -31,9 +31,7 @@ SwitchBoard::~SwitchBoard()
 void SwitchBoard::initSocket()
 {
    xplane = new QUdpSocket(this);
-   //xplane->bind(settings->xplaneHost(), settings->xplanePort());
    xplane->bind(settings->xplaneHost(), settings->xplanePort(), QUdpSocket::ShareAddress);
-   
    connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
 }
 
@@ -88,17 +86,12 @@ void SwitchBoard::requestDatarefsFromXPlane()
       memcpy(&dref.data, vstr.toLocal8Bit().data(), vstr.size());
       
       const int len = ID_DIM + sizeof(xp_dref_in);
-      //char* data = new char[len]();
       char data[len];
       memset(&data, 0, len);
       memcpy(&data, RREF_PREFIX, ID_DIM);
       memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
       
       xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
-      //delete data;
-
-      // sleep to ensure the packets do not bunch up
-      //usleep(2000000);
    }
 
 
@@ -144,16 +137,14 @@ void SwitchBoard::requestDatarefsFromXPlane()
    indexes.append((XPDataIndex) 97);
 
 
-   // DSEL_PREFIX + 1 + i*8-bit ints + 1 + 0
+   // DSEL_PREFIX + i*cs + 3*0 for padding
    // == DSEL0 + ___ + 0
    int cs = sizeof(xpint);
-   const int len2 = ID_DIM + cs*indexes.size() + 3; // unpadded
+   const int len2 = ID_DIM+3 + cs*indexes.size(); // +3 to pad: len%4==0
    const int len3 = (len2%4 == 0) ? len2 : len2 + len2%4;
    char dsel[len3];
    memset(&dsel, 0, len3);
    memcpy(&dsel, DSEL_PREFIX, ID_DIM);
-   // memset(&dsel[ID_DIM], 1, cs); // 0 char
-   // memset(&dsel[len2-2], 1, cs); // 1 char
 
    for (int i = 0; i < indexes.size(); i++) {
       memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
@@ -173,7 +164,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
    if (header == "RREFO") {
       int size = sizeof(xp_dref_out);
       int numValues = values.size()/size;
-      //qDebug() << "Received RREFO with" << numValues << "values:";
+      qDebug() << "Received RREFO with" << numValues << "values:";
 
       for (int i = 0; i < numValues; i++) {
          xp_dref_out* dref = (struct xp_dref_out*) values.mid(i*size, size).data();
@@ -184,11 +175,11 @@ void SwitchBoard::processDatagram(QByteArray& data)
           * dref->code into some erroneous data, so variables store the code
           * and value directly, as soon as the dref object is constructed.
           */
-         //qDebug() << "   data received:" << header << dref->code << dref->data;
+         qDebug() << "   data received:" << header << dref->code << dref->data;
 
          notifyAll((XPDataIndex) code, value);
       }
-      // qDebug() << "--- --- --- --- ---";
+      qDebug() << "--- --- --- --- ---";
    }
 
 
@@ -198,7 +189,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
       // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
       int size = 36;
       int numValues = values.size()/size;
-      //qDebug() << "Received DATA@ with" << numValues << "values:";
+      qDebug() << "Received DATA@ with" << numValues << "values:";
       
       // Separate each value
       for (int i = 0; i < numValues; i++) {
