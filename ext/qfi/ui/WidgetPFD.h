@@ -50,7 +50,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <QWidget>
+#include <QFrame>
 
 #include <qfi_PFD.h>
 
@@ -65,13 +65,13 @@ namespace Ui
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class WidgetPFD : public QWidget
+class WidgetPFD : public QFrame
 {
     Q_OBJECT
 
 public:
 
-    explicit WidgetPFD( QWidget * parent = 0 );
+    explicit WidgetPFD( QFrame * parent = 0 );
 
     virtual ~WidgetPFD();
 

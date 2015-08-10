@@ -1,95 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="300"
-   height="300"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="pfd_mask.svg">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1.9999999"
-     inkscape:cx="123.60498"
-     inkscape:cy="186.71105"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:window-width="1196"
-     inkscape:window-height="1878"
-     inkscape:window-x="2400"
-     inkscape:window-y="40"
-     inkscape:window-maximized="0"
-     inkscape:snap-object-midpoints="false"
-     inkscape:snap-smooth-nodes="false"
-     inkscape:object-paths="false"
-     inkscape:snap-midpoints="true"
-     inkscape:snap-intersection-paths="true"
-     inkscape:object-nodes="true"
-     inkscape:snap-center="false"
-     inkscape:snap-nodes="true"
-     showguides="true"
-     inkscape:guide-bbox="true"
-     inkscape:snap-global="false"
-     inkscape:snap-bbox="true"
-     inkscape:snap-bbox-edge-midpoints="true"
-     inkscape:snap-grids="true"
-     inkscape:snap-to-guides="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid11004"
-       spacingx="0.5"
-       spacingy="0.5" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-752.36218)">
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:none"
-       d="M 0 0 L 0 300 L 300 300 L 300 0 L 0 0 z M 18.261719 37.496094 L 37.076172 37.5 L 61 37.5 L 61 37.505859 L 231 37.541016 L 231 37.5 L 271 37.5 L 271 37.548828 L 281.67578 37.550781 L 294 83.5 L 294 83.5625 L 294 166.4375 L 293.99609 166.45117 L 293.99609 166.48438 L 281.64844 212.5 L 271 212.49805 L 271 212.5 L 231 212.5 L 231 212.49023 L 61 212.45508 L 61 212.5 L 25 212.5 L 25 212.44727 L 18.289062 212.44531 L 5.9375 166.42578 L 5.9375 83.445312 L 18.261719 37.496094 z M 150 240 C 187.82078 240 220.98414 260.0031 239.46875 290 L 60.5625 290 C 79.0471 260.0031 112.17921 240 150 240 z "
-       transform="translate(0,752.36218)"
-       id="rect11308-0-8-0" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 0,752.36218 300,0"
-       id="path11027"
-       inkscape:connector-curvature="0" />
-    <rect
-       style="fill:#020000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect33571"
-       width="20"
-       height="194.00002"
-       x="2.5"
-       y="781.86218"
-       ry="0" />
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1"
+	 id="svg2" xmlns:svg="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" sodipodi:docname="pfd_mask.svg" inkscape:version="0.91 r13725"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-155 247 300 300"
+	 style="enable-background:new -155 247 300 300;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#222222;stroke:#222222;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#222222;stroke-miterlimit:10;}
+	.st2{fill:#222222;}
+</style>
+<sodipodi:namedview  inkscape:snap-global="false" inkscape:snap-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:cx="123.60498" showguides="true" showgrid="true" inkscape:cy="186.71105" id="base" inkscape:zoom="1.9999999" borderopacity="1.0" pagecolor="#ffffff" bordercolor="#666666" inkscape:snap-intersection-paths="true" inkscape:guide-bbox="true" inkscape:snap-nodes="true" inkscape:snap-center="false" inkscape:object-nodes="true" inkscape:snap-midpoints="true" inkscape:object-paths="false" inkscape:snap-smooth-nodes="false" inkscape:snap-object-midpoints="false" inkscape:window-maximized="0" inkscape:window-y="40" inkscape:current-layer="layer1" inkscape:document-units="px" inkscape:window-height="1878" inkscape:window-width="1196" inkscape:window-x="2400" inkscape:pageshadow="2" inkscape:pageopacity="0.0" inkscape:snap-bbox-edge-midpoints="true">
+	<inkscape:grid  type="xygrid" id="grid11004" spacingy="0.5" spacingx="0.5"></inkscape:grid>
+</sodipodi:namedview>
+<g id="layer1" transform="translate(0,-752.36218)" inkscape:label="Layer 1" inkscape:groupmode="layer">
+	<path id="rect11308-0-8-0" class="st0" d="M-155,999.4v300h300v-300H-155z M-136.7,1036.9l18.8,0H-94v0l170,0v0h40v0l10.7,0
+		l12.3,45.9v0.1v82.9l0,0v0l-12.3,46l-10.6,0v0H76v0l-170,0v0h-36v-0.1l-6.7,0l-12.4-46v-83L-136.7,1036.9z M-5,1239.4
+		c37.8,0,71,20,89.5,50H-94.4C-76,1259.4-42.8,1239.4-5,1239.4z"/>
+	<path id="path11027" inkscape:connector-curvature="0" class="st1" d="M-155,999.4h300"/>
+	<rect id="rect33571" x="-152.5" y="1028.9" class="st2" width="20" height="194"/>
+</g>
 </svg>

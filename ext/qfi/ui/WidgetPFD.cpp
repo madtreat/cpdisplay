@@ -54,8 +54,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-WidgetPFD::WidgetPFD( QWidget * parent ) :
-    QWidget( parent ),
+WidgetPFD::WidgetPFD( QFrame * parent ) :
+    QFrame( parent ),
     m_ui( new Ui::WidgetPFD ),
     m_pfd ( 0 ),
     m_layoutSq ( 0 )
@@ -82,7 +82,7 @@ void WidgetPFD::setupUi()
 {
     m_layoutSq = new LayoutSquare( this );
 
-    m_layoutSq->setContentsMargins( 0, 0, 0, 0 );
+//    m_layoutSq->setContentsMargins( 0, 0, 0, 0 );
     m_layoutSq->addWidget( m_ui->framePFD );
 
     setLayout( m_layoutSq );
