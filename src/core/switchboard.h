@@ -154,6 +154,8 @@ private:
    void notifyAll(int code, xpflt value);
    void notifyAll(XPOutputData* data);
 
+   void setDataref(QString dataref, float value);
+
    int nextDRefID() {return ++drefID;}
 };
 
