@@ -51,6 +51,8 @@ public slots:
    
    void updateOilPressure(float pressure, int engNum);
    void updateOilTemp(float temp, int engNum);
+
+   void updateFuelQuantity(float fuel, int engNum);
    
 signals:
    void engineTypeUpdate(AircraftEngineType type);
@@ -69,8 +71,10 @@ signals:
    void egtUpdate(float value, int engNum);
    void chtUpdate(float value, int engNum);
    
-   void oilPUpdate(float _value, int engNum);
-   void oilTUpdate(float _value, int engNum);
+   void oilPUpdate(float value, int engNum);
+   void oilTUpdate(float value, int engNum);
+
+   void fuelUpdate(float value, int engNum);
 
 private:
    CPDSettings* cpdSettings;

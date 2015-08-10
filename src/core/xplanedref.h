@@ -27,8 +27,9 @@ static const char* XPDR_RADIO_NAV1_STDBY  = "sim/cockpit/radios/nav1_stdby_freq_
 static const char* XPDR_RADIO_NAV2_FREQ   = "sim/cockpit/radios/nav2_freq_hz";
 static const char* XPDR_RADIO_NAV2_STDBY  = "sim/cockpit/radios/nav2_stdby_freq_hz";
 
+static const char* XPDR_AC_FUEL_QTY_X     = "sim/cockpit2/fuel/fuel_quantity[__X__]";
+
 /*
-static const char* XPDR_AC_ = "sim/";
 static const char* XPDR_AC_ = "sim/";
 static const char* XPDR_AC_ = "sim/";
 static const char* XPDR_AC_ = "sim/";

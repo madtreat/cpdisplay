@@ -40,8 +40,8 @@ EngineWidget::~EngineWidget()
 void EngineWidget::setupEngineControls()
 {
    QHBoxLayout* layout = new QHBoxLayout(this);
-   layout->setContentsMargins(0, 0, 0, 0);
-   
+//   layout->setContentsMargins(0, 0, 0, 0);
+
    // This loop will create throttles in pairs, to keep them grouped better on the main layout
    for (int i = 0; i < ENGINES_MAX; i++) {
       SingleEngineWidget* eng = new SingleEngineWidget(cpdSettings, engC, i);

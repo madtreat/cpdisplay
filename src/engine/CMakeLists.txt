@@ -4,7 +4,9 @@ set(SOURCES
    enginecontroller.cpp
    enginedial.cpp
    enginewidget.cpp
+   fuelwidget.cpp
    singleenginewidget.cpp
+   singlefuelwidget.cpp
    throttlewidget.cpp
 )
 
@@ -13,7 +15,9 @@ set(HEADERS
    enginecontroller.h
    enginedial.h
    enginewidget.h
+   fuelwidget.h
    singleenginewidget.cpp
+   singlefuelwidget.h
    throttlewidget.h
 )
 

@@ -10,6 +10,7 @@
 
 #include <QDial>
 #include <QWidget>
+#include <QColor>
 
 #include "engineconsts.h"
 
@@ -52,6 +53,14 @@ private:
    
    QString typeText;
    QString valueTextBase;
+
+   QColor tickColor;
+   QColor dialColor;
+   QColor bgColor;
+
+   QColor goodColor;
+   QColor warnColor;
+   QColor dngrColor;
 
 };
 

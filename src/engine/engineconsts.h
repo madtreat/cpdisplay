@@ -17,7 +17,8 @@ enum EngineDialType {
    DIAL_ENG_RPM,
    DIAL_PROP_RPM,
    DIAL_EPR,
-   DIAL_EGT
+   DIAL_EGT,
+   DIAL_FUEL
 };
 
 
@@ -28,6 +29,9 @@ typedef QList<ThrottleWidget*> ThrottleList;
 
 class SingleEngineWidget;
 typedef QList<SingleEngineWidget*> Engines;
+
+class SingleFuelWidget;
+typedef QList<SingleFuelWidget*> FuelGauges;
 
 #endif	/* ENGCONSTS_H */
 

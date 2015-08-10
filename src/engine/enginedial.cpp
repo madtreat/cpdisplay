@@ -68,6 +68,13 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
       
       connect(engC, &EngineController::egtUpdate, this, &EngineDial::setValue);
    }
+   else if (type == DIAL_FUEL) {
+      typeText = "FUEL";
+      valueTextBase = QString("_X_ %");
+      stepSize = 10;
+
+      connect(engC, &EngineController::fuelUpdate, this, &EngineDial::setValue);
+   }
    
    tickIncrement = 0.0;
    tickDegIncrement = 21;
@@ -76,6 +83,14 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
    tickRatio = 0.0;
    
    circleBuffer = 20;
+
+   tickColor = QColor(Qt::darkGreen);
+   dialColor = QColor(105, 105, 105);
+   bgColor = QColor(34, 34, 34);
+
+   goodColor = QColor(Qt::green);
+   warnColor = QColor(Qt::yellow);
+   dngrColor = QColor(Qt::red);
    
    if (valueMin >= valueMax) {
       qWarning() << "Warning: dial type" << type << "has invalid range:";
@@ -127,16 +142,15 @@ void EngineDial::paintEvent(QPaintEvent*)
    extent -= 2*circleBuffer;
    
    p.translate((width()-extent)/2, (height()-extent)/2);
-   p.setPen(QColor(105, 105, 105));
-   p.setBrush(QColor(34, 34, 34));
+   p.setPen(dialColor);
+   p.setBrush(bgColor);
    
    // Draw the background circle
-   // Note the 15 deg offset
+   // Note the 15 deg offset, and the 16ths of a degree (15*16 = 15 degrees)
    p.drawArc(0, 0, extent, extent, 15*16, (tickDegMax-tickDegMin)*16);
    
    // Draw dial identification and value text
-   p.setPen(QColor(105, 105, 105));
-//   p.setPen(Qt::white);
+   p.setPen(dialColor);
    QString valueText = QString(valueTextBase);
    QString valStr;
    if (type == DIAL_EPR) {
@@ -150,7 +164,7 @@ void EngineDial::paintEvent(QPaintEvent*)
    p.drawText(extent/2-4, extent/2+32, valueText);
    
    // Draw tickmarks
-   p.setPen(QColor(0, 128, 0, 255));
+   p.setPen(tickColor);
    p.translate(extent/2, extent/2);
    for (int i = tickDegMin; i <= tickDegMax; i += tickDegIncrement) {
       p.save();
@@ -160,13 +174,13 @@ void EngineDial::paintEvent(QPaintEvent*)
    }
    
    // Draw min and max value
-   p.setPen(Qt::darkGreen);
+   p.setPen((type != DIAL_FUEL) ? goodColor : dngrColor);
    QString valueStr = QString::number(valueMin);
    int textX = -(extent/2 + 6*valueStr.size() - 4);
    int textY = extent/2;
    p.drawText(textX, textY, valueStr);
-   
-   p.setPen(Qt::red);
+
+   p.setPen((type != DIAL_FUEL) ? dngrColor : goodColor);
    valueStr = QString::number(valueMax);
    textX = extent - 2*circleBuffer - 10;
    textY = +4;
@@ -175,14 +189,16 @@ void EngineDial::paintEvent(QPaintEvent*)
    // Draw the needle
    p.setPen(Qt::NoPen);
    double percent = (valueFloat-valueMin) / (double) range;
-   if ( percent >= 0.9 ) {
-      p.setBrush(QColor(255, 0, 0, 120));
+   if ( ( type != DIAL_FUEL && percent >= 0.9 ) ||
+        ( type == DIAL_FUEL && percent <= 0.2 ) ) {
+      p.setBrush(dngrColor);
    }
-   else if ( percent >= 0.8 ) {
-      p.setBrush(QColor(255, 255, 0, 120));
+   else if ( ( type != DIAL_FUEL && percent >= 0.8 ) ||
+             ( type == DIAL_FUEL && percent <= 0.4 ) ) {
+      p.setBrush(warnColor);
    }
    else {
-      p.setBrush(QColor(0, 255, 0, 120));
+      p.setBrush(goodColor);
    }
    
    p.save();

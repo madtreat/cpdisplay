@@ -14,7 +14,6 @@
 
 class CPDSettings;
 class EngineController;
-class EngineDial;
 
 
 class EngineWidget : public QFrame {

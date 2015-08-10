@@ -29,6 +29,7 @@
 #include "comms/commswidget.h"
 #include "engine/enginecontroller.h"
 #include "engine/enginewidget.h"
+#include "engine/fuelwidget.h"
 #include "traffic/trafficcontroller.h"
 
 
@@ -46,9 +47,10 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    
    layoutProfile = new LayoutProfile(cpdSettings->layoutProfile());
    layoutManager = new LayoutManager();
-   
-   engW = new EngineWidget(cpdSettings, cpdC->getEngC());
+
+   fulW = new FuelWidget(cpdSettings, cpdC->getEngC());
    comW = new CommsWidget(cpdSettings, cpdC->getComC());
+   engW = new EngineWidget(cpdSettings, cpdC->getEngC());
    
    setupPFDAltGuages();
    setupToolbar();
@@ -62,6 +64,7 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    widgetMap.insert(5, comW);
    widgetMap.insert(6, toolbar);
    widgetMap.insert(7, pfdAltGuages);
+   widgetMap.insert(8, fulW);
    
    for (int i = 0; i < layoutProfile->numItems(); i++) {
       LayoutItem* item = layoutProfile->itemAt(i);

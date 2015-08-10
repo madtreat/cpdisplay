@@ -141,3 +141,8 @@ void EngineController::updateOilTemp(float temp, int engNum)
 {
    emit oilTUpdate(temp, engNum);
 }
+
+void EngineController::updateFuelQuantity(float fuel, int engNum)
+{
+   emit fuelUpdate(fuel, engNum);
+}
