@@ -61,12 +61,12 @@ SingleEngineWidget::SingleEngineWidget(CPDSettings* _cpdSettings, EngineControll
    engineLabel->setObjectName("border-light");
    
    throttle    = new ThrottleWidget(engC, engNum, 100, 0);
-   oilP        = new EngineDial(engC, engNum, DIAL_OIL_PRESSURE, 40, 120, 0);
-   oilT        = new EngineDial(engC, engNum, DIAL_OIL_TEMP, 20, 180, 0);
-   engRPM      = new EngineDial(engC, engNum, DIAL_ENG_RPM, 0, 5000, 0);
-   propRPM     = new EngineDial(engC, engNum, DIAL_PROP_RPM, 0, 5000, 0);
-   eprDial     = new EngineDial(engC, engNum, DIAL_EPR, 0, 20, 0);
-   egtDial     = new EngineDial(engC, engNum, DIAL_EGT, 0, 2000, 0);
+   oilP        = new EngineDial(engC, engNum, DIAL_OIL_PRESSURE, 40, 120);
+   oilT        = new EngineDial(engC, engNum, DIAL_OIL_TEMP, 20, 180);
+   engRPM      = new EngineDial(engC, engNum, DIAL_ENG_RPM, 0, 5000);
+   propRPM     = new EngineDial(engC, engNum, DIAL_PROP_RPM, 0, 5000);
+   eprDial     = new EngineDial(engC, engNum, DIAL_EPR, 0, 20);
+   egtDial     = new EngineDial(engC, engNum, DIAL_EGT, 0, 2000);
    
    propPitch   = new QLabel("0 " + propPitchUnits);
    propWash    = new QLabel("0 " + propWashUnits);

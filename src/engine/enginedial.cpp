@@ -77,7 +77,18 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
    
    circleBuffer = 20;
    
+   if (valueMin >= valueMax) {
+      qWarning() << "Warning: dial type" << type << "has invalid range:";
+      qWarning() << "   ( Min =" << valueMin << ") >= ( Max =" << valueMax;
+   }
    setRange(valueMin, valueMax);
+
+   if (_value < valueMin) {
+      _value = valueMin;
+   }
+   else if (_value > valueMax) {
+      _value = valueMax;
+   }
    setValue(_value, engNum);
    setWrapping(false);
    setNotchesVisible(true);

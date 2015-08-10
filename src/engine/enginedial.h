@@ -23,7 +23,7 @@ class EngineDial : public QDial {
    static const int DIAL_OFFSET = 135;
 
 public:
-   EngineDial(EngineController* _engC, int _engNum, EngineDialType _type, int _min, int _max, int _value, QWidget* _parent = 0);
+   EngineDial(EngineController* _engC, int _engNum, EngineDialType _type, int _min, int _max, int _value=0, QWidget* _parent=0);
    EngineDial(const EngineDial& orig) = delete;
    virtual ~EngineDial();
 
