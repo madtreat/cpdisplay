@@ -26,9 +26,10 @@ class SwitchBoard : public QObject {
    // Define the value struct for the Dataref Map drmap
    struct DRefValue {
       int            xpIndex; // The index as defined by the application
-                              //   (simple version: xpIndex == XPDataIndex)
+                              //  (simple version: xpIndex == XPDataIndex)
       QString        str;     // The string representation of the dataref
-      func_pointer   signal;  // The SwitchBoard signal to be emitted
+      func_pointer   signal;  // The SwitchBoard signal to be emitted, and
+                              //  the reason this struct is inside SwitchBoard
       int            freq;    // Frequency of response
 
       DRefValue(int _index, QString _str, func_pointer _fn, int _freq) {
@@ -68,6 +69,16 @@ signals:
    void radioNav1StdbyUpdate(float freq);
    void radioNav2FreqUpdate(float freq);
    void radioNav2StdbyUpdate(float freq);
+
+   void fuelQuantity1Update(float qty);
+   void fuelQuantity2Update(float qty);
+   void fuelQuantity3Update(float qty);
+   void fuelQuantity4Update(float qty);
+   void fuelQuantity5Update(float qty);
+   void fuelQuantity6Update(float qty);
+   void fuelQuantity7Update(float qty);
+   void fuelQuantity8Update(float qty);
+   void fuelQuantity9Update(float qty);
 
 
    // XPlane < 10.40 / raw UDP output versions:
@@ -133,14 +144,17 @@ signals:
 private:
    CPDSettings* settings;
    QUdpSocket* xplane;
+   int drefID; // used for incrementing dataref request ID's 
 
-   QMap<XPDataIndex, DRefValue*> drmap;
+   QMap<int, DRefValue*> drmap;
    
    void initSocket();
    void requestDatarefsFromXPlane();
    void processDatagram(QByteArray& data);
-   void notifyAll(XPDataIndex code, xpflt value);
+   void notifyAll(int code, xpflt value);
    void notifyAll(XPOutputData* data);
+
+   int nextDRefID() {return ++drefID;}
 };
 
 typedef SwitchBoard SWB;

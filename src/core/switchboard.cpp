@@ -14,7 +14,8 @@
 #include "cpdsettings.h"
 
 SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
-: QObject(_parent)
+: QObject(_parent),
+  drefID(NUM_DATA_INDEXES)
 {
    settings = _settings;
    initSocket();
@@ -52,44 +53,55 @@ void SwitchBoard::readPendingData()
 /*
  * Sends the RREF message to XPlane to request all necessary datarefs.
  */
-#define DRMAP_INSERT(INDEX, STR, SIGNAL, FREQ) \
-   drmap.insert(INDEX, new DRefValue(INDEX, STR, &SwitchBoard::SIGNAL, FREQ));
+#define DRMAP_INSERT(STR, SIGNAL, FREQ) \
+   drmap.insert(nextDRefID(), new DRefValue(drefID, STR, &SwitchBoard::SIGNAL, FREQ));
 void SwitchBoard::requestDatarefsFromXPlane()
 {
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
    // http://forums.x-plane.org/index.php?showtopic=87772)
 
-   //DRMAP_INSERT(AC_TYPE,         XPDR_AC_TYPE,          acTypeUpdate,         1);
-   DRMAP_INSERT(AC_TAIL_NUM,     XPDR_AC_TAIL_NUM_X,    acTailNumUpdate,      1);
-   DRMAP_INSERT(AC_NUM_ENGINES,  XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,   1);
-   DRMAP_INSERT(RAD_COM1_FREQ,   XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,  2);
-   DRMAP_INSERT(RAD_COM1_STDBY,  XPDR_RADIO_COM1_STDBY, radioCom1StdbyUpdate, 2);
-   DRMAP_INSERT(RAD_COM2_FREQ,   XPDR_RADIO_COM2_FREQ,  radioCom2FreqUpdate,  2);
-   DRMAP_INSERT(RAD_COM2_STDBY,  XPDR_RADIO_COM2_STDBY, radioCom2StdbyUpdate, 2);
-   DRMAP_INSERT(RAD_NAV1_FREQ,   XPDR_RADIO_NAV1_FREQ,  radioNav1FreqUpdate,  2);
-   DRMAP_INSERT(RAD_NAV1_STDBY,  XPDR_RADIO_NAV1_STDBY, radioNav1StdbyUpdate, 2);
-   DRMAP_INSERT(RAD_NAV2_FREQ,   XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,  2);
-   DRMAP_INSERT(RAD_NAV2_STDBY,  XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate, 2);
+   //DRMAP_INSERT(XPDR_AC_TYPE,          acTypeUpdate,         1);
+   DRMAP_INSERT(XPDR_AC_TAIL_NUM_X,    acTailNumUpdate,      1);
+   DRMAP_INSERT(XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,   1);
 
-   foreach (XPDataIndex i, drmap.keys()) {
+   DRMAP_INSERT(XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,  2);
+   DRMAP_INSERT(XPDR_RADIO_COM1_STDBY, radioCom1StdbyUpdate, 2);
+   DRMAP_INSERT(XPDR_RADIO_COM2_FREQ,  radioCom2FreqUpdate,  2);
+   DRMAP_INSERT(XPDR_RADIO_COM2_STDBY, radioCom2StdbyUpdate, 2);
+   DRMAP_INSERT(XPDR_RADIO_NAV1_FREQ,  radioNav1FreqUpdate,  2);
+   DRMAP_INSERT(XPDR_RADIO_NAV1_STDBY, radioNav1StdbyUpdate, 2);
+   DRMAP_INSERT(XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,  2);
+   DRMAP_INSERT(XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate, 2);
+
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity1Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity2Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity3Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity4Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity5Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity6Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity7Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity8Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity9Update,  20);
+
+   foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
       QString vstr = val->str;
-      if (vstr.contains("__X__")) {
-         vstr.replace("__X__", "1");
-      }
+      // if (vstr.contains("__X__")) {
+      //    vstr.replace("__X__", "1");
+      // }
       qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
 
-      xp_dref_in dref;
+      xp_rref_in dref;
       dref.freq = (xpint) val->freq;
       dref.code = (xpint) val->xpIndex;
       memset(&dref.data, 0, sizeof(dref.data));
       memcpy(&dref.data, vstr.toLocal8Bit().data(), vstr.size());
       
-      const int len = ID_DIM + sizeof(xp_dref_in);
+      const int len = ID_DIM + sizeof(xp_rref_in);
       char data[len];
       memset(&data, 0, len);
       memcpy(&data, RREF_PREFIX, ID_DIM);
-      memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
+      memcpy(&data[ID_DIM], &dref, sizeof(xp_rref_in));
       
       xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
    }
@@ -162,12 +174,12 @@ void SwitchBoard::processDatagram(QByteArray& data)
 
    // Note the RREFO ends with a capitol O, not the number zero (0)
    if (header == "RREFO") {
-      int size = sizeof(xp_dref_out);
+      int size = sizeof(xp_rref_out);
       int numValues = values.size()/size;
       qDebug() << "Received RREFO with" << numValues << "values:";
 
       for (int i = 0; i < numValues; i++) {
-         xp_dref_out* dref = (struct xp_dref_out*) values.mid(i*size, size).data();
+         xp_rref_out* dref = (struct xp_rref_out*) values.mid(i*size, size).data();
          xpint code  = dref->code;
          xpflt value = dref->data;
          /*
@@ -177,7 +189,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
           */
          qDebug() << "   data received:" << header << dref->code << dref->data;
 
-         notifyAll((XPDataIndex) code, value);
+         notifyAll((int) code, value);
       }
       qDebug() << "--- --- --- --- ---";
    }
@@ -189,7 +201,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
       // Each raw value is 36 bytes: 4 bytes=index from X-Plane, 32 bytes of data
       int size = 36;
       int numValues = values.size()/size;
-      qDebug() << "Received DATA@ with" << numValues << "values:";
+      // qDebug() << "Received DATA@ with" << numValues << "values:";
       
       // Separate each value
       for (int i = 0; i < numValues; i++) {
@@ -210,7 +222,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
  * Notify everyone of new data.  This parses the data's values and emits signals
  * that other objects can be connected to.
  */
-void SwitchBoard::notifyAll(XPDataIndex code, xpflt value)
+void SwitchBoard::notifyAll(int code, xpflt value)
 {
    DRefValue* val = drmap.value(code);
    if (val) {
@@ -448,4 +460,9 @@ void SwitchBoard::notifyAll(XPOutputData* data)
          //qDebug() << "Unknown data receievd:" << data->index << VALUE(0);
          break;
    }
+}
+
+void SwitchBoard::setDataref(QString dataref, float value)
+{
+   // TODO: send xp_dref_in message to xplane
 }

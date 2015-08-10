@@ -93,9 +93,10 @@ enum XPDataIndex {
     * Custom Dataref Indices (XPlane 10.40+)
     */
 
+   /*
    // Aircraft info
    AC_TYPE,          // 135
-   AC_TAIL_NUM,
+   AC_TAIL_NUM,      // this one only, but could add more here for up to 8 aircraft
    AC_ENGINE_TYPE,
    AC_NUM_ENGINES,
    
@@ -109,7 +110,19 @@ enum XPDataIndex {
    RAD_NAV2_FREQ,
    RAD_NAV2_STDBY,
 
+   // Fuel
+   FUEL_QTY_1,
+   FUEL_QTY_2,
+   FUEL_QTY_3,
+   FUEL_QTY_4,
+   FUEL_QTY_5,
+   FUEL_QTY_6,
+   FUEL_QTY_7,
+   FUEL_QTY_8,
+   FUEL_QTY_9,
+
    NUM_TOTAL_DATA_INDEXES
+   // */
 };
 
 
@@ -128,28 +141,46 @@ const int ID_DIM = 5;
 
 
 /*
- * XPlane 10.40+ dataref structs.
+ * XPlane 10.40+ dataref structs.  If they end in _in, they are input to xplane.
+ * Similarly, if they end in _out, they are output from xplane (and input to
+ * the CPDisplay app).
  */
 // Length: ID_DIM
-const char RREF_PREFIX[ID_DIM] = {'R', 'R', 'E', 'F', 'O'};
-const char DSEL_PREFIX[ID_DIM] = {'D', 'S', 'E', 'L', 'O'};
+const char RREF_PREFIX[ID_DIM] = {'R', 'R', 'E', 'F', 'O'}; // request dataref from xplane
+const char DREF_PREFIX[ID_DIM] = {'D', 'R', 'E', 'F', 'O'}; // set dataref to value
+const char DSEL_PREFIX[ID_DIM] = {'D', 'S', 'E', 'L', 'O'}; // turn on data output indices
+const char DATA_PREFIX[ID_DIM] = {'D', 'A', 'T', 'A', 'O'}; // set data output indices
 
 // Prefix this struct with RREF_PREFIX and send to xplane host on port 49000
-struct xp_dref_in {
+struct xp_rref_in {
    xpint freq; // frequency of output from xplane
    xpint code; // id/code of output from xplane (for internal mapping)
    xpchr data[400]; // dataref string with optional "[xxx]" index for array vals
 };
 
-struct xp_dref_out {
-   xpint code; // the id/code defined in xp_dref_in
+// The response packet to a xp_rref_in, sent from xplane to the CPDisplay
+struct xp_rref_out {
+   xpint code; // the id/code defined in xp_rref_in
    xpflt data; // output data from xplane
+};
+
+// Prefix this struct with DREF_PREFIX and send to xplane
+struct xp_dref_in {
+   xpflt value; // the value you are setting for the dataref
+   xpchr dref_path[STR_DIM]; // the null-terminated dataref string being set
 };
 
 // Prefix this struct with DSEL_PREFIX to request UDP output for the specified
 // indices in xplane.
 struct xp_dsel_in {
    xpint* data;//[400];
+};
+
+// Prefix this struct with DATA_PREFIX to set UDP output values
+struct xp_data_in {
+   xpint index;   // index of the value-set in xplane's data output screen
+   xpflt data[8]; // the 8 (or less) float values you want to set at this
+                  //   index in the data output screen
 };
 
 
