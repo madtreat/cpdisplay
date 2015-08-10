@@ -25,8 +25,8 @@ MapWidget::MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap
 {
 //   LayoutSquare* layout = new LayoutSquare(this);
    QGridLayout* layout = new QGridLayout(this);
-   layout->setContentsMargins(0, 0, 0, 0);
-   
+//   layout->setContentsMargins(0, 0, 0, 0);
+
    QSizePolicy sp(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
    sp.setHeightForWidth(true);
    setSizePolicy(sp);
@@ -40,7 +40,7 @@ MapWidget::MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap
 
    setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
    resize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
-//   setObjectName("border");
+   setObjectName("border");
 }
 
 //MapWidget::MapWidget(const MapWidget& orig)
@@ -71,8 +71,10 @@ void MapWidget::resize(int w, int h)
 void MapWidget::resize(const QSize& size)
 {
    QWidget::resize(size);
-   view->resize(size);
-   overlay->resize(size);
+   int padding = 2*MAP_PADDING;// + 1; // 1 for extra shifting
+   QSize paddedSize(size.width()-padding, size.height()-padding);
+   view->resize(paddedSize);
+   overlay->resize(paddedSize);
 }
 
 

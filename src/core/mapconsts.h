@@ -17,8 +17,9 @@ const int ZOOM_MAX = 19; // Level 19 is the closest in one can zoom
 const int ZOOM_MIN = 0;  // Level 0 shows the whole planet
 
 // The default map size, and also the minimum size
-const int DEFAULT_MAP_WIDTH  = 440;
-const int DEFAULT_MAP_HEIGHT = 440;
+const int DEFAULT_MAP_WIDTH  = 400;
+const int DEFAULT_MAP_HEIGHT = 400;
+const int MAP_PADDING = 14; // margins=11px + border=2px + extra=1px
 
 #endif	/* MAPCONSTS_H */
 

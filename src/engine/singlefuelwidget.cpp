@@ -23,9 +23,9 @@ SingleFuelWidget::SingleFuelWidget(CPDSettings* _cpdSettings, EngineController* 
   engNum(_engNum)
 {
    QVBoxLayout* layout = new QVBoxLayout(this);
-   layout->setContentsMargins(0, 0, 0, 0);
+   layout->setContentsMargins(4, 4, 4, 4);
 
-   QString labelText = QString("ENG %1").arg(engNum);
+   QString labelText = QString("ENG %1").arg(engNum+1);
    QLabel* label = new QLabel(labelText);
    label->setAlignment(Qt::AlignHCenter);
    label->setObjectName("border-light");

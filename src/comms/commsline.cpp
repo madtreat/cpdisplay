@@ -53,6 +53,7 @@ CommsLine::CommsLine(CommsController* _comC, CommType _commType, QWidget* _paren
    connect(swap, &QPushButton::clicked, this, &CommsLine::swapActive);
    
    QHBoxLayout* layout = new QHBoxLayout(this);
+   layout->setContentsMargins(0, 0, 0, 0);
    layout->addWidget(typeLabel);
 //   layout->addWidget(actDown);
    layout->addWidget(activeSB);

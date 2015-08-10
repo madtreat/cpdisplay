@@ -23,8 +23,7 @@ CommsWidget::CommsWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFra
   comC(_comC)
 {
    setupCommsControls();
-   
-   setContentsMargins(0, 0, 0, 0);
+
    setObjectName("border");
 }
 
@@ -47,16 +46,17 @@ void CommsWidget::setTimes(float _zulu, float _local)
 void CommsWidget::setupCommsControls()
 {
    QVBoxLayout* layout = new QVBoxLayout(this);
-   layout->setContentsMargins(0, 0, 0, 0);
+//   layout->setContentsMargins(0, 0, 0, 0);
    QHBoxLayout* header = new QHBoxLayout();
+   header->setContentsMargins(0, 0, 0, 0);
    
    QLabel* activeLabel = new QLabel("Active");
    QLabel* standbyLabel = new QLabel("Standby");
-   header->addStretch(2);
+   header->addStretch(5);
    header->addWidget(activeLabel);
-   header->addStretch(3);
+   header->addStretch(6);
    header->addWidget(standbyLabel);
-   header->addStretch(1);
+   header->addStretch(2);
    
    com1 = new CommsLine(comC, COM1);
    com2 = new CommsLine(comC, COM2);
@@ -68,6 +68,7 @@ void CommsWidget::setupCommsControls()
    layout->addWidget(com2);
    layout->addWidget(nav1);
    layout->addWidget(nav2);
+   layout->addStretch(2);
    
 //   QFormLayout* layoutR = new QFormLayout(); // right form
 //   
