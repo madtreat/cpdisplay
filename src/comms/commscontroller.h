@@ -36,12 +36,16 @@ public slots:
    void com2Swapped();
    void nav1Swapped();
    void nav2Swapped();
-   void notifyXPlane(CommType ct, float value);
+   void notifyXPlaneComms(CommType ct, float value);
+
+   void notifyXPlaneTimer(bool running);
+   void notifyXPlaneTimerReset();
    
 signals:
    void timesUpdated(float zulu, float local, float mission, float timer);
    void comUpdate(CommType ct, float active, float standby);
    void updateXPlaneComms(QString drefStr, xpflt value);
+   void updateXPlaneTimer(QString drefStr, xpint value);
 
 private:
    CPDSettings* cpdSettings;

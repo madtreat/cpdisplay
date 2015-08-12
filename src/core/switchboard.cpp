@@ -98,15 +98,15 @@ void SwitchBoard::requestDatarefsFromXPlane()
    DRMAP_INSERT(XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,  2);
    DRMAP_INSERT(XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate, 2);
 
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_1,    fuelQuantity1Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_2,    fuelQuantity2Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_3,    fuelQuantity3Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_4,    fuelQuantity4Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_5,    fuelQuantity5Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_6,    fuelQuantity6Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_7,    fuelQuantity7Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_8,    fuelQuantity8Update,  4);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_9,    fuelQuantity9Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_1,    fuelQuantity1Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_2,    fuelQuantity2Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_3,    fuelQuantity3Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_4,    fuelQuantity4Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_5,    fuelQuantity5Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_6,    fuelQuantity6Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_7,    fuelQuantity7Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_8,    fuelQuantity8Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_9,    fuelQuantity9Update,  4);
 
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
@@ -114,7 +114,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
       // if (vstr.contains("__X__")) {
       //    vstr.replace("__X__", "1");
       // }
-      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
+      // qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
 
       xp_rref_in dref;
       dref.freq = (xpint) val->freq;

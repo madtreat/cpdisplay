@@ -92,6 +92,7 @@ void CPDController::connectSignals()
     * to xplane).
     */
    connect(comC, &COMC::updateXPlaneComms,   sb, &SWB::sendDREF);
+   connect(comC, &COMC::updateXPlaneTimer,   sb, &SWB::sendDREF);
 
 
    /*

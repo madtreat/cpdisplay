@@ -11,8 +11,9 @@
 #include <QFrame>
 #include <QString>
 
-
 class QLabel;
+class QPushButton;
+
 class CPDSettings;
 class CommsController;
 
@@ -38,6 +39,9 @@ public slots:
    void setTimerTime(float time);
    void setTimes(float zulu, float local, float mission, float timer);
 
+   void toggleTimer(bool checked);
+   void resetTimer();
+
 private:
    CPDSettings* settings;
    CommsController* comC;
@@ -46,6 +50,11 @@ private:
    QLabel* localTime;
    QLabel* missionTime;
    QLabel* timerTime;
+
+   QPushButton* timerStartStop;
+   QPushButton* timerReset;
+
+   bool justInitialized; // to make sure timer start/stop button's state is accurate
 
    QString formatTime(float time, TimeType type=TIME_ZULU);
 };

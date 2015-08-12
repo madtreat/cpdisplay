@@ -30,26 +30,30 @@ static const char* XPDR_RADIO_NAV2_FREQ   = "sim/cockpit/radios/nav2_freq_hz";
 static const char* XPDR_RADIO_NAV2_STDBY  = "sim/cockpit/radios/nav2_stdby_freq_hz";
 
 // const int MAX_NUM_FUEL_TANKS = 9; // NOT DRY: see engine/engineconsts.h
-static const char* XPDR_AC_FUEL_QTY_X     = "sim/cockpit2/fuel/fuel_quantity[__X__]";
-static const char* XPDR_AC_FUEL_QTY_1     = "sim/cockpit2/fuel/fuel_quantity[0]";
-static const char* XPDR_AC_FUEL_QTY_2     = "sim/cockpit2/fuel/fuel_quantity[1]";
-static const char* XPDR_AC_FUEL_QTY_3     = "sim/cockpit2/fuel/fuel_quantity[2]";
-static const char* XPDR_AC_FUEL_QTY_4     = "sim/cockpit2/fuel/fuel_quantity[3]";
-static const char* XPDR_AC_FUEL_QTY_5     = "sim/cockpit2/fuel/fuel_quantity[4]";
-static const char* XPDR_AC_FUEL_QTY_6     = "sim/cockpit2/fuel/fuel_quantity[5]";
-static const char* XPDR_AC_FUEL_QTY_7     = "sim/cockpit2/fuel/fuel_quantity[6]";
-static const char* XPDR_AC_FUEL_QTY_8     = "sim/cockpit2/fuel/fuel_quantity[7]";
-static const char* XPDR_AC_FUEL_QTY_9     = "sim/cockpit2/fuel/fuel_quantity[8]";
+static const char* XPDR_CP_FUEL_QTY_X     = "sim/cockpit2/fuel/fuel_quantity[__X__]";
+static const char* XPDR_CP_FUEL_QTY_1     = "sim/cockpit2/fuel/fuel_quantity[0]";
+static const char* XPDR_CP_FUEL_QTY_2     = "sim/cockpit2/fuel/fuel_quantity[1]";
+static const char* XPDR_CP_FUEL_QTY_3     = "sim/cockpit2/fuel/fuel_quantity[2]";
+static const char* XPDR_CP_FUEL_QTY_4     = "sim/cockpit2/fuel/fuel_quantity[3]";
+static const char* XPDR_CP_FUEL_QTY_5     = "sim/cockpit2/fuel/fuel_quantity[4]";
+static const char* XPDR_CP_FUEL_QTY_6     = "sim/cockpit2/fuel/fuel_quantity[5]";
+static const char* XPDR_CP_FUEL_QTY_7     = "sim/cockpit2/fuel/fuel_quantity[6]";
+static const char* XPDR_CP_FUEL_QTY_8     = "sim/cockpit2/fuel/fuel_quantity[7]";
+static const char* XPDR_CP_FUEL_QTY_9     = "sim/cockpit2/fuel/fuel_quantity[8]";
+
+// Timer
+// static const char* XPDR_CP_TIMER_RUNNING = "sim/cockpit2/clock_timer/timer_running";
+static const char* XPDR_CP_TIMER_RUNNING = "sim/time/timer_is_running_sec";
+static const char* XPDR_CP_TIMER_ELAPSED = "sim/time/timer_elapsed_time_sec";
 
 /*
-static const char* XPDR_AC_ = "sim/";
-static const char* XPDR_AC_ = "sim/";
-static const char* XPDR_AC_ = "sim/";
-static const char* XPDR_AC_ = "sim/";
-static const char* XPDR_AC_ = "sim/";
-static const char* XPDR_AC_ = "sim/";
-static const char* XPDR_AC_ = "sim/";
-static const char* XPDR_AC_ = "sim/";
+static const char* XPDR_ = "sim/";
+static const char* XPDR_ = "sim/";
+static const char* XPDR_ = "sim/";
+static const char* XPDR_ = "sim/";
+static const char* XPDR_ = "sim/";
+static const char* XPDR_ = "sim/";
+static const char* XPDR_ = "sim/";
 // */
 
 #endif

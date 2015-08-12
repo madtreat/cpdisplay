@@ -84,32 +84,32 @@ void CommsController::comSwapped(CommType ct)
 void CommsController::com1Swapped()
 {
    float com1act  = com1active;
-   notifyXPlane(COM1_ACTIVE,  com1standby);
-   notifyXPlane(COM1_STANDBY, com1act);
+   notifyXPlaneComms(COM1_ACTIVE,  com1standby);
+   notifyXPlaneComms(COM1_STANDBY, com1act);
 }
 
 void CommsController::com2Swapped()
 {
    float com2act  = com2active;
-   notifyXPlane(COM2_ACTIVE,  com2standby);
-   notifyXPlane(COM2_STANDBY, com2act);
+   notifyXPlaneComms(COM2_ACTIVE,  com2standby);
+   notifyXPlaneComms(COM2_STANDBY, com2act);
 }
 
 void CommsController::nav1Swapped()
 {
    float nav1act  = nav1active;
-   notifyXPlane(NAV1_ACTIVE,  nav1standby);
-   notifyXPlane(NAV1_STANDBY, nav1act);
+   notifyXPlaneComms(NAV1_ACTIVE,  nav1standby);
+   notifyXPlaneComms(NAV1_STANDBY, nav1act);
 }
 
 void CommsController::nav2Swapped()
 {
    float nav2act  = nav2active;
-   notifyXPlane(NAV2_ACTIVE,  nav2standby);
-   notifyXPlane(NAV2_STANDBY, nav2act);
+   notifyXPlaneComms(NAV2_ACTIVE,  nav2standby);
+   notifyXPlaneComms(NAV2_STANDBY, nav2act);
 }
 
-void CommsController::notifyXPlane(CommType ct, float value)
+void CommsController::notifyXPlaneComms(CommType ct, float value)
 {
    QString drefStr;
    if (ct == COM1_ACTIVE) {
@@ -145,4 +145,18 @@ void CommsController::notifyXPlane(CommType ct, float value)
       nav2standby = value;
    }
    emit updateXPlaneComms(drefStr, (xpflt) value);
+}
+
+void CommsController::notifyXPlaneTimer(bool running)
+{
+   QString drefStr(XPDR_CP_TIMER_RUNNING);
+   emit updateXPlaneTimer(drefStr, running ? 1 : 0);
+}
+
+void CommsController::notifyXPlaneTimerReset()
+{
+   // Only have to send the reset, because the start/stop button has already
+   // been toggled, in timeWidget.
+   QString drefStr(XPDR_CP_TIMER_ELAPSED);
+   emit updateXPlaneTimer(drefStr, 0.0);
 }

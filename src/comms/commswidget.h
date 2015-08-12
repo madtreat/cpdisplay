@@ -29,7 +29,6 @@ public:
    virtual ~CommsWidget();
    
 public slots:
-   void setTimes(float _zulu, float _local);
 
 private:
    CPDSettings* cpdSettings;
@@ -40,9 +39,6 @@ private:
    CommsLine* com2;
    CommsLine* nav1;
    CommsLine* nav2;
-   
-//   QLabel* gmt;
-//   QLabel* local;
 
    void setupCommsControls();
 };

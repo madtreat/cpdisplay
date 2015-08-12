@@ -35,14 +35,6 @@ CommsWidget::~CommsWidget()
 {
 }
 
-void CommsWidget::setTimes(float _zulu, float _local)
-{
-   QString zuluStr = QString("%1").arg(_zulu);
-   QString localStr = QString("%1").arg(_local);
-//   gmt->setText(zuluStr);
-//   local->setText(localStr);
-}
-
 void CommsWidget::setupCommsControls()
 {
    QVBoxLayout* layout = new QVBoxLayout(this);
@@ -69,11 +61,4 @@ void CommsWidget::setupCommsControls()
    layout->addWidget(nav1);
    layout->addWidget(nav2);
    layout->addStretch(2);
-   
-//   QFormLayout* layoutR = new QFormLayout(); // right form
-//   
-//   gmt  = new QLabel("0:00:00");
-//   local= new QLabel("0:00:00");
-//   layoutR->addRow(tr("GMT:"), gmt);
-//   layoutR->addRow(tr("local:"), local);
 }

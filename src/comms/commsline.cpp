@@ -146,7 +146,7 @@ void CommsLine::activeChanged(double freq)
 {
    if (!justInitialized) {
       activeJustChanged = true;
-      comC->notifyXPlane((CommType) (type | ACTIVE), (float) 100*freq);
+      comC->notifyXPlaneComms((CommType) (type | ACTIVE), (float) 100*freq);
    }
 }
 
@@ -154,6 +154,6 @@ void CommsLine::standbyChanged(double freq)
 {
    if (!justInitialized) {
       standbyJustChanged = true;
-      comC->notifyXPlane((CommType) (type | STANDBY), (float) 100*freq);
+      comC->notifyXPlaneComms((CommType) (type | STANDBY), (float) 100*freq);
    }
 }
