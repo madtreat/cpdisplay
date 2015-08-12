@@ -34,6 +34,10 @@ public slots:
    void swapActive();
    void setFreqs(CommType ct, float active, float standby);
    
+   // These are for the spin boxes' valueChanged() signal
+   void activeChanged(double freq);
+   void standbyChanged(double freq);
+   
 signals:
    
 private:
@@ -57,6 +61,11 @@ private:
    
    // Button to Swap Active and Standby
    QPushButton* swap;
+
+   // If this line just updated a value, ignore the next update signal
+   bool activeJustChanged;
+   bool standbyJustChanged;
+   bool justInitialized; // dont send the first valueChanged
    
    QDoubleSpinBox* createFreqSpinBox();
    QString formatFreq(float freq);

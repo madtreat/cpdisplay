@@ -18,7 +18,10 @@
 CommsLine::CommsLine(CommsController* _comC, CommType _commType, QWidget* _parent)
 : QWidget(_parent),
   comC(_comC),
-  type(_commType)
+  type(_commType),
+  activeJustChanged(false),
+  standbyJustChanged(false),
+  justInitialized(true)
 {
    connect(comC, &CommsController::comUpdate, this, &CommsLine::setFreqs);
    
@@ -43,6 +46,8 @@ CommsLine::CommsLine(CommsController* _comC, CommType _commType, QWidget* _paren
    
    activeSB = createFreqSpinBox();
    standbySB = createFreqSpinBox();
+   connect(activeSB,  SIGNAL(valueChanged(double)), this, SLOT(activeChanged(double)));
+   connect(standbySB, SIGNAL(valueChanged(double)), this, SLOT(standbyChanged(double)));
    
 //   actUp = new QPushButton("^");
 //   actDown = new QPushButton("v");
@@ -62,6 +67,8 @@ CommsLine::CommsLine(CommsController* _comC, CommType _commType, QWidget* _paren
 //   layout->addWidget(standbyDown);
    layout->addWidget(standbySB);
 //   layout->addWidget(standbyUp);
+
+   justInitialized = false;
 }
 
 //CommsLine::CommsLine(const MapSettings& orig)
@@ -95,25 +102,34 @@ QString CommsLine::formatFreq(float freq)
 
 void CommsLine::setActiveValue(float freq)
 {
-   activeFreq = freq;
-   activeSB->setValue(freq / 100);
+   // if (!activeJustChanged) {
+      activeFreq = freq;
+      activeSB->blockSignals(true);
+      activeSB->setValue(freq / 100);
+      activeSB->blockSignals(false);
+      activeJustChanged = false; // only ignore the first signal after manually changing
+   // }
 }
 
 void CommsLine::setStandbyValue(float freq)
 {
-   standbyFreq = freq;
-   standbySB->setValue(freq / 100);
+   // if (!standbyJustChanged) {
+      standbyFreq = freq;
+      standbySB->blockSignals(true);
+      standbySB->setValue(freq / 100);
+      standbySB->blockSignals(false);
+      standbyJustChanged = false; // only ignore the first signal after manually changing
+   // }
 }
 
 void CommsLine::swapActive()
 {
    float activeFreq2 = activeFreq;
-   activeFreq = standbyFreq;
-   standbyFreq = activeFreq2;
+   setActiveValue(standbyFreq);
+   setStandbyValue(activeFreq2);
    
-   setActiveValue(activeFreq);
-   setStandbyValue(standbyFreq);
-   
+   // activeJustChanged = true;
+   // standbyJustChanged = true;
    comC->comSwapped(type);
 }
 
@@ -123,5 +139,21 @@ void CommsLine::setFreqs(CommType ct, float active, float standby)
    if (ct & type) {
       setActiveValue(active);
       setStandbyValue(standby);
+   }
+}
+
+void CommsLine::activeChanged(double freq)
+{
+   if (!justInitialized) {
+      activeJustChanged = true;
+      comC->notifyXPlane((CommType) (type | ACTIVE), (float) 100*freq);
+   }
+}
+
+void CommsLine::standbyChanged(double freq)
+{
+   if (!justInitialized) {
+      standbyJustChanged = true;
+      comC->notifyXPlane((CommType) (type | STANDBY), (float) 100*freq);
    }
 }

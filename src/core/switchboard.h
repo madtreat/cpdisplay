@@ -53,6 +53,7 @@ public:
    
 public slots:
    void readPendingData();
+   void sendDREF(QString drefStr, xpflt value);
    
 signals:
    void notConnected(); // not connected to XPlane
@@ -156,7 +157,7 @@ private:
 
    void setDataref(QString dataref, float value);
 
-   int nextDRefID() {return ++drefID;}
+   inline int nextDRefID() {return ++drefID;}
 };
 
 typedef SwitchBoard SWB;

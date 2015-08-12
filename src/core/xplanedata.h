@@ -152,6 +152,7 @@ const char DSEL_PREFIX[ID_DIM] = {'D', 'S', 'E', 'L', 'O'}; // turn on data outp
 const char DATA_PREFIX[ID_DIM] = {'D', 'A', 'T', 'A', 'O'}; // set data output indices
 
 // Prefix this struct with RREF_PREFIX and send to xplane host on port 49000
+// RREF packets request a dataref to be output from xplane
 struct xp_rref_in {
    xpint freq; // frequency of output from xplane
    xpint code; // id/code of output from xplane (for internal mapping)
@@ -165,6 +166,7 @@ struct xp_rref_out {
 };
 
 // Prefix this struct with DREF_PREFIX and send to xplane
+// DREF packets tell xplane to set a value
 struct xp_dref_in {
    xpflt value; // the value you are setting for the dataref
    xpchr dref_path[STR_DIM]; // the null-terminated dataref string being set
@@ -172,11 +174,13 @@ struct xp_dref_in {
 
 // Prefix this struct with DSEL_PREFIX to request UDP output for the specified
 // indices in xplane.
+// DSEL packets select raw UDP output indices
 struct xp_dsel_in {
    xpint* data;//[400];
 };
 
 // Prefix this struct with DATA_PREFIX to set UDP output values
+// DATA packets set values for a specified UDP output index
 struct xp_data_in {
    xpint index;   // index of the value-set in xplane's data output screen
    xpflt data[8]; // the 8 (or less) float values you want to set at this

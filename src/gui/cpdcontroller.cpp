@@ -86,6 +86,14 @@ void CPDController::connectSignals()
    // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
    // connect(sb, &SWB::acNumEnginesUpdate,  this, &CPDC::setNumEngines);
 
+
+   /*
+    * These connections are for xplane 10.40+ dataref set requests (DREFs sent
+    * to xplane).
+    */
+   connect(comC, &COMC::updateXPlaneComms,   sb, &SWB::sendDREF);
+
+
    /*
     * Everything below is for the raw UDP output from xplane, if selected.
     */

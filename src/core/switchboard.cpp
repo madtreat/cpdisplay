@@ -13,6 +13,10 @@
 
 #include "cpdsettings.h"
 
+#define DEBUG_SEND 0
+#define DEBUG_RECV 0
+
+
 SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
 : QObject(_parent),
   drefID(NUM_DATA_INDEXES)
@@ -50,18 +54,39 @@ void SwitchBoard::readPendingData()
    }
 }
 
+void SwitchBoard::sendDREF(QString drefStr, xpflt value)
+{
+   if (DEBUG_SEND)
+      qDebug() << "Sending DREF packet:" << drefStr << "(" << value << ")";
+   xp_dref_in dref;
+   dref.value = value;
+   memset(&dref.dref_path, 0, sizeof(dref.dref_path));
+   memcpy(&dref.dref_path, drefStr.toLocal8Bit().data(), drefStr.size());
+   
+   const int len = ID_DIM + sizeof(xp_dref_in);
+   char data[len];
+   memset(&data, 0, len);
+   memcpy(&data, DREF_PREFIX, ID_DIM);
+   memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
+   
+   xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
+}
+
 /*
  * Sends the RREF message to XPlane to request all necessary datarefs.
  */
 #define DRMAP_INSERT(STR, SIGNAL, FREQ) \
-   drmap.insert(nextDRefID(), new DRefValue(drefID, STR, &SwitchBoard::SIGNAL, FREQ));
+   { \
+      int id = nextDRefID(); \
+      drmap.insert(id, new DRefValue(id, STR, &SwitchBoard::SIGNAL, FREQ)); \
+   }
 void SwitchBoard::requestDatarefsFromXPlane()
 {
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
    // http://forums.x-plane.org/index.php?showtopic=87772)
 
    //DRMAP_INSERT(XPDR_AC_TYPE,          acTypeUpdate,         1);
-   DRMAP_INSERT(XPDR_AC_TAIL_NUM_X,    acTailNumUpdate,      1);
+   DRMAP_INSERT(XPDR_AC_TAIL_NUM_1,    acTailNumUpdate,      1);
    DRMAP_INSERT(XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,   1);
 
    DRMAP_INSERT(XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,  2);
@@ -73,15 +98,15 @@ void SwitchBoard::requestDatarefsFromXPlane()
    DRMAP_INSERT(XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,  2);
    DRMAP_INSERT(XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate, 2);
 
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity1Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity2Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity3Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity4Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity5Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity6Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity7Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity8Update,  20);
-   DRMAP_INSERT(XPDR_AC_FUEL_QTY_X,    fuelQuantity9Update,  20);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_1,    fuelQuantity1Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_2,    fuelQuantity2Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_3,    fuelQuantity3Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_4,    fuelQuantity4Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_5,    fuelQuantity5Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_6,    fuelQuantity6Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_7,    fuelQuantity7Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_8,    fuelQuantity8Update,  4);
+   DRMAP_INSERT(XPDR_AC_FUEL_QTY_9,    fuelQuantity9Update,  4);
 
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
@@ -176,7 +201,8 @@ void SwitchBoard::processDatagram(QByteArray& data)
    if (header == "RREFO") {
       int size = sizeof(xp_rref_out);
       int numValues = values.size()/size;
-      qDebug() << "Received RREFO with" << numValues << "values:";
+      if (DEBUG_RECV)
+         qDebug() << "Received RREFO with" << numValues << "values:";
 
       for (int i = 0; i < numValues; i++) {
          xp_rref_out* dref = (struct xp_rref_out*) values.mid(i*size, size).data();
@@ -187,11 +213,13 @@ void SwitchBoard::processDatagram(QByteArray& data)
           * dref->code into some erroneous data, so variables store the code
           * and value directly, as soon as the dref object is constructed.
           */
-         qDebug() << "   data received:" << header << dref->code << dref->data;
+         if (DEBUG_RECV)
+            qDebug() << "   data received:" << header << dref->code << dref->data;
 
          notifyAll((int) code, value);
       }
-      qDebug() << "--- --- --- --- ---";
+      if (DEBUG_RECV)
+         qDebug() << "--- --- --- --- ---";
    }
 
 

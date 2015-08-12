@@ -10,6 +10,7 @@
 
 #include <QObject>
 
+#include "core/xplanedata.h"
 #include "comms.h"
 //#include "commswidget.h"
 
@@ -39,9 +40,11 @@ public slots:
    void com2Swapped();
    void nav1Swapped();
    void nav2Swapped();
+   void notifyXPlane(CommType ct, float value);
    
 signals:
    void comUpdate(CommType ct, float active, float standby);
+   void updateXPlaneComms(QString drefStr, xpflt value);
 
 private:
    CPDSettings* cpdSettings;

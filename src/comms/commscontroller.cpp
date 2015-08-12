@@ -10,6 +10,7 @@
 #include <QDebug>
 
 #include "core/cpdsettings.h"
+#include "core/xplanedref.h"
 #include "commswidget.h"
 
 CommsController::CommsController(CPDSettings* _cpdSettings, QObject* _parent)
@@ -84,27 +85,65 @@ void CommsController::comSwapped(CommType ct)
 void CommsController::com1Swapped()
 {
    float com1act  = com1active;
-   com1active     = com1standby;
-   com1standby    = com1act;
+   notifyXPlane(COM1_ACTIVE,  com1standby);
+   notifyXPlane(COM1_STANDBY, com1act);
 }
 
 void CommsController::com2Swapped()
 {
    float com2act  = com2active;
-   com2active     = com2standby;
-   com2standby    = com2act;
+   notifyXPlane(COM2_ACTIVE,  com2standby);
+   notifyXPlane(COM2_STANDBY, com2act);
 }
 
 void CommsController::nav1Swapped()
 {
    float nav1act  = nav1active;
-   nav1active     = nav1standby;
-   nav1standby    = nav1act;
+   notifyXPlane(NAV1_ACTIVE,  nav1standby);
+   notifyXPlane(NAV1_STANDBY, nav1act);
 }
 
 void CommsController::nav2Swapped()
 {
    float nav2act  = nav2active;
-   nav2active     = nav2standby;
-   nav2standby    = nav2act;
+   notifyXPlane(NAV2_ACTIVE,  nav2standby);
+   notifyXPlane(NAV2_STANDBY, nav2act);
+}
+
+void CommsController::notifyXPlane(CommType ct, float value)
+{
+   QString drefStr;
+   if (ct == COM1_ACTIVE) {
+      drefStr = QString(XPDR_RADIO_COM1_FREQ);
+      com1active = value;
+   }
+   else if (ct == COM1_STANDBY) {
+      drefStr = QString(XPDR_RADIO_COM1_STDBY);
+      com1standby = value;
+   }
+   else if (ct == COM2_ACTIVE) {
+      drefStr = QString(XPDR_RADIO_COM2_FREQ);
+      com2active = value;
+   }
+   else if (ct == COM2_STANDBY) {
+      drefStr = QString(XPDR_RADIO_COM2_STDBY);
+      com2standby = value;
+   }
+   else if (ct == NAV1_ACTIVE) {
+      drefStr = QString(XPDR_RADIO_NAV1_FREQ);
+      nav1active = value;
+   }
+   else if (ct == NAV1_STANDBY) {
+      drefStr = QString(XPDR_RADIO_NAV1_STDBY);
+      nav1standby = value;
+   }
+   else if (ct == NAV2_ACTIVE) {
+      drefStr = QString(XPDR_RADIO_NAV2_FREQ);
+      nav2active = value;
+   }
+   else if (ct == NAV2_STANDBY) {
+      drefStr = QString(XPDR_RADIO_NAV2_STDBY);
+      nav2standby = value;
+   }
+   emit updateXPlaneComms(drefStr, (xpflt) value);
 }
