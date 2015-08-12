@@ -29,7 +29,7 @@ static const char* XPDR_RADIO_NAV1_STDBY  = "sim/cockpit/radios/nav1_stdby_freq_
 static const char* XPDR_RADIO_NAV2_FREQ   = "sim/cockpit/radios/nav2_freq_hz";
 static const char* XPDR_RADIO_NAV2_STDBY  = "sim/cockpit/radios/nav2_stdby_freq_hz";
 
-const int NUM_FUEL_TANKS = 9;
+// const int MAX_NUM_FUEL_TANKS = 9; // NOT DRY: see engine/engineconsts.h
 static const char* XPDR_AC_FUEL_QTY_X     = "sim/cockpit2/fuel/fuel_quantity[__X__]";
 static const char* XPDR_AC_FUEL_QTY_1     = "sim/cockpit2/fuel/fuel_quantity[0]";
 static const char* XPDR_AC_FUEL_QTY_2     = "sim/cockpit2/fuel/fuel_quantity[1]";

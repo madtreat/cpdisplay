@@ -21,14 +21,14 @@ class FuelWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   FuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines=2, QFrame* _parent=0);
+   FuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numTanks=2, QFrame* _parent=0);
    FuelWidget(const FuelWidget& orig) = delete;
    virtual ~FuelWidget();
 
 private:
    CPDSettings* cpdSettings;
    EngineController* engC;
-   int numEngines;
+   int numTanks;
 
    FuelGauges fuelGauges;
 

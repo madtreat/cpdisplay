@@ -22,18 +22,18 @@ class SingleFuelWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   SingleFuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _engNum, QFrame* _parent=0);
+   SingleFuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _tankNum, QFrame* _parent=0);
    ~SingleFuelWidget();
 
 public slots:
-   void setValuePercent(float value, int _engNum);
-   void setValueVolume(float value, int _engNum);
-   void setFF(float value, int _engNum);
+   void setValuePercent(float value, int _tankNum);
+   void setValueVolume(float value, int _tankNum);
+   void setFF(float value, int _tankNum);
 
 private:
    CPDSettings* cpdSettings;
    EngineController* engC;
-   int engNum;
+   int tankNum;
 
    EngineDial* gauge;
    float valuePercent;

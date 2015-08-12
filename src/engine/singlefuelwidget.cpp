@@ -18,22 +18,22 @@
 #include "enginedial.h"
 
 
-SingleFuelWidget::SingleFuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _engNum, QFrame* _parent)
+SingleFuelWidget::SingleFuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _tankNum, QFrame* _parent)
 : cpdSettings(_cpdSettings),
   engC(_engC),
-  engNum(_engNum)
+  tankNum(_tankNum)
 {
    QVBoxLayout* layout = new QVBoxLayout(this);
    layout->setContentsMargins(4, 4, 4, 4);
 
-   QString labelText = QString("ENG %1").arg(engNum+1);
+   QString labelText = QString("Tank %1").arg(tankNum+1);
    QLabel* label = new QLabel(labelText);
    label->setAlignment(Qt::AlignHCenter);
    label->setObjectName("border-light");
 
    // Making engines with 0-100% fuel capacity.  Could make this an optional
    // volume later, instead of percent.
-   gauge = new EngineDial(engC, engNum, DIAL_FUEL, 0, 100, 100);
+   gauge = new EngineDial(engC, tankNum, DIAL_FUEL, 0, 100, 100);
 
    // Set up fuel flow widget/label
    QFormLayout* lower = new QFormLayout();
@@ -58,24 +58,24 @@ SingleFuelWidget::~SingleFuelWidget()
 
 }
 
-void SingleFuelWidget::setValuePercent(float value, int _engNum)
+void SingleFuelWidget::setValuePercent(float value, int _tankNum)
 {
-   if (_engNum == engNum) {
+   if (_tankNum == tankNum) {
       valuePercent = value;
    }
 }
 
 
-void SingleFuelWidget::setValueVolume(float value, int _engNum)
+void SingleFuelWidget::setValueVolume(float value, int _tankNum)
 {
-   if (_engNum == engNum) {
+   if (_tankNum == tankNum) {
       valueVolume = value;
    }
 }
 
-void SingleFuelWidget::setFF(float value, int _engNum)
+void SingleFuelWidget::setFF(float value, int _tankNum)
 {
-   if (_engNum == engNum) {
+   if (_tankNum == tankNum) {
       QString str = QString("%1 " + ffUnits).arg(value, 5, 'f', 0, '0');
       fuelFlow->setText(str);
    }

@@ -22,7 +22,8 @@ enum EngineDialType {
 };
 
 
-static const int ENGINES_MAX = 8;
+const int ENGINES_MAX = 8;
+const int FUEL_TANKS_MAX = 9;
 
 class ThrottleWidget;
 typedef QList<ThrottleWidget*> ThrottleList;

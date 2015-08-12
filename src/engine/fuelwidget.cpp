@@ -17,10 +17,10 @@
 #include "singlefuelwidget.h"
 
 
-FuelWidget::FuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines, QFrame* _parent)
+FuelWidget::FuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numTanks, QFrame* _parent)
 : cpdSettings(_cpdSettings),
   engC(_engC),
-  numEngines(_numEngines)
+  numTanks(_numTanks)
 {
    setupFuelGauges();
 
@@ -37,9 +37,9 @@ void FuelWidget::setupFuelGauges()
 {
    QHBoxLayout* layout = new QHBoxLayout(this);
 
-   for (int i = 0; i < ENGINES_MAX; i++) {
+   for (int i = 0; i < FUEL_TANKS_MAX; i++) {
       SingleFuelWidget* fgauge = new SingleFuelWidget(cpdSettings, engC, i);
-      fgauge->setVisible(i < numEngines);
+      fgauge->setVisible(i < numTanks);
 
       fuelGauges.append(fgauge);
       layout->addWidget(fgauge);
