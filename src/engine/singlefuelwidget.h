@@ -11,6 +11,8 @@
 
 #include <QFrame>
 
+class QLabel;
+
 class CPDSettings;
 class EngineController;
 class EngineDial;
@@ -26,6 +28,7 @@ public:
 public slots:
    void setValuePercent(float value, int _engNum);
    void setValueVolume(float value, int _engNum);
+   void setFF(float value, int _engNum);
 
 private:
    CPDSettings* cpdSettings;
@@ -35,6 +38,10 @@ private:
    EngineDial* gauge;
    float valuePercent;
    float valueVolume;
+
+
+   QLabel* fuelFlow;
+   QString ffUnits;
 };
 
 #endif /* SINGLEFUELWIDGET_H_ */

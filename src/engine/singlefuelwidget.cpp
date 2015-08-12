@@ -9,6 +9,7 @@
 #include "singlefuelwidget.h"
 
 #include <QVBoxLayout>
+#include <QFormLayout>
 #include <QString>
 #include <QLabel>
 
@@ -34,8 +35,19 @@ SingleFuelWidget::SingleFuelWidget(CPDSettings* _cpdSettings, EngineController* 
    // volume later, instead of percent.
    gauge = new EngineDial(engC, engNum, DIAL_FUEL, 0, 100, 100);
 
+   // Set up fuel flow widget/label
+   QFormLayout* lower = new QFormLayout();
+   lower->setContentsMargins(10, 0, 10, 0);
+
+   ffUnits  = QString("lb/h");
+   fuelFlow = new QLabel("0 " + ffUnits);
+   connect(engC, &EngineController::ffUpdate, this, &SingleFuelWidget::setFF);
+   lower->addRow(tr("FF"), fuelFlow);
+
+
    layout->addWidget(label);
    layout->addWidget(gauge);
+   layout->addLayout(lower);
    layout->addStretch(2);
 
    setObjectName("border-light");
@@ -58,5 +70,13 @@ void SingleFuelWidget::setValueVolume(float value, int _engNum)
 {
    if (_engNum == engNum) {
       valueVolume = value;
+   }
+}
+
+void SingleFuelWidget::setFF(float value, int _engNum)
+{
+   if (_engNum == engNum) {
+      QString str = QString("%1 " + ffUnits).arg(value, 5, 'f', 0, '0');
+      fuelFlow->setText(str);
    }
 }

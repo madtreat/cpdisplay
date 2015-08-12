@@ -119,12 +119,12 @@ SingleEngineWidget::SingleEngineWidget(CPDSettings* _cpdSettings, EngineControll
    setVisibleWidgets(engC->getEngineType());
    
    // Add widgets to the single engine layout
-   layout->addWidget(engineLabel);
    upper->addWidget(throttle);
    upper->addWidget(jetForm);
    upper->addWidget(propForm);
    upper->addStretch(1);
    
+   layout->addWidget(engineLabel);
    layout->addLayout(upper);
    layout->addWidget(oilP);
    layout->addWidget(oilT);
@@ -132,6 +132,7 @@ SingleEngineWidget::SingleEngineWidget(CPDSettings* _cpdSettings, EngineControll
    layout->addWidget(propRPM);
    layout->addWidget(eprDial);
    layout->addWidget(egtDial);
+   layout->addStretch(2);
    
    setMinimumWidth(132);
    setObjectName("border-light");
