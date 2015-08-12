@@ -62,15 +62,16 @@ signals:
    void acTailNumUpdate(float tail);
    void acNumEnginesUpdate(float num);
 
-   void radioCom1FreqUpdate(float freq);
+   void radioCom1FreqUpdate( float freq);
    void radioCom1StdbyUpdate(float freq);
-   void radioCom2FreqUpdate(float freq);
+   void radioCom2FreqUpdate( float freq);
    void radioCom2StdbyUpdate(float freq);
-   void radioNav1FreqUpdate(float freq);
+   void radioNav1FreqUpdate( float freq);
    void radioNav1StdbyUpdate(float freq);
-   void radioNav2FreqUpdate(float freq);
+   void radioNav2FreqUpdate( float freq);
    void radioNav2StdbyUpdate(float freq);
 
+   void fuelQuantity0Update(float qty);
    void fuelQuantity1Update(float qty);
    void fuelQuantity2Update(float qty);
    void fuelQuantity3Update(float qty);
@@ -79,7 +80,19 @@ signals:
    void fuelQuantity6Update(float qty);
    void fuelQuantity7Update(float qty);
    void fuelQuantity8Update(float qty);
-   void fuelQuantity9Update(float qty);
+
+   // Landing Gear
+   // range: [0.0, 1.0]
+   void gear0DeployUpdate(float percent);
+   void gear1DeployUpdate(float percent);
+   void gear2DeployUpdate(float percent);
+   void gear3DeployUpdate(float percent);
+   void gear4DeployUpdate(float percent);
+   void gear5DeployUpdate(float percent);
+   void gear6DeployUpdate(float percent);
+   void gear7DeployUpdate(float percent);
+   void gear8DeployUpdate(float percent);
+   void gear9DeployUpdate(float percent);
 
 
    // XPlane < 10.40 / raw UDP output versions:

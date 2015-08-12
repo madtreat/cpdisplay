@@ -14,7 +14,7 @@
 #include "cpdsettings.h"
 
 #define DEBUG_SEND 0
-#define DEBUG_RECV 0
+#define DEBUG_RECV 1
 
 
 SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
@@ -85,28 +85,39 @@ void SwitchBoard::requestDatarefsFromXPlane()
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
    // http://forums.x-plane.org/index.php?showtopic=87772)
 
-   //DRMAP_INSERT(XPDR_AC_TYPE,          acTypeUpdate,         1);
-   DRMAP_INSERT(XPDR_AC_TAIL_NUM_1,    acTailNumUpdate,      1);
-   DRMAP_INSERT(XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,   1);
+   //DRMAP_INSERT(XPDR_AC_TYPE,          acTypeUpdate,           1);
+   DRMAP_INSERT(XPDR_AC_TAIL_NUM_1,    acTailNumUpdate,        1);
+   DRMAP_INSERT(XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,     1);
 
-   DRMAP_INSERT(XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,  2);
-   DRMAP_INSERT(XPDR_RADIO_COM1_STDBY, radioCom1StdbyUpdate, 2);
-   DRMAP_INSERT(XPDR_RADIO_COM2_FREQ,  radioCom2FreqUpdate,  2);
-   DRMAP_INSERT(XPDR_RADIO_COM2_STDBY, radioCom2StdbyUpdate, 2);
-   DRMAP_INSERT(XPDR_RADIO_NAV1_FREQ,  radioNav1FreqUpdate,  2);
-   DRMAP_INSERT(XPDR_RADIO_NAV1_STDBY, radioNav1StdbyUpdate, 2);
-   DRMAP_INSERT(XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,  2);
-   DRMAP_INSERT(XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate, 2);
+   DRMAP_INSERT(XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,    2);
+   DRMAP_INSERT(XPDR_RADIO_COM1_STDBY, radioCom1StdbyUpdate,   2);
+   DRMAP_INSERT(XPDR_RADIO_COM2_FREQ,  radioCom2FreqUpdate,    2);
+   DRMAP_INSERT(XPDR_RADIO_COM2_STDBY, radioCom2StdbyUpdate,   2);
+   DRMAP_INSERT(XPDR_RADIO_NAV1_FREQ,  radioNav1FreqUpdate,    2);
+   DRMAP_INSERT(XPDR_RADIO_NAV1_STDBY, radioNav1StdbyUpdate,   2);
+   DRMAP_INSERT(XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,    2);
+   DRMAP_INSERT(XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate,   2);
 
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_1,    fuelQuantity1Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_2,    fuelQuantity2Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_3,    fuelQuantity3Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_4,    fuelQuantity4Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_5,    fuelQuantity5Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_6,    fuelQuantity6Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_7,    fuelQuantity7Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_8,    fuelQuantity8Update,  4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_9,    fuelQuantity9Update,  4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_0,    fuelQuantity0Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_1,    fuelQuantity1Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_2,    fuelQuantity2Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_3,    fuelQuantity3Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_4,    fuelQuantity4Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_5,    fuelQuantity5Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_6,    fuelQuantity6Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_7,    fuelQuantity7Update,    4);
+   DRMAP_INSERT(XPDR_CP_FUEL_QTY_8,    fuelQuantity8Update,    4);
+
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_0,    gear0DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_1,    gear1DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_2,    gear2DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_3,    gear3DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_4,    gear4DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_5,    gear5DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_6,    gear6DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_7,    gear7DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_8,    gear8DeployUpdate,      2);
+   DRMAP_INSERT(XPDR_GEAR_DEPLOY_9,    gear9DeployUpdate,      2);
 
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
