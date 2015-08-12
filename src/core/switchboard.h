@@ -83,7 +83,7 @@ signals:
 
 
    // XPlane < 10.40 / raw UDP output versions:
-   void timeUpdate(float zulu, float local);
+   void timeUpdate(float zulu, float local, float mission, float timer);
    void speedUpdate(float speed);
    
    void machNumUpdate(float mach);

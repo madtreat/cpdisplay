@@ -4,12 +4,14 @@ set(SOURCES
    commscontroller.cpp
    commsline.cpp
    commswidget.cpp
+   timewidget.cpp
 )
 
 set(HEADERS
    commscontroller.h
    commsline.h
    commswidget.h
+   timewidget.h
 )
 
 add_library(${PROJECT_NAME} SHARED

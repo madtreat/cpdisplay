@@ -17,7 +17,6 @@ CommsController::CommsController(CPDSettings* _cpdSettings, QObject* _parent)
 : QObject(_parent),
   cpdSettings(_cpdSettings)
 {
-//   commsWidget = new CommsWidget(cpdSettings);
 }
 
 //CommsController::CommsController(const CommsController& orig)
@@ -28,13 +27,13 @@ CommsController::~CommsController()
 {
 }
 
-void CommsController::setTimes(float _zulu, float _local)
+void CommsController::setTimes(float zulu, float local, float mission, float timer)
 {
-//   QString zuluStr = QString("%1").arg(_zulu);
-//   QString localStr = QString("%1").arg(_local);
-   timeGMT = _zulu;
-   timeLocal = _local;
-   // emit timesUpdated();
+   timeGMT = zulu;
+   timeLocal = local;
+   timeMission = mission;
+   timeTimer = timer;
+   emit timesUpdated(timeGMT, timeLocal, timeMission, timeTimer);
 }
 
 void CommsController::setCom1(float freq, float standby)

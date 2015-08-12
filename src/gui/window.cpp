@@ -27,6 +27,7 @@
 
 #include "comms/commscontroller.h"
 #include "comms/commswidget.h"
+#include "comms/timewidget.h"
 #include "engine/enginecontroller.h"
 #include "engine/enginewidget.h"
 #include "engine/fuelwidget.h"
@@ -48,7 +49,8 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    layoutProfile = new LayoutProfile(cpdSettings->layoutProfile());
    layoutManager = new LayoutManager();
 
-   fulW = new FuelWidget(cpdSettings, cpdC->getEngC());
+   timeW = new TimeWidget(cpdSettings, cpdC->getComC());
+   fuelW = new FuelWidget(cpdSettings, cpdC->getEngC());
    comW = new CommsWidget(cpdSettings, cpdC->getComC());
    engW = new EngineWidget(cpdSettings, cpdC->getEngC());
    
@@ -64,7 +66,8 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    widgetMap.insert(5, comW);
    widgetMap.insert(6, toolbar);
    widgetMap.insert(7, pfdAltGuages);
-   widgetMap.insert(8, fulW);
+   widgetMap.insert(8, fuelW);
+   widgetMap.insert(9, timeW);
    
    for (int i = 0; i < layoutProfile->numItems(); i++) {
       LayoutItem* item = layoutProfile->itemAt(i);

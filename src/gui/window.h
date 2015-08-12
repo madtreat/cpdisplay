@@ -12,6 +12,7 @@ class LayoutManager;
 class CPDSettings;
 class CPDController;
 
+class TimeWidget;
 class FuelWidget;
 class CommsWidget;
 class EngineWidget;
@@ -40,7 +41,8 @@ private:
    QMap<int, LayoutItem*> layoutMap;
    
    // Individual widgets
-   FuelWidget*    fulW;
+   TimeWidget*    timeW;
+   FuelWidget*    fuelW;
    CommsWidget*   comW;
    EngineWidget*  engW;
    

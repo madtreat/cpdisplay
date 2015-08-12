@@ -12,10 +12,8 @@
 
 #include "core/xplanedata.h"
 #include "comms.h"
-//#include "commswidget.h"
 
 class CPDSettings;
-class CommsWidget;
 
 
 class CommsController : public QObject {
@@ -25,11 +23,9 @@ public:
    CommsController(CPDSettings* _cpdSettings, QObject* _parent = 0);
    CommsController(const CommsController& orig) = delete;
    virtual ~CommsController();
-   
-//   CommsWidget*  getWidget()  const { return commsWidget; }
 
 public slots:
-   void setTimes(float _zulu, float _local);
+   void setTimes(float zulu, float local, float mission, float timer);
    void setCom1(float freq, float standby);
    void setCom2(float freq, float standby);
    void setNav1(float freq, float standby);
@@ -43,12 +39,12 @@ public slots:
    void notifyXPlane(CommType ct, float value);
    
 signals:
+   void timesUpdated(float zulu, float local, float mission, float timer);
    void comUpdate(CommType ct, float active, float standby);
    void updateXPlaneComms(QString drefStr, xpflt value);
 
 private:
    CPDSettings* cpdSettings;
-//   CommsWidget* commsWidget;
    
    // Comms frequencies
    float com1active;
@@ -62,6 +58,8 @@ private:
    
    float timeGMT;
    float timeLocal;
+   float timeMission;
+   float timeTimer;
 };
 
 typedef CommsController COMC;

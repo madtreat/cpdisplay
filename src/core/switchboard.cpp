@@ -274,7 +274,7 @@ void SwitchBoard::notifyAll(XPOutputData* data)
    #define VALUE(pos) data->values.at(pos).toFloat()
    switch (data->index) {
       case TIMES:
-         emit timeUpdate(VALUE(5), VALUE(6));
+         emit timeUpdate(VALUE(5), VALUE(6), VALUE(2), VALUE(3));
          break;
          
       case SPEEDS:
