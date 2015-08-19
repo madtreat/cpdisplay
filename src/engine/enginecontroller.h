@@ -21,7 +21,7 @@ class EngineController : public QObject {
    Q_OBJECT;
 
 public:
-   EngineController(CPDSettings* _cpdSettings, AircraftEngineType _engType, int _numEngines, QObject* _parent = 0);
+   EngineController(CPDSettings* _cpdSettings, AircraftEngineType _engType, int _numEngines, int _numFuelTanks, QObject* _parent = 0);
    EngineController(const EngineController& orig) = delete;
    virtual ~EngineController();
    
@@ -80,7 +80,7 @@ private:
    CPDSettings* cpdSettings;
    AircraftEngineType engType;
    int numEngines;
-   
+   int numFuelTanks;
 };
 
 typedef EngineController ENGC;

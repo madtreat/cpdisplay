@@ -14,6 +14,7 @@ class CPDController;
 
 class TimeWidget;
 class FuelWidget;
+class GearWidget;
 class CommsWidget;
 class EngineWidget;
 
@@ -43,6 +44,7 @@ private:
    // Individual widgets
    TimeWidget*    timeW;
    FuelWidget*    fuelW;
+   GearWidget*    gearW;
    CommsWidget*   comW;
    EngineWidget*  engW;
    

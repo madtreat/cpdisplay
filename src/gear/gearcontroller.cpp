@@ -6,9 +6,10 @@
 #include "core/cpdsettings.h"
 
 
-GearController::GearController(CPDSettings* _settings, QObject* _parent)
+GearController::GearController(CPDSettings* _settings, int _numGears, QObject* _parent)
 : QObject(_parent),
-  settings(_settings)
+  settings(_settings),
+  numGears(_numGears)
 {
    
 }

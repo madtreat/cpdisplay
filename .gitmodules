@@ -7,3 +7,6 @@
 [submodule "src/resources/sprites"]
 	path = src/resources/sprites
 	url = git@github.tamu.edu:vscl/sprites.git
+[submodule "ext/qt-toggle-input"]
+	path = ext/qt-toggle-input
+	url = git@github.com:madtreat/qt-toggle-input.git

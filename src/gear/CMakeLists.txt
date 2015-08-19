@@ -22,6 +22,7 @@ target_link_libraries(${PROJECT_NAME}
    ${Qt5Widgets_LIBRARIES}
    ${Qt5Gui_LIBRARIES}
 
+   qt-toggle-input
    cpd-utils
    cpd-core
 )

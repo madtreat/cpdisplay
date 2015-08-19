@@ -12,7 +12,7 @@ class GearController : public QObject {
    Q_OBJECT;
 
 public:
-   GearController(CPDSettings* _settings, QObject* _parent=0);
+   GearController(CPDSettings* _settings, int _numGears=3, QObject* _parent=0);
    ~GearController();
 
 public slots:
@@ -20,7 +20,7 @@ public slots:
 
 private:
    CPDSettings* settings;
-
+   int numGears;
 };
 
 typedef GearController GEARC;

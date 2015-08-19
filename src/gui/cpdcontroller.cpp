@@ -22,6 +22,7 @@
 #include "instruments/tcdcontroller.h"
 #include "instruments/vsicontroller.h"
 
+#include "gear/gearcontroller.h"
 #include "comms/commscontroller.h"
 #include "engine/enginecontroller.h"
 #include "traffic/trafficcontroller.h"
@@ -45,8 +46,11 @@ CPDController::CPDController(CPDSettings* _settings, QObject* _parent)
    vsiC = new VSIController(this);
    
    numEngines = 2;
+   numFuelTanks = 2;
+   numGears = 3;
+   gearC = new GearController(settings, numGears, this);
    comC = new CommsController(settings, this);
-   engC = new EngineController(settings, AC_ENG_JET, numEngines, this);
+   engC = new EngineController(settings, AC_ENG_JET, numEngines, numFuelTanks, this);
    tfcC = new TrafficController(settings, acMap, this);
 
    angVelUpdatedFlag = false;

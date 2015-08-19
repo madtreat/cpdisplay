@@ -12,11 +12,12 @@
 #include "core/cpdsettings.h"
 
 
-EngineController::EngineController(CPDSettings* _cpdSettings, AircraftEngineType _engType, int _numEngines, QObject* _parent)
+EngineController::EngineController(CPDSettings* _cpdSettings, AircraftEngineType _engType, int _numEngines, int _numFuelTanks, QObject* _parent)
 : QObject(_parent),
   cpdSettings(_cpdSettings),
   engType(_engType),
-  numEngines(_numEngines)
+  numEngines(_numEngines),
+  numFuelTanks(_numFuelTanks)
 {
 //   engineWidget = new EngineWidget(cpdSettings, _numThrottles);
 }

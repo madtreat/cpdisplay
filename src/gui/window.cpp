@@ -25,12 +25,12 @@
 #include "instruments/tcdcontroller.h"
 #include "instruments/vsicontroller.h"
 
-#include "comms/commscontroller.h"
 #include "comms/commswidget.h"
 #include "comms/timewidget.h"
-#include "engine/enginecontroller.h"
 #include "engine/enginewidget.h"
 #include "engine/fuelwidget.h"
+#include "gear/gearwidget.h"
+// TODO: remove
 #include "traffic/trafficcontroller.h"
 
 
@@ -51,23 +51,25 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
 
    timeW = new TimeWidget(cpdSettings, cpdC->getComC());
    fuelW = new FuelWidget(cpdSettings, cpdC->getEngC());
-   comW = new CommsWidget(cpdSettings, cpdC->getComC());
-   engW = new EngineWidget(cpdSettings, cpdC->getEngC());
+   gearW = new GearWidget(cpdSettings, cpdC->getGearC());
+   comW  = new CommsWidget(cpdSettings, cpdC->getComC());
+   engW  = new EngineWidget(cpdSettings, cpdC->getEngC());
    
    setupPFDAltGuages();
    setupToolbar();
 //   pfdButtonClicked(true); // Hide the alt guages after creation;
    
    QMap<int, QWidget*> widgetMap;
-   widgetMap.insert(1, cpdC->getPFDC()->getWidget());
-   widgetMap.insert(2, cpdC->getMapC()->getWidget());
-   widgetMap.insert(3, engW);
-   widgetMap.insert(4, cpdC->getTfcC()->getWidget());
-   widgetMap.insert(5, comW);
-   widgetMap.insert(6, toolbar);
-   widgetMap.insert(7, pfdAltGuages);
-   widgetMap.insert(8, fuelW);
-   widgetMap.insert(9, timeW);
+   widgetMap.insert(1,  cpdC->getPFDC()->getWidget());
+   widgetMap.insert(2,  cpdC->getMapC()->getWidget());
+   widgetMap.insert(3,  engW);
+   widgetMap.insert(4,  cpdC->getTfcC()->getWidget());
+   widgetMap.insert(5,  comW);
+   widgetMap.insert(6,  toolbar);
+   widgetMap.insert(7,  pfdAltGuages);
+   widgetMap.insert(8,  fuelW);
+   widgetMap.insert(9,  timeW);
+   widgetMap.insert(10, gearW);
    
    for (int i = 0; i < layoutProfile->numItems(); i++) {
       LayoutItem* item = layoutProfile->itemAt(i);

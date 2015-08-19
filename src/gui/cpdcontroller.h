@@ -30,6 +30,7 @@ class PFDController;
 class TCDController;
 class VSIController;
 
+class GearController;
 class CommsController;
 class EngineController;
 class TrafficController;
@@ -53,7 +54,8 @@ public:
    PFDController* getPFDC() const { return pfdC; }
    TCDController* getTCDC() const { return tcdC; }
    VSIController* getVSIC() const { return vsiC; }
-   
+
+   GearController*    getGearC() const {return gearC;}
    CommsController*   getComC() const { return comC; }
    EngineController*  getEngC() const { return engC; }
    TrafficController* getTfcC() const { return tfcC; }
@@ -85,6 +87,8 @@ private:
    SwitchBoard*   sb;
    ACMap*         acMap;
    int            numEngines;
+   int            numFuelTanks;
+   int            numGears;
    
    // Widget controllers
    MapController* mapC;
@@ -95,7 +99,8 @@ private:
    PFDController* pfdC;
    TCDController* tcdC;
    VSIController* vsiC;
-   
+
+   GearController*    gearC;
    CommsController*   comC;
    EngineController*  engC;
    TrafficController* tfcC;

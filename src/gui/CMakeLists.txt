@@ -37,6 +37,7 @@ target_link_libraries(${PROJECT_NAME}
    cpd-core
    cpd-instruments
    cpd-map
+   cpd-gear
    cpd-comms
    cpd-engine
    cpd-traffic
