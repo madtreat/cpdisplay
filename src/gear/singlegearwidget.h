@@ -2,7 +2,7 @@
 #ifndef SINGLEGEARWIDGET_H_
 #define SINGLEGEARWIDGET_H_
 
-#include <QWidget>
+#include <QFrame>
 
 class QLabel;
 class QPushButton;
@@ -11,11 +11,11 @@ class CPDSettings;
 class GearController;
 
 
-class SingleGearWidget : public QWidget {
+class SingleGearWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   SingleGearWidget(CPDSettings* _settings, GearController* _gearC, QWidget* _parent=0);
+   SingleGearWidget(CPDSettings* _settings, GearController* _gearC, int _gearNum, QFrame* _parent=0);
    ~SingleGearWidget();
 
 public slots:
@@ -24,6 +24,7 @@ public slots:
 private:
    CPDSettings* settings;
    GearController* gearC;
+   int gearNum;
 
    QLabel*        label;
    QPushButton*   deployButton;

@@ -16,3 +16,8 @@ GearController::GearController(CPDSettings* _settings, QObject* _parent)
 GearController::~GearController()
 {
 }
+
+void GearController::setGear()
+{
+   
+}

@@ -16,7 +16,7 @@ GearWidget::GearWidget(CPDSettings* _settings, GearController* _gearC, QFrame* _
   gearC(_gearC)
 {
    for (int i = 0; i < MAX_NUM_GEARS; i++) {
-      SingleGearWidget* gear = new SingleGearWidget(settings, gearC, this);
+      SingleGearWidget* gear = new SingleGearWidget(settings, gearC, i, this);
       gears.append(gear);
    }
 

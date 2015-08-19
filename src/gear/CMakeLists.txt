@@ -3,11 +3,13 @@ project(cpd-gear)
 set(SOURCES
    gearcontroller.cpp
    gearwidget.cpp
+   singlegearwidget.cpp
 )
 
 set(HEADERS
    gearcontroller.h
    gearwidget.h
+   singlegearwidget.h
 )
 
 add_library(${PROJECT_NAME} SHARED
