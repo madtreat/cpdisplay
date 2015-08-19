@@ -13,6 +13,7 @@
 #include <QLabel>
 
 #include "core/cpdsettings.h"
+#include "core/xplanedref.h"
 #include "enginecontroller.h"
 #include "singleenginewidget.h"
 
@@ -43,7 +44,7 @@ void EngineWidget::setupEngineControls()
 //   layout->setContentsMargins(0, 0, 0, 0);
 
    // This loop will create throttles in pairs, to keep them grouped better on the main layout
-   for (int i = 0; i < ENGINES_MAX; i++) {
+   for (int i = 0; i < MAX_NUM_ENGINES; i++) {
       SingleEngineWidget* eng = new SingleEngineWidget(cpdSettings, engC, i);
       eng->setVisible(i < numEngines);
       

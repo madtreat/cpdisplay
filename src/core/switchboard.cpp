@@ -72,59 +72,74 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value)
    xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
 }
 
+
 /*
  * Sends the RREF message to XPlane to request all necessary datarefs.
+ * 
+ * The DRMAP_INSERT_D and DRMAP_INSERT_N macros simplify the very repetitive
+ * task of creating a new DRefValue objects and inserting them into the drmap.
+ * DRMAP_INSERT_D will insert an object with a direct_fp signal, where
+ * DRMAP_INSERT_N will insert an object with a numbered_fp signal.
+ *
+ * The arguments are:
+ *    STR            = the dataref string used by xplane
+ *    SIG_DIRECT     = the signal function for direct value updates
+ *    SIG_NUMBERED   = the signal function for numbered value updates
+ *    FREQ           = the frequency with which xplane will emit updates
+ *    SIG_NUM        = the number used in a SIG_NUMBERED signal
+ *                      example: gear2 update SIG_NUM is 2
+ *
+ * NOTES:
+ *  - The dataref's ID is determined programmatically so you do not have
+ *    to keep track of ID's for every single dataref you request.
+ *  - The curly braces in each of the macros are used to keep "int id = ..."
+ *    from re-declaring the id variable each time the macro is called, which
+ *    would throw compiler errors.
  */
-#define DRMAP_INSERT(STR, SIGNAL, FREQ) \
-   { \
-      int id = nextDRefID(); \
-      drmap.insert(id, new DRefValue(id, STR, &SwitchBoard::SIGNAL, FREQ)); \
-   }
 void SwitchBoard::requestDatarefsFromXPlane()
 {
+   #define DRMAP_INSERT_D(STR, SIG_DIRECT, FREQ) \
+   { \
+      int id = nextDRefID(); \
+      drmap.insert(id, new DRefValue(id, STR, &SwitchBoard::SIG_DIRECT, NULL, FREQ)); \
+   }
+   #define DRMAP_INSERT_N(STR, SIG_NUMBERED, FREQ, SIG_NUM) \
+   { \
+      int id = nextDRefID(); \
+      drmap.insert(id, new DRefValue(id, STR, NULL, &SwitchBoard::SIG_NUMBERED, FREQ, SIG_NUM)); \
+   }
+   
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
    // http://forums.x-plane.org/index.php?showtopic=87772)
 
-   //DRMAP_INSERT(XPDR_AC_TYPE,          acTypeUpdate,           1);
-   DRMAP_INSERT(XPDR_AC_TAIL_NUM_1,    acTailNumUpdate,        1);
-   DRMAP_INSERT(XPDR_AC_NUM_ENGINES,   acNumEnginesUpdate,     1);
+   //DRMAP_INSERT_D(XPDR_AC_TYPE,           acTypeUpdate,           1);
+   DRMAP_INSERT_D(XPDR_AC_TAIL_NUM_1,     acTailNumUpdate,        1);
+   DRMAP_INSERT_D(XPDR_AC_NUM_ENGINES,    acNumEnginesUpdate,     1);
 
-   DRMAP_INSERT(XPDR_RADIO_COM1_FREQ,  radioCom1FreqUpdate,    2);
-   DRMAP_INSERT(XPDR_RADIO_COM1_STDBY, radioCom1StdbyUpdate,   2);
-   DRMAP_INSERT(XPDR_RADIO_COM2_FREQ,  radioCom2FreqUpdate,    2);
-   DRMAP_INSERT(XPDR_RADIO_COM2_STDBY, radioCom2StdbyUpdate,   2);
-   DRMAP_INSERT(XPDR_RADIO_NAV1_FREQ,  radioNav1FreqUpdate,    2);
-   DRMAP_INSERT(XPDR_RADIO_NAV1_STDBY, radioNav1StdbyUpdate,   2);
-   DRMAP_INSERT(XPDR_RADIO_NAV2_FREQ,  radioNav2FreqUpdate,    2);
-   DRMAP_INSERT(XPDR_RADIO_NAV2_STDBY, radioNav2StdbyUpdate,   2);
+   DRMAP_INSERT_D(XPDR_RADIO_COM1_FREQ,   radioCom1FreqUpdate,    2);
+   DRMAP_INSERT_D(XPDR_RADIO_COM1_STDBY,  radioCom1StdbyUpdate,   2);
+   DRMAP_INSERT_D(XPDR_RADIO_COM2_FREQ,   radioCom2FreqUpdate,    2);
+   DRMAP_INSERT_D(XPDR_RADIO_COM2_STDBY,  radioCom2StdbyUpdate,   2);
+   DRMAP_INSERT_D(XPDR_RADIO_NAV1_FREQ,   radioNav1FreqUpdate,    2);
+   DRMAP_INSERT_D(XPDR_RADIO_NAV1_STDBY,  radioNav1StdbyUpdate,   2);
+   DRMAP_INSERT_D(XPDR_RADIO_NAV2_FREQ,   radioNav2FreqUpdate,    2);
+   DRMAP_INSERT_D(XPDR_RADIO_NAV2_STDBY,  radioNav2StdbyUpdate,   2);
 
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_0,    fuelQuantity0Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_1,    fuelQuantity1Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_2,    fuelQuantity2Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_3,    fuelQuantity3Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_4,    fuelQuantity4Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_5,    fuelQuantity5Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_6,    fuelQuantity6Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_7,    fuelQuantity7Update,    4);
-   DRMAP_INSERT(XPDR_CP_FUEL_QTY_8,    fuelQuantity8Update,    4);
+   for (int i = 0; i < MAX_NUM_FUEL_TANKS; i++) {
+      QString vstr = XPDR_CP_FUEL_QTY_X;
+      vstr.replace("__X__", QString::number(i));
+      DRMAP_INSERT_N(vstr, fuelQuantityUpdate, 4, i);
+   }
 
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_0,    gear0DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_1,    gear1DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_2,    gear2DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_3,    gear3DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_4,    gear4DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_5,    gear5DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_6,    gear6DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_7,    gear7DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_8,    gear8DeployUpdate,      2);
-   DRMAP_INSERT(XPDR_GEAR_DEPLOY_9,    gear9DeployUpdate,      2);
+   for (int i = 0; i < MAX_NUM_LANDING_GEARS; i++) {
+      QString vstr = XPDR_GEAR_DEPLOY_X;
+      vstr.replace("__X__", QString::number(i));
+      DRMAP_INSERT_N(vstr, gearDeployUpdate, 2, i);
+   }
 
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
       QString vstr = val->str;
-      // if (vstr.contains("__X__")) {
-      //    vstr.replace("__X__", "1");
-      // }
       // qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
 
       xp_rref_in dref;
@@ -265,8 +280,14 @@ void SwitchBoard::notifyAll(int code, xpflt value)
 {
    DRefValue* val = drmap.value(code);
    if (val) {
-      func_pointer signal = val->signal;
-      emit (this->*(val->signal))(value);
+      direct_fp   sigDirect   = val->signalDirect;
+      numbered_fp sigNumbered = val->signalNumbered;
+      if (sigDirect) {
+         emit (this->*(sigDirect))(value);
+      }
+      if (sigNumbered) {
+         emit (this->*(sigNumbered))(value, val->signalNum);
+      }
    }
    else {
       qWarning() << "Warning: invalid data from xplane";

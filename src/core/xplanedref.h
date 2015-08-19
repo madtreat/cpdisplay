@@ -12,10 +12,13 @@
 #define XPLANEDREF_H
 
 //const char* XPDR_AC_TYPE = "";
- const int NUM_AC_TAIL_NUMS = 40;
+const int MAX_NUM_AC_TAIL_NUMS = 40;
 static const char* XPDR_AC_TAIL_NUM_X     = "sim/aircraft/view/acf_tailnum[__X__]";
 static const char* XPDR_AC_TAIL_NUM_1     = "sim/aircraft/view/acf_tailnum[1]";
 static const char* XPDR_AC_ENGINE_TYPE    = "sim/aircraft/prop/acf_en_type";
+
+// Engines
+const int MAX_NUM_ENGINES = 8;
 static const char* XPDR_AC_NUM_ENGINES    = "sim/aircraft/engine/acf_num_engines";
 
 // Radios
@@ -29,7 +32,8 @@ static const char* XPDR_RADIO_NAV1_STDBY  = "sim/cockpit/radios/nav1_stdby_freq_
 static const char* XPDR_RADIO_NAV2_FREQ   = "sim/cockpit/radios/nav2_freq_hz";
 static const char* XPDR_RADIO_NAV2_STDBY  = "sim/cockpit/radios/nav2_stdby_freq_hz";
 
-// const int MAX_NUM_FUEL_TANKS = 9; // NOT DRY: see engine/engineconsts.h
+// Fuel Tanks
+const int MAX_NUM_FUEL_TANKS = 9;
 static const char* XPDR_CP_FUEL_QTY_X     = "sim/cockpit2/fuel/fuel_quantity[__X__]";
 static const char* XPDR_CP_FUEL_QTY_0     = "sim/cockpit2/fuel/fuel_quantity[0]";
 static const char* XPDR_CP_FUEL_QTY_1     = "sim/cockpit2/fuel/fuel_quantity[1]";
@@ -47,7 +51,7 @@ static const char* XPDR_CP_TIMER_RUNNING  = "sim/time/timer_is_running_sec";
 static const char* XPDR_CP_TIMER_ELAPSED  = "sim/time/timer_elapsed_time_sec";
 
 // Landing Gear
-const int NUM_LANDING_GEARS = 10;
+const int MAX_NUM_LANDING_GEARS = 10;
 static const char* XPDR_GEAR_DEPLOY_X  = "sim/aircraft/parts/acf_gear_deploy[__X__]";
 static const char* XPDR_GEAR_DEPLOY_0  = "sim/aircraft/parts/acf_gear_deploy[0]";
 static const char* XPDR_GEAR_DEPLOY_1  = "sim/aircraft/parts/acf_gear_deploy[1]";

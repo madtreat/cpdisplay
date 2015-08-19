@@ -21,28 +21,56 @@ class XPOutputData;
 class SwitchBoard : public QObject {
    Q_OBJECT
 
-   // Typdef a generic signal function pointer
-   typedef void (SwitchBoard::*func_pointer)(float);
+   // Typdef generic signal function pointers for direct value updates...
+   typedef void (SwitchBoard::*direct_fp)(float);
+   // and value updates tied to a specific engine number, gear number, etc.
+   typedef void (SwitchBoard::*numbered_fp)(float, int);
+
    // Define the value struct for the Dataref Map drmap
    struct DRefValue {
-      int            xpIndex; // The index as defined by the application
-                              //  (simple version: xpIndex == XPDataIndex)
-      QString        str;     // The string representation of the dataref
-      func_pointer   signal;  // The SwitchBoard signal to be emitted, and
-                              //  the reason this struct is inside SwitchBoard
-      int            freq;    // Frequency of response
+      int      xpIndex; // The index as defined by the application
+                        //  (simple version: xpIndex == XPDataIndex)
+      QString  str;     // The string representation of the dataref
+      int      freq;    // Frequency of response
 
-      DRefValue(int _index, QString _str, func_pointer _fn, int _freq) {
+      /*
+       * The SwitchBoard signal to be emitted, and the reason this struct is
+       * inside the SwitchBoard class (the functions had to be accessed from 
+       * inside).  Both of these signals will be emitted by default (assuming
+       * they are not null), so the application can use either or both, 
+       * depending on context and what needs to be done.
+       * 
+       * If the dataref does not need a numbered_fp or a direct_fp, then that
+       * value can be safely set to null and no signal will not be emitted.
+       */
+      direct_fp   signalDirect;
+      numbered_fp signalNumbered;
+
+      /*
+       * If using a numbered_fp, set this to the item's number to be emitted.
+       * If not using a numbered_fp, set this to -1, which is the default in the
+       * constructor for simplicity.  Note that the default is never used in 
+       * this particular application because there is a macro to handle the
+       * repetitive creation of DRefValue objects, and it requires a number.
+       */
+      int signalNum;
+
+      DRefValue(int _index, QString _str, direct_fp _fn_d, numbered_fp _fn_n, int _freq, int _sigNum=-1) {
          xpIndex = _index;
          str = _str;
-         signal = _fn;
+         signalDirect = _fn_d;
+         signalNumbered = _fn_n;
          freq = _freq;
+         signalNum = _sigNum;
       }
+
       DRefValue(const DRefValue& rhs) {
          xpIndex = rhs.xpIndex;
          str = rhs.str;
-         signal = rhs.signal;
+         signalDirect = rhs.signalDirect;
+         signalNumbered = rhs.signalNumbered;
          freq = rhs.freq;
+         signalNum = rhs.signalNum;
       }
    };
 
@@ -71,6 +99,9 @@ signals:
    void radioNav2FreqUpdate( float freq);
    void radioNav2StdbyUpdate(float freq);
 
+   // Fuel Quantity
+   void fuelQuantityUpdate(float qty, int tankNum);
+   /* // These are not used because for loops are better
    void fuelQuantity0Update(float qty);
    void fuelQuantity1Update(float qty);
    void fuelQuantity2Update(float qty);
@@ -80,9 +111,12 @@ signals:
    void fuelQuantity6Update(float qty);
    void fuelQuantity7Update(float qty);
    void fuelQuantity8Update(float qty);
+   // */
 
    // Landing Gear
    // range: [0.0, 1.0]
+   void gearDeployUpdate(float percent, int gearNum);
+   /* // These are not used because for loops are better
    void gear0DeployUpdate(float percent);
    void gear1DeployUpdate(float percent);
    void gear2DeployUpdate(float percent);
@@ -93,6 +127,7 @@ signals:
    void gear7DeployUpdate(float percent);
    void gear8DeployUpdate(float percent);
    void gear9DeployUpdate(float percent);
+   // */
 
 
    // XPlane < 10.40 / raw UDP output versions:

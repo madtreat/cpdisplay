@@ -13,6 +13,7 @@
 #include <QLabel>
 
 #include "core/cpdsettings.h"
+#include "core/xplanedref.h"
 #include "enginecontroller.h"
 #include "singlefuelwidget.h"
 
@@ -37,7 +38,7 @@ void FuelWidget::setupFuelGauges()
 {
    QHBoxLayout* layout = new QHBoxLayout(this);
 
-   for (int i = 0; i < FUEL_TANKS_MAX; i++) {
+   for (int i = 0; i < MAX_NUM_FUEL_TANKS; i++) {
       SingleFuelWidget* fgauge = new SingleFuelWidget(cpdSettings, engC, i);
       fgauge->setVisible(i < numTanks);
 
