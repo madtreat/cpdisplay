@@ -31,7 +31,7 @@ MapWidget::MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap
    sp.setHeightForWidth(true);
    setSizePolicy(sp);
    
-   view = new MapView(cpdSettings, mapSettings, acMap);
+   view = new MapView(cpdSettings, mapSettings, acMap, this);
    layout->addWidget(view);
    view->setSizePolicy(sp);
    
@@ -50,7 +50,6 @@ MapWidget::MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, ACMap
 MapWidget::~MapWidget()
 {
    delete view;
-   delete overlay;
 }
 
 QSize MapWidget::sizeHint() const
