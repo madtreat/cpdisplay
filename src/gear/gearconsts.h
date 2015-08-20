@@ -4,8 +4,6 @@
 
 #include <QList>
 
-const int MAX_NUM_GEARS = 10;
-
 class SingleGearWidget;
 typedef QList<SingleGearWidget*> GearWidgets;
 

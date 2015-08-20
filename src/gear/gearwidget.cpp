@@ -7,6 +7,7 @@
 #include <QLabel>
 
 #include "core/cpdsettings.h"
+#include "core/xplanedref.h"
 #include "gearcontroller.h"
 #include "singlegearwidget.h"
 
@@ -22,7 +23,7 @@ GearWidget::GearWidget(CPDSettings* _settings, GearController* _gearC, int _numG
    master = new SingleGearWidget(settings, gearC, -1, this);
    layout->addWidget(master);
 
-   for (int i = 0; i < MAX_NUM_GEARS; i++) {
+   for (int i = 0; i < MAX_NUM_LANDING_GEARS; i++) {
       SingleGearWidget* gear = new SingleGearWidget(settings, gearC, i, this);
       connect(master, &SingleGearWidget::switchChanged, gear, &SingleGearWidget::setSwitch);
 
