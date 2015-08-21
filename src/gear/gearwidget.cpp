@@ -25,6 +25,7 @@ GearWidget::GearWidget(CPDSettings* _settings, GearController* _gearC, int _numG
    for (int i = 0; i < MAX_NUM_GEARS; i++) {
       SingleGearWidget* gear = new SingleGearWidget(settings, gearC, i, this);
       connect(master, &SingleGearWidget::switchChanged, gear, &SingleGearWidget::setSwitch);
+      connect(master, &SingleGearWidget::switchChanged, this, &GearWidget::masterChanged);
 
       if (i >= numGears) {
          gear->setVisible(false);

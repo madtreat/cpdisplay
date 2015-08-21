@@ -98,6 +98,8 @@ void CPDController::connectSignals()
    connect(comC, &COMC::updateXPlaneComms,   sb, &SWB::sendDREF);
    connect(comC, &COMC::updateXPlaneTimer,   sb, &SWB::sendDREF);
 
+   connect(gearC, &GEARC::updateXPlaneGearHandle, sb, &SWB::sendDREF);
+
 
    /*
     * Everything below is for the raw UDP output from xplane, if selected.

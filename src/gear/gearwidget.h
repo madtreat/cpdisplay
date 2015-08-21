@@ -18,6 +18,9 @@ public:
    GearWidget(CPDSettings* _settings, GearController* _gearC, int _numGears=3, QFrame* _parent=0);
    ~GearWidget();
 
+signals:
+   void masterChanged(bool up);
+
 private:
    CPDSettings* settings;
    GearController* gearC;

@@ -17,6 +17,10 @@ public:
 
 public slots:
    void setGear();
+   void notifyXPlaneGearHandle(bool up);
+
+signals:
+   void updateXPlaneGearHandle(QString dref, int down);
 
 private:
    CPDSettings* settings;

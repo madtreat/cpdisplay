@@ -13,8 +13,8 @@
 
 #include "cpdsettings.h"
 
-#define DEBUG_SEND 0
-#define DEBUG_RECV 1
+#define DEBUG_SEND 1
+#define DEBUG_RECV 0
 
 
 SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
