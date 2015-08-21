@@ -16,7 +16,6 @@
 
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"
-#include "core/mapconsts.h"
 
 
 MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent)
@@ -92,6 +91,10 @@ void MapView::resize(const QSize& size)
    webView->resize(size);
    webView->page()->setViewportSize(size);
 //   qDebug() << "       New viewport size:" << webView->page()->viewportSize();
+}
+
+bool MapView::northUp() const {
+   return settings->mapOrientation() == NORTH_UP;
 }
 
 

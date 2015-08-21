@@ -6,15 +6,15 @@
  */
 
 #include "pfdcontroller.h"
-#include "core/mapconsts.h"
+//#include "mapconsts.h"
 
 PFDController::PFDController(QObject* _parent)
 : QObject(_parent)
 {
    pfdWidget = new WidgetPFD();
    pfdWidget->setContentsMargins(0, 0, 0, 0);
-   pfdWidget->setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
-   pfdWidget->resize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+//   pfdWidget->setMinimumSize(QSize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT));
+//   pfdWidget->resize(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
    pfdWidget->setObjectName("border");
 }
 

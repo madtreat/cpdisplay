@@ -15,7 +15,6 @@
 #include "qt-google-maps/mapsettings.h"
 #include "utils/geodist.h"
 #include "core/cpdsettings.h"
-#include "core/mapconsts.h"
 
 
 using namespace std;
@@ -59,6 +58,10 @@ QSize MapOverlay::sizeHint() const
 void MapOverlay::resize(int w, int h)
 {
    resize(QSize(w, h));
+}
+
+bool MapOverlay::northUp() const {
+   return mapSettings->mapOrientation() == NORTH_UP;
 }
 
 

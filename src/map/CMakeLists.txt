@@ -8,6 +8,7 @@ set(SOURCES
 )
 
 set(HEADERS
+   mapconsts.h
    mapcontroller.h
    mapwidget.h
    mapview.h
