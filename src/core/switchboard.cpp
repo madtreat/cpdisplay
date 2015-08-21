@@ -36,7 +36,8 @@ SwitchBoard::~SwitchBoard()
 void SwitchBoard::initSocket()
 {
    xplane = new QUdpSocket(this);
-   xplane->bind(settings->xplaneHost(), settings->xplanePort(), QUdpSocket::ShareAddress);
+   //xplane->bind(settings->xplaneHost(), settings->xplanePort(), QUdpSocket::ShareAddress);
+   xplane->bind(settings->xplanePort(), QUdpSocket::ShareAddress);
    connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
 }
 
@@ -49,6 +50,7 @@ void SwitchBoard::readPendingData()
       quint16 senderPort;
       
       xplane->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+      //qDebug() << "Packet size" << datagram.size() << "  \tfrom" << sender << ":" << senderPort;
       
       processDatagram(datagram);
    }
@@ -69,7 +71,7 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value)
    memcpy(&data, DREF_PREFIX, ID_DIM);
    memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
    
-   xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
+   xplane->writeDatagram(data, len, settings->xplaneHost(), settings->xplanePort());
 }
 
 
@@ -154,7 +156,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
       memcpy(&data, RREF_PREFIX, ID_DIM);
       memcpy(&data[ID_DIM], &dref, sizeof(xp_rref_in));
       
-      xplane->writeDatagram(data, len, settings->xplaneHost(), 49000);
+      xplane->writeDatagram(data, len, settings->xplaneHost(), settings->xplanePort());
    }
 
 
@@ -212,7 +214,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
    for (int i = 0; i < indexes.size(); i++) {
       memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
    }
-   xplane->writeDatagram(dsel, len2, settings->xplaneHost(), 49000);
+   xplane->writeDatagram(dsel, len2, settings->xplaneHost(), settings->xplanePort());
 }
 
 void SwitchBoard::processDatagram(QByteArray& data)

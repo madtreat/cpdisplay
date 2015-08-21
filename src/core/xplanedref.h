@@ -52,7 +52,8 @@ static const char* XPDR_CP_TIMER_ELAPSED  = "sim/time/timer_elapsed_time_sec";
 
 // Landing Gear
 const int MAX_NUM_LANDING_GEARS = 10;
-static const char* XPDR_GEAR_HANDLE_DOWN  = "sim/cockpit2/controls/gear_handle_down";
+//static const char* XPDR_GEAR_HANDLE_DOWN  = "sim/cockpit2/controls/gear_handle_down";
+static const char* XPDR_GEAR_HANDLE_STATUS= "sim/cockpit/switches/gear_handle_status";
 static const char* XPDR_GEAR_DEPLOY_X     = "sim/aircraft/parts/acf_gear_deploy[__X__]";
 static const char* XPDR_GEAR_DEPLOY_0     = "sim/aircraft/parts/acf_gear_deploy[0]";
 static const char* XPDR_GEAR_DEPLOY_1     = "sim/aircraft/parts/acf_gear_deploy[1]";
