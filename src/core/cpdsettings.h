@@ -30,7 +30,8 @@ public:
    
    QString     layoutProfile()   const { return m_layoutProfile;  }
    
-   int            xplanePort()   const { return m_xplanePort;     }
+   int            xplanePortOut()const { return m_xplanePortOut;  }
+   int            xplanePortIn() const { return m_xplanePortIn;   }
    QHostAddress   xplaneHost()   const { return m_xplaneHost;     }
 
 public slots:
@@ -47,7 +48,8 @@ private:
    QString     m_layoutProfile; // LayoutProfile config file
    
    // "xplane" group
-   int            m_xplanePort;
+   int            m_xplanePortOut;
+   int            m_xplanePortIn;
    QHostAddress   m_xplaneHost;
 };
 

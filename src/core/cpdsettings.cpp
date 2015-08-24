@@ -63,8 +63,9 @@ void CPDSettings::loadSettingsFile(QString _filename)
    
    // Load X-Plane 10 settings
    settings->beginGroup("xplane");
-   m_xplanePort = settings->value("xplane_port").toInt();
-   QString host = settings->value("xplane_host").toString();
+   m_xplanePortOut = settings->value("xplane_port_out").toInt();
+   m_xplanePortIn  = settings->value("xplane_port_in").toInt();
+   QString host    = settings->value("xplane_host").toString();
    if (host == "localhost") {
       m_xplaneHost = QHostAddress::LocalHost;
    }
