@@ -8,6 +8,7 @@
 #include <QLabel>
 
 #include "core/cpdsettings.h"
+#include "core/xplanedref.h"
 #include "gearcontroller.h"
 #include "singlegearwidget.h"
 
