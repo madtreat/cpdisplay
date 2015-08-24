@@ -12,9 +12,8 @@
 #include <QString>
 #include <QHostAddress>
 
-#include "core/mapconsts.h"
-
 class QSettings;
+
 
 class CPDSettings : public QObject {
    Q_OBJECT;
@@ -33,9 +32,6 @@ public:
    
    int            xplanePort()   const { return m_xplanePort;     }
    QHostAddress   xplaneHost()   const { return m_xplaneHost;     }
-   
-   MapOrientation mapOrientation() const { return m_mapOrientation; }
-   void        setMapOrientation(MapOrientation mo) { m_mapOrientation = mo; }
 
 public slots:
    void loadSettingsFile(QString _filename);
@@ -53,9 +49,6 @@ private:
    // "xplane" group
    int            m_xplanePort;
    QHostAddress   m_xplaneHost;
-   
-   // "map" group
-   MapOrientation m_mapOrientation;
 };
 
 #endif	/* CPDSETTINGS_H */

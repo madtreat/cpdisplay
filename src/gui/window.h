@@ -3,6 +3,7 @@
 #include "core/aircraft.h"
 #include "map/mapcontroller.h"
 
+class QFrame;
 class QToolBar;
 class QPushButton;
 
@@ -12,6 +13,7 @@ class LayoutManager;
 class CPDSettings;
 class CPDController;
 
+class MapWidget;
 class TimeWidget;
 class FuelWidget;
 class GearWidget;
@@ -28,7 +30,6 @@ public:
 
 public slots:
    void pfdButtonClicked(bool checked);
-   void orientationButtonClicked(bool checked);
    
 private:
    CPDSettings*   cpdSettings;
@@ -42,6 +43,7 @@ private:
    QMap<int, LayoutItem*> layoutMap;
    
    // Individual widgets
+   MapWidget*     mapW;
    TimeWidget*    timeW;
    FuelWidget*    fuelW;
    GearWidget*    gearW;
@@ -55,15 +57,7 @@ private:
 //   QToolBar*      toolbar;
    QFrame*        toolbar;
    QPushButton*   pfdButton;
-   QPushButton*   weatherButton;
-   QPushButton*   trafficButton;
-   QPushButton*   terrainButton;
-   QPushButton*   orientationButton; // map orientation, checked = NORTH_UP
-   QPushButton*   zoomInButton;
-   QPushButton*   zoomOutButton;
-//   QPushButton*    homeButton;
 
-   QPushButton* createToolButton(QString text, bool checkable);
    void setupToolbar();
    void setupPFDAltGuages();
 };

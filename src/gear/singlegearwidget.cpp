@@ -18,9 +18,11 @@ SingleGearWidget::SingleGearWidget(CPDSettings* _settings, GearController* _gear
   gearNum(_gearNum)
 {
    QVBoxLayout* layout = new QVBoxLayout(this);
+   layout->setContentsMargins(4, 4, 4, 4);
 
-   label = new QLabel((gearNum == -1) ? "Master" : QString::number(gearNum));
+   label = new QLabel((gearNum == -1) ? "Gear" : QString::number(gearNum));
    label->setAlignment(Qt::AlignHCenter);
+   label->setObjectName("border-light");
    status = new QLabel("0%");
    status->setAlignment(Qt::AlignHCenter);
 
@@ -32,7 +34,7 @@ SingleGearWidget::SingleGearWidget(CPDSettings* _settings, GearController* _gear
    layout->addWidget(gearSwitch);
    layout->addWidget(status);
 
-   setObjectName("border");
+   setObjectName("border-light");
 }
 
 SingleGearWidget::~SingleGearWidget()

@@ -72,14 +72,4 @@ void CPDSettings::loadSettingsFile(QString _filename)
       m_xplaneHost = QHostAddress(host);
    }
    settings->endGroup(); // "xplane"
-   
-   // Load Map settings
-   settings->beginGroup("map");
-   if (settings->value("orientation").toString() == "NORTH_UP") {
-      m_mapOrientation = NORTH_UP;
-   }
-   else {
-      m_mapOrientation = TRACK_UP;
-   }
-   settings->endGroup();
 }

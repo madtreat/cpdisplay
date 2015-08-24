@@ -15,8 +15,10 @@
 #include <QGraphicsSvgItem>
 
 #include "core/aircraft.h"
-#include "core/mapconsts.h"
 #include "core/cpdsettings.h"
+
+#include "qt-google-maps/qtmapsconsts.h"
+#include "mapconsts.h"
 
 class QPaintEvent;
 
@@ -38,7 +40,7 @@ public:
    void resize(int w, int h);
    void resize(const QSize& size);
    
-   bool northUp() const { return cpdSettings->mapOrientation() == NORTH_UP; }
+   bool northUp() const;
 
 public slots:
    void setZoom(int level);

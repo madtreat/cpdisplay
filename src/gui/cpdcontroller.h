@@ -18,9 +18,7 @@
 class CPDSettings;
 class SwitchBoard;
 
-//class MapController;
-class MapView;
-class MapOverlay;
+class MapController;
 
 class ADIController;
 class ALTController;
@@ -59,9 +57,6 @@ public:
    CommsController*   getComC() const { return comC; }
    EngineController*  getEngC() const { return engC; }
    TrafficController* getTfcC() const { return tfcC; }
-   
-   MapView*    getMapView() const { return mapC->getMapView(); }
-   MapOverlay* getOverlay() const { return mapC->getOverlay(); }
    
    float calculateTurnRate(float q, float r, float pitch, float roll);
    

@@ -52,17 +52,19 @@ static const char* XPDR_CP_TIMER_ELAPSED  = "sim/time/timer_elapsed_time_sec";
 
 // Landing Gear
 const int MAX_NUM_LANDING_GEARS = 10;
-static const char* XPDR_GEAR_DEPLOY_X  = "sim/aircraft/parts/acf_gear_deploy[__X__]";
-static const char* XPDR_GEAR_DEPLOY_0  = "sim/aircraft/parts/acf_gear_deploy[0]";
-static const char* XPDR_GEAR_DEPLOY_1  = "sim/aircraft/parts/acf_gear_deploy[1]";
-static const char* XPDR_GEAR_DEPLOY_2  = "sim/aircraft/parts/acf_gear_deploy[2]";
-static const char* XPDR_GEAR_DEPLOY_3  = "sim/aircraft/parts/acf_gear_deploy[3]";
-static const char* XPDR_GEAR_DEPLOY_4  = "sim/aircraft/parts/acf_gear_deploy[4]";
-static const char* XPDR_GEAR_DEPLOY_5  = "sim/aircraft/parts/acf_gear_deploy[5]";
-static const char* XPDR_GEAR_DEPLOY_6  = "sim/aircraft/parts/acf_gear_deploy[6]";
-static const char* XPDR_GEAR_DEPLOY_7  = "sim/aircraft/parts/acf_gear_deploy[7]";
-static const char* XPDR_GEAR_DEPLOY_8  = "sim/aircraft/parts/acf_gear_deploy[8]";
-static const char* XPDR_GEAR_DEPLOY_9  = "sim/aircraft/parts/acf_gear_deploy[9]";
+//static const char* XPDR_GEAR_HANDLE_DOWN  = "sim/cockpit2/controls/gear_handle_down";
+static const char* XPDR_GEAR_HANDLE_STATUS= "sim/cockpit/switches/gear_handle_status";
+static const char* XPDR_GEAR_DEPLOY_X     = "sim/aircraft/parts/acf_gear_deploy[__X__]";
+static const char* XPDR_GEAR_DEPLOY_0     = "sim/aircraft/parts/acf_gear_deploy[0]";
+static const char* XPDR_GEAR_DEPLOY_1     = "sim/aircraft/parts/acf_gear_deploy[1]";
+static const char* XPDR_GEAR_DEPLOY_2     = "sim/aircraft/parts/acf_gear_deploy[2]";
+static const char* XPDR_GEAR_DEPLOY_3     = "sim/aircraft/parts/acf_gear_deploy[3]";
+static const char* XPDR_GEAR_DEPLOY_4     = "sim/aircraft/parts/acf_gear_deploy[4]";
+static const char* XPDR_GEAR_DEPLOY_5     = "sim/aircraft/parts/acf_gear_deploy[5]";
+static const char* XPDR_GEAR_DEPLOY_6     = "sim/aircraft/parts/acf_gear_deploy[6]";
+static const char* XPDR_GEAR_DEPLOY_7     = "sim/aircraft/parts/acf_gear_deploy[7]";
+static const char* XPDR_GEAR_DEPLOY_8     = "sim/aircraft/parts/acf_gear_deploy[8]";
+static const char* XPDR_GEAR_DEPLOY_9     = "sim/aircraft/parts/acf_gear_deploy[9]";
 
 /*
 static const char* XPDR_ = "sim/";

@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QPushButton>
+#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -18,12 +19,14 @@ GearWidget::GearWidget(CPDSettings* _settings, GearController* _gearC, int _numG
   gearC(_gearC),
   numGears(_numGears)
 {
-   QHBoxLayout* layout = new QHBoxLayout(this);
+   QVBoxLayout* layout = new QVBoxLayout(this);
 
    master = new SingleGearWidget(settings, gearC, -1, this);
+   connect(master, &SingleGearWidget::switchChanged, gearC, &GEARC::notifyXPlaneGearHandle);
    layout->addWidget(master);
 
-   for (int i = 0; i < MAX_NUM_LANDING_GEARS; i++) {
+   /*
+   for (int i = 0; i < MAX_NUM_GEARS; i++) {
       SingleGearWidget* gear = new SingleGearWidget(settings, gearC, i, this);
       connect(master, &SingleGearWidget::switchChanged, gear, &SingleGearWidget::setSwitch);
 
@@ -33,6 +36,7 @@ GearWidget::GearWidget(CPDSettings* _settings, GearController* _gearC, int _numG
       gears.append(gear);
       layout->addWidget(gear);
    }
+   */
 
    setObjectName("border");
 }

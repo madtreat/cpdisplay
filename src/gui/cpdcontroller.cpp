@@ -13,7 +13,6 @@
 #include "core/switchboard.h"
 #include "utils/geodist.h"
 
-#include "map/mapcontroller.h"
 #include "instruments/adicontroller.h"
 #include "instruments/altcontroller.h"
 #include "instruments/asicontroller.h"
@@ -22,6 +21,7 @@
 #include "instruments/tcdcontroller.h"
 #include "instruments/vsicontroller.h"
 
+#include "map/mapcontroller.h"
 #include "gear/gearcontroller.h"
 #include "comms/commscontroller.h"
 #include "engine/enginecontroller.h"
@@ -76,9 +76,6 @@ CPDController::~CPDController()
  */
 void CPDController::connectSignals()
 {
-   MapView*    mapView = getMapView();
-   MapOverlay* overlay = getOverlay();
-   
 //   EngineWidget* engW = engC->getWidget();
 //   TrafficWidget* tfcW = tfcC->getWidget();
 
@@ -97,6 +94,8 @@ void CPDController::connectSignals()
     */
    connect(comC, &COMC::updateXPlaneComms,   sb, &SWB::sendDREF);
    connect(comC, &COMC::updateXPlaneTimer,   sb, &SWB::sendDREF);
+
+   connect(gearC, &GEARC::updateXPlaneGearHandle, sb, &SWB::sendDREF);
 
 
    /*
@@ -135,10 +134,9 @@ void CPDController::connectSignals()
    connect(sb, &SWB::rollUpdate,    adiC,    &ADIC::setRoll);
    connect(sb, &SWB::rollUpdate,    pfdC,    &PFDC::setRoll);
 
-   connect(sb, &SWB::headingMagUpdate, mapView, &MapView::setHeading);
-   connect(sb, &SWB::headingMagUpdate, overlay, &MapOverlay::setHeading);
-   connect(sb, &SWB::headingMagUpdate, hsiC,    &HSIC::setHeading);
-   connect(sb, &SWB::headingMagUpdate, pfdC,    &PFDC::setHeading);
+   connect(sb, &SWB::headingMagUpdate, mapC, &MAPC::setHeading);
+   connect(sb, &SWB::headingMagUpdate, hsiC, &HSIC::setHeading);
+   connect(sb, &SWB::headingMagUpdate, pfdC, &PFDC::setHeading);
 
    // AOA, SideSlip
    connect(sb, SIGNAL(aoaSideSlipUpdate(float, float)), pfdC, SLOT(setFlightPathMarker(float, float)));
@@ -152,14 +150,13 @@ void CPDController::connectSignals()
 
    // Compass != Heading
    /*
-   connect(sb, &SWB::compassUpdate, mapView, &MapView::setHeading);
-   connect(sb, &SWB::compassUpdate, overlay, &MapOverlay::setHeading);
+   connect(sb, &SWB::compassUpdate, mapC,    &MAPC::setHeading);
    connect(sb, &SWB::compassUpdate, pfdC,    &PFDC::setHeading);
    connect(sb, &SWB::compassUpdate, hsiC,    &HSIC::setHeading);
    // */
 
    // Position (this AC)
-   connect(sb, &SWB::latLonUpdate, mapC, &MAPC::panToLocation);
+   connect(sb, &SWB::latLonUpdate, mapC,     &MAPC::panToLocation);
 
    // Altitudes: using MSL, but AGL could be connected later
    connect(sb, &SWB::altMSLUpdate, pfdC,     &PFDC::setAltitude);

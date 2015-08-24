@@ -150,7 +150,7 @@ void CommsController::notifyXPlaneComms(CommType ct, float value)
 void CommsController::notifyXPlaneTimer(bool running)
 {
    QString drefStr(XPDR_CP_TIMER_RUNNING);
-   emit updateXPlaneTimer(drefStr, running ? 1 : 0);
+   emit updateXPlaneTimer(drefStr, (int) running);
 }
 
 void CommsController::notifyXPlaneTimerReset()

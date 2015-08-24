@@ -10,16 +10,13 @@
 
 #include <QObject>
 
+#include "qt-google-maps/qtmapsconsts.h"
 #include "core/aircraft.h"
-#include "core/mapconsts.h"
-#include "mapwidget.h"
+#include "mapconsts.h"
 
 
 class CPDSettings;
 class MapSettings;
-class MapWidget;
-class MapView;
-class MapOverlay;
 
 class MapController : public QObject {
    Q_OBJECT;
@@ -28,19 +25,14 @@ public:
    MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent = 0);
    MapController(const MapController& orig) = delete;
    virtual ~MapController();
-   
-   MapWidget*  getWidget()  const { return mapWidget; }
-   MapView*    getMapView() const { return mapWidget->getMapView(); }
-   MapOverlay* getOverlay() const { return mapWidget->getOverlay(); }
+
+   MapSettings* getMapSettings() const {return settings;}
 
 public slots:
    void setZoom(int level);
    void increaseZoom();
    void decreaseZoom();
-   void panToLocation(float lat, float lon);
    void setOrientation(MapOrientation mo);
-   void acUpdated(int id);
-   void displayTraffic(bool show);
    
 signals:
    /*
@@ -54,10 +46,14 @@ signals:
    void zoomMinReached(bool disable);
    void zoomEither(bool enable);
 
+   // These signals are just passing info along from CPDController
+   void panToLocation(float lat, float lon);
+   void acUpdated(int id);
+   void setHeading(float heading);
+
 private:
    CPDSettings* cpdSettings;
    MapSettings* settings;
-   MapWidget* mapWidget;
    
    ACMap* acMap;
    

@@ -12,13 +12,15 @@
 
 #include <QWidget>
 #include "core/aircraft.h"
-#include "core/mapconsts.h"
-#include "core/cpdsettings.h"
+
+#include "qt-google-maps/qtmapsconsts.h"
+#include "mapconsts.h"
+
 
 class QPaintEvent;
 class QWebView;
 
-//class CPDSettings;
+class CPDSettings;
 class MapSettings;
 class GeocodeDataManager;
 
@@ -35,7 +37,7 @@ public:
    void resize(int w, int h);
    void resize(const QSize& size);
    
-   bool northUp() const { return cpdSettings->mapOrientation() == NORTH_UP; }
+   bool northUp() const;
 
 public slots:
    void startedLoading();

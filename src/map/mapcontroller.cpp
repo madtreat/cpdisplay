@@ -12,7 +12,7 @@
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"
 #include "qt-google-maps/mapsettings.h"
-#include "mapwidget.h"
+
 
 MapController::MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent)
 : QObject(_parent),
@@ -21,7 +21,6 @@ MapController::MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* 
 {
    orientation = TRACK_UP;
    settings = new MapSettings("maps.ini", this);
-   mapWidget = new MapWidget(cpdSettings, settings, acMap);
    
    qDebug() << "Can enable maps?" << settings->canEnableMaps();
 }
@@ -45,7 +44,6 @@ void MapController::setZoom(int level)
       return;
    }
    settings->setZoom(level);
-   mapWidget->setZoom(level);
    emit zoomEither(true);
 }
 
@@ -61,26 +59,7 @@ void MapController::decreaseZoom()
    setZoom(newLevel);
 }
 
-void MapController::panToLocation(float lat, float lon)
-{
-   mapWidget->panToLocation(lat, lon);
-}
-
 void MapController::setOrientation(MapOrientation mo)
 {
-   cpdSettings->setMapOrientation(mo);
-   mapWidget->setOrientation(mo);
-}
-
-void MapController::acUpdated(int id)
-{
-   // The map overlay draws uses the values directly from acMap, so it does not
-   // need to be notified, but the map view does.
-   getMapView()->updateAC(id);
-}
-
-void MapController::displayTraffic(bool show)
-{
-   mapWidget->getMapView()->displayTraffic(show);
-   mapWidget->getOverlay()->displayTraffic(show);
+   settings->setMapOrientation(mo);
 }
