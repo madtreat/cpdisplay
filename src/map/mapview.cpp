@@ -17,9 +17,12 @@
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"
 
+#include "mapcontroller.h"
 
-MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent)
+
+MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, MapController* _mapC, ACMap* _acMap, QWidget* _parent)
 : QWidget(_parent),
+  mapC(_mapC),
   cpdSettings(_cpdSettings),
   settings(_settings),
   acMap(_acMap),
@@ -28,6 +31,8 @@ MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, ACMap* _acMa
   lon(0.0),
   showTraffic(false)
 {
+   connect(mapC, &MAPC::updateZoom, this, &MapView::setZoom);
+
    geocode = new GeocodeDataManager(settings->apiKey(), this);
    connect(geocode, SIGNAL(coordinatesReady(double,double)),  this, SLOT(showCoordinates(double,double)));
    connect(geocode, SIGNAL(errorOccurred(QString)),           this, SLOT(errorOccurred(QString)));

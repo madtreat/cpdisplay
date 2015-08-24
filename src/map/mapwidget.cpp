@@ -34,7 +34,7 @@ MapWidget::MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, MapCo
 //   sp.setHeightForWidth(true);
 //   setSizePolicy(sp);
 
-   view = new MapView(cpdSettings, mapSettings, acMap);
+   view = new MapView(cpdSettings, mapSettings, mapC, acMap);
 //   view->setSizePolicy(sp);
    layout->addWidget(view);
 

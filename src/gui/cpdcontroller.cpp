@@ -217,9 +217,9 @@ Aircraft* CPDController::createAircraft(int id, float lat, float lon, float alt)
 {
    Aircraft* a = new Aircraft(id, this);
    a->setLatLonAlt(lat, lon, alt);
-   connect(a, SIGNAL(acUpdated(int)), tfcC, SLOT(acUpdated(int)));
-   connect(a, SIGNAL(acUpdated(int)), mapC, SLOT(acUpdated(int)));
-//   connect(a, SIGNAL(rngBerUpdated(int)), mapC, SLOT(updateACPos(int)));
+   connect(a, &Aircraft::acUpdated, tfcC, &TFCC::acUpdated);
+   connect(a, &Aircraft::acUpdated, mapC, &MAPC::acUpdated);
+//   connect(a, &Aircraft::rngBerUpdated, mapC, &MAPC::updateACPos);
    acMap->insert(id, a);
    return a;
 }

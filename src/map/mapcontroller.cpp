@@ -44,6 +44,7 @@ void MapController::setZoom(int level)
       return;
    }
    settings->setZoom(level);
+   emit updateZoom(level);
    emit zoomEither(true);
 }
 

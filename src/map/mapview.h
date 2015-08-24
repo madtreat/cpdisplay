@@ -20,6 +20,7 @@
 class QPaintEvent;
 class QWebView;
 
+class MapController;
 class CPDSettings;
 class MapSettings;
 class GeocodeDataManager;
@@ -29,7 +30,7 @@ class MapView : public QWidget {
    Q_OBJECT;
 
 public:
-   MapView(CPDSettings* _cpdSettings, MapSettings* _settings, ACMap* _acMap, QWidget* _parent = 0);
+   MapView(CPDSettings* _cpdSettings, MapSettings* _settings, MapController* _mapC, ACMap* _acMap, QWidget* _parent = 0);
    MapView(const MapView& orig) = delete;
    virtual ~MapView();
    
@@ -59,6 +60,7 @@ public slots:
    void displayTraffic(bool show);
    
 private:
+   MapController*       mapC;
    CPDSettings*         cpdSettings;
    MapSettings*         settings;
    bool                 enabled; // are the maps enabled?

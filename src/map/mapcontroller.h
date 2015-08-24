@@ -46,6 +46,9 @@ signals:
    void zoomMinReached(bool disable);
    void zoomEither(bool enable);
 
+   // Notify of a change to zoom level
+   void updateZoom(int level);
+
    // These signals are just passing info along from CPDController
    void panToLocation(float lat, float lon);
    void acUpdated(int id);
