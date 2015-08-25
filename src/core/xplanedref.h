@@ -20,6 +20,44 @@ static const char* XPDR_AC_ENGINE_TYPE    = "sim/aircraft/prop/acf_en_type";
 // Engines
 const int MAX_NUM_ENGINES = 8;
 static const char* XPDR_AC_NUM_ENGINES    = "sim/aircraft/engine/acf_num_engines";
+/*
+ * These engine values are of the form .../limits/[red|green|yellow]_[lo|hi]_[property]
+ * and thus the __LT__ should be replaced with a color and "_lo" or "_hi".
+ *    example: "green_lo"
+ * The LimitType enum is a utility bit-masking enum for specifying the limit type.
+ */
+enum LimitType {
+   NO_LIMIT       = 0, // Default is 0, so this can safely be used as an invalid limit
+   // LIMIT_LO       = 1 << 0, // 1
+   // LIMIT_HI       = 1 << 1, // 2
+   // // Bit-mask these colors with either LIMIT_HI or LIMIT_LO
+   // LIMIT_GREEN    = 1 << 2, // 4
+   // LIMIT_YELLOW   = 1 << 3, // 8
+   // LIMIT_RED      = 1 << 4,  // 16
+
+   // These are the 6 different results that can be used as limits, as a short-hand to
+   // avoid all the bitwise-or'ing
+   LIMIT_G_LO,//     = LIMIT_GREEN  | LIMIT_LO,
+   LIMIT_G_HI,//     = LIMIT_GREEN  | LIMIT_HI,
+   LIMIT_Y_LO,//     = LIMIT_YELLOW | LIMIT_LO,
+   LIMIT_Y_HI,//     = LIMIT_YELLOW | LIMIT_HI,
+   LIMIT_R_LO,//     = LIMIT_RED    | LIMIT_LO,
+   LIMIT_R_HI //     = LIMIT_RED    | LIMIT_HI
+};
+static const char* XPDR_ENG_LIMIT_MP      = "sim/aircraft/limits/__LT___MP";
+static const char* XPDR_ENG_LIMIT_FF      = "sim/aircraft/limits/__LT___FF";
+static const char* XPDR_ENG_LIMIT_N1      = "sim/aircraft/limits/__LT___N1";
+static const char* XPDR_ENG_LIMIT_N2      = "sim/aircraft/limits/__LT___N2";
+
+static const char* XPDR_ENG_LIMIT_EPR     = "sim/aircraft/limits/__LT___EPR";
+static const char* XPDR_ENG_LIMIT_EGT     = "sim/aircraft/limits/__LT___EGT";
+static const char* XPDR_ENG_LIMIT_TRQ     = "sim/aircraft/limits/__LT___TRQ";
+static const char* XPDR_ENG_LIMIT_ITT     = "sim/aircraft/limits/__LT___ITT";
+static const char* XPDR_ENG_LIMIT_CHT     = "sim/aircraft/limits/__LT___CHT";
+
+static const char* XPDR_ENG_LIMIT_OILP    = "sim/aircraft/limits/__LT___oilP";
+static const char* XPDR_ENG_LIMIT_OILT    = "sim/aircraft/limits/__LT___oilT";
+static const char* XPDR_ENG_LIMIT_FUELP   = "sim/aircraft/limits/__LT___fuelP";
 
 // Radios
 static const char* XPDR_RADIO_COM1_FREQ   = "sim/cockpit/radios/com1_freq_hz";

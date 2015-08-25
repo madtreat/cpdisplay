@@ -23,8 +23,18 @@ class SwitchBoard : public QObject {
 
    // Typdef generic signal function pointers for direct value updates...
    typedef void (SwitchBoard::*direct_fp)(float);
-   // and value updates tied to a specific engine number, gear number, etc.
+   // and value updates tied to a specific engine number, gear number, etc. ...
    typedef void (SwitchBoard::*numbered_fp)(float, int);
+   // and value updates for engine limits ...
+   typedef void (SwitchBoard::*limit_fp)(float, LimitType);
+
+   // An enum for bit-masking the type(s) of signals to use for a particular
+   // DRefValue instance.
+   // enum SignalType {
+   //    SIG_DIRECT     = 1 << 0,
+   //    SIG_NUMBERED   = 1 << 1,
+   //    SIG_LIMIT      = 1 << 2
+   // };
 
    // Define the value struct for the Dataref Map drmap
    struct DRefValue {
@@ -32,19 +42,21 @@ class SwitchBoard : public QObject {
                         //  (simple version: xpIndex == XPDataIndex)
       QString  str;     // The string representation of the dataref
       int      freq;    // Frequency of response
+      // SignalType sigType;// Signal type(s) to be emitted
 
       /*
        * The SwitchBoard signal to be emitted, and the reason this struct is
        * inside the SwitchBoard class (the functions had to be accessed from 
-       * inside).  Both of these signals will be emitted by default (assuming
-       * they are not null), so the application can use either or both, 
+       * inside).  All of these signals will be emitted by default (assuming
+       * they are not null), so the application can use either or any, 
        * depending on context and what needs to be done.
        * 
-       * If the dataref does not need a numbered_fp or a direct_fp, then that
+       * If the dataref does not need one of these function pointers, then that
        * value can be safely set to null and no signal will not be emitted.
        */
       direct_fp   signalDirect;
       numbered_fp signalNumbered;
+      limit_fp    signalLimit;
 
       /*
        * If using a numbered_fp, set this to the item's number to be emitted.
@@ -55,23 +67,26 @@ class SwitchBoard : public QObject {
        */
       int signalNum;
 
-      DRefValue(int _index, QString _str, direct_fp _fn_d, numbered_fp _fn_n, int _freq, int _sigNum=-1) {
-         xpIndex = _index;
-         str = _str;
-         signalDirect = _fn_d;
-         signalNumbered = _fn_n;
-         freq = _freq;
-         signalNum = _sigNum;
-      }
+      /*
+       * If using a limit_fp, set this to the corresponding type to be emitted
+       * as one of the signal's arguments.
+       */
+      LimitType limitType;
 
-      DRefValue(const DRefValue& rhs) {
-         xpIndex = rhs.xpIndex;
-         str = rhs.str;
-         signalDirect = rhs.signalDirect;
-         signalNumbered = rhs.signalNumbered;
-         freq = rhs.freq;
-         signalNum = rhs.signalNum;
-      }
+      // Direct-signal-only constructor
+      DRefValue(int _index, QString _str, int _freq, direct_fp _fn_d);
+      
+      // Numbered-signal-only constructor
+      DRefValue(int _index, QString _str, int _freq, numbered_fp _fn_n, int _sigNum);
+      
+      // Limit-signal-only constructor
+      DRefValue(int _index, QString _str, int _freq, limit_fp _fn_l, LimitType _limitType);
+      
+      // All-signals constructor: can use NULL to select only desired signal types
+      DRefValue(int _index, QString _str, int _freq, direct_fp _fn_d, numbered_fp _fn_n, limit_fp _fn_l, int _sigNum=-1,  LimitType _limitType=NO_LIMIT);
+      
+      // Copy constructor
+      DRefValue(const DRefValue& rhs);
    };
 
 public:
@@ -90,44 +105,38 @@ signals:
    void acTailNumUpdate(float tail);
    void acNumEnginesUpdate(float num);
 
-   void radioCom1FreqUpdate( float freq);
+   // Engine Limits
+   void engLimitMPUpdate   (float inhg,   LimitType type);
+   void engLimitFFUpdate   (float gph,    LimitType type); // gal/hr
+   void engLimitN1Update   (float percent,LimitType type);
+   void engLimitN2Update   (float percent,LimitType type);
+
+   void engLimitEPRUpdate  (float ratio,  LimitType type);
+   void engLimitEGTUpdate  (float degC,   LimitType type);
+   void engLimitTRQUpdate  (float ft_lb,  LimitType type);
+   void engLimitITTUpdate  (float degC,   LimitType type);
+   void engLimitCHTUpdate  (float degC,   LimitType type);
+
+   void engLimitOilPUpdate (float psi,    LimitType type);
+   void engLimitOilTUpdate (float degC,   LimitType type);
+   void engLimitFuelPUpdate(float psi,    LimitType type);
+
+   // Radios
+   void radioCom1FreqUpdate (float freq);
    void radioCom1StdbyUpdate(float freq);
-   void radioCom2FreqUpdate( float freq);
+   void radioCom2FreqUpdate (float freq);
    void radioCom2StdbyUpdate(float freq);
-   void radioNav1FreqUpdate( float freq);
+   void radioNav1FreqUpdate (float freq);
    void radioNav1StdbyUpdate(float freq);
-   void radioNav2FreqUpdate( float freq);
+   void radioNav2FreqUpdate (float freq);
    void radioNav2StdbyUpdate(float freq);
 
    // Fuel Quantity
    void fuelQuantityUpdate(float qty, int tankNum);
-   /* // These are not used because for loops are better
-   void fuelQuantity0Update(float qty);
-   void fuelQuantity1Update(float qty);
-   void fuelQuantity2Update(float qty);
-   void fuelQuantity3Update(float qty);
-   void fuelQuantity4Update(float qty);
-   void fuelQuantity5Update(float qty);
-   void fuelQuantity6Update(float qty);
-   void fuelQuantity7Update(float qty);
-   void fuelQuantity8Update(float qty);
-   // */
 
    // Landing Gear
    // range: [0.0, 1.0]
    void gearDeployUpdate(float percent, int gearNum);
-   /* // These are not used because for loops are better
-   void gear0DeployUpdate(float percent);
-   void gear1DeployUpdate(float percent);
-   void gear2DeployUpdate(float percent);
-   void gear3DeployUpdate(float percent);
-   void gear4DeployUpdate(float percent);
-   void gear5DeployUpdate(float percent);
-   void gear6DeployUpdate(float percent);
-   void gear7DeployUpdate(float percent);
-   void gear8DeployUpdate(float percent);
-   void gear9DeployUpdate(float percent);
-   // */
 
 
    // XPlane < 10.40 / raw UDP output versions:
@@ -196,8 +205,13 @@ private:
    int drefID; // used for incrementing dataref request ID's 
 
    QMap<int, DRefValue*> drmap;
-   
-   void initSocket();
+
+   // Helper functions for adding new entries to the drmap.
+   void addDirectDRef   (QString str, int freq, direct_fp   sig);
+   void addNumberedDRef (QString str, int freq, numbered_fp sig, int sigNum);
+   void addLimitDRefHelp(QString str, int freq, limit_fp    sig, LimitType lt);
+   void addLimitDRef    (QString str, int freq, limit_fp    sig);
+
    void requestDatarefsFromXPlane();
    void processDatagram(QByteArray& data);
    void notifyAll(int code, xpflt value);

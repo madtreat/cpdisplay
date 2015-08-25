@@ -87,42 +87,7 @@ enum XPDataIndex {
    NAV_1_2_FREQ = 97,
    
    // End; for looping
-   NUM_DATA_INDEXES = 134,
-
-   /*
-    * Custom Dataref Indices (XPlane 10.40+)
-    */
-
-   /*
-   // Aircraft info
-   AC_TYPE,          // 135
-   AC_TAIL_NUM,      // this one only, but could add more here for up to 8 aircraft
-   AC_ENGINE_TYPE,
-   AC_NUM_ENGINES,
-   
-   // Radios
-   RAD_COM1_FREQ,
-   RAD_COM1_STDBY,
-   RAD_COM2_FREQ,
-   RAD_COM2_STDBY,
-   RAD_NAV1_FREQ,
-   RAD_NAV1_STDBY,
-   RAD_NAV2_FREQ,
-   RAD_NAV2_STDBY,
-
-   // Fuel
-   FUEL_QTY_1,
-   FUEL_QTY_2,
-   FUEL_QTY_3,
-   FUEL_QTY_4,
-   FUEL_QTY_5,
-   FUEL_QTY_6,
-   FUEL_QTY_7,
-   FUEL_QTY_8,
-   FUEL_QTY_9,
-
-   NUM_TOTAL_DATA_INDEXES
-   // */
+   NUM_DATA_INDEXES = 134
 };
 
 

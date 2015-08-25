@@ -101,7 +101,7 @@ SingleEngineWidget::SingleEngineWidget(CPDSettings* _cpdSettings, EngineControll
    propFormLayout->addRow(tr("pitch"), propPitch);
    propFormLayout->addRow(tr("pwash"), propWash);
    propFormLayout->addRow(tr("MP"),    mp);
-   propFormLayout->addRow(tr("FF"),    fuelFlow);
+   // propFormLayout->addRow(tr("FF"),    fuelFlow);
    propFormLayout->addRow(tr("ITT"),   itt);
    propFormLayout->addRow(tr("EGT"),   egt);
    propFormLayout->addRow(tr("CHT"),   cht);
@@ -110,7 +110,7 @@ SingleEngineWidget::SingleEngineWidget(CPDSettings* _cpdSettings, EngineControll
    jetFormLayout->addRow(tr("N1"),     n1);
    jetFormLayout->addRow(tr("N2"),     n2);
    jetFormLayout->addRow(tr("EPR"),    epr);
-   jetFormLayout->addRow(tr("FF"),     fuelFlow);
+   // jetFormLayout->addRow(tr("FF"),     fuelFlow);
    jetFormLayout->addRow(tr("ITT"),    itt);
    jetFormLayout->addRow(tr("EGT"),    egt);
    jetFormLayout->addRow(tr("CHT"),    cht);

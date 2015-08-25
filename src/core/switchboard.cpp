@@ -10,6 +10,7 @@
 #include <QByteArray>
 #include <QList>
 #include <QDebug>
+#include <QTimer>
 
 #include "cpdsettings.h"
 
@@ -17,14 +18,86 @@
 #define DEBUG_RECV 0
 
 
+// Direct-signal-only constructor
+SwitchBoard::DRefValue::DRefValue(int _index, QString _str, int _freq, direct_fp _fn_d) {
+   xpIndex = _index;
+   str = _str;
+   signalDirect = _fn_d;
+   signalNumbered = NULL;
+   signalLimit = NULL;
+   freq = _freq;
+   signalNum = -1;
+   limitType = NO_LIMIT;
+}
+
+// Numbered-signal-only constructor
+SwitchBoard::DRefValue::DRefValue(int _index, QString _str, int _freq, numbered_fp _fn_n, int _sigNum) {
+   xpIndex = _index;
+   str = _str;
+   signalDirect = NULL;
+   signalNumbered = _fn_n;
+   signalLimit = NULL;
+   freq = _freq;
+   signalNum = _sigNum;
+   limitType = NO_LIMIT;
+}
+
+// Limit-signal-only constructor
+SwitchBoard::DRefValue::DRefValue(int _index, QString _str, int _freq, limit_fp _fn_l, LimitType _limitType) {
+   xpIndex = _index;
+   str = _str;
+   signalDirect = NULL;
+   signalNumbered = NULL;
+   signalLimit = _fn_l;
+   freq = _freq;
+   signalNum = -1;
+   limitType = _limitType;
+}
+
+// All-signals constructor: can use NULL to select only desired signal types
+SwitchBoard::DRefValue::DRefValue(int _index,
+          QString _str,
+          int _freq,
+          direct_fp _fn_d,
+          numbered_fp _fn_n,
+          limit_fp _fn_l,
+          int _sigNum,
+          LimitType _limitType) {
+   xpIndex = _index;
+   str = _str;
+   signalDirect = _fn_d;
+   signalNumbered = _fn_n;
+   signalLimit = _fn_l;
+   freq = _freq;
+   signalNum = _sigNum;
+   limitType = _limitType;
+}
+
+SwitchBoard::DRefValue::DRefValue(const DRefValue& rhs) {
+   xpIndex = rhs.xpIndex;
+   str = rhs.str;
+   signalDirect = rhs.signalDirect;
+   signalNumbered = rhs.signalNumbered;
+   signalLimit = rhs.signalLimit;
+   freq = rhs.freq;
+   signalNum = rhs.signalNum;
+   limitType = rhs.limitType;
+}
+
+
 SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
 : QObject(_parent),
   drefID(NUM_DATA_INDEXES)
 {
    settings = _settings;
-   initSocket();
+
+   xplane = new QUdpSocket(this);
+   // TODO: figure out the differences between these two functions
+   xplane->bind(settings->xplaneHost(), settings->xplanePortOut(), QUdpSocket::ShareAddress);
+   //xplane->bind(settings->xplanePortOut(), QUdpSocket::ShareAddress);
 
    requestDatarefsFromXPlane();
+   connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
 }
 
 
@@ -32,14 +105,6 @@ SwitchBoard::~SwitchBoard()
 {
 }
 
-
-void SwitchBoard::initSocket()
-{
-   xplane = new QUdpSocket(this);
-   //xplane->bind(settings->xplaneHost(), settings->xplanePort(), QUdpSocket::ShareAddress);
-   xplane->bind(settings->xplanePortOut(), QUdpSocket::ShareAddress);
-   connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
-}
 
 void SwitchBoard::readPendingData()
 {
@@ -75,22 +140,41 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value)
 }
 
 
+void SwitchBoard::addDirectDRef(QString str, int freq, direct_fp sig)
+{
+   int id = nextDRefID();
+   DRefValue* val = new DRefValue(id, str, freq, sig);
+   drmap.insert(id, val);
+}
+
+void SwitchBoard::addNumberedDRef(QString str, int freq, numbered_fp sig, int sigNum)
+{
+   int id = nextDRefID();
+   DRefValue* val = new DRefValue(id, str, freq, sig, sigNum);
+   drmap.insert(id, val);
+}
+
+void SwitchBoard::addLimitDRefHelp(QString str, int freq, limit_fp sig, LimitType lt)
+{
+   int id = nextDRefID();
+   DRefValue* val = new DRefValue(id, str, freq, sig, lt);
+   drmap.insert(id, val);
+}
+
+void SwitchBoard::addLimitDRef(QString str, int freq, limit_fp sig)
+{
+   addLimitDRefHelp(QString(str).replace("__LT__", "green_lo"),  freq, sig, LIMIT_G_LO);
+   addLimitDRefHelp(QString(str).replace("__LT__", "green_hi"),  freq, sig, LIMIT_G_HI);
+   addLimitDRefHelp(QString(str).replace("__LT__", "yellow_lo"), freq, sig, LIMIT_Y_LO);
+   addLimitDRefHelp(QString(str).replace("__LT__", "yellow_hi"), freq, sig, LIMIT_Y_HI);
+   addLimitDRefHelp(QString(str).replace("__LT__", "red_lo"),    freq, sig, LIMIT_R_LO);
+   addLimitDRefHelp(QString(str).replace("__LT__", "red_hi"),    freq, sig, LIMIT_R_HI);
+}
+
+
 /*
  * Sends the RREF message to XPlane to request all necessary datarefs.
  * 
- * The DRMAP_INSERT_D and DRMAP_INSERT_N macros simplify the very repetitive
- * task of creating a new DRefValue objects and inserting them into the drmap.
- * DRMAP_INSERT_D will insert an object with a direct_fp signal, where
- * DRMAP_INSERT_N will insert an object with a numbered_fp signal.
- *
- * The arguments are:
- *    STR            = the dataref string used by xplane
- *    SIG_DIRECT     = the signal function for direct value updates
- *    SIG_NUMBERED   = the signal function for numbered value updates
- *    FREQ           = the frequency with which xplane will emit updates
- *    SIG_NUM        = the number used in a SIG_NUMBERED signal
- *                      example: gear2 update SIG_NUM is 2
- *
  * NOTES:
  *  - The dataref's ID is determined programmatically so you do not have
  *    to keep track of ID's for every single dataref you request.
@@ -100,44 +184,52 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value)
  */
 void SwitchBoard::requestDatarefsFromXPlane()
 {
-   #define DRMAP_INSERT_D(STR, SIG_DIRECT, FREQ) \
-   { \
-      int id = nextDRefID(); \
-      drmap.insert(id, new DRefValue(id, STR, &SwitchBoard::SIG_DIRECT, NULL, FREQ)); \
-   }
-   #define DRMAP_INSERT_N(STR, SIG_NUMBERED, FREQ, SIG_NUM) \
-   { \
-      int id = nextDRefID(); \
-      drmap.insert(id, new DRefValue(id, STR, NULL, &SwitchBoard::SIG_NUMBERED, FREQ, SIG_NUM)); \
-   }
-   
+   // We do not want to receive our own packets, if this CPDisplay is running
+   // on the same machine that xplane is running on.
+   // xplane->blockSignals(true);
+
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
    // http://forums.x-plane.org/index.php?showtopic=87772)
 
-   //DRMAP_INSERT_D(XPDR_AC_TYPE,           acTypeUpdate,           1);
-   DRMAP_INSERT_D(XPDR_AC_TAIL_NUM_1,     acTailNumUpdate,        1);
-   DRMAP_INSERT_D(XPDR_AC_NUM_ENGINES,    acNumEnginesUpdate,     1);
+   //addDirectDRef(XPDR_AC_TYPE,           1, &SWB::acTypeUpdate);
+   addDirectDRef(XPDR_AC_TAIL_NUM_1,     1, &SWB::acTailNumUpdate);
+   addDirectDRef(XPDR_AC_NUM_ENGINES,    1, &SWB::acNumEnginesUpdate);
 
-   DRMAP_INSERT_D(XPDR_RADIO_COM1_FREQ,   radioCom1FreqUpdate,    2);
-   DRMAP_INSERT_D(XPDR_RADIO_COM1_STDBY,  radioCom1StdbyUpdate,   2);
-   DRMAP_INSERT_D(XPDR_RADIO_COM2_FREQ,   radioCom2FreqUpdate,    2);
-   DRMAP_INSERT_D(XPDR_RADIO_COM2_STDBY,  radioCom2StdbyUpdate,   2);
-   DRMAP_INSERT_D(XPDR_RADIO_NAV1_FREQ,   radioNav1FreqUpdate,    2);
-   DRMAP_INSERT_D(XPDR_RADIO_NAV1_STDBY,  radioNav1StdbyUpdate,   2);
-   DRMAP_INSERT_D(XPDR_RADIO_NAV2_FREQ,   radioNav2FreqUpdate,    2);
-   DRMAP_INSERT_D(XPDR_RADIO_NAV2_STDBY,  radioNav2StdbyUpdate,   2);
+   addDirectDRef(XPDR_RADIO_COM1_FREQ,   2, &SWB::radioCom1FreqUpdate);
+   addDirectDRef(XPDR_RADIO_COM1_STDBY,  2, &SWB::radioCom1StdbyUpdate);
+   addDirectDRef(XPDR_RADIO_COM2_FREQ,   2, &SWB::radioCom2FreqUpdate);
+   addDirectDRef(XPDR_RADIO_COM2_STDBY,  2, &SWB::radioCom2StdbyUpdate);
+   addDirectDRef(XPDR_RADIO_NAV1_FREQ,   2, &SWB::radioNav1FreqUpdate);
+   addDirectDRef(XPDR_RADIO_NAV1_STDBY,  2, &SWB::radioNav1StdbyUpdate);
+   addDirectDRef(XPDR_RADIO_NAV2_FREQ,   2, &SWB::radioNav2FreqUpdate);
+   addDirectDRef(XPDR_RADIO_NAV2_STDBY,  2, &SWB::radioNav2StdbyUpdate);
 
    for (int i = 0; i < MAX_NUM_FUEL_TANKS; i++) {
       QString vstr = XPDR_CP_FUEL_QTY_X;
       vstr.replace("__X__", QString::number(i));
-      DRMAP_INSERT_N(vstr, fuelQuantityUpdate, 4, i);
+      addNumberedDRef(vstr, 4, &SWB::fuelQuantityUpdate, i);
    }
 
    for (int i = 0; i < MAX_NUM_LANDING_GEARS; i++) {
       QString vstr = XPDR_GEAR_DEPLOY_X;
       vstr.replace("__X__", QString::number(i));
-      DRMAP_INSERT_N(vstr, gearDeployUpdate, 2, i);
+      addNumberedDRef(vstr, 2, &SWB::gearDeployUpdate, i);
    }
+
+   addLimitDRef(XPDR_ENG_LIMIT_MP,     1, &SWB::engLimitMPUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_FF,     1, &SWB::engLimitFFUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_N1,     1, &SWB::engLimitN1Update);
+   addLimitDRef(XPDR_ENG_LIMIT_N2,     1, &SWB::engLimitN2Update);
+ 
+   addLimitDRef(XPDR_ENG_LIMIT_EPR,    1, &SWB::engLimitEPRUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_EGT,    1, &SWB::engLimitEGTUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_TRQ,    1, &SWB::engLimitTRQUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_ITT,    1, &SWB::engLimitITTUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_CHT,    1, &SWB::engLimitCHTUpdate);
+ 
+   addLimitDRef(XPDR_ENG_LIMIT_OILP,   1, &SWB::engLimitOilPUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_OILT,   1, &SWB::engLimitOilTUpdate);
+   addLimitDRef(XPDR_ENG_LIMIT_FUELP,  1, &SWB::engLimitFuelPUpdate);
 
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
@@ -163,44 +255,11 @@ void SwitchBoard::requestDatarefsFromXPlane()
    // Turn on UDP output
    // This works (the DSEL packet to xplane), at least in 10.40b7
    QList<XPDataIndex> indexes;
-   indexes.append((XPDataIndex) 1);
-   indexes.append((XPDataIndex) 3);
-   indexes.append((XPDataIndex) 4);
-
-   indexes.append((XPDataIndex) 15);
-   indexes.append((XPDataIndex) 16);
-   indexes.append((XPDataIndex) 17);
-   indexes.append((XPDataIndex) 18);
-   indexes.append((XPDataIndex) 19);
-   indexes.append((XPDataIndex) 20);
-   indexes.append((XPDataIndex) 21);
-   indexes.append((XPDataIndex) 22);
-   indexes.append((XPDataIndex) 23);
-   indexes.append((XPDataIndex) 24);
-   indexes.append((XPDataIndex) 25);
-   indexes.append((XPDataIndex) 26);
-   
-   indexes.append((XPDataIndex) 34);
-   indexes.append((XPDataIndex) 35);
-   indexes.append((XPDataIndex) 36);
-   indexes.append((XPDataIndex) 37);
-   indexes.append((XPDataIndex) 38);
-   indexes.append((XPDataIndex) 39);
-   indexes.append((XPDataIndex) 40);
-   indexes.append((XPDataIndex) 41);
-   indexes.append((XPDataIndex) 42);
-   indexes.append((XPDataIndex) 43);
-   indexes.append((XPDataIndex) 44);
-   indexes.append((XPDataIndex) 45);
-   indexes.append((XPDataIndex) 46);
-   indexes.append((XPDataIndex) 47);
-   indexes.append((XPDataIndex) 48);
-   indexes.append((XPDataIndex) 49);
-   indexes.append((XPDataIndex) 50);
-
-   indexes.append((XPDataIndex) 96);
-   indexes.append((XPDataIndex) 97);
-
+   // Be lazy and enable everything we can for output.  Better this than
+   // explicitly selecting only the ones we want.
+   for (int i = 0; i < NUM_DATA_INDEXES-1; i++) {
+      indexes.append((XPDataIndex) i);
+   }
 
    // DSEL_PREFIX + i*cs + 3*0 for padding
    // == DSEL0 + ___ + 0
@@ -214,8 +273,9 @@ void SwitchBoard::requestDatarefsFromXPlane()
    for (int i = 0; i < indexes.size(); i++) {
       memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
    }
-   xplane->writeDatagram(dsel, len2, settings->xplaneHost(), settings->xplanePortOut());
+   xplane->writeDatagram(dsel, len2, settings->xplaneHost(), settings->xplanePortIn());
 }
+
 
 void SwitchBoard::processDatagram(QByteArray& data)
 {
@@ -284,15 +344,20 @@ void SwitchBoard::notifyAll(int code, xpflt value)
    if (val) {
       direct_fp   sigDirect   = val->signalDirect;
       numbered_fp sigNumbered = val->signalNumbered;
+      limit_fp    sigLimit    = val->signalLimit;
       if (sigDirect) {
          emit (this->*(sigDirect))(value);
       }
       if (sigNumbered) {
          emit (this->*(sigNumbered))(value, val->signalNum);
       }
+      if (sigLimit) {
+         emit (this->*(sigLimit))(value, val->limitType);
+      }
    }
    else {
-      qWarning() << "Warning: invalid data from xplane";
+      if (DEBUG_RECV)
+         qWarning() << "Warning: invalid data from xplane";
    }
 }
 
