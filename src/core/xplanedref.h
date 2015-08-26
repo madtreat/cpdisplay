@@ -104,9 +104,11 @@ static const char* XPDR_GEAR_DEPLOY_7     = "sim/aircraft/parts/acf_gear_deploy[
 static const char* XPDR_GEAR_DEPLOY_8     = "sim/aircraft/parts/acf_gear_deploy[8]";
 static const char* XPDR_GEAR_DEPLOY_9     = "sim/aircraft/parts/acf_gear_deploy[9]";
 
+// Flaps
+static const char* XPDR_FLAP1_DEPLOY      = "sim/flightmodel2/controls/flap1_deploy_ratio";
+static const char* XPDR_FLAP2_DEPLOY      = "sim/flightmodel2/controls/flap2_deploy_ratio";
+
 /*
-static const char* XPDR_ = "sim/";
-static const char* XPDR_ = "sim/";
 static const char* XPDR_ = "sim/";
 static const char* XPDR_ = "sim/";
 static const char* XPDR_ = "sim/";
