@@ -11,6 +11,7 @@
 #include <QObject>
 
 #include "core/aircraft.h"
+#include "core/xplanedref.h"
 #include "enginewidget.h"
 
 
@@ -75,6 +76,22 @@ signals:
    void oilTUpdate(float value, int engNum);
 
    void fuelUpdate(float value, int engNum);
+
+   // Engine limit signals, passed through from CPDController
+   void engLimitMPUpdate(float value, LimitType type); // in hg
+   void engLimitFFUpdate(float value, LimitType type); // gal/hr
+   void engLimitN1Update(float value, LimitType type); // percent
+   void engLimitN2Update(float value, LimitType type); // percent
+
+   void engLimitEPRUpdate(float value, LimitType type); // ratio
+   void engLimitEGTUpdate(float value, LimitType type); // deg C
+   void engLimitTRQUpdate(float value, LimitType type); // ft-lb
+   void engLimitITTUpdate(float value, LimitType type); // deg C
+   void engLimitCHTUpdate(float value, LimitType type); // deg C
+
+   void engLimitOilPUpdate(float value, LimitType type); // PSI
+   void engLimitOilTUpdate(float value, LimitType type); // deg C
+   void engLimitFuelPUpdate(float value, LimitType type); // PSI
 
 private:
    CPDSettings* cpdSettings;

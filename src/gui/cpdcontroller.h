@@ -71,8 +71,6 @@ public slots:
    void updateACLat(float lat, int ac);
    void updateACLon(float lon, int ac);
    void updateACAlt(float alt, int ac);
-   
-   void acUpdated(int id);
 
 signals:
    void turnRateUpdate(float tr);

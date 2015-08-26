@@ -12,6 +12,7 @@
 #include <QWidget>
 #include <QColor>
 
+#include "core/xplanedref.h"
 #include "engineconsts.h"
 
 
@@ -30,6 +31,7 @@ public:
 
 public slots:
    void setValue(float value, int _engNum);
+   void setLimit(float limit, LimitType lt);
    
 protected:
    void paintEvent(QPaintEvent*);
@@ -43,6 +45,13 @@ private:
    int valueMax;
    float valueFloat;
    
+   int limitGreenLo;
+   int limitGreenHi;
+   int limitYellowLo;
+   int limitYellowHi;
+   int limitRedLo;
+   int limitRedHi;
+
    double tickIncrement; // each tick represents X value
    double tickRatio;     // ratio of value to rotation degrees
    int tickDegIncrement; // each tick represents X rotation degrees
@@ -58,9 +67,9 @@ private:
    QColor dialColor;
    QColor bgColor;
 
-   QColor goodColor;
-   QColor warnColor;
-   QColor dngrColor;
+   QColor grnColor;
+   QColor ylwColor;
+   QColor redColor;
 
 };
 

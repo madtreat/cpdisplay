@@ -80,7 +80,6 @@ void CommsController::comSwapped(CommType ct)
    }
 }
 
-// TODO: notify xplane of the swap
 void CommsController::com1Swapped()
 {
    float com1act  = com1active;

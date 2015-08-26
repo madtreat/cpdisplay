@@ -17,7 +17,8 @@ QFrame#border,
 Ui--WidgetPFD,
 /*QLabel,*/
 QToolBar {
-   background-color: #222;
+   /*background-color: #222;*/
+   background-color: #111;
 /*   background: url(':/style/bg/metal-1-200x200.jpg') repeat;*/
 /*   background: url(':/style/bg/metal-2-160x160.jpg') repeat;*/
 }
@@ -32,6 +33,7 @@ Ui--WidgetPFD
 QFrame#border-light,
 QLabel#border-light,
 QWidget#border-light {
+   /*background-color: #222;*/
    border: 1px solid dimgray;
    border-radius: 8px;
 }

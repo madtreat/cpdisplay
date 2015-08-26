@@ -28,21 +28,21 @@ static const char* XPDR_AC_NUM_ENGINES    = "sim/aircraft/engine/acf_num_engines
  */
 enum LimitType {
    NO_LIMIT       = 0, // Default is 0, so this can safely be used as an invalid limit
-   // LIMIT_LO       = 1 << 0, // 1
-   // LIMIT_HI       = 1 << 1, // 2
-   // // Bit-mask these colors with either LIMIT_HI or LIMIT_LO
-   // LIMIT_GREEN    = 1 << 2, // 4
-   // LIMIT_YELLOW   = 1 << 3, // 8
-   // LIMIT_RED      = 1 << 4,  // 16
+   LIMIT_LO       = 1 << 0, // 1
+   LIMIT_HI       = 1 << 1, // 2
+   // Bit-mask these colors with either LIMIT_HI or LIMIT_LO
+   LIMIT_GREEN    = 1 << 2, // 4
+   LIMIT_YELLOW   = 1 << 3, // 8
+   LIMIT_RED      = 1 << 4,  // 16
 
    // These are the 6 different results that can be used as limits, as a short-hand to
    // avoid all the bitwise-or'ing
-   LIMIT_G_LO,//     = LIMIT_GREEN  | LIMIT_LO,
-   LIMIT_G_HI,//     = LIMIT_GREEN  | LIMIT_HI,
-   LIMIT_Y_LO,//     = LIMIT_YELLOW | LIMIT_LO,
-   LIMIT_Y_HI,//     = LIMIT_YELLOW | LIMIT_HI,
-   LIMIT_R_LO,//     = LIMIT_RED    | LIMIT_LO,
-   LIMIT_R_HI //     = LIMIT_RED    | LIMIT_HI
+   LIMIT_G_LO     = LIMIT_GREEN  | LIMIT_LO,
+   LIMIT_G_HI     = LIMIT_GREEN  | LIMIT_HI,
+   LIMIT_Y_LO     = LIMIT_YELLOW | LIMIT_LO,
+   LIMIT_Y_HI     = LIMIT_YELLOW | LIMIT_HI,
+   LIMIT_R_LO     = LIMIT_RED    | LIMIT_LO,
+   LIMIT_R_HI     = LIMIT_RED    | LIMIT_HI
 };
 static const char* XPDR_ENG_LIMIT_MP      = "sim/aircraft/limits/__LT___MP";
 static const char* XPDR_ENG_LIMIT_FF      = "sim/aircraft/limits/__LT___FF";

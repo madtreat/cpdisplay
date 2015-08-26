@@ -28,35 +28,40 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
       valueTextBase = QString("_X_ %1C").arg(QChar(0260));
       stepSize = 10;
       
-      connect(engC, &EngineController::oilTUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::oilTUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::engLimitOilTUpdate, this, &EngineDial::setLimit);
    }
    else if (type == DIAL_OIL_PRESSURE) {
       typeText = "Oil P";
       valueTextBase = "_X_ psi";
       stepSize = 10;
       
-      connect(engC, &EngineController::oilPUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::oilPUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::engLimitOilPUpdate, this, &EngineDial::setLimit);
    }
    else if (type == DIAL_ENG_RPM) {
       typeText = "ENG RPM";
       valueTextBase = "_X_ Hz";
       stepSize = 200;
       
-      connect(engC, &EngineController::engRPMUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::engRPMUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::engLimitOilTUpdate, this, &EngineDial::setLimit);
    }
    else if (type == DIAL_PROP_RPM) {
       typeText = "Prop RPM";
       valueTextBase = "_X_ Hz";
       stepSize = 200;
       
-      connect(engC, &EngineController::propRPMUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::propRPMUpdate, this, &EngineDial::setValue);
    }
    else if (type == DIAL_EPR) {
       typeText = "EPR";
       valueTextBase = "_X_ part";
       stepSize = 1;
       
-      connect(engC, &EngineController::eprUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::eprUpdate, this, &EngineDial::setValue);
+      // connect(engC, &ENGC::engLimitEPRUpdate, this, &EngineDial::setLimit);
+
       QTimer* repaintTimer = new QTimer(this);
       connect(repaintTimer, SIGNAL(timeout()), this, SLOT(update()));
       repaintTimer->start(1000);
@@ -66,14 +71,15 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
       valueTextBase = QString("_X_ %1C").arg(QChar(0260));
       stepSize = 200;
       
-      connect(engC, &EngineController::egtUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::egtUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::engLimitEGTUpdate, this, &EngineDial::setLimit);
    }
    else if (type == DIAL_FUEL) {
       typeText = "FUEL";
       valueTextBase = QString("_X_ %");
       stepSize = 10;
 
-      connect(engC, &EngineController::fuelUpdate, this, &EngineDial::setValue);
+      connect(engC, &ENGC::fuelUpdate, this, &EngineDial::setValue);
    }
    
    tickIncrement = 0.0;
@@ -88,9 +94,9 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
    dialColor = QColor(105, 105, 105);
    bgColor = QColor(34, 34, 34);
 
-   goodColor = QColor(Qt::green);
-   warnColor = QColor(Qt::yellow);
-   dngrColor = QColor(Qt::red);
+   grnColor = QColor(Qt::green);
+   ylwColor = QColor(Qt::yellow);
+   redColor = QColor(Qt::red);
    
    if (valueMin >= valueMax) {
       qWarning() << "Warning: dial type" << type << "has invalid range:";
@@ -126,6 +132,40 @@ void EngineDial::setValue(float _value, int _engNum)
 //      qDebug() << "Updating ENG" << engNum << "type:" << type << "value:" << _value;
       QDial::setValue((int) _value);
       valueFloat = _value;
+   }
+}
+
+void EngineDial::setLimit(float limit, LimitType lt)
+{
+   switch (lt) {
+      case LIMIT_G_LO:
+         limitGreenLo = limit;
+         if (type != DIAL_FUEL)
+            valueMin = limit;
+         break;
+      case LIMIT_G_HI:
+         limitGreenHi = limit;
+         // if (type == DIAL_FUEL)
+         //    valueMax = limit;
+         break;
+      case LIMIT_Y_LO:
+         limitYellowLo = limit;
+         break;
+      case LIMIT_Y_HI:
+         limitYellowHi = limit;
+         break;
+      case LIMIT_R_LO:
+         limitRedLo = limit;
+         // if (type == DIAL_FUEL)
+         //    valueMin = limit;
+         break;
+      case LIMIT_R_HI:
+         limitRedHi = limit;
+         if (type != DIAL_FUEL)
+            valueMax = limit;
+         break;
+      default:
+         break;
    }
 }
 
@@ -174,13 +214,13 @@ void EngineDial::paintEvent(QPaintEvent*)
    }
    
    // Draw min and max value
-   p.setPen((type != DIAL_FUEL) ? goodColor : dngrColor);
+   p.setPen((type != DIAL_FUEL) ? grnColor : redColor);
    QString valueStr = QString::number(valueMin);
    int textX = -(extent/2 + 6*valueStr.size() - 4);
    int textY = extent/2;
    p.drawText(textX, textY, valueStr);
 
-   p.setPen((type != DIAL_FUEL) ? dngrColor : goodColor);
+   p.setPen((type != DIAL_FUEL) ? redColor : grnColor);
    valueStr = QString::number(valueMax);
    textX = extent - 2*circleBuffer - 10;
    textY = +4;
@@ -189,16 +229,16 @@ void EngineDial::paintEvent(QPaintEvent*)
    // Draw the needle
    p.setPen(Qt::NoPen);
    double percent = (valueFloat-valueMin) / (double) range;
-   if ( ( type != DIAL_FUEL && percent >= 0.9 ) ||
-        ( type == DIAL_FUEL && percent <= 0.2 ) ) {
-      p.setBrush(dngrColor);
+   p.setBrush(grnColor);
+   // The following IF blocks need to override each other, so no ELSE's
+   if (value() > limitRedLo && value() <= limitRedHi) {
+      p.setBrush(redColor);
    }
-   else if ( ( type != DIAL_FUEL && percent >= 0.8 ) ||
-             ( type == DIAL_FUEL && percent <= 0.4 ) ) {
-      p.setBrush(warnColor);
+   if (value() > limitYellowLo && value() <= limitYellowHi) {
+      p.setBrush(ylwColor);
    }
-   else {
-      p.setBrush(goodColor);
+   if (value() >= limitGreenLo && value() <= limitGreenHi) {
+      p.setBrush(grnColor);
    }
    
    p.save();

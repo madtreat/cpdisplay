@@ -83,9 +83,23 @@ void CPDController::connectSignals()
    /*
     * These connections are for xplane 10.40+ dataref requests (RREF results).
     */
-   // TODO: direct these to the appropriate place
    // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
    // connect(sb, &SWB::acNumEnginesUpdate,  this, &CPDC::setNumEngines);
+
+   connect(sb, &SWB::engLimitMPUpdate,    engC, &ENGC::engLimitMPUpdate);
+   connect(sb, &SWB::engLimitFFUpdate,    engC, &ENGC::engLimitFFUpdate);
+   connect(sb, &SWB::engLimitN1Update,    engC, &ENGC::engLimitN1Update);
+   connect(sb, &SWB::engLimitN2Update,    engC, &ENGC::engLimitN2Update);
+   
+   connect(sb, &SWB::engLimitEPRUpdate,   engC, &ENGC::engLimitEPRUpdate);
+   connect(sb, &SWB::engLimitEGTUpdate,   engC, &ENGC::engLimitEGTUpdate);
+   connect(sb, &SWB::engLimitTRQUpdate,   engC, &ENGC::engLimitTRQUpdate);
+   connect(sb, &SWB::engLimitITTUpdate,   engC, &ENGC::engLimitITTUpdate);
+   connect(sb, &SWB::engLimitCHTUpdate,   engC, &ENGC::engLimitCHTUpdate);
+
+   connect(sb, &SWB::engLimitOilPUpdate,  engC, &ENGC::engLimitOilPUpdate);
+   connect(sb, &SWB::engLimitOilTUpdate,  engC, &ENGC::engLimitOilTUpdate);
+   connect(sb, &SWB::engLimitFuelPUpdate, engC, &ENGC::engLimitFuelPUpdate);
 
 
    /*
@@ -296,18 +310,4 @@ void CPDController::updateACAlt(float alt, int ac)
    Aircraft* a = acMap->value(ac);
    a->setAlt(alt);
    acMap->insert(ac, a); // update the map
-}
-
-/*
- * This slot is called when any given aircraft (identified by id) has had its
- * lat, lon and altitude updated.
- * 
- * Update the map so it can draw the AC.
- * Update the TFC controller so it can update the displayed values if this AC
- * is currently selected.
- */
-void CPDController::acUpdated(int id)
-{
-   
-   // TODO: update the map for drawing the AC
 }

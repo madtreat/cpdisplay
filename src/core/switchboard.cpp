@@ -15,7 +15,9 @@
 #include "cpdsettings.h"
 
 #define DEBUG_SEND 1
-#define DEBUG_RECV 0
+#define DEBUG_RECV_UDP 0
+#define DEBUG_RECV_RREF 0
+#define DEBUG_RECV (DEBUG_RECV_UDP | DEBUG_RECV_RREF)
 
 
 // Direct-signal-only constructor
@@ -234,7 +236,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
       QString vstr = val->str;
-      // qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
+      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
 
       xp_rref_in dref;
       dref.freq = (xpint) val->freq;
@@ -248,7 +250,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
       memcpy(&data, RREF_PREFIX, ID_DIM);
       memcpy(&data[ID_DIM], &dref, sizeof(xp_rref_in));
       
-      xplane->writeDatagram(data, len, settings->xplaneHost(), settings->xplanePortOut());
+      xplane->writeDatagram(data, len, settings->xplaneHost(), settings->xplanePortIn());
    }
 
 
@@ -289,7 +291,7 @@ void SwitchBoard::processDatagram(QByteArray& data)
    if (header == "RREFO") {
       int size = sizeof(xp_rref_out);
       int numValues = values.size()/size;
-      if (DEBUG_RECV)
+      if (DEBUG_RECV_RREF)
          qDebug() << "Received RREFO with" << numValues << "values:";
 
       for (int i = 0; i < numValues; i++) {
@@ -301,12 +303,12 @@ void SwitchBoard::processDatagram(QByteArray& data)
           * dref->code into some erroneous data, so variables store the code
           * and value directly, as soon as the dref object is constructed.
           */
-         if (DEBUG_RECV)
+         if (DEBUG_RECV_RREF && code >= 188 && code <= 199) // EPR/EGT only
             qDebug() << "   data received:" << header << dref->code << dref->data;
 
          notifyAll((int) code, value);
       }
-      if (DEBUG_RECV)
+      if (DEBUG_RECV_RREF)
          qDebug() << "--- --- --- --- ---";
    }
 
@@ -356,7 +358,7 @@ void SwitchBoard::notifyAll(int code, xpflt value)
       }
    }
    else {
-      if (DEBUG_RECV)
+      if (DEBUG_RECV_RREF)
          qWarning() << "Warning: invalid data from xplane";
    }
 }
