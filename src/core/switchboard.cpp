@@ -193,10 +193,13 @@ void SwitchBoard::requestDatarefsFromXPlane()
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
    // http://forums.x-plane.org/index.php?showtopic=87772)
 
+   // Aircraft type and info
    //addDirectDRef(XPDR_AC_TYPE,           1, &SWB::acTypeUpdate);
    addDirectDRef(XPDR_AC_TAIL_NUM_1,     1, &SWB::acTailNumUpdate);
    addDirectDRef(XPDR_AC_NUM_ENGINES,    1, &SWB::acNumEnginesUpdate);
+   addDirectDRef(XPDR_GEAR_RETRACTABLE,  1, &SWB::gearRetractableUpdate);
 
+   // Radios
    addDirectDRef(XPDR_RADIO_COM1_FREQ,   2, &SWB::radioCom1FreqUpdate);
    addDirectDRef(XPDR_RADIO_COM1_STDBY,  2, &SWB::radioCom1StdbyUpdate);
    addDirectDRef(XPDR_RADIO_COM2_FREQ,   2, &SWB::radioCom2FreqUpdate);
@@ -206,18 +209,21 @@ void SwitchBoard::requestDatarefsFromXPlane()
    addDirectDRef(XPDR_RADIO_NAV2_FREQ,   2, &SWB::radioNav2FreqUpdate);
    addDirectDRef(XPDR_RADIO_NAV2_STDBY,  2, &SWB::radioNav2StdbyUpdate);
 
+   // Fuel
    for (int i = 0; i < MAX_NUM_FUEL_TANKS; i++) {
       QString vstr = XPDR_CP_FUEL_QTY_X;
       vstr.replace("__X__", QString::number(i));
       addNumberedDRef(vstr, 4, &SWB::fuelQuantityUpdate, i);
    }
 
+   // Gear
    for (int i = 0; i < MAX_NUM_LANDING_GEARS; i++) {
       QString vstr = XPDR_GEAR_DEPLOY_X;
       vstr.replace("__X__", QString::number(i));
       addNumberedDRef(vstr, 2, &SWB::gearDeployUpdate, i);
    }
 
+   // Engine limits
    addLimitDRef(XPDR_ENG_LIMIT_MP,     1, &SWB::engLimitMPUpdate);
    addLimitDRef(XPDR_ENG_LIMIT_FF,     1, &SWB::engLimitFFUpdate);
    addLimitDRef(XPDR_ENG_LIMIT_N1,     1, &SWB::engLimitN1Update);

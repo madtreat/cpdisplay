@@ -16,10 +16,10 @@ public:
    ~GearController();
 
 public slots:
-   void setGear();
    void notifyXPlaneGearHandle(bool up);
 
 signals:
+   void updateGearRetractable(float retractable);
    void updateXPlaneGearHandle(QString dref, int down);
 
 private:

@@ -19,11 +19,6 @@ GearController::~GearController()
 {
 }
 
-void GearController::setGear()
-{
-   
-}
-
 // Note the default for my gear widgets is up, while the dataref is down
 void GearController::notifyXPlaneGearHandle(bool up)
 {

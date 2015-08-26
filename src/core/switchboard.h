@@ -136,6 +136,7 @@ signals:
 
    // Landing Gear
    // range: [0.0, 1.0]
+   void gearRetractableUpdate(float rectractable); // a bool value
    void gearDeployUpdate(float percent, int gearNum);
 
 

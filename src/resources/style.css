@@ -3,10 +3,7 @@
     Author     : Madison Treat <madison.treat@tamu.edu>
 */
 
-QMainWindow {/*,*/
-/*QWidget,*/
-/*QPushButton,*/
-/*QWebView {*/
+QMainWindow {
    background-color: black;
    background: url(':/style/bg/metal-1-200x200.jpg') repeat;
 /*   background: url(':/style/bg/metal-2-160x160.jpg') repeat;*/
@@ -15,12 +12,8 @@ QMainWindow {/*,*/
 
 QFrame#border,
 Ui--WidgetPFD,
-/*QLabel,*/
 QToolBar {
-   /*background-color: #222;*/
    background-color: #111;
-/*   background: url(':/style/bg/metal-1-200x200.jpg') repeat;*/
-/*   background: url(':/style/bg/metal-2-160x160.jpg') repeat;*/
 }
 
 QFrame#border,
@@ -33,7 +26,6 @@ Ui--WidgetPFD
 QFrame#border-light,
 QLabel#border-light,
 QWidget#border-light {
-   /*background-color: #222;*/
    border: 1px solid dimgray;
    border-radius: 8px;
 }
@@ -41,7 +33,6 @@ QWidget#border-light {
 QToolBar,
 QPushButton::checked,
 QLabel {
-   /*color: darkgreen;*/
    color: green;
 }
 
@@ -66,13 +57,11 @@ QPushButton::pressed {
 QPushButton::checked {
    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
       stop: 0 darkgreen, stop: 1 black);
-   /*color: green;*/
 }
 
 QPushButton::checked::pressed {
    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
       stop: 0 black, stop: 1 darkgreen);
-   /*color: green;*/
 }
 
 QProgressBar {
