@@ -69,6 +69,7 @@ public slots:
    void updateRoll(float r);
    void tryCalculateTurnRate();
    
+   // Multiplayer aircraft updates
    void updateACLat(float lat, int ac);
    void updateACLon(float lon, int ac);
    void updateACAlt(float alt, int ac);

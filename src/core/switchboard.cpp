@@ -14,6 +14,7 @@
 
 #include "cpdsettings.h"
 
+#define DEBUG_DREF_ID 0
 #define DEBUG_SEND 1
 #define DEBUG_RECV_UDP 0
 #define DEBUG_RECV_RREF 0
@@ -282,7 +283,8 @@ void SwitchBoard::requestDatarefsFromXPlane()
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
       QString vstr = val->str;
-//      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
+      if (DEBUG_DREF_ID)
+         qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
 
       xp_rref_in dref;
       dref.freq = (xpint) val->freq;

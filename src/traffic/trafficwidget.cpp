@@ -51,8 +51,8 @@ void TrafficWidget::displayAC(Aircraft* ac)
 {
    currentAC = ac;
    currentID = ac->getID();
-   acLabel->setText(QString("Aircraft %1").arg(ac->getID()));
-   alt->setText(QString("%1").arg(ac->getAlt(), 1, 'f', 1));
+   acLabel->setText(QString("Aircraft %1").arg(currentID));
+   alt->setText(QString("%1").arg(ac->getAlt(), 1, 'f', 0));
    spd->setText(QString("%1").arg(ac->getSpd(), 1, 'f', 1));
    hdg->setText(QString("%1").arg(ac->getHdg(), 1, 'f', 1));
    rng->setText(QString("%1").arg(ac->getRng(), 1, 'f', 1));

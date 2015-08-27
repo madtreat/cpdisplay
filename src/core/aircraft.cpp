@@ -7,6 +7,11 @@
 
 #include "aircraft.h"
 
+#include <QDebug>
+
+// meters/sec to knots conversion
+#define MPS_TO_KNOTS 1.94384f
+
 Aircraft::Aircraft(int _id, QObject* _parent)
 : QObject(_parent),
   id(_id),
@@ -47,6 +52,9 @@ void Aircraft::tryEmitUpdate()
 void Aircraft::tryEmitSpdUpdate()
 {
    if (spdXUpdated && spdYUpdated && spdZUpdated) {
+      spd = sqrt(spdX*spdX + spdY*spdY + spdZ*spdZ) * MPS_TO_KNOTS;
+      qDebug() << "AC" << id << "speed updated:" << spd << "(" << spdX << spdY << spdZ << ")";
+      emit acUpdated(id);
       emit spdUpdated(id);
       spdXUpdated = false;
       spdYUpdated = false;
@@ -90,6 +98,8 @@ void Aircraft::setLatLonAlt(float _lat, float _lon, float _alt)
 void Aircraft::setHdg(float _hdg)
 {
    hdg = _hdg;
+   qDebug() << "AC" << id << "heading updated:" << hdg;
+   emit acUpdated(id);
    emit hdgUpdated(id);
 }
 
