@@ -112,6 +112,12 @@ static const char* XPDR_FLAP_HANDLE_DEPLOY= "sim/cockpit2/controls/flap_ratio";
 //static const char* XPDR_FLAP1_DEPLOY      = "sim/flightmodel2/controls/flap1_deploy_ratio";
 //static const char* XPDR_FLAP2_DEPLOY      = "sim/flightmodel2/controls/flap2_deploy_ratio";
 
+// Multiplayer
+static const int MAX_NUM_PLANES = 19; // range: [1,19]; we are plane 0, making 20
+static const char* XPDR_PLANE_X_HEADING   = "sim/multiplayer/position/plane__X___psi";
+static const char* XPDR_PLANE_X_SPEED_X   = "sim/multiplayer/position/plane__X___v_x";
+static const char* XPDR_PLANE_X_SPEED_Y   = "sim/multiplayer/position/plane__X___v_y";
+static const char* XPDR_PLANE_X_SPEED_Z   = "sim/multiplayer/position/plane__X___v_z";
 
 /*
 static const char* XPDR_ = "sim/";

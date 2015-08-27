@@ -147,6 +147,12 @@ signals:
    void flapUpdate(float percent);
    void flapHandleUpdate(float percent);
 
+   // Multiplayer planes
+   void acHdgUpdate(float heading, int acNum);
+   void acSpdXUpdate(float vx, int acNum);
+   void acSpdYUpdate(float vy, int acNum);
+   void acSpdZUpdate(float vz, int acNum);
+
 
    // XPlane < 10.40 / raw UDP output versions:
    void timeUpdate(float zulu, float local, float mission, float timer);

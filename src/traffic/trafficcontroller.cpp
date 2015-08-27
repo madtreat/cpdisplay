@@ -11,15 +11,13 @@
 
 #include "utils/geodist.h"
 #include "core/cpdsettings.h"
-#include "trafficwidget.h"
+
 
 TrafficController::TrafficController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent)
 : QObject(_parent),
   cpdSettings(_cpdSettings),
   acMap(_acMap)
 {
-   trafficWidget = new TrafficWidget(cpdSettings, acMap);
-   connect(trafficWidget, &TrafficWidget::displayedACChanged, this, &TrafficController::updateCurrentAC);
    currentID = 1;
 }
 
@@ -40,7 +38,6 @@ TrafficController::~TrafficController()
  */
 void TrafficController::acUpdated(int id)
 {
-   
    Aircraft* ac0 = acMap->value(0);  // This cockpit/AC
    Aircraft* ac  = acMap->value(id); // The updated AC
    double rng = geo::distance(ac0->getLat(), ac0->getLon(), ac->getLat(), ac->getLon());
@@ -48,13 +45,8 @@ void TrafficController::acUpdated(int id)
    ac->setRngBer(rng, ber);
    
    if (id == currentID) {
-      setDisplayedAC(acMap->value(id));
+      emit displayedACUpdated(id);
    }
-}
-
-void TrafficController::setDisplayedAC(Aircraft* ac)
-{
-   trafficWidget->displayAC(ac);
 }
 
 void TrafficController::updateCurrentAC(int id)

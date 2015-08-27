@@ -17,19 +17,21 @@ class QPushButton;
 
 class Aircraft;
 class CPDSettings;
+class TrafficController;
 
 
 class TrafficWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   TrafficWidget(CPDSettings* _cpdSettings, ACMap* _acMap, QFrame* _parent = 0);
+   TrafficWidget(CPDSettings* _cpdSettings, TrafficController* _tfcC, ACMap* _acMap, QFrame* _parent = 0);
    TrafficWidget(const TrafficWidget& orig) = delete;
    virtual ~TrafficWidget();
 
 public slots:
    void displayAC(Aircraft* ac);
    void displayAC(int acID);
+   void refreshAC(int acID);
    void showNextAC();
    void showPrevAC();
    
@@ -38,6 +40,7 @@ signals:
 
 private:
    CPDSettings*   cpdSettings;
+   TrafficController* tfcC;
    ACMap*         acMap;
    Aircraft*      currentAC;
    int            currentID;

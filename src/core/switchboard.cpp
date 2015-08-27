@@ -263,6 +263,22 @@ void SwitchBoard::requestDatarefsFromXPlane()
    addDirectDRef(XPDR_FLAP_DEPLOY,        4, &SWB::flapUpdate);
    addDirectDRef(XPDR_FLAP_HANDLE_DEPLOY, 4, &SWB::flapHandleUpdate);
 
+   // Multiplayer
+   for (int i = 1; i <= MAX_NUM_PLANES; i++) {
+      QString vstr = QString(XPDR_PLANE_X_HEADING).replace("__X__", QString::number(i));
+      addNumberedDRef(vstr, 20, &SWB::acHdgUpdate, i);
+
+      vstr = QString(XPDR_PLANE_X_SPEED_X).replace("__X__", QString::number(i));
+      addNumberedDRef(vstr, 20, &SWB::acSpdXUpdate, i);
+
+      vstr = QString(XPDR_PLANE_X_SPEED_Y).replace("__X__", QString::number(i));
+      addNumberedDRef(vstr, 20, &SWB::acSpdYUpdate, i);
+
+      vstr = QString(XPDR_PLANE_X_SPEED_Y).replace("__X__", QString::number(i));
+      addNumberedDRef(vstr, 20, &SWB::acSpdZUpdate, i);
+
+   }
+
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
       QString vstr = val->str;

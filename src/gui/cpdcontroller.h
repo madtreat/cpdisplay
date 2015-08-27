@@ -33,6 +33,7 @@ class CommsController;
 class EngineController;
 class TrafficController;
 
+
 class CPDController : public QObject {
    Q_OBJECT;
 
@@ -71,6 +72,10 @@ public slots:
    void updateACLat(float lat, int ac);
    void updateACLon(float lon, int ac);
    void updateACAlt(float alt, int ac);
+   void updateACHdg(float hdg, int ac);
+   void updateACSpdX(float vx, int ac);
+   void updateACSpdY(float vy, int ac);
+   void updateACSpdZ(float vz, int ac);
 
 signals:
    void turnRateUpdate(float tr);

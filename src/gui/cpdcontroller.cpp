@@ -83,10 +83,12 @@ void CPDController::connectSignals()
    /*
     * These connections are for xplane 10.40+ dataref requests (RREF results).
     */
+   // General aircraft
    // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
    // connect(sb, &SWB::acNumEnginesUpdate,  this, &CPDC::setNumEngines);
    connect(sb, &SWB::gearRetractableUpdate, gearC, &GEARC::updateGearRetractable);
 
+   // Engine limits
    connect(sb, &SWB::engLimitMPUpdate,    engC, &ENGC::engLimitMPUpdate);
    connect(sb, &SWB::engLimitFFUpdate,    engC, &ENGC::engLimitFFUpdate);
    connect(sb, &SWB::engLimitN1Update,    engC, &ENGC::engLimitN1Update);
@@ -102,8 +104,15 @@ void CPDController::connectSignals()
    connect(sb, &SWB::engLimitOilTUpdate,  engC, &ENGC::engLimitOilTUpdate);
    connect(sb, &SWB::engLimitFuelPUpdate, engC, &ENGC::engLimitFuelPUpdate);
 
+   // Flaps
    connect(sb, &SWB::flapUpdate,          gearC, &GEARC::flapUpdate);
    connect(sb, &SWB::flapHandleUpdate,    gearC, &GEARC::flapHandleUpdate);
+
+   // Multiplayer: other aircraft
+   connect(sb, &SWB::acHdgUpdate,         this,  &CPDC::updateACHdg);
+   connect(sb, &SWB::acSpdXUpdate,        this,  &CPDC::updateACSpdX);
+   connect(sb, &SWB::acSpdYUpdate,        this,  &CPDC::updateACSpdY);
+   connect(sb, &SWB::acSpdZUpdate,        this,  &CPDC::updateACSpdZ);
 
 
    /*
@@ -314,5 +323,53 @@ void CPDController::updateACAlt(float alt, int ac)
    }
    Aircraft* a = acMap->value(ac);
    a->setAlt(alt);
+   acMap->insert(ac, a); // update the map
+}
+
+void CPDController::updateACHdg(float hdg, int ac)
+{
+   // If this aircraft has not been identified yet, add it to the list
+   if (!acMap->contains(ac)) {
+      //      createAircraft(ac, 0.0, 0.0, alt);
+      return;
+   }
+   Aircraft* a = acMap->value(ac);
+   a->setHdg(hdg);
+   acMap->insert(ac, a); // update the map
+}
+
+void CPDController::updateACSpdX(float vx, int ac)
+{
+   // If this aircraft has not been identified yet, add it to the list
+   if (!acMap->contains(ac)) {
+      //      createAircraft(ac, 0.0, 0.0, alt);
+      return;
+   }
+   Aircraft* a = acMap->value(ac);
+   a->setSpdX(vx);
+   acMap->insert(ac, a); // update the map
+}
+
+void CPDController::updateACSpdY(float vy, int ac)
+{
+   // If this aircraft has not been identified yet, add it to the list
+   if (!acMap->contains(ac)) {
+      //      createAircraft(ac, 0.0, 0.0, alt);
+      return;
+   }
+   Aircraft* a = acMap->value(ac);
+   a->setSpdY(vy);
+   acMap->insert(ac, a); // update the map
+}
+
+void CPDController::updateACSpdZ(float vz, int ac)
+{
+   // If this aircraft has not been identified yet, add it to the list
+   if (!acMap->contains(ac)) {
+      //      createAircraft(ac, 0.0, 0.0, alt);
+      return;
+   }
+   Aircraft* a = acMap->value(ac);
+   a->setSpdZ(vz);
    acMap->insert(ac, a); // update the map
 }

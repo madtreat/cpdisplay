@@ -20,6 +20,7 @@ class GearWidget;
 class FlapsWidget;
 class CommsWidget;
 class EngineWidget;
+class TrafficWidget;
 
 
 class CPDWindow : public QMainWindow {
@@ -53,6 +54,7 @@ private:
    FlapsWidget*   flapW;
    CommsWidget*   comW;
    EngineWidget*  engW;
+   TrafficWidget* tfcW;
    
    // PFD Alternate - guages instead of PFD
    QWidget*       pfdAltGuages;

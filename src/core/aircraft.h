@@ -61,12 +61,18 @@ public slots:
    void setLon(float _lon);
    void setAlt(float _alt);
    void setLatLonAlt(float _lat, float _lon, float _alt);
+   void setHdg(float _hdg);
+   void setSpdX(float _vx);
+   void setSpdY(float _vy);
+   void setSpdZ(float _vz);
    
    void setRngBer(double _rng, double _ber);
 
 signals:
-   void acUpdated(int id);
-   void rngBerUpdated(int id);
+   void acUpdated(int id);       // lat/lon/alt
+   void rngBerUpdated(int id);   // rng/ber
+   void hdgUpdated(int id);      // hdg
+   void spdUpdated(int id);      // spd (after all 3 components)
 
 private:
    AircraftType type;
@@ -79,17 +85,26 @@ private:
    float alt; // MSL altitude
    
    float spd; // speed
+   float spdX;// speed x component
+   float spdY;// speed y component
+   float spdZ;// speed z component
    float hdg; // aircraft's heading
    
    // These values are from a reference point of the current cockpit's position
    float rng; // aircraft's range from this position
    float ber; // aircraft's bearing from this position
-   
+
+   // Flags for updating groups of values together
    bool latUpdated;
    bool lonUpdated;
    bool altUpdated;
+
+   bool spdXUpdated;
+   bool spdYUpdated;
+   bool spdZUpdated;
    
    void tryEmitUpdate();
+   void tryEmitSpdUpdate();
 };
 
 // map of ID to Aircraft

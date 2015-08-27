@@ -37,11 +37,20 @@ Aircraft::~Aircraft()
 void Aircraft::tryEmitUpdate()
 {
    if (latUpdated && lonUpdated && altUpdated) {
-      // TODO: calculate spd, hdg, rng, ber
       emit acUpdated(id);
       latUpdated = false;
       lonUpdated = false;
       altUpdated = false;
+   }
+}
+
+void Aircraft::tryEmitSpdUpdate()
+{
+   if (spdXUpdated && spdYUpdated && spdZUpdated) {
+      emit spdUpdated(id);
+      spdXUpdated = false;
+      spdYUpdated = false;
+      spdZUpdated = false;
    }
 }
 
@@ -76,6 +85,33 @@ void Aircraft::setLatLonAlt(float _lat, float _lon, float _alt)
    latUpdated = false;
    lonUpdated = false;
    altUpdated = false;
+}
+
+void Aircraft::setHdg(float _hdg)
+{
+   hdg = _hdg;
+   emit hdgUpdated(id);
+}
+
+void Aircraft::setSpdX(float _vx)
+{
+   spdX = _vx;
+   spdXUpdated = true;
+   tryEmitSpdUpdate();
+}
+
+void Aircraft::setSpdY(float _vy)
+{
+   spdY = _vy;
+   spdYUpdated = true;
+   tryEmitSpdUpdate();
+}
+
+void Aircraft::setSpdZ(float _vz)
+{
+   spdZ = _vz;
+   spdZUpdated = true;
+   tryEmitSpdUpdate();
 }
 
 void Aircraft::setRngBer(double _rng, double _ber)

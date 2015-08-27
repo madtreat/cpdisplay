@@ -31,8 +31,7 @@
 #include "comms/commswidget.h"
 #include "engine/fuelwidget.h"
 #include "engine/enginewidget.h"
-// TODO: remove
-#include "traffic/trafficcontroller.h"
+#include "traffic/trafficwidget.h"
 
 
 CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent) 
@@ -59,6 +58,7 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    flapW = new FlapsWidget(cpdSettings,   cpdC->getGearC());
    comW  = new CommsWidget(cpdSettings,   cpdC->getComC());
    engW  = new EngineWidget(cpdSettings,  cpdC->getEngC());
+   tfcW  = new TrafficWidget(cpdSettings, cpdC->getTfcC(), acMap);
    
    setupPFDAltGuages();
 
@@ -67,7 +67,7 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    widgetMap.insert(1,  cpdC->getPFDC()->getWidget());
    widgetMap.insert(2,  mapW);
    widgetMap.insert(3,  engW);
-   widgetMap.insert(4,  cpdC->getTfcC()->getWidget());
+   widgetMap.insert(4,  tfcW);
    widgetMap.insert(5,  comW);
    widgetMap.insert(6,  pfdAltGuages);
    widgetMap.insert(7,  fuelW);

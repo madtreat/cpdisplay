@@ -14,13 +14,19 @@
 
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"
+#include "trafficcontroller.h"
 
-TrafficWidget::TrafficWidget(CPDSettings* _cpdSettings, ACMap* _acMap, QFrame* _parent)
+
+TrafficWidget::TrafficWidget(CPDSettings* _cpdSettings, TrafficController* _tfcC, ACMap* _acMap, QFrame* _parent)
 : QFrame(_parent),
   cpdSettings(_cpdSettings),
+  tfcC(_tfcC),
   acMap(_acMap),
   currentID(1)
 {
+   connect(this, &TrafficWidget::displayedACChanged, tfcC, &TFCC::updateCurrentAC);
+   connect(tfcC, &TFCC::displayedACUpdated, this, &TrafficWidget::refreshAC);
+
    if (acMap->contains(currentID)) {
       currentAC = acMap->value(currentID);
    }
@@ -59,8 +65,15 @@ void TrafficWidget::displayAC(int acID)
    if (acMap->contains(acID)) {
       displayAC(acMap->value(acID));
    }
-   else {
-      // do nothing?
+}
+
+void TrafficWidget::refreshAC(int acID)
+{
+   if (acMap->contains(acID)) {
+      // Block the signals temporarily, since this is already the current AC
+      blockSignals(true);
+      displayAC(acMap->value(acID));
+      blockSignals(false);
    }
 }
 
