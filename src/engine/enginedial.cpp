@@ -129,7 +129,6 @@ EngineDial::~EngineDial()
 void EngineDial::setValue(float _value, int _engNum)
 {
    if (_engNum == engNum) {
-//      qDebug() << "Updating ENG" << engNum << "type:" << type << "value:" << _value;
       QDial::setValue((int) _value);
       valueFloat = _value;
    }

@@ -26,6 +26,7 @@
 
 #include "map/mapwidget.h"
 #include "gear/gearwidget.h"
+#include "gear/flapswidget.h"
 #include "comms/timewidget.h"
 #include "comms/commswidget.h"
 #include "engine/fuelwidget.h"
@@ -50,16 +51,19 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    layoutManager = new LayoutManager();
 
    MapController* mapC = cpdC->getMapC();
-   mapW  = new MapWidget(cpdSettings, mapC->getMapSettings(), mapC, acMap);
-   timeW = new TimeWidget(cpdSettings, cpdC->getComC());
-   fuelW = new FuelWidget(cpdSettings, cpdC->getEngC());
-   gearW = new GearWidget(cpdSettings, cpdC->getGearC());
-   comW  = new CommsWidget(cpdSettings, cpdC->getComC());
-   engW  = new EngineWidget(cpdSettings, cpdC->getEngC());
+   // NOTE: to add a new widget, add its constructor here
+   mapW  = new MapWidget(cpdSettings,     mapC->getMapSettings(), mapC, acMap);
+   timeW = new TimeWidget(cpdSettings,    cpdC->getComC());
+   fuelW = new FuelWidget(cpdSettings,    cpdC->getEngC());
+   gearW = new GearWidget(cpdSettings,    cpdC->getGearC());
+   flapW = new FlapsWidget(cpdSettings,   cpdC->getGearC());
+   comW  = new CommsWidget(cpdSettings,   cpdC->getComC());
+   engW  = new EngineWidget(cpdSettings,  cpdC->getEngC());
    
    setupPFDAltGuages();
 //   pfdButtonClicked(true); // Hide the alt guages after creation;
-   
+
+   // NOTE: to add a new widget, insert it into the map below
    QMap<int, QWidget*> widgetMap;
    widgetMap.insert(1,  cpdC->getPFDC()->getWidget());
    widgetMap.insert(2,  mapW);
@@ -71,6 +75,7 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    widgetMap.insert(8,  fuelW);
    widgetMap.insert(9,  timeW);
    widgetMap.insert(10, gearW);
+   widgetMap.insert(11, flapW);
    
    for (int i = 0; i < layoutProfile->numItems(); i++) {
       LayoutItem* item = layoutProfile->itemAt(i);

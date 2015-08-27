@@ -220,7 +220,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
    for (int i = 0; i < MAX_NUM_LANDING_GEARS; i++) {
       QString vstr = XPDR_GEAR_DEPLOY_X;
       vstr.replace("__X__", QString::number(i));
-      addNumberedDRef(vstr, 2, &SWB::gearDeployUpdate, i);
+      addNumberedDRef(vstr, 4, &SWB::gearDeployUpdate, i);
    }
 
    // Engine limits
@@ -238,6 +238,11 @@ void SwitchBoard::requestDatarefsFromXPlane()
    addLimitDRef(XPDR_ENG_LIMIT_OILP,   1, &SWB::engLimitOilPUpdate);
    addLimitDRef(XPDR_ENG_LIMIT_OILT,   1, &SWB::engLimitOilTUpdate);
    addLimitDRef(XPDR_ENG_LIMIT_FUELP,  1, &SWB::engLimitFuelPUpdate);
+
+   // Flaps
+   addDirectDRef(XPDR_FLAP1_DEPLOY,    4, &SWB::flap1Update);
+   addDirectDRef(XPDR_FLAP2_DEPLOY,    4, &SWB::flap2Update);
+
 
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);

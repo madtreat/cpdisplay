@@ -17,6 +17,7 @@ class MapWidget;
 class TimeWidget;
 class FuelWidget;
 class GearWidget;
+class FlapsWidget;
 class CommsWidget;
 class EngineWidget;
 
@@ -43,10 +44,13 @@ private:
    QMap<int, LayoutItem*> layoutMap;
    
    // Individual widgets
+   // NOTE: to add a new widget, first add a forward declare above, then add
+   // a line here.
    MapWidget*     mapW;
    TimeWidget*    timeW;
    FuelWidget*    fuelW;
    GearWidget*    gearW;
+   FlapsWidget*   flapW;
    CommsWidget*   comW;
    EngineWidget*  engW;
    

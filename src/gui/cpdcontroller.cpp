@@ -111,6 +111,7 @@ void CPDController::connectSignals()
    connect(comC, &COMC::updateXPlaneTimer,   sb, &SWB::sendDREF);
 
    connect(gearC, &GEARC::updateXPlaneGearHandle, sb, &SWB::sendDREF);
+   connect(gearC, &GEARC::updateXPlaneFlaps, sb, &SWB::sendDREF);
 
 
    /*

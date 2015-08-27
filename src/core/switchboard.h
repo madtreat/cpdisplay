@@ -134,10 +134,13 @@ signals:
    // Fuel Quantity
    void fuelQuantityUpdate(float qty, int tankNum);
 
-   // Landing Gear
-   // range: [0.0, 1.0]
+   // Landing Gear - range: [0.0, 1.0]
    void gearRetractableUpdate(float rectractable); // a bool value
    void gearDeployUpdate(float percent, int gearNum);
+
+   // Flaps - range: [0.0, 1.0]
+   void flap1Update(float percent);
+   void flap2Update(float percent);
 
 
    // XPlane < 10.40 / raw UDP output versions:

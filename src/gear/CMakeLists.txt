@@ -4,12 +4,14 @@ set(SOURCES
    gearcontroller.cpp
    gearwidget.cpp
    singlegearwidget.cpp
+   flapswidget.cpp
 )
 
 set(HEADERS
    gearcontroller.h
    gearwidget.h
    singlegearwidget.h
+   flapswidget.h
 )
 
 add_library(${PROJECT_NAME} SHARED
