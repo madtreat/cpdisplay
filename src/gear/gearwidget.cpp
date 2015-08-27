@@ -26,19 +26,6 @@ GearWidget::GearWidget(CPDSettings* _settings, GearController* _gearC, int _numG
    connect(master, &SingleGearWidget::switchChanged, gearC, &GEARC::notifyXPlaneGearHandle);
    layout->addWidget(master);
 
-   /*
-   for (int i = 0; i < MAX_NUM_GEARS; i++) {
-      SingleGearWidget* gear = new SingleGearWidget(settings, gearC, i, this);
-      connect(master, &SingleGearWidget::switchChanged, gear, &SingleGearWidget::setSwitch);
-
-      if (i >= numGears) {
-         gear->setVisible(false);
-      }
-      gears.append(gear);
-      layout->addWidget(gear);
-   }
-   */
-
    setObjectName("border");
 }
 

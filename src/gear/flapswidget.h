@@ -10,10 +10,12 @@
 
 #include <QFrame>
 
+
 class QSlider;
 
 class CPDSettings;
 class GearController;
+class SingleFlapWidget;
 
 
 class FlapsWidget : public QFrame {
@@ -23,20 +25,12 @@ public:
    FlapsWidget(CPDSettings* _settings, GearController* _gearC, QFrame* _parent=0);
    ~FlapsWidget();
 
-public slots:
-//   void setFlaps();
-
-signals:
-//   void flapUpdate(float percent);
-
 private:
    CPDSettings* settings;
    GearController* gearC;
 
-   QSlider* flap1;
-   QSlider* flap2;
-
-   QSlider* createSlider();
+   SingleFlapWidget* flap1;
+   SingleFlapWidget* flap2;
 };
 
 

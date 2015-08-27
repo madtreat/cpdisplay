@@ -9,6 +9,7 @@
 
 class CPDSettings;
 class GearController;
+class SingleGearWidget;
 
 
 class GearWidget : public QFrame {
@@ -26,7 +27,6 @@ private:
    GearController* gearC;
    int numGears;
 
-   GearWidgets gears;
    SingleGearWidget* master;
 };
 

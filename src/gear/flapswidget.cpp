@@ -15,6 +15,7 @@
 
 #include "core/cpdsettings.h"
 #include "gearcontroller.h"
+#include "singleflapwidget.h"
 
 
 FlapsWidget::FlapsWidget(CPDSettings* _settings, GearController* _gearC, QFrame* _parent)
@@ -34,11 +35,8 @@ FlapsWidget::FlapsWidget(CPDSettings* _settings, GearController* _gearC, QFrame*
    label->setAlignment(Qt::AlignHCenter);
    label->setObjectName("border-light");
 
-   flap1 = createSlider();
-   connect(flap1, &QSlider::valueChanged, gearC, &GEARC::notifyXPlaneFlap1);
-
-   flap2 = createSlider();
-   connect(flap2, &QSlider::valueChanged, gearC, &GEARC::notifyXPlaneFlap2);
+   flap1 = new SingleFlapWidget(settings, gearC);
+   flap2 = new SingleFlapWidget(settings, gearC);
 
    center->addStretch();
    center->addWidget(flap1);
@@ -56,14 +54,3 @@ FlapsWidget::~FlapsWidget()
 //void FlapsWidget::setFlaps()
 //{
 //}
-
-QSlider* FlapsWidget::createSlider()
-{
-   QSlider* slider = new QSlider(Qt::Vertical);
-   slider->setTickInterval(10);
-   slider->setTickPosition(QSlider::TicksBothSides);
-   slider->setValue(0);
-   slider->setMinimum(0);
-   slider->setMaximum(100);
-   return slider;
-}
