@@ -26,14 +26,9 @@ void GearController::notifyXPlaneGearHandle(bool up)
    emit updateXPlaneGearHandle(drefStr, (int) !up);
 }
 
-void GearController::notifyXPlaneFlap1(float value)
+void GearController::notifyXPlaneFlapHandle(float value)
 {
-   QString drefStr(XPDR_FLAP1_DEPLOY);
-   emit updateXPlaneFlaps(drefStr, value);
+   QString drefStr(XPDR_FLAP_HANDLE_DEPLOY);
+   emit updateXPlaneFlaps(drefStr, (float) value/100);
 }
 
-void GearController::notifyXPlaneFlap2(float value)
-{
-   QString drefStr(XPDR_FLAP2_DEPLOY);
-   emit updateXPlaneFlaps(drefStr, value);
-}

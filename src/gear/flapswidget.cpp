@@ -28,19 +28,19 @@ FlapsWidget::FlapsWidget(CPDSettings* _settings, GearController* _gearC, QFrame*
    setMaximumWidth(120);
 
    QVBoxLayout* layout = new QVBoxLayout(this);
-   QHBoxLayout* center = new QHBoxLayout(this);
+   QHBoxLayout* center = new QHBoxLayout();
    center->setContentsMargins(0, 0, 0, 0);
 
    QLabel* label = new QLabel("Flaps");
    label->setAlignment(Qt::AlignHCenter);
    label->setObjectName("border-light");
 
-   flap1 = new SingleFlapWidget(settings, gearC);
-   flap2 = new SingleFlapWidget(settings, gearC);
+   flapHandle = new SingleFlapWidget(settings, gearC, FLAP_HANDLE);
+   flapReal = new SingleFlapWidget(settings, gearC, FLAP_REAL);
 
    center->addStretch();
-   center->addWidget(flap1);
-   center->addWidget(flap2);
+   center->addWidget(flapHandle);
+   //center->addWidget(flapReal); // I cannot figure out which dataref this is
    center->addStretch();
 
    layout->addWidget(label);

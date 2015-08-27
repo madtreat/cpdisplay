@@ -102,6 +102,9 @@ void CPDController::connectSignals()
    connect(sb, &SWB::engLimitOilTUpdate,  engC, &ENGC::engLimitOilTUpdate);
    connect(sb, &SWB::engLimitFuelPUpdate, engC, &ENGC::engLimitFuelPUpdate);
 
+   connect(sb, &SWB::flapUpdate,          gearC, &GEARC::flapUpdate);
+   connect(sb, &SWB::flapHandleUpdate,    gearC, &GEARC::flapHandleUpdate);
+
 
    /*
     * These connections are for xplane 10.40+ dataref set requests (DREFs sent

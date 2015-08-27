@@ -17,13 +17,15 @@ public:
 
 public slots:
    void notifyXPlaneGearHandle(bool up);
-   void notifyXPlaneFlap1(float value);
-   void notifyXPlaneFlap2(float value);
+   void notifyXPlaneFlapHandle(float value);
 
 signals:
    void updateGearRetractable(float retractable);
    void updateXPlaneGearHandle(QString dref, int down);
    void updateXPlaneFlaps(QString dref, float value);
+
+   void flapUpdate(float percent);
+   void flapHandleUpdate(float percent);
 
 private:
    CPDSettings* settings;

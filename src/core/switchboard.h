@@ -144,8 +144,8 @@ signals:
    void gearDeployUpdate(float percent, int gearNum);
 
    // Flaps - range: [0.0, 1.0]
-   void flap1Update(float percent);
-   void flap2Update(float percent);
+   void flapUpdate(float percent);
+   void flapHandleUpdate(float percent);
 
 
    // XPlane < 10.40 / raw UDP output versions:

@@ -96,8 +96,10 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
 
    xplane = new QUdpSocket(this);
    // TODO: figure out the differences between these two functions
-   xplane->bind(settings->xplaneHost(), settings->xplanePortOut(), QUdpSocket::ShareAddress);
-   //xplane->bind(settings->xplanePortOut(), QUdpSocket::ShareAddress);
+   //xplane->bind(settings->xplaneHost(), settings->xplanePortOut(), QUdpSocket::ShareAddress);
+   // This socket must be bound to the input port of xplane to receive the raw
+   // UDP output.  The xplane output port will not work.
+   xplane->bind(settings->xplanePortIn(), QUdpSocket::ShareAddress);
 
    requestDatarefsFromXPlane();
    connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readPendingData);
@@ -136,7 +138,9 @@ void SwitchBoard::readPendingData()
       quint16 senderPort;
       
       xplane->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
-      //qDebug() << "Packet size" << datagram.size() << "  \tfrom" << sender << ":" << senderPort;
+      if (DEBUG_RECV) {
+         qDebug() << "Packet size" << datagram.size() << "  \tfrom" << sender << ":" << senderPort;
+      }
 
       didReceiveData = true;
       processDatagram(datagram);
@@ -256,9 +260,8 @@ void SwitchBoard::requestDatarefsFromXPlane()
    addLimitDRef(XPDR_ENG_LIMIT_FUELP,  1, &SWB::engLimitFuelPUpdate);
 
    // Flaps
-   addDirectDRef(XPDR_FLAP1_DEPLOY,    4, &SWB::flap1Update);
-   addDirectDRef(XPDR_FLAP2_DEPLOY,    4, &SWB::flap2Update);
-
+   addDirectDRef(XPDR_FLAP_DEPLOY,        4, &SWB::flapUpdate);
+   addDirectDRef(XPDR_FLAP_HANDLE_DEPLOY, 4, &SWB::flapHandleUpdate);
 
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);

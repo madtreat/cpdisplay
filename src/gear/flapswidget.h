@@ -29,8 +29,8 @@ private:
    CPDSettings* settings;
    GearController* gearC;
 
-   SingleFlapWidget* flap1;
-   SingleFlapWidget* flap2;
+   SingleFlapWidget* flapHandle;
+   SingleFlapWidget* flapReal;
 };
 
 
