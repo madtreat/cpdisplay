@@ -89,7 +89,8 @@ SwitchBoard::DRefValue::DRefValue(const DRefValue& rhs) {
 
 SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
 : QObject(_parent),
-  drefID(NUM_DATA_INDEXES)
+  drefID(NUM_DATA_INDEXES),
+  didReceiveData(false)
 {
    settings = _settings;
 
@@ -99,7 +100,11 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
    //xplane->bind(settings->xplanePortOut(), QUdpSocket::ShareAddress);
 
    requestDatarefsFromXPlane();
-   connect(xplane, SIGNAL(readyRead()), this, SLOT(readPendingData()));
+   connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readPendingData);
+
+   timer = new QTimer(this);
+   connect(timer, &QTimer::timeout, this, &SwitchBoard::testConnection);
+   timer->start(2000);
 }
 
 
@@ -107,6 +112,20 @@ SwitchBoard::~SwitchBoard()
 {
 }
 
+
+void SwitchBoard::testConnection()
+{
+   // If we did receive data in the last timer interval, reset the flag
+   if (didReceiveData) {
+      didReceiveData = false;
+   }
+   // If we did not receive anything, request it again
+   else {
+      qWarning() << "Warning: did not receive data, resending requests.";
+      drefID = NUM_DATA_INDEXES;
+      requestDatarefsFromXPlane();
+   }
+}
 
 void SwitchBoard::readPendingData()
 {
@@ -118,7 +137,8 @@ void SwitchBoard::readPendingData()
       
       xplane->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
       //qDebug() << "Packet size" << datagram.size() << "  \tfrom" << sender << ":" << senderPort;
-      
+
+      didReceiveData = true;
       processDatagram(datagram);
    }
 }
@@ -186,10 +206,6 @@ void SwitchBoard::addLimitDRef(QString str, int freq, limit_fp sig)
  */
 void SwitchBoard::requestDatarefsFromXPlane()
 {
-   // We do not want to receive our own packets, if this CPDisplay is running
-   // on the same machine that xplane is running on.
-   // xplane->blockSignals(true);
-
    // Request datarefs from xplane (does not work in < 10.40b7: known bug:
    // http://forums.x-plane.org/index.php?showtopic=87772)
 
@@ -247,7 +263,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
       QString vstr = val->str;
-      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
+//      qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
 
       xp_rref_in dref;
       dref.freq = (xpint) val->freq;

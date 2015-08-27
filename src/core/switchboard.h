@@ -14,9 +14,12 @@
 #include "xplanedref.h"
 
 
+class QTimer;
 class QUdpSocket;
+
 class CPDSettings;
 class XPOutputData;
+
 
 class SwitchBoard : public QObject {
    Q_OBJECT
@@ -95,8 +98,10 @@ public:
    ~SwitchBoard();
    
 public slots:
+   void testConnection();
    void readPendingData();
    void sendDREF(QString drefStr, xpflt value);
+   void requestDatarefsFromXPlane();
    
 signals:
    void notConnected(); // not connected to XPlane
@@ -206,7 +211,10 @@ signals:
 private:
    CPDSettings* settings;
    QUdpSocket* xplane;
-   int drefID; // used for incrementing dataref request ID's 
+   int drefID; // used for incrementing dataref request ID's
+
+   QTimer* timer; // connection-test timer
+   bool didReceiveData; // did this object receive data within the last timer?
 
    QMap<int, DRefValue*> drmap;
 
@@ -216,7 +224,6 @@ private:
    void addLimitDRefHelp(QString str, int freq, limit_fp    sig, LimitType lt);
    void addLimitDRef    (QString str, int freq, limit_fp    sig);
 
-   void requestDatarefsFromXPlane();
    void processDatagram(QByteArray& data);
    void notifyAll(int code, xpflt value);
    void notifyAll(XPOutputData* data);
