@@ -30,7 +30,7 @@ public:
    ~CPDWindow();
 
 public slots:
-   void pfdButtonClicked(bool checked);
+   void swapPFDAltGauges(bool checked);
    
 private:
    CPDSettings*   cpdSettings;
@@ -56,12 +56,6 @@ private:
    
    // PFD Alternate - guages instead of PFD
    QWidget*       pfdAltGuages;
-   
-   // The toolbar and buttons
-//   QToolBar*      toolbar;
-   QFrame*        toolbar;
-   QPushButton*   pfdButton;
 
-   void setupToolbar();
    void setupPFDAltGuages();
 };

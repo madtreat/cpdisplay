@@ -61,7 +61,6 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    engW  = new EngineWidget(cpdSettings,  cpdC->getEngC());
    
    setupPFDAltGuages();
-//   pfdButtonClicked(true); // Hide the alt guages after creation;
 
    // NOTE: to add a new widget, insert it into the map below
    QMap<int, QWidget*> widgetMap;
@@ -70,12 +69,11 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    widgetMap.insert(3,  engW);
    widgetMap.insert(4,  cpdC->getTfcC()->getWidget());
    widgetMap.insert(5,  comW);
-//   widgetMap.insert(6,  toolbar);
-   widgetMap.insert(7,  pfdAltGuages);
-   widgetMap.insert(8,  fuelW);
-   widgetMap.insert(9,  timeW);
-   widgetMap.insert(10, gearW);
-   widgetMap.insert(11, flapW);
+   widgetMap.insert(6,  pfdAltGuages);
+   widgetMap.insert(7,  fuelW);
+   widgetMap.insert(8,  timeW);
+   widgetMap.insert(9,  gearW);
+   widgetMap.insert(10, flapW);
    
    for (int i = 0; i < layoutProfile->numItems(); i++) {
       LayoutItem* item = layoutProfile->itemAt(i);
@@ -105,24 +103,6 @@ CPDWindow::~CPDWindow()
    delete cpdSettings;
 }
 
-void CPDWindow::setupToolbar()
-{
-   toolbar = new QFrame(this);
-   QHBoxLayout* tblayout = new QHBoxLayout(toolbar);
-   tblayout->setContentsMargins(0, 0, 0, 0);
-   //   toolbar->setOrientation(Qt::Vertical);// | Qt::Horizontal);
-
-//   pfdButton = createToolButton("PFD", true);
-//   pfdButton->setEnabled(true);
-//   connect(pfdButton, SIGNAL(toggled(bool)), this, SLOT(pfdButtonClicked(bool)));
-//   pfdButton->setChecked(true);
-//   tblayout->addWidget(pfdButton);
-
-   // No longer using the toolbar directly in the QMainWindow so it can be
-   // inserted into the LayoutManager.
-   //   this->addToolBar(Qt::RightToolBarArea, toolbar);
-}
-
 void CPDWindow::setupPFDAltGuages()
 {
    QWidget* adiW = (QWidget*) cpdC->getADIC()->getWidget();
@@ -148,7 +128,7 @@ void CPDWindow::setupPFDAltGuages()
    vbLayout->addLayout(botRow);
 }
 
-void CPDWindow::pfdButtonClicked(bool checked)
+void CPDWindow::swapPFDAltGauges(bool checked)
 {
    LayoutItem* pfd = layoutProfile->getItemByName("PFDWidget");
    LayoutItem* pfdAlt = layoutProfile->getItemByName("PFDAltGuages");
