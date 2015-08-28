@@ -8,6 +8,7 @@
 #include "commsline.h"
 
 #include <QHBoxLayout>
+#include <QFormLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QDoubleSpinBox>
@@ -43,7 +44,7 @@ CommsLine::CommsLine(CommsController* _comC, CommType _commType, QWidget* _paren
    }
    typeLabel = new QLabel(typeString);
    typeLabel->setMinimumHeight(20);
-   
+
    activeSB = createFreqSpinBox();
    standbySB = createFreqSpinBox();
    connect(activeSB,  SIGNAL(valueChanged(double)), this, SLOT(activeChanged(double)));
@@ -67,6 +68,10 @@ CommsLine::CommsLine(CommsController* _comC, CommType _commType, QWidget* _paren
 //   layout->addWidget(standbyDown);
    layout->addWidget(standbySB);
 //   layout->addWidget(standbyUp);
+
+//   QFormLayout* lineLayout = new QFormLayout(this);
+//   lineLayout->setContentsMargins(0, 0, 0, 0);
+//   lineLayout->addRow(typeString, layout);
 
    justInitialized = false;
 }

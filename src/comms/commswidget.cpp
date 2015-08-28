@@ -39,6 +39,11 @@ void CommsWidget::setupCommsControls()
 {
    QVBoxLayout* layout = new QVBoxLayout(this);
 //   layout->setContentsMargins(0, 0, 0, 0);
+
+   QLabel* commsLabel = new QLabel("Radios");
+   commsLabel->setAlignment(Qt::AlignHCenter);
+   commsLabel->setObjectName("border-light");
+
    QHBoxLayout* header = new QHBoxLayout();
    header->setContentsMargins(0, 0, 0, 0);
    
@@ -54,7 +59,8 @@ void CommsWidget::setupCommsControls()
    com2 = new CommsLine(comC, COM2);
    nav1 = new CommsLine(comC, NAV1);
    nav2 = new CommsLine(comC, NAV2);
-   
+
+   layout->addWidget(commsLabel);
    layout->addLayout(header);
    layout->addWidget(com1);
    layout->addWidget(com2);

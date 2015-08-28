@@ -212,7 +212,13 @@ void MapView::updateAC(int id)
       str = QString("addNewAircraft");
       a->setHasBeenDisplayed();
    }
-   str += QString("(%1, %2, %3, %4, %5, %6, %7);").arg(a->getID()).arg(a->getLat()).arg(a->getLon()).arg(a->getRng()).arg(a->getBer()).arg(a->getAlt()).arg(a->getHdg());
+   str += QString("(%1, %2, %3, %4, %5, %6, %7);").arg(a->getID()).
+                                                   arg(a->getLat()).
+                                                   arg(a->getLon()).
+                                                   arg(a->getRng()).
+                                                   arg(a->getBer()).
+                                                   arg(a->getAlt()).
+                                                   arg(a->getHdg());
 //   qDebug() << "Updating AC Map Icon:" << str;
    evaluateJS(str);
 }

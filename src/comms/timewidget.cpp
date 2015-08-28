@@ -49,7 +49,7 @@ TimeWidget::TimeWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFrame
 
    QLabel* timerLabel = new QLabel("Timer");
    timerLabel->setObjectName("border-light");
-   timerLabel->setAlignment(Qt::AlignHCenter);
+   timerLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
    timerStartStop = new QPushButton("Start");
    timerStartStop->setCheckable(true);
    // timerStartStop->setChecked(false); // stop the timer at init
@@ -63,6 +63,7 @@ TimeWidget::TimeWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFrame
    timerLayout->addWidget(timerLabel);
    timerLayout->addWidget(timerStartStop);
    timerLayout->addWidget(timerReset);
+   timerLayout->addStretch();
 
    // Set up the main layout
    layout->addLayout(form);

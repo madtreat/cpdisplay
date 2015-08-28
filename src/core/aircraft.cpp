@@ -7,10 +7,12 @@
 
 #include "aircraft.h"
 
+#include <math.h>
 #include <QDebug>
 
 // meters/sec to knots conversion
 #define MPS_TO_KNOTS 1.94384f
+
 
 Aircraft::Aircraft(int _id, QObject* _parent)
 : QObject(_parent),

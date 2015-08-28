@@ -24,7 +24,7 @@ FlapsWidget::FlapsWidget(CPDSettings* _settings, GearController* _gearC, QFrame*
   gearC(_gearC)
 {
    setObjectName("border");
-   setMinimumWidth(80);
+   setMinimumWidth(40);// NOTE: depends on flapReal included
    setMaximumWidth(120);
 
    QVBoxLayout* layout = new QVBoxLayout(this);

@@ -31,12 +31,12 @@ SingleFlapWidget::SingleFlapWidget(CPDSettings* _settings, GearController* _gear
    QHBoxLayout* center = new QHBoxLayout();
    center->setContentsMargins(0, 0, 0, 0);
 
-   QLabel* typeLabel;
+//   QLabel* typeLabel;
    if (type == FLAP_HANDLE) {
-      typeLabel = new QLabel("Hndl");
+//      typeLabel = new QLabel("Handle");
    }
    else {
-      typeLabel = new QLabel("Real");
+//      typeLabel = new QLabel("Real");
    }
 
    slider = new QSlider(Qt::Vertical);
@@ -62,7 +62,7 @@ SingleFlapWidget::SingleFlapWidget(CPDSettings* _settings, GearController* _gear
    center->addWidget(slider);
    center->addStretch();
 
-   layout->addWidget(typeLabel);
+//   layout->addWidget(typeLabel);
    layout->addLayout(center);
    layout->addWidget(valueLabel);
 }
