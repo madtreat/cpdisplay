@@ -200,6 +200,18 @@ function updateAircraft(id, lat, lon, rng, ber, alt, hdg) {
       feature.set('ber', ber);
       feature.set('alt', alt);
       feature.set('hdg', hdg);
+
+      var iconStyle = new ol.style.Style({
+         image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 24],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            rotation: hdg,// * Math.pi/180,
+            src: '../src/resources/icons/airplane.png'
+         }))
+      });
+      feature.setStyle(iconStyle);
       
       acIconLayers[id-1].refresh({force:true});
    }
@@ -236,7 +248,7 @@ function addNewAircraft(id, lat, lon, rng, ber, alt, hdg) {
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
             opacity: 0.75,
-            rotation: hdg * Math.pi/180,
+            rotation: hdg,// * Math.pi/180,
             src: '../src/resources/icons/airplane.png'
          }))
       });

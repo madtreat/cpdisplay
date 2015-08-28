@@ -96,11 +96,17 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
    settings = _settings;
 
    xplane = new QUdpSocket(this);
-   // TODO: figure out the differences between these two functions
-   //xplane->bind(settings->xplaneHost(), settings->xplanePortOut(), QUdpSocket::ShareAddress);
+   // This first function only works if xplane is running on this machine
+   if (settings->xplaneHost() == QHostAddress::LocalHost) {
+      qDebug() << "Warning: X-Plane is running on localhost, some connection issues may occur.";
+      xplane->bind(settings->xplaneHost(), settings->xplanePortOut(), QUdpSocket::ShareAddress);
+   }
+   // This second function only works if xplane is running on another machine
    // This socket must be bound to the input port of xplane to receive the raw
    // UDP output.  The xplane output port will not work.
-   xplane->bind(settings->xplanePortIn(), QUdpSocket::ShareAddress);
+   else {
+      xplane->bind(settings->xplanePortIn(), QUdpSocket::ShareAddress);
+   }
 
    requestDatarefsFromXPlane();
    connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readPendingData);
