@@ -41,3 +41,6 @@ target_link_libraries(${PROJECT_NAME}
    cpd-utils
    #cpd-core
 )
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+

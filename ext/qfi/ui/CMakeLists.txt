@@ -61,3 +61,7 @@ add_executable(qfi-test
 target_link_libraries(qfi-test
    ${PROJECT_NAME}
 )
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+install(TARGETS qfi-test DESTINATION bin)
+

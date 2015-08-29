@@ -33,3 +33,5 @@ target_link_libraries(${PROJECT_NAME}
    cpd-utils
 )
 
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+

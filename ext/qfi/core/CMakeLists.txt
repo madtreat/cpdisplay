@@ -42,3 +42,6 @@ qt5_use_modules(${PROJECT_NAME}
    Widgets
    Svg
 )
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+
