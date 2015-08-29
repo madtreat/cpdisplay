@@ -99,13 +99,10 @@ void TrafficWidget::showPrevAC()
 
 void TrafficWidget::setupTrafficControls()
 {
-   QVBoxLayout* layout = new QVBoxLayout(this);
-   QHBoxLayout* buttonLayout = new QHBoxLayout();
-//   QGridLayout* layout = new QGridLayout(this);
-//   QGridLayout* layoutAC= new QGridLayout(); // Selected AC label
-//   QFormLayout* layoutL = new QFormLayout(); // left form
-   QFormLayout* layoutC = new QFormLayout(); // center form
-//   QFormLayout* layoutR = new QFormLayout(); // right form
+   QVBoxLayout* layout        = new QVBoxLayout(this);
+   QHBoxLayout* buttonLayout  = new QHBoxLayout();
+   QHBoxLayout* layoutC       = new QHBoxLayout(); // center form with padding
+   QFormLayout* layoutForm    = new QFormLayout(); // center form
 
    acLabel = new QLabel("Aircraft 1");
    acLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -120,9 +117,6 @@ void TrafficWidget::setupTrafficControls()
 
    buttonLayout->addWidget(prevButton);
    buttonLayout->addWidget(nextButton);
-//   layoutAC->addWidget(prevButton, 0, 0);
-//   layoutAC->addWidget(acLabel,    0, 2);
-//   layoutAC->addWidget(nextButton, 0, 4);
 
    alt = new QLabel("0 ft");
    spd = new QLabel("0 kts");
@@ -131,20 +125,19 @@ void TrafficWidget::setupTrafficControls()
    rng = new QLabel("0 nm");
    ber = new QLabel("0 deg");
 
-   layoutC->addRow(tr("TYPE:"), typ);
-   layoutC->addRow(tr("ALT:"),  alt);
-   layoutC->addRow(tr("SPD:"),  spd);
-   layoutC->addRow(tr("HDG:"),  hdg);
-   layoutC->addRow(tr("RNG:"),  rng);
-   layoutC->addRow(tr("BER:"),  ber);
+   layoutForm->addRow(tr("TYPE:"), typ);
+   layoutForm->addRow(tr("ALT:"),  alt);
+   layoutForm->addRow(tr("SPD:"),  spd);
+   layoutForm->addRow(tr("HDG:"),  hdg);
+   layoutForm->addRow(tr("RNG:"),  rng);
+   layoutForm->addRow(tr("BER:"),  ber);
+
+   layoutC->addStretch();
+   layoutC->addLayout(layoutForm);
+   layoutC->addStretch();
 
    layout->addWidget(acLabel);
    layout->addLayout(layoutC);
+   layout->addStretch();
    layout->addLayout(buttonLayout);
-
-   
-//   layout->addLayout(layoutL, 0, 0);
-//   layout->addLayout(layoutC, 0, 2);
-//   layout->addLayout(layoutR, 0, 4);
-//   layout->addLayout(layoutAC,1, 0, 1, 6);
 }

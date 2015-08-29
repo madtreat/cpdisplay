@@ -38,6 +38,7 @@ void FuelWidget::setupFuelGauges()
 {
    QHBoxLayout* layout = new QHBoxLayout(this);
 
+   layout->addStretch();
    for (int i = 0; i < MAX_NUM_FUEL_TANKS; i++) {
       SingleFuelWidget* fgauge = new SingleFuelWidget(cpdSettings, engC, i);
       fgauge->setVisible(i < numTanks);
@@ -45,5 +46,5 @@ void FuelWidget::setupFuelGauges()
       fuelGauges.append(fgauge);
       layout->addWidget(fgauge);
    }
-   layout->addStretch(2);
+   layout->addStretch();
 }

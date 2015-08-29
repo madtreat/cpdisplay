@@ -75,7 +75,7 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
       connect(engC, &ENGC::engLimitEGTUpdate, this, &EngineDial::setLimit);
    }
    else if (type == DIAL_FUEL) {
-      typeText = "FUEL";
+      typeText = "Fuel";
       valueTextBase = QString("_X_ %");
       stepSize = 10;
 
@@ -92,7 +92,8 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
 
    tickColor = QColor(Qt::darkGreen);
    dialColor = QColor(105, 105, 105);
-   bgColor = QColor(34, 34, 34);
+   textColor = QColor(Qt::cyan);
+   bgColor   = QColor(34, 34, 34);
 
    grnColor = QColor(Qt::green);
    ylwColor = QColor(Qt::yellow);
@@ -189,7 +190,7 @@ void EngineDial::paintEvent(QPaintEvent*)
    p.drawArc(0, 0, extent, extent, 15*16, (tickDegMax-tickDegMin)*16);
    
    // Draw dial identification and value text
-   p.setPen(dialColor);
+   p.setPen(textColor);
    QString valueText = QString(valueTextBase);
    QString valStr;
    if (type == DIAL_EPR) {

@@ -6,16 +6,17 @@
 QMainWindow {
    background-color: black;
    background: url(':/style/bg/metal-1-200x200.jpg') repeat;
-/*   background: url(':/style/bg/metal-2-160x160.jpg') repeat;*/
-/*   background: url(':/style/bg/metal-3-960x600.png') repeat;*/
 }
 
 QFrame#border,
-Ui--WidgetPFD
-{
+Ui--WidgetPFD {
    background-color: #111;
    border: 2px solid dimgray;
    border-radius: 8px;
+}
+
+QLabel {
+   color: white;
 }
 
 QFrame#border-light,
@@ -25,9 +26,17 @@ QWidget#border-light {
    border-radius: 8px;
 }
 
-QPushButton::checked,
-QLabel {
-   color: green;
+QLabel#border-light,
+QLabel#comms-label {
+   font-size: 20px;
+}
+
+QLabel#border-light {
+   color: yellow;
+}
+
+QPushButton::checked {
+   color: white;
 }
 
 QPushButton {
@@ -35,7 +44,9 @@ QPushButton {
    border-radius: 6px;
    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
       stop: 0 gray, stop: 1 darkslategray);
-   color: black;
+   color: white;
+   min-height: 24px;
+   font-size: 13px;
 }
 
 QPushButton::disabled {
@@ -64,28 +75,34 @@ QProgressBar {
    text-align: center;
    background-color: darkslategray;
    width: 30px;
+   color: cyan;
 }
 
 QProgressBar::chunk {
    background-color: green;
 }
 
-QSpinBox,
 QDoubleSpinBox {
    background-color: #444;
-   color: lightgray;
+   /*color: lightgray;*/
+   color: gold;
+   min-height: 22px;
+   font-size: 14px;
+}
+
+QDoubleSpinBox::up-button,
+QDoubleSpinBox::down-button {
+   min-height: 22px;
+   min-width: 22px;
 }
 
 QDoubleSpinBox::up-button {
    subcontrol-position: right;
-   height: 20px;
 }
 
 QDoubleSpinBox::down-button {
    subcontrol-position: left;
-   height: 20px;
 }
-
 
 QSlider::groove:vertical {
    background-color: #111;

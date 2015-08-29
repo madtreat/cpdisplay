@@ -29,6 +29,7 @@ public:
    QString     settingsFile()    const { return m_settingsFile;   }
    
    QString     layoutProfile()   const { return m_layoutProfile;  }
+   QString     styleFile()       const { return m_style;          }
    
    int            xplanePortOut()const { return m_xplanePortOut;  }
    int            xplanePortIn() const { return m_xplanePortIn;   }
@@ -46,6 +47,7 @@ private:
    
    // Settings values for the Cockpit Display app
    QString     m_layoutProfile; // LayoutProfile config file
+   QString     m_style; // QSS style file
    
    // "xplane" group
    int            m_xplanePortOut;

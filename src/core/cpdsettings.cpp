@@ -60,7 +60,8 @@ void CPDSettings::loadSettingsFile(QString _filename)
    
    // Load general settings
    m_layoutProfile = m_configDir + "/" + settings->value("profile").toString();
-   
+   m_style         = m_configDir + "/" + settings->value("style").toString();
+
    // Load X-Plane 10 settings
    settings->beginGroup("xplane");
    m_xplanePortOut = settings->value("xplane_port_out").toInt();

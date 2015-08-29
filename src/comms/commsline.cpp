@@ -43,7 +43,8 @@ CommsLine::CommsLine(CommsController* _comC, CommType _commType, QWidget* _paren
       typeString = "NAV 2:";
    }
    typeLabel = new QLabel(typeString);
-   typeLabel->setMinimumHeight(20);
+   typeLabel->setObjectName("comms-type");
+   typeLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
    activeSB = createFreqSpinBox();
    standbySB = createFreqSpinBox();

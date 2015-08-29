@@ -41,7 +41,9 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    cpdC = new CPDController(cpdSettings, this);
    acMap = cpdC->getACMap();
    
-   QFile ss(":/style/style.css");
+   // QFile ss(":/style/style.css");
+   QFile ss(cpdSettings->styleFile());
+   qDebug() << "Style:" << ss.fileName();
    ss.open(QFile::ReadOnly);
    QString style = QLatin1String(ss.readAll());
    setStyleSheet(style);

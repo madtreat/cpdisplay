@@ -65,6 +65,7 @@ private:
 
    QColor tickColor;
    QColor dialColor;
+   QColor textColor;
    QColor bgColor;
 
    QColor grnColor;
