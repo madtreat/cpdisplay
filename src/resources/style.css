@@ -91,14 +91,14 @@ QSlider::groove:vertical {
    background-color: #111;
    position: absolute;  /* absolutely position 4px from the left and right of the widget.
                            setting margins on the widget should work too... */
-   left: 9px;
-   right: 9px;
+   left: 6px;
+   right: 6px;
 }
 
 QSlider::handle:vertical {
-   height: 10px;
+   height: 24px;
    background: green;
-   margin: 0 -6px; /* expand outside the groove */
+   margin: 0 -16px; /* expand outside the groove */
 }
 
 QSlider::handle:vertical::disabled {

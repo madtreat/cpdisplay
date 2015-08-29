@@ -87,6 +87,7 @@ void CPDController::connectSignals()
    // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
    // connect(sb, &SWB::acNumEnginesUpdate,  this, &CPDC::setNumEngines);
    connect(sb, &SWB::gearRetractableUpdate, gearC, &GEARC::updateGearRetractable);
+   connect(sb, &SWB::gearRetractableUpdate, this, &CPDC::updateGearRetractable);
 
    // Engine limits
    connect(sb, &SWB::engLimitMPUpdate,    engC, &ENGC::engLimitMPUpdate);

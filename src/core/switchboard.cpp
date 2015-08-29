@@ -96,14 +96,20 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
    settings = _settings;
 
    xplane = new QUdpSocket(this);
-   // This first function only works if xplane is running on this machine
+
+   /*
+    * This first function only works if xplane is running on this machine
+    */
    if (settings->xplaneHost() == QHostAddress::LocalHost) {
       qDebug() << "Warning: X-Plane is running on localhost, some connection issues may occur.";
       xplane->bind(settings->xplaneHost(), settings->xplanePortOut(), QUdpSocket::ShareAddress);
    }
-   // This second function only works if xplane is running on another machine
-   // This socket must be bound to the input port of xplane to receive the raw
-   // UDP output.  The xplane output port will not work.
+   /*
+    * This second function only works if xplane is running on another machine
+    * This socket must be bound to the input port of xplane to receive the raw
+    * UDP output.  The xplane output port will cause raw UDP packets to be
+    * ignored.
+    */
    else {
       xplane->bind(settings->xplanePortIn(), QUdpSocket::ShareAddress);
    }
@@ -283,7 +289,6 @@ void SwitchBoard::requestDatarefsFromXPlane()
 
       vstr = QString(XPDR_PLANE_X_SPEED_Y).replace("__X__", QString::number(i));
       addNumberedDRef(vstr, 20, &SWB::acSpdZUpdate, i);
-
    }
 
    foreach (int i, drmap.keys()) {

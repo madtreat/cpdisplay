@@ -80,6 +80,7 @@ public slots:
 
 signals:
    void turnRateUpdate(float tr);
+   void updateGearRetractable(float retractable);
 
 private:
    CPDSettings*   settings;

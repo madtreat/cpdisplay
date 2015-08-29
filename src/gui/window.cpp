@@ -59,34 +59,54 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
    comW  = new CommsWidget(cpdSettings,   cpdC->getComC());
    engW  = new EngineWidget(cpdSettings,  cpdC->getEngC());
    tfcW  = new TrafficWidget(cpdSettings, cpdC->getTfcC(), acMap);
-   
+
+   // Blanks and alternate-blank widgets
+   QFrame* gearWBlank = new QFrame();
+   gearWBlank->setObjectName("border");
+   connect(cpdC, &CPDC::updateGearRetractable, this, &CPDWindow::swapGearWidget);
+
+   QFrame* pfdFillerBlank = new QFrame();
+   pfdFillerBlank->setObjectName("border");
+   QFrame* blank1 = new QFrame();
+   QFrame* blank2 = new QFrame();
+   QFrame* blank3 = new QFrame();
+   blank1->setObjectName("border");
+   blank2->setObjectName("border");
+   blank3->setObjectName("border");
+
    setupPFDAltGuages();
 
    // NOTE: to add a new widget, insert it into the map below
-   QMap<int, QWidget*> widgetMap;
-   widgetMap.insert(1,  cpdC->getPFDC()->getWidget());
-   widgetMap.insert(2,  mapW);
-   widgetMap.insert(3,  engW);
-   widgetMap.insert(4,  tfcW);
-   widgetMap.insert(5,  comW);
-   widgetMap.insert(6,  pfdAltGuages);
-   widgetMap.insert(7,  fuelW);
-   widgetMap.insert(8,  timeW);
-   widgetMap.insert(9,  gearW);
-   widgetMap.insert(10, flapW);
+   QMap<QString, QWidget*> widgetMap;
+   widgetMap.insert("PFDWidget",       cpdC->getPFDC()->getWidget());
+   widgetMap.insert("MapWidget",       mapW);
+   widgetMap.insert("EngineWidget",    engW);
+   widgetMap.insert("TrafficWidget",   tfcW);
+   widgetMap.insert("CommsWidget",     comW);
+   widgetMap.insert("PFDAltGuages",    pfdAltGuages);
+   widgetMap.insert("FuelWidget",      fuelW);
+   widgetMap.insert("TimeWidget",      timeW);
+   widgetMap.insert("GearWidget",      gearW);
+   widgetMap.insert("GearWidgetBlank", gearWBlank);
+   widgetMap.insert("FlapsWidget",     flapW);
+   widgetMap.insert("PFDFillerBlank",  pfdFillerBlank);
+   widgetMap.insert("Blank1",          blank1);
+   widgetMap.insert("Blank2",          blank2);
+   widgetMap.insert("Blank3",          blank3);
    
-   for (int i = 0; i < layoutProfile->numItems(); i++) {
-      LayoutItem* item = layoutProfile->itemAt(i);
+   foreach (QString widgetName, widgetMap.keys()) {
+      LayoutItem* item = layoutProfile->getItemByName(widgetName);
       if (!item) {
          qWarning() << "Warning: tried to add a null LayoutItem to LayoutManager";
+         qWarning() << "   Name:" << widgetName;
          continue;
       }
-      item->widget = widgetMap.value(i+1);
+      item->widget = widgetMap.value(widgetName);
       if (!item->widget) {
          qWarning() << "Warning: tried to add a null Widget to LayoutManager";
+         qWarning() << "   Name:" << widgetName;
          continue;
       }
-      layoutMap.insert(i+1, item);
       layoutManager->addWidget(item);
    }
    
@@ -148,6 +168,18 @@ void CPDWindow::swapPFDAltGauges(bool checked)
    // Display other instruments if unchecked
    else {
       layoutManager->replaceItem(pfd, pfdAlt);
+   }
+}
+
+void CPDWindow::swapGearWidget(float retractable)
+{
+   LayoutItem* gw = layoutProfile->getItemByName("GearWidget");
+   LayoutItem* gwb = layoutProfile->getItemByName("GearWidgetBlank");
+   if (retractable) {
+      layoutManager->replaceItem(gwb, gw);
+   }
+   else {
+      layoutManager->replaceItem(gw, gwb);
    }
 }
 

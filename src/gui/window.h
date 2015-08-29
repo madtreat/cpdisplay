@@ -32,6 +32,7 @@ public:
 
 public slots:
    void swapPFDAltGauges(bool checked);
+   void swapGearWidget(float retractable); // actuall a bool value (0|1)
    
 private:
    CPDSettings*   cpdSettings;
@@ -42,7 +43,6 @@ private:
    // Main layout for central widget
    LayoutProfile* layoutProfile;
    LayoutManager* layoutManager;
-   QMap<int, LayoutItem*> layoutMap;
    
    // Individual widgets
    // NOTE: to add a new widget, first add a forward declare above, then add

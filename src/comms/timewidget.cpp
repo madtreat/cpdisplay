@@ -44,30 +44,31 @@ TimeWidget::TimeWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFrame
    // Set up the timer buttons
    QWidget* timerButtons = new QWidget();
    timerButtons->setObjectName("border-light");
-   QVBoxLayout* timerLayout = new QVBoxLayout(timerButtons);
+   QVBoxLayout* timerLayout = new QVBoxLayout();//timerButtons);
    timerLayout->setContentsMargins(0, 0, 0, 0);
 
    QLabel* timerLabel = new QLabel("Timer");
    timerLabel->setObjectName("border-light");
    timerLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-   timerStartStop = new QPushButton("Start");
+   timerStartStop = new QPushButton("Timer Start");
    timerStartStop->setCheckable(true);
    // timerStartStop->setChecked(false); // stop the timer at init
    timerStartStop->setMinimumHeight(27);
-   timerReset = new QPushButton("Reset");
+   timerReset = new QPushButton("Timer Reset");
    timerReset->setMinimumHeight(27);
 
    connect(timerStartStop, &QPushButton::toggled, this, &TimeWidget::toggleTimer);
    connect(timerReset,     &QPushButton::clicked, this, &TimeWidget::resetTimer);
 
-   timerLayout->addWidget(timerLabel);
+   // timerLayout->addWidget(timerLabel);
    timerLayout->addWidget(timerStartStop);
    timerLayout->addWidget(timerReset);
-   timerLayout->addStretch();
+   // timerLayout->addStretch();
 
    // Set up the main layout
    layout->addLayout(form);
-   layout->addWidget(timerButtons);
+   // layout->addWidget(timerButtons);
+   layout->addLayout(timerLayout);
 
    setObjectName("border");
    justInitialized = false;
