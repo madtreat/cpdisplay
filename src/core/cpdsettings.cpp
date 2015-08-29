@@ -25,18 +25,30 @@ CPDSettings::CPDSettings(QString _filename, QObject* _parent)
    appRoot.cdUp();
    m_configDir = appRoot.absolutePath() + "/config";
    
-   if (m_settingsFile == "") {
+   if (_filename == "") {
       m_settingsFile = m_configDir + "/cpd-settings.ini";
+   }
+   else {
+      m_settingsFile = _filename;
+      m_configDir = QFileInfo(m_settingsFile).absolutePath();
    }
    
    if (!QFile::exists(m_settingsFile)) {
-      qWarning() << "Warning: Settings file" << m_settingsFile << "does not exist. Exiting.";
-      exit(1);
+      qWarning() << "Warning: Settings file" << m_settingsFile << "does not exist.";
+      m_configDir = m_userHomeDir + "/.cpdisplay";
+      m_settingsFile = m_configDir + "/cpd-settings.ini";
+      qWarning() << "   Trying" << m_settingsFile << "...";
+      if (!QFile::exists(m_settingsFile)) {
+         qWarning() << "   File not found\n";
+         qWarning() << "ERROR: No valid config files found.";
+         qWarning() << "NOTE: you can specify a config file with the '-c <settings.ini>' option.";
+         qWarning() << "Exiting.";
+         exit(1);
+      }
    }
-   qDebug() << "Loading settings file:\n  " << m_settingsFile;
    
    loadSettingsFile(m_settingsFile);
-   qDebug() << "   Done loading Cockpit Display settings.";
+   qDebug() << "Loaded settings file:" << m_settingsFile;
 }
 
 //CPDSettings::CPDSettings(const CPDSettings& orig)
@@ -61,6 +73,7 @@ void CPDSettings::loadSettingsFile(QString _filename)
    // Load general settings
    m_layoutProfile = m_configDir + "/" + settings->value("profile").toString();
    m_style         = m_configDir + "/" + settings->value("style").toString();
+   m_mapSettings   = m_configDir + "/" + settings->value("map_settings").toString();
 
    // Load X-Plane 10 settings
    settings->beginGroup("xplane");

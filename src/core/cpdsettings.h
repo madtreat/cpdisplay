@@ -19,7 +19,7 @@ class CPDSettings : public QObject {
    Q_OBJECT;
 
 public:
-   CPDSettings(QString _filename=0, QObject* _parent = 0);
+   CPDSettings(QString _filename, QObject* _parent = 0);
    CPDSettings(const CPDSettings& orig) = delete;
    virtual ~CPDSettings();
    
@@ -30,6 +30,7 @@ public:
    
    QString     layoutProfile()   const { return m_layoutProfile;  }
    QString     styleFile()       const { return m_style;          }
+   QString     mapSettingsFile() const { return m_mapSettings;    }
    
    int            xplanePortOut()const { return m_xplanePortOut;  }
    int            xplanePortIn() const { return m_xplanePortIn;   }
@@ -46,8 +47,9 @@ private:
    QString     m_settingsFile;
    
    // Settings values for the Cockpit Display app
-   QString     m_layoutProfile; // LayoutProfile config file
-   QString     m_style; // QSS style file
+   QString     m_layoutProfile;  // LayoutProfile config file
+   QString     m_style;          // QSS style file
+   QString     m_mapSettings;    // map settings file
    
    // "xplane" group
    int            m_xplanePortOut;

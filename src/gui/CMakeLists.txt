@@ -1,4 +1,4 @@
-project(cpd-gui)
+project(cpdisplay)
 
 set(SOURCES
    cpdcontroller.cpp
