@@ -1,6 +1,7 @@
 build
 lib
 bin
+packages
 
 # Compiled Object files
 *.slo

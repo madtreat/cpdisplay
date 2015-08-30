@@ -11,7 +11,7 @@
 int main(int argc, char* argv[]) {
    QApplication app(argc, argv);
    QCoreApplication::setApplicationName("cpdisplay");
-   QCoreApplication::setApplicationVersion("1.2");
+   QCoreApplication::setApplicationVersion("2.0.0");
 
    // Create the arg parser
    QCommandLineParser parser;
