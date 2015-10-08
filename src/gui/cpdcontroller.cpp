@@ -45,12 +45,12 @@ CPDController::CPDController(CPDSettings* _settings, QObject* _parent)
    tcdC = new TCDController(this);
    vsiC = new VSIController(this);
    
-   numEngines = 2;
-   numFuelTanks = 2;
+   numEngines = 1;
+   numFuelTanks = 1;
    numGears = 3;
    gearC = new GearController(settings, numGears, this);
    comC = new CommsController(settings, this);
-   engC = new EngineController(settings, AC_ENG_JET, numEngines, numFuelTanks, this);
+   engC = new EngineController(settings, AC_ENG_PROP, numEngines, numFuelTanks, this);
    tfcC = new TrafficController(settings, acMap, this);
 
    angVelUpdatedFlag = false;

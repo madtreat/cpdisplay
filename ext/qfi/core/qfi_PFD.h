@@ -166,7 +166,10 @@ public:
     /** @param airspeed (dimensionless numeric value) */
     inline void setAirspeed( float airspeed )
     {
-        m_asi->setAirspeed( airspeed );
+        // When airspeed is very low, prevent the velocity vector marker from jumping around
+        if (airspeed > 5.0) {
+            m_asi->setAirspeed( airspeed );
+        }
     }
 
     /** @param Mach number */

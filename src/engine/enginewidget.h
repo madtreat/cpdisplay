@@ -20,7 +20,7 @@ class EngineWidget : public QFrame {
    Q_OBJECT;
 
 public:
-   EngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines=2, QFrame* _parent = 0);
+   EngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines=1, QFrame* _parent = 0);
    EngineWidget(const EngineWidget& orig) = delete;
    virtual ~EngineWidget();
 
