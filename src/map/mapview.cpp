@@ -10,6 +10,7 @@
 #include <QWebFrame>
 #include <QWebElement>
 #include <QMessageBox>
+#include <QNetworkProxy>
 
 #include "qt-google-maps/geocode_data_manager.h"
 #include "qt-google-maps/mapsettings.h"
@@ -36,6 +37,12 @@ MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, MapControlle
    geocode = new GeocodeDataManager(settings->apiKey(), this);
    connect(geocode, SIGNAL(coordinatesReady(double,double)),  this, SLOT(showCoordinates(double,double)));
    connect(geocode, SIGNAL(errorOccurred(QString)),           this, SLOT(errorOccurred(QString)));
+
+   QNetworkProxy proxy;
+   proxy.setType(QNetworkProxy::HttpProxy);
+   proxy.setHostName("10.0.1.10");
+   proxy.setPort(3128);
+   QNetworkProxy::setApplicationProxy(proxy);
    
    QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
 //   QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
@@ -43,7 +50,7 @@ MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, MapControlle
    connect(webView, SIGNAL(loadStarted()), this, SLOT(startedLoading()));
    connect(webView, SIGNAL(loadProgress(int)), this, SLOT(loadingProgress(int)));
    connect(webView, SIGNAL(loadFinished(bool)), this, SLOT(finishedLoading(bool)));
-   
+
    qDebug() << "WebView loading HTML file from" << settings->mapHtmlPath();
    webView->setUrl(QUrl::fromLocalFile(settings->mapHtmlPath()));
    
