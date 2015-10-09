@@ -36,6 +36,10 @@ public:
    int            xplanePortIn() const { return m_xplanePortIn;   }
    QHostAddress   xplaneHost()   const { return m_xplaneHost;     }
 
+   bool        mapUseProxy()     const { return m_mapUseProxy;    }
+   QString     mapProxyHost()    const { return m_mapProxyHost;   }
+   int         mapProxyPort()    const { return m_mapProxyPort;   }
+
 public slots:
    void loadSettingsFile(QString _filename);
 
@@ -55,6 +59,11 @@ private:
    int            m_xplanePortOut;
    int            m_xplanePortIn;
    QHostAddress   m_xplaneHost;
+
+   // "map-proxy" group
+   bool           m_mapUseProxy;
+   QString        m_mapProxyHost;
+   int            m_mapProxyPort;
 };
 
 #endif	/* CPDSETTINGS_H */

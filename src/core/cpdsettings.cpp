@@ -87,4 +87,11 @@ void CPDSettings::loadSettingsFile(QString _filename)
       m_xplaneHost = QHostAddress(host);
    }
    settings->endGroup(); // "xplane"
+
+   // Load Map Proxy settings
+   settings->beginGroup("map-proxy");
+   m_mapUseProxy  = settings->value("use_proxy").toBool();
+   m_mapProxyHost = settings->value("proxy_host").toString();
+   m_mapProxyPort = settings->value("proxy_port").toInt();
+   settings->endGroup(); // "map-proxy"
 }

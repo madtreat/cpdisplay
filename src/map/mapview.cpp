@@ -38,11 +38,16 @@ MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, MapControlle
    connect(geocode, SIGNAL(coordinatesReady(double,double)),  this, SLOT(showCoordinates(double,double)));
    connect(geocode, SIGNAL(errorOccurred(QString)),           this, SLOT(errorOccurred(QString)));
 
-   QNetworkProxy proxy;
-   proxy.setType(QNetworkProxy::HttpProxy);
-   proxy.setHostName("10.0.1.10");
-   proxy.setPort(3128);
-   QNetworkProxy::setApplicationProxy(proxy);
+   if (cpdSettings->mapUseProxy()) {
+      qDebug() << "Using a proxy for the map data";
+      qDebug() << "   Host:" << cpdSettings->mapProxyHost();
+      qDebug() << "   Port:" << cpdSettings->mapProxyPort();
+      QNetworkProxy proxy;
+      proxy.setType(QNetworkProxy::HttpProxy);
+      proxy.setHostName(cpdSettings->mapProxyHost());
+      proxy.setPort(cpdSettings->mapProxyPort());
+      QNetworkProxy::setApplicationProxy(proxy);
+   }
    
    QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
 //   QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
