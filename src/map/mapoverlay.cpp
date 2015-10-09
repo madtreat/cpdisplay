@@ -261,6 +261,7 @@ void MapOverlay::drawRangeCircle(QPainter& p)
    if (showTraffic) {
       for (int i = 1; i < acMap->size(); i++) {
          Aircraft* ac = acMap->value(i);
+         if (!ac) continue;
          double ber = ac->getBer();
          double ang = northUp() ? ber : ber - heading;
          double rad = getDrawAngleRad(ang);
