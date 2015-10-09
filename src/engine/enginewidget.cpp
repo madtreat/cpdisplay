@@ -59,5 +59,10 @@ void EngineWidget::setupEngineControls()
 
 void EngineWidget::setNumEngines(int _eng)
 {
+   if (numEngines != _eng) {
+      for (int i = 0; i < _eng; i++) {
+         engines.at(i)->setVisible(true);
+      }
+   }
    numEngines = _eng;
 }
