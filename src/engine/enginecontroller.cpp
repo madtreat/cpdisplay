@@ -40,7 +40,7 @@ void EngineController::updateNumEngines(int numEng)
 {
    qDebug() << "Updating num engines...";
    numEngines = numEng;
-   //setupEngineControls();
+   emit numEnginesUpdate(numEngines);
 }
 
 void EngineController::updateThrottleCommand(float throttle, int engNum)

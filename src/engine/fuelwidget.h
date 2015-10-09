@@ -25,6 +25,9 @@ public:
    FuelWidget(const FuelWidget& orig) = delete;
    virtual ~FuelWidget();
 
+public slots:
+   void setNumTanks(int _eng);
+
 private:
    CPDSettings* cpdSettings;
    EngineController* engC;

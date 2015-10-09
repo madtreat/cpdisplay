@@ -85,9 +85,9 @@ void CPDController::connectSignals()
     */
    // General aircraft
    // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
-   // connect(sb, &SWB::acNumEnginesUpdate,  this, &CPDC::setNumEngines);
+   connect(sb, &SWB::acNumEnginesUpdate,    engC,  &ENGC::updateNumEngines);
    connect(sb, &SWB::gearRetractableUpdate, gearC, &GEARC::updateGearRetractable);
-   connect(sb, &SWB::gearRetractableUpdate, this, &CPDC::updateGearRetractable);
+   connect(sb, &SWB::gearRetractableUpdate, this,  &CPDC::updateGearRetractable);
 
    // Engine limits
    connect(sb, &SWB::engLimitMPUpdate,    engC, &ENGC::engLimitMPUpdate);

@@ -57,6 +57,9 @@ public slots:
    
 signals:
    void engineTypeUpdate(AircraftEngineType type);
+   void numEnginesUpdate(int numEngines);
+   void numTanksUpdate(int numTanks);
+
    void throttleUpdate(int value, int engNum);
    void engRPMUpdate(float value, int engNum);
    void propRPMUpdate(float value, int engNum);

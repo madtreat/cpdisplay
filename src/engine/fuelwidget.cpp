@@ -23,6 +23,7 @@ FuelWidget::FuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _
   engC(_engC),
   numTanks(_numTanks)
 {
+   connect(engC, &ENGC::numTanksUpdate, this, &FuelWidget::setNumTanks);
    setupFuelGauges();
 
 //   setMinimumSize(QSize(65, 180));
@@ -47,4 +48,9 @@ void FuelWidget::setupFuelGauges()
       layout->addWidget(fgauge);
    }
    layout->addStretch();
+}
+
+void FuelWidget::setNumTanks(int _tanks)
+{
+   numTanks = _tanks;
 }

@@ -24,6 +24,7 @@ EngineWidget::EngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, i
   engC(_engC),
   numEngines(_numEngines)
 {
+   connect(engC, &ENGC::numEnginesUpdate, this, &EngineWidget::setNumEngines);
    setupEngineControls();
    
    setMinimumSize(QSize(65, 180));
@@ -54,4 +55,9 @@ void EngineWidget::setupEngineControls()
    }
    
    layout->addStretch();
+}
+
+void EngineWidget::setNumEngines(int _eng)
+{
+   numEngines = _eng;
 }

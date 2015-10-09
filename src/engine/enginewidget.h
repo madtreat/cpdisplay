@@ -24,7 +24,8 @@ public:
    EngineWidget(const EngineWidget& orig) = delete;
    virtual ~EngineWidget();
 
-//public slots:
+public slots:
+   void setNumEngines(int _eng);
 
 private:
    CPDSettings* cpdSettings;
