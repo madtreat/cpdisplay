@@ -41,7 +41,7 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
    }
    else if (type == DIAL_ENG_RPM) {
       typeText = "ENG RPM";
-      valueTextBase = "_X_ Hz";
+      valueTextBase = "_X_";
       stepSize = 200;
       
       connect(engC, &ENGC::engRPMUpdate, this, &EngineDial::setValue);
@@ -49,7 +49,7 @@ EngineDial::EngineDial(EngineController* _engC, int _engNum, EngineDialType _typ
    }
    else if (type == DIAL_PROP_RPM) {
       typeText = "Prop RPM";
-      valueTextBase = "_X_ Hz";
+      valueTextBase = "_X_";
       stepSize = 200;
       
       connect(engC, &ENGC::propRPMUpdate, this, &EngineDial::setValue);
