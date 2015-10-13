@@ -40,6 +40,7 @@ SET(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 # Set the output directory for the build executables and libraries
 ################################################################################
 set(CPACK_PACKAGE_VERSION ${cpd_VERSION})
+#set(CPACK_GENERATOR "RPM")
 set(CPACK_GENERATOR "RPM")
 set(CPACK_PACKAGE_NAME "cpdisplay")
 set(CPACK_PACKAGE_RELEASE 1)
@@ -199,4 +200,8 @@ ADD_SUBDIRECTORY(${QTTOGGLEINPUT_DIR})
 
 # Project: CPD (Cockpit Display)
 ADD_SUBDIRECTORY(src)
+
+# Project: CPD Configuration files
+# This is primarily for installation and package builds
+ADD_SUBDIRECTORY(config)
 
