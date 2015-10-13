@@ -13,7 +13,7 @@ ENDIF(POLICY CMP0043)
 # Version
 ################################################################################
 SET(cpd_MAJOR_VERSION 2)
-SET(cpd_MINOR_VERSION 0)
+SET(cpd_MINOR_VERSION 1)
 SET(cpd_PATCH_VERSION 0)
 SET(cpd_VERSION ${cpd_MAJOR_VERSION}.${cpd_MINOR_VERSION}.${cpd_PATCH_VERSION})
 
@@ -34,6 +34,20 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${cpd_RUNTIME_OUTPUT_DIRECTORY})
 SET(CMAKE_INSTALL_PREFIX /opt/cpdisplay)
 SET(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 #SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+
+################################################################################
+# Set the output directory for the build executables and libraries
+################################################################################
+set(CPACK_PACKAGE_VERSION ${cpd_VERSION})
+set(CPACK_GENERATOR "RPM")
+set(CPACK_PACKAGE_NAME "cpdisplay")
+set(CPACK_PACKAGE_RELEASE 1)
+set(CPACK_PACKAGE_CONTACT "Madison Treat")
+set(CPACK_PACKAGE_VENDOR "VSCL")
+set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
+include(CPack)
 
 
 ################################################################################
