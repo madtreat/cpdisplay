@@ -1,5 +1,7 @@
 project(cpd-config)
 
+add_subdirectory(examples)
+
 set(CONFIG
    maps.ini
    maps.js
@@ -8,5 +10,5 @@ set(CONFIG
    profile-default.ini
 )
 
-install(TARGETS ${CONFIG} DESTINATION config)
+install(FILES ${CONFIG} DESTINATION config)
 

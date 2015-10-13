@@ -10,5 +10,5 @@ set(CONFIG
    style-default.qss
 )
 
-install(TARGETS ${CONFIG} DESTINATION config/examples)
+install(FILES ${CONFIG} DESTINATION config/examples)
 
