@@ -82,6 +82,12 @@ public:
     /** Refreshes (redraws) widget. */
     void update();
 
+    /**
+     * @param angle of attack [deg]
+     * @param angle of sideslip [deg]
+     * @param flight path marker visibility */
+    void setFlightPathMarker( float aoa, float sideslip, bool visible = true );
+
     /** @param roll angle [deg] */
     inline void setRoll( float roll )
     {
@@ -92,15 +98,6 @@ public:
     inline void setPitch( float pitch )
     {
         m_adi->setPitch( pitch );
-    }
-
-    /**
-     * @param angle of attack [deg]
-     * @param angle of sideslip [deg]
-     * @param flight path marker visibility */
-    inline void setFlightPathMarker( float aoa, float sideslip, bool visible = true )
-    {
-        m_adi->setFlightPathMarker( aoa, sideslip, visible );
     }
 
     /** @param normalized slip or skid (range from -1.0 to 1.0) */
@@ -166,10 +163,7 @@ public:
     /** @param airspeed (dimensionless numeric value) */
     inline void setAirspeed( float airspeed )
     {
-        // When airspeed is very low, prevent the velocity vector marker from jumping around
-        if (airspeed > 5.0) {
-            m_asi->setAirspeed( airspeed );
-        }
+        m_asi->setAirspeed( airspeed );
     }
 
     /** @param Mach number */
@@ -409,6 +403,7 @@ private:
         ASI( QGraphicsScene * scene );
         void init( float scaleX, float scaleY );
         void update( float scaleX, float scaleY );
+        float getAirspeed( void );
         void setAirspeed( float airspeed );
         void setMachNo( float machNo );
 
