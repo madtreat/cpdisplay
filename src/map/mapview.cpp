@@ -6,9 +6,10 @@
  */
 
 #include "mapview.h"
-#include <QWebView>
-#include <QWebFrame>
-#include <QWebElement>
+#include <QWebEngineView>
+#include <QWebEngineSettings>
+//#include <QWebEngineFrame>
+//#include <QWebEngineElement>
 #include <QMessageBox>
 #include <QNetworkProxy>
 
@@ -49,9 +50,9 @@ MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, MapControlle
       QNetworkProxy::setApplicationProxy(proxy);
    }
    
-   QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
-//   QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-   webView = new QWebView(this);
+   QWebEngineSettings::globalSettings()->setAttribute(QWebEngineSettings::JavascriptEnabled, true);
+//   QWebEngineSettings::globalSettings()->setAttribute(QWebEngineSettings::DeveloperExtrasEnabled, true);
+   webView = new QWebEngineView(this);
    connect(webView, SIGNAL(loadStarted()), this, SLOT(startedLoading()));
    connect(webView, SIGNAL(loadProgress(int)), this, SLOT(loadingProgress(int)));
    connect(webView, SIGNAL(loadFinished(bool)), this, SLOT(finishedLoading(bool)));
@@ -95,7 +96,8 @@ void MapView::resize(const QSize& size)
    
 //   QString str = "map.updateSize();";
    QString str = "resize();";
-   QVariant response = evaluateJS(str);
+   //QVariant response = evaluateJS(str);
+   evaluateJS(str);
 //   qDebug() << "   JS response:" << response.toString();
    
    // set the web page's size
@@ -106,7 +108,7 @@ void MapView::resize(const QSize& size)
    // used to resize at least the visible map to transition correctly on move
    // and zoom events and generally, for the visible map to look right.
    webView->resize(size);
-   webView->page()->setViewportSize(size);
+   //webView->page()->setViewportSize(size);
 //   qDebug() << "       New viewport size:" << webView->page()->viewportSize();
 }
 
@@ -115,10 +117,12 @@ bool MapView::northUp() const {
 }
 
 
-QVariant MapView::evaluateJS(QString js)
+//QVariant MapView::evaluateJS(QString js)
+void MapView::evaluateJS(QString js)
 {
 //   return webView->page()->currentFrame()->documentElement().evaluateJavaScript(js);
-   return webView->page()->mainFrame()->evaluateJavaScript(js);
+   //return webView->page()->mainFrame()->evaluateJavaScript(js);
+   return webView->page()->runJavaScript(js); // Qt 5.5.1+
 }
 
 void MapView::calculateDistanceScale()
@@ -128,7 +132,8 @@ void MapView::calculateDistanceScale()
    QString latlon2 = QString("map.getBounds().getSouthWest()");
 
    QString str = QString("google.maps.geometry.spherical.computeDistanceBetween (%1, %2);").arg(latlon1).arg(latlon2);
-   QVariant diagDist = evaluateJS(str);
+   //QVariant diagDist = evaluateJS(str);
+   evaluateJS(str);
 //   qDebug() << "diagDist =" << diagDist;
 }
 
@@ -180,7 +185,8 @@ void MapView::panToLocation(float _lat, float _lon)
    lon = _lon;
    QString str = QString("panTo(%1, %2);").arg(lat).arg(lon);
    
-   QVariant ret = evaluateJS(str);
+   //QVariant ret = evaluateJS(str);
+   evaluateJS(str);
 }
 
 void MapView::setHeading(float _heading)

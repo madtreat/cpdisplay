@@ -139,9 +139,9 @@ FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5Gui     REQUIRED)
 FIND_PACKAGE(Qt5Svg     REQUIRED)
 FIND_PACKAGE(Qt5Network REQUIRED)
-FIND_PACKAGE(Qt5Positioning REQUIRED)
-FIND_PACKAGE(Qt5WebKit  REQUIRED)
-FIND_PACKAGE(Qt5WebKitWidgets REQUIRED)
+FIND_PACKAGE(Qt5Positioning      REQUIRED)
+FIND_PACKAGE(Qt5WebEngine        REQUIRED)
+FIND_PACKAGE(Qt5WebEngineWidgets REQUIRED)
 
 
 ################################################################################

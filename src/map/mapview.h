@@ -18,7 +18,7 @@
 
 
 class QPaintEvent;
-class QWebView;
+class QWebEngineView;
 
 class MapController;
 class CPDSettings;
@@ -66,7 +66,7 @@ private:
    bool                 enabled; // are the maps enabled?
    ACMap*               acMap;
    
-   QWebView*            webView;
+   QWebEngineView*            webView;
    GeocodeDataManager*  geocode;
    
    double heading; // current heading value in degrees
@@ -75,7 +75,8 @@ private:
    double lon; // current lon
    bool   showTraffic; // currently displaying traffic?
 
-   QVariant evaluateJS(QString js);
+   //QVariant evaluateJS(QString js);
+   void evaluateJS(QString js);
    void calculateDistanceScale();
 };
 
