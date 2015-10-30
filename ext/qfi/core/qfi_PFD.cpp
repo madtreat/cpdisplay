@@ -212,6 +212,22 @@ void qfi_PFD::updateView()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @param angle of attack [deg]
+ * @param angle of sideslip [deg]
+ * @param flight path marker visibility */
+void qfi_PFD::setFlightPathMarker( float aoa, float sideslip, bool visible)
+{
+    // Only show the flight path marker if the aircraft is moving.
+    if (m_asi->getAirspeed() > 5) {
+        m_adi->setFlightPathMarker( aoa, sideslip, visible );
+    } else {
+        m_adi->setFlightPathMarker( aoa, sideslip, false );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1423,6 +1439,13 @@ void qfi_PFD::ASI::update( float scaleX, float scaleY )
     m_scale1DeltaY_old = m_scale1DeltaY_new;
     m_scale2DeltaY_old = m_scale2DeltaY_new;
     m_labelsDeltaY_old = m_labelsDeltaY_new;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+float qfi_PFD::ASI::getAirspeed( void )
+{
+    return m_airspeed;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
