@@ -1,4 +1,7 @@
-#include <QMainWindow>
+#ifndef CPDWIDGET_H
+#define CPDWIDGET_H
+
+#include <QFrame>
 
 #include "core/aircraft.h"
 #include "map/mapcontroller.h"
@@ -23,12 +26,12 @@ class EngineWidget;
 class TrafficWidget;
 
 
-class CPDWindow : public QMainWindow {
+class CPDWidget : public QFrame {
    Q_OBJECT
 
 public:
-   CPDWindow(CPDSettings* _cpdSettings, QObject* _parent=0);
-   ~CPDWindow();
+   CPDWidget(CPDSettings* _cpdSettings, int _slaveID = -1, QFrame* _parent=0);
+   ~CPDWidget();
 
 public slots:
    void swapPFDAltGauges(bool checked);
@@ -39,6 +42,7 @@ private:
    CPDController* cpdC;
    ACMap*         acMap;
    int            numEngines;
+   int            slaveID; // current tab's slaveID
    
    // Main layout for central widget
    LayoutProfile* layoutProfile;
@@ -61,3 +65,5 @@ private:
 
    void setupPFDAltGuages();
 };
+
+#endif

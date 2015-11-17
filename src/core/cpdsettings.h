@@ -15,6 +15,17 @@
 class QSettings;
 
 
+struct XPSlave {
+   int            m_slaveID;
+   QString        m_slaveName;
+
+   int            m_xplanePortOut;
+   int            m_xplanePortIn;
+   QHostAddress   m_xplaneHost;
+
+   QHostAddress   m_hddHost;
+};
+
 class CPDSettings : public QObject {
    Q_OBJECT;
 
@@ -31,6 +42,13 @@ public:
    QString     layoutProfile()   const { return m_layoutProfile;  }
    QString     styleFile()       const { return m_style;          }
    QString     mapSettingsFile() const { return m_mapSettings;    }
+
+   bool        isMCS()           const { return m_isMCS;          }
+   int         numSlaves()       const { return m_numSlaves;      }
+   QMap<int, XPSlave*> slaves()  const { return m_slaves;         }
+   XPSlave*    getSlave(int id)  const { return m_slaves.value(id);}
+   XPSlave*    getSlaveByName(QString name) const;
+
    
    int            xplanePortOut()const { return m_xplanePortOut;  }
    int            xplanePortIn() const { return m_xplanePortIn;   }
@@ -54,7 +72,14 @@ private:
    QString     m_layoutProfile;  // LayoutProfile config file
    QString     m_style;          // QSS style file
    QString     m_mapSettings;    // map settings file
-   
+
+   // "mcs" group
+   bool        m_isMCS;          // Is this a MCS (Master Control System)?
+   int         m_numSlaves;      // Number of slaves under this MCS
+
+   // "xplane-slaves" group for MCS
+   QMap<int, XPSlave*> m_slaves; // Map of <ID, Slave info>
+
    // "xplane" group
    int            m_xplanePortOut;
    int            m_xplanePortIn;

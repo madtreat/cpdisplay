@@ -6,7 +6,7 @@
 
 #include "core/cpdsettings.h"
 //#include "cpdcontroller.h"
-#include "window.h"
+#include "cpdwindow.h"
 
 int main(int argc, char* argv[]) {
    QApplication app(argc, argv);

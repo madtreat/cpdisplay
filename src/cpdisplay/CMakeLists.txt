@@ -2,12 +2,14 @@ project(cpdisplay)
 
 set(SOURCES
    cpdcontroller.cpp
-   window.cpp
+   cpdwidget.cpp
+   cpdwindow.cpp
 )
 
 set(HEADERS
    cpdcontroller.h
-   window.h
+   cpdwidget.h
+   cpdwindow.h
 )
 
 set(RESOURCES

@@ -88,21 +88,37 @@ SwitchBoard::DRefValue::DRefValue(const DRefValue& rhs) {
 }
 
 
-SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
+/* 
+ * slaveID is the identity of this machine if the 
+ */
+SwitchBoard::SwitchBoard(CPDSettings* _settings, int _slaveID, QObject* _parent)
 : QObject(_parent),
+  settings(_settings),
+  slaveID(_slaveID),
   drefID(NUM_DATA_INDEXES),
   didReceiveData(false)
 {
-   settings = _settings;
-
    xplane = new QUdpSocket(this);
+
+   // If standard CPD config...
+   if (slaveID == -1) {
+      thisHost    = settings->xplaneHost();
+      thisPortOut = settings->xplanePortOut();
+      thisPortIn  = settings->xplanePortIn();
+   }
+   // Else (for a single MCS slave instance)...
+   else {
+      thisHost    = settings->getSlave(slaveID)->m_xplaneHost;
+      thisPortOut = settings->getSlave(slaveID)->m_xplanePortOut;
+      thisPortIn  = settings->getSlave(slaveID)->m_xplanePortIn;
+   }
 
    /*
     * This first function only works if xplane is running on this machine
     */
-   if (settings->xplaneHost() == QHostAddress::LocalHost) {
+   if (thisHost == QHostAddress::LocalHost) {
       qDebug() << "Warning: X-Plane is running on localhost, some connection issues may occur.";
-      xplane->bind(settings->xplaneHost(), settings->xplanePortOut(), QUdpSocket::ShareAddress);
+      xplane->bind(thisHost, thisPortOut, QUdpSocket::ShareAddress);
    }
    /*
     * This second function only works if xplane is running on another machine
@@ -111,7 +127,7 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, QObject* _parent)
     * ignored.
     */
    else {
-      xplane->bind(settings->xplanePortIn(), QUdpSocket::ShareAddress);
+      xplane->bind(thisPortIn, QUdpSocket::ShareAddress);
    }
 
    requestDatarefsFromXPlane();
@@ -175,8 +191,12 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value)
    memcpy(&data, DREF_PREFIX, ID_DIM);
    memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
 
-   xplane->writeDatagram(data, len, settings->xplaneHost(), settings->xplanePortIn());
+   xplane->writeDatagram(data, len, thisHost, thisPortIn);
 }
+
+// void SwitchBoard::notifyComms(float value)
+// {
+// }
 
 
 void SwitchBoard::addDirectDRef(QString str, int freq, direct_fp sig)
@@ -309,7 +329,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
       memcpy(&data, RREF_PREFIX, ID_DIM);
       memcpy(&data[ID_DIM], &dref, sizeof(xp_rref_in));
 
-      xplane->writeDatagram(data, len, settings->xplaneHost(), settings->xplanePortIn());
+      xplane->writeDatagram(data, len, thisHost, thisPortIn);
    }
 
 
@@ -334,7 +354,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
    for (int i = 0; i < indexes.size(); i++) {
       memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
    }
-   xplane->writeDatagram(dsel, len2, settings->xplaneHost(), settings->xplanePortIn());
+   xplane->writeDatagram(dsel, len2, thisHost, thisPortIn);
 }
 
 

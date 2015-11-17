@@ -26,7 +26,7 @@ public:
    MapController(const MapController& orig) = delete;
    virtual ~MapController();
 
-   MapSettings* getMapSettings() const {return settings;}
+   MapSettings* getMapSettings() const {return mapSettings;}
 
 public slots:
    void setZoom(int level);
@@ -56,7 +56,7 @@ signals:
 
 private:
    CPDSettings* cpdSettings;
-   MapSettings* settings;
+   MapSettings* mapSettings;
    
    ACMap* acMap;
    

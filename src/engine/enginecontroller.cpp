@@ -19,7 +19,6 @@ EngineController::EngineController(CPDSettings* _cpdSettings, AircraftEngineType
   numEngines(_numEngines),
   numFuelTanks(_numFuelTanks)
 {
-//   engineWidget = new EngineWidget(cpdSettings, _numThrottles);
 }
 
 //EngineController::EngineController(const EngineController& orig)

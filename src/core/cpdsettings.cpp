@@ -59,6 +59,19 @@ CPDSettings::~CPDSettings()
 {
 }
 
+XPSlave* CPDSettings::getSlaveByName(QString name) const
+{
+   // The number of slaves should never be so large that a linear search
+   // would be prohibitively slow.
+   for (int i = 0; i < m_numSlaves; ++i) {
+      XPSlave* slave = m_slaves.value(i);
+      if (slave->m_slaveName == name) {
+         return slave;
+      }
+   }
+   return NULL;
+}
+
 
 void CPDSettings::loadSettingsFile(QString _filename)
 {
@@ -69,24 +82,57 @@ void CPDSettings::loadSettingsFile(QString _filename)
       delete settings;
    }
    settings = new QSettings(_filename, QSettings::IniFormat);
+   qDebug() << "Child Keys/Groups:" << settings->childKeys() << "/" << settings->childGroups();
    
    // Load general settings
    m_layoutProfile = m_configDir + "/" + settings->value("profile").toString();
    m_style         = m_configDir + "/" + settings->value("style").toString();
    m_mapSettings   = m_configDir + "/" + settings->value("map_settings").toString();
 
-   // Load X-Plane 10 settings
-   settings->beginGroup("xplane");
-   m_xplanePortOut = settings->value("xplane_port_out").toInt();
-   m_xplanePortIn  = settings->value("xplane_port_in").toInt();
-   QString host    = settings->value("xplane_host").toString();
-   if (host == "localhost") {
-      m_xplaneHost = QHostAddress::LocalHost;
+   // Default to false if it does not appear (do not want standard CPD's
+   // to be cluttered, also can prevent them from knowing about MCS)
+   settings->beginGroup("mcs");
+   m_isMCS = settings->value("is_mcs", "false").toBool();
+   settings->endGroup(); // "mcs"
+
+   if (m_isMCS) {
+      // Load X-Plane 10 slave settings
+      m_numSlaves = settings->beginReadArray("xplane-slaves");
+      qDebug() << "Loading MCS settings for" << m_numSlaves << "slaves...";
+      for (int i = 0; i < m_numSlaves; ++i) {
+         settings->setArrayIndex(i);
+         XPSlave* slave = new XPSlave();
+         slave->m_slaveID        = i;
+         slave->m_slaveName      = settings->value("slave_name").toString();
+         slave->m_xplanePortOut  = settings->value("xplane_port_out").toInt();
+         slave->m_xplanePortIn   = settings->value("xplane_port_in").toInt();
+         slave->m_xplaneHost     = settings->value("xplane_host").toString();
+         slave->m_hddHost        = settings->value("hdd_host").toString();
+         m_slaves.insert(i, slave);
+      }
+      settings->endArray(); // "xplane-slaves"
+      // Set default values for m_xplane* data
+      m_xplanePortOut = 0;
+      m_xplanePortIn = 0;
+      m_xplaneHost = "mcs";
    }
    else {
-      m_xplaneHost = QHostAddress(host);
+      // Load X-Plane 10 settings
+      settings->beginGroup("xplane");
+      m_xplanePortOut = settings->value("xplane_port_out").toInt();
+      m_xplanePortIn  = settings->value("xplane_port_in").toInt();
+      QString host    = settings->value("xplane_host").toString();
+      if (host == "localhost") {
+         m_xplaneHost = QHostAddress::LocalHost;
+      }
+      else {
+         m_xplaneHost = QHostAddress(host);
+      }
+      settings->endGroup(); // "xplane"
+      // Set default values for MCS data
+      m_numSlaves = 0;
    }
-   settings->endGroup(); // "xplane"
+   
 
    // Load Map Proxy settings
    settings->beginGroup("map-proxy");

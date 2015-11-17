@@ -1,4 +1,4 @@
-#include "window.h"
+#include "cpdwidget.h"
 
 #include <QToolBar>
 #include <QPushButton>
@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QWidget>
+#include <QHBoxLayout>
 //#include <QLatin1String>
 
 #include "qt-layout/layoutitem.h"
@@ -34,11 +35,13 @@
 #include "traffic/trafficwidget.h"
 
 
-CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent) 
-: QMainWindow(),
-  cpdSettings(_cpdSettings)
+CPDWidget::CPDWidget(CPDSettings* _cpdSettings, int _slaveID, QFrame* _parent) 
+: QFrame(),
+  cpdSettings(_cpdSettings),
+  slaveID(_slaveID)
 {
-   cpdC = new CPDController(cpdSettings, this);
+   setObjectName("include-background");
+   cpdC = new CPDController(cpdSettings, slaveID, this);
    acMap = cpdC->getACMap();
    
    // QFile ss(":/style/style.css");
@@ -53,19 +56,19 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
 
    MapController* mapC = cpdC->getMapC();
    // NOTE: to add a new widget, add its constructor here
-   mapW  = new MapWidget(cpdSettings,     mapC->getMapSettings(), mapC, acMap);
-   timeW = new TimeWidget(cpdSettings,    cpdC->getComC());
-   fuelW = new FuelWidget(cpdSettings,    cpdC->getEngC());
-   gearW = new GearWidget(cpdSettings,    cpdC->getGearC());
-   flapW = new FlapsWidget(cpdSettings,   cpdC->getGearC());
-   comW  = new CommsWidget(cpdSettings,   cpdC->getComC());
-   engW  = new EngineWidget(cpdSettings,  cpdC->getEngC());
+   mapW  = new MapWidget    (cpdSettings, mapC->getMapSettings(), mapC, acMap);
+   timeW = new TimeWidget   (cpdSettings, cpdC->getComC());
+   fuelW = new FuelWidget   (cpdSettings, cpdC->getEngC());
+   gearW = new GearWidget   (cpdSettings, cpdC->getGearC());
+   flapW = new FlapsWidget  (cpdSettings, cpdC->getGearC());
+   comW  = new CommsWidget  (cpdSettings, cpdC->getComC());
+   engW  = new EngineWidget (cpdSettings, cpdC->getEngC());
    tfcW  = new TrafficWidget(cpdSettings, cpdC->getTfcC(), acMap);
 
    // Blanks and alternate-blank widgets
    QFrame* gearWBlank = new QFrame();
    gearWBlank->setObjectName("border");
-   connect(cpdC, &CPDC::updateGearRetractable, this, &CPDWindow::swapGearWidget);
+   connect(cpdC, &CPDC::updateGearRetractable, this, &CPDWidget::swapGearWidget);
 
    QFrame* pfdFillerBlank = new QFrame();
    pfdFillerBlank->setObjectName("border");
@@ -112,12 +115,14 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QObject* _parent)
       layoutManager->addWidget(item);
    }
    
-   setCentralWidget(layoutManager);
-   
+   // setCentralWidget(layoutManager);
+   QHBoxLayout* layout = new QHBoxLayout(this);
+   layout->addWidget(layoutManager);
+
    setMinimumSize(QSize(1344, 756));
 }
 
-CPDWindow::~CPDWindow()
+CPDWidget::~CPDWidget()
 {
    delete cpdC;
    delete acMap;
@@ -125,7 +130,7 @@ CPDWindow::~CPDWindow()
    delete cpdSettings;
 }
 
-void CPDWindow::setupPFDAltGuages()
+void CPDWidget::setupPFDAltGuages()
 {
    QWidget* adiW = (QWidget*) cpdC->getADIC()->getWidget();
    QWidget* altW = (QWidget*) cpdC->getALTC()->getWidget();
@@ -150,7 +155,7 @@ void CPDWindow::setupPFDAltGuages()
    vbLayout->addLayout(botRow);
 }
 
-void CPDWindow::swapPFDAltGauges(bool checked)
+void CPDWidget::swapPFDAltGauges(bool checked)
 {
    LayoutItem* pfd = layoutProfile->getItemByName("PFDWidget");
    LayoutItem* pfdAlt = layoutProfile->getItemByName("PFDAltGuages");
@@ -173,7 +178,7 @@ void CPDWindow::swapPFDAltGauges(bool checked)
    }
 }
 
-void CPDWindow::swapGearWidget(float retractable)
+void CPDWidget::swapGearWidget(float retractable)
 {
    LayoutItem* gw = layoutProfile->getItemByName("GearWidget");
    LayoutItem* gwb = layoutProfile->getItemByName("GearWidgetBlank");

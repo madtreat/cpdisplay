@@ -66,7 +66,7 @@ private:
    bool                 enabled; // are the maps enabled?
    ACMap*               acMap;
    
-   QWebEngineView*            webView;
+   QWebEngineView*      webView;
    GeocodeDataManager*  geocode;
    
    double heading; // current heading value in degrees

@@ -21,9 +21,9 @@ MapController::MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* 
 {
    orientation = TRACK_UP;
    QString mapSettingsFile = cpdSettings->mapSettingsFile();
-   settings = new MapSettings(mapSettingsFile, this);
+   mapSettings = new MapSettings(mapSettingsFile, this);
    
-   qDebug() << "Can enable maps?" << settings->canEnableMaps();
+   qDebug() << "Can enable maps?" << mapSettings->canEnableMaps();
 }
 
 //MapController::MapController(const MapController& orig)
@@ -44,24 +44,24 @@ void MapController::setZoom(int level)
       emit zoomMinReached(true);
       return;
    }
-   settings->setZoom(level);
+   mapSettings->setZoom(level);
    emit updateZoom(level);
    emit zoomEither(true);
 }
 
 void MapController::increaseZoom()
 {
-   int newLevel = settings->zoom() + 1;
+   int newLevel = mapSettings->zoom() + 1;
    setZoom(newLevel);
 }
 
 void MapController::decreaseZoom()
 {
-   int newLevel = settings->zoom() - 1;
+   int newLevel = mapSettings->zoom() - 1;
    setZoom(newLevel);
 }
 
 void MapController::setOrientation(MapOrientation mo)
 {
-   settings->setMapOrientation(mo);
+   mapSettings->setMapOrientation(mo);
 }

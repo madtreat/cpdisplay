@@ -38,7 +38,7 @@ class CPDController : public QObject {
    Q_OBJECT;
 
 public:
-   CPDController(CPDSettings* _settings, QObject* _parent = 0);
+   CPDController(CPDSettings* _settings, int _slaveID = -1, QObject* _parent = 0);
    CPDController(const CPDController& orig) = delete;
    virtual ~CPDController();
 
@@ -84,6 +84,7 @@ signals:
 
 private:
    CPDSettings*   settings;
+   int            slaveID;
    SwitchBoard*   sb;
    ACMap*         acMap;
    int            numEngines;

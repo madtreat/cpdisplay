@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QHostAddress>
 
 #include "xplanedata.h"
 #include "xplanedref.h"
@@ -93,7 +94,7 @@ class SwitchBoard : public QObject {
    };
 
 public:
-   SwitchBoard(CPDSettings* _settings, QObject* _parent=0);
+   SwitchBoard(CPDSettings* _settings, int _slaveID = -1, QObject* _parent=0);
    SwitchBoard(const SwitchBoard& orig) = delete;
    ~SwitchBoard();
    
@@ -102,53 +103,58 @@ public slots:
    void readPendingData();
    void sendDREF(QString drefStr, xpflt value);
    void requestDatarefsFromXPlane();
+
+   // XPlane send request slots: called when an app wants to send to XPlane
+   // void notifyComms       (float value); // comm update
+   // void notifyTimerActive (int   value); // timer is active? 1/0
+   // void notifyTimerReset  (float value); // reset timer to 0
    
 signals:
    void notConnected(); // not connected to XPlane
 
    // XPlane 10.40+ versions:
-   void acTailNumUpdate(float tail);
-   void acNumEnginesUpdate(float num);
+   void acTailNumUpdate      (float tail);
+   void acNumEnginesUpdate   (float num);
 
    // Engine Limits
-   void engLimitMPUpdate   (float inhg,   LimitType type);
-   void engLimitFFUpdate   (float gph,    LimitType type); // gal/hr
-   void engLimitN1Update   (float percent,LimitType type);
-   void engLimitN2Update   (float percent,LimitType type);
+   void engLimitMPUpdate     (float inhg,   LimitType type);
+   void engLimitFFUpdate     (float gph,    LimitType type); // gal/hr
+   void engLimitN1Update     (float percent,LimitType type);
+   void engLimitN2Update     (float percent,LimitType type);
 
-   void engLimitEPRUpdate  (float ratio,  LimitType type);
-   void engLimitEGTUpdate  (float degC,   LimitType type);
-   void engLimitTRQUpdate  (float ft_lb,  LimitType type);
-   void engLimitITTUpdate  (float degC,   LimitType type);
-   void engLimitCHTUpdate  (float degC,   LimitType type);
+   void engLimitEPRUpdate    (float ratio,  LimitType type);
+   void engLimitEGTUpdate    (float degC,   LimitType type);
+   void engLimitTRQUpdate    (float ft_lb,  LimitType type);
+   void engLimitITTUpdate    (float degC,   LimitType type);
+   void engLimitCHTUpdate    (float degC,   LimitType type);
 
-   void engLimitOilPUpdate (float psi,    LimitType type);
-   void engLimitOilTUpdate (float degC,   LimitType type);
-   void engLimitFuelPUpdate(float psi,    LimitType type);
+   void engLimitOilPUpdate   (float psi,    LimitType type);
+   void engLimitOilTUpdate   (float degC,   LimitType type);
+   void engLimitFuelPUpdate  (float psi,    LimitType type);
 
    // Radios
-   void radioCom1FreqUpdate (float freq);
-   void radioCom1StdbyUpdate(float freq);
-   void radioCom2FreqUpdate (float freq);
-   void radioCom2StdbyUpdate(float freq);
-   void radioNav1FreqUpdate (float freq);
-   void radioNav1StdbyUpdate(float freq);
-   void radioNav2FreqUpdate (float freq);
-   void radioNav2StdbyUpdate(float freq);
+   void radioCom1FreqUpdate  (float freq);
+   void radioCom1StdbyUpdate (float freq);
+   void radioCom2FreqUpdate  (float freq);
+   void radioCom2StdbyUpdate (float freq);
+   void radioNav1FreqUpdate  (float freq);
+   void radioNav1StdbyUpdate (float freq);
+   void radioNav2FreqUpdate  (float freq);
+   void radioNav2StdbyUpdate (float freq);
 
    // Fuel Quantity
-   void fuelQuantityUpdate(float qty, int tankNum);
+   void fuelQuantityUpdate   (float qty, int tankNum);
 
    // Landing Gear - range: [0.0, 1.0]
    void gearRetractableUpdate(float rectractable); // a bool value
-   void gearDeployUpdate(float percent, int gearNum);
+   void gearDeployUpdate     (float percent, int gearNum);
 
    // Flaps - range: [0.0, 1.0]
-   void flapUpdate(float percent);
+   void flapUpdate      (float percent);
    void flapHandleUpdate(float percent);
 
    // Multiplayer planes
-   void acHdgUpdate(float heading, int acNum);
+   void acHdgUpdate (float heading, int acNum);
    void acSpdXUpdate(float vx, int acNum);
    void acSpdYUpdate(float vy, int acNum);
    void acSpdZUpdate(float vz, int acNum);
@@ -185,39 +191,43 @@ signals:
    void acAltUpdate(float alt, int ac);
    
    void throttleCommandUpdate(float throttle, int engNum);
-   void throttleActualUpdate(float throttle, int engNum);
+   void throttleActualUpdate (float throttle, int engNum);
    
-   void engPowerUpdate(float power, int engNum);
-   void engThrustUpdate(float thrust, int engNum);
-   void engTorqueUpdate(float torque, int engNum);
-   void engRPMUpdate(float rpm, int engNum);
-   void propRPMUpdate(float rpm, int engNum);
-   void propPitchUpdate(float pitch, int engNum);
-   void propwashUpdate(float pwash, int engNum);
+   void engPowerUpdate  (float power, int engNum);
+   void engThrustUpdate (float thrust, int engNum);
+   void engTorqueUpdate (float torque, int engNum);
+   void engRPMUpdate    (float rpm, int engNum);
+   void propRPMUpdate   (float rpm, int engNum);
+   void propPitchUpdate (float pitch, int engNum);
+   void propwashUpdate  (float pwash, int engNum);
    
-   void n1Update(float n1, int engNum);
-   void n2Update(float n2, int engNum);
-   void mpUpdate(float mp, int engNum);
-   void eprUpdate(float epr, int engNum);
-   void ffUpdate(float ff, int engNum);
-   void ittUpdate(float itt, int engNum);
-   void egtUpdate(float egt, int engNum);
-   void chtUpdate(float cht, int engNum);
+   void n1Update  (float n1, int engNum);
+   void n2Update  (float n2, int engNum);
+   void mpUpdate  (float mp, int engNum);
+   void eprUpdate (float epr, int engNum);
+   void ffUpdate  (float ff, int engNum);
+   void ittUpdate (float itt, int engNum);
+   void egtUpdate (float egt, int engNum);
+   void chtUpdate (float cht, int engNum);
    
    void engOilPressureUpdate(float pressure, int engNum);
    void engOilTempUpdate(float temp, int engNum);
    
-   void com1Update(float freq, float standby);
-   void com2Update(float freq, float standby);
+   void com1Update       (float freq, float standby);
+   void com2Update       (float freq, float standby);
    void comTransmitUpdate(float freq);
    
-   void nav1Update(float freq, float standby);
-   void nav2Update(float freq, float standby);
+   void nav1Update       (float freq, float standby);
+   void nav2Update       (float freq, float standby);
 
 private:
-   CPDSettings* settings;
-   QUdpSocket* xplane;
-   int drefID; // used for incrementing dataref request ID's
+   CPDSettings*   settings;
+   int            slaveID;
+   QHostAddress   thisHost;
+   int            thisPortOut;
+   int            thisPortIn;
+   QUdpSocket*    xplane;
+   int            drefID; // used for incrementing dataref request ID's
 
    QTimer* timer; // connection-test timer
    bool didReceiveData; // did this object receive data within the last timer?

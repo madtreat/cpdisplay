@@ -146,7 +146,7 @@ void TimeWidget::setTimes(float zulu, float local, float mission, float timer)
 // In this context, checked == timer is running
 void TimeWidget::toggleTimer(bool checked)
 {
-   timerStartStop->setText(checked ? "Stop" : "Start");
+   timerStartStop->setText(checked ? "Timer Stop" : "Timer Start");
    // notify xplane
    comC->notifyXPlaneTimer(checked);
 }

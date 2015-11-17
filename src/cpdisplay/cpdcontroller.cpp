@@ -28,13 +28,14 @@
 #include "traffic/trafficcontroller.h"
 
 
-CPDController::CPDController(CPDSettings* _settings, QObject* _parent)
-: QObject(_parent)
+CPDController::CPDController(CPDSettings* _settings, int _slaveID, QObject* _parent)
+: QObject(_parent),
+  slaveID(_slaveID)
 {
    settings = _settings;
    acMap = new QMap<int, Aircraft*>();
    
-   sb = new SwitchBoard(settings);
+   sb = new SwitchBoard(settings, slaveID);
    
    mapC = new MapController(settings, acMap, this);
    adiC = new ADIController(this);
