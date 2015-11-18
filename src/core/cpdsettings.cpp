@@ -59,12 +59,12 @@ CPDSettings::~CPDSettings()
 {
 }
 
-XPSlave* CPDSettings::getSlaveByName(QString name) const
+SlaveSystem* CPDSettings::getSlaveByName(QString name) const
 {
    // The number of slaves should never be so large that a linear search
    // would be prohibitively slow.
    for (int i = 0; i < m_numSlaves; ++i) {
-      XPSlave* slave = m_slaves.value(i);
+      SlaveSystem* slave = m_slaves.value(i);
       if (slave->m_slaveName == name) {
          return slave;
       }
@@ -101,13 +101,14 @@ void CPDSettings::loadSettingsFile(QString _filename)
       qDebug() << "Loading MCS settings for" << m_numSlaves << "slaves...";
       for (int i = 0; i < m_numSlaves; ++i) {
          settings->setArrayIndex(i);
-         XPSlave* slave = new XPSlave();
-         slave->m_slaveID        = i;
-         slave->m_slaveName      = settings->value("slave_name").toString();
-         slave->m_xplanePortOut  = settings->value("xplane_port_out").toInt();
-         slave->m_xplanePortIn   = settings->value("xplane_port_in").toInt();
-         slave->m_xplaneHost     = settings->value("xplane_host").toString();
-         slave->m_hddHost        = settings->value("hdd_host").toString();
+         SlaveSystem* slave = new SlaveSystem();
+         slave->m_slaveID           = i;
+         slave->m_slaveName         = settings->value("slave_name").toString();
+         slave->m_allowMCSOverride  = settings->value("allow_mcs_override", "true").toBool();
+         slave->m_xplanePortOut     = settings->value("xplane_port_out").toInt();
+         slave->m_xplanePortIn      = settings->value("xplane_port_in").toInt();
+         slave->m_xplaneHost        = settings->value("xplane_host").toString();
+         slave->m_cpdHost           = settings->value("cpd_host").toString();
          m_slaves.insert(i, slave);
       }
       settings->endArray(); // "xplane-slaves"

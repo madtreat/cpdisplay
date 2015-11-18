@@ -13,7 +13,7 @@
 #include <QResizeEvent>
 
 #include "qfi/ui/LayoutSquare.h"
-#include "qt-google-maps/mapsettings.h"
+#include "qt-maps/mapsettings.h"
 #include "core/cpdsettings.h"
 
 #include "mapconsts.h"

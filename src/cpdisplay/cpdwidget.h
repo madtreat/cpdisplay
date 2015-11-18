@@ -15,6 +15,7 @@ class LayoutProfile;
 class LayoutManager;
 class CPDSettings;
 class CPDController;
+class SwitchBoard;
 
 class MapWidget;
 class TimeWidget;
@@ -32,6 +33,8 @@ class CPDWidget : public QFrame {
 public:
    CPDWidget(CPDSettings* _cpdSettings, int _slaveID = -1, QFrame* _parent=0);
    ~CPDWidget();
+
+   SwitchBoard* getSwitchBoard() const;
 
 public slots:
    void swapPFDAltGauges(bool checked);

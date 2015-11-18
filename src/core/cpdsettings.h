@@ -15,15 +15,16 @@
 class QSettings;
 
 
-struct XPSlave {
+struct SlaveSystem {
    int            m_slaveID;
    QString        m_slaveName;
+   bool           m_allowMCSOverride;
 
    int            m_xplanePortOut;
    int            m_xplanePortIn;
    QHostAddress   m_xplaneHost;
 
-   QHostAddress   m_hddHost;
+   QHostAddress   m_cpdHost;
 };
 
 class CPDSettings : public QObject {
@@ -45,9 +46,10 @@ public:
 
    bool        isMCS()           const { return m_isMCS;          }
    int         numSlaves()       const { return m_numSlaves;      }
-   QMap<int, XPSlave*> slaves()  const { return m_slaves;         }
-   XPSlave*    getSlave(int id)  const { return m_slaves.value(id);}
-   XPSlave*    getSlaveByName(QString name) const;
+
+   QMap<int, SlaveSystem*> slaves()  const { return m_slaves;     }
+   SlaveSystem*   getSlave(int id)   const { return m_slaves.value(id); }
+   SlaveSystem*   getSlaveByName(QString name) const;
 
    
    int            xplanePortOut()const { return m_xplanePortOut;  }
@@ -78,7 +80,7 @@ private:
    int         m_numSlaves;      // Number of slaves under this MCS
 
    // "xplane-slaves" group for MCS
-   QMap<int, XPSlave*> m_slaves; // Map of <ID, Slave info>
+   QMap<int, SlaveSystem*> m_slaves; // Map of <ID, Slave info>
 
    // "xplane" group
    int            m_xplanePortOut;

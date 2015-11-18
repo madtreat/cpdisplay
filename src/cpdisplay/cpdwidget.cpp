@@ -127,7 +127,11 @@ CPDWidget::~CPDWidget()
    delete cpdC;
    delete acMap;
    delete layoutManager;
-   delete cpdSettings;
+}
+
+SwitchBoard* CPDWidget::getSwitchBoard() const
+{
+   return cpdC->getSwitchBoard();
 }
 
 void CPDWidget::setupPFDAltGuages()

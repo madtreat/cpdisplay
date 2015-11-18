@@ -10,7 +10,7 @@
 
 #include <QObject>
 
-#include "qt-google-maps/qtmapsconsts.h"
+#include "qt-maps/qtmapsconsts.h"
 #include "core/aircraft.h"
 #include "mapconsts.h"
 

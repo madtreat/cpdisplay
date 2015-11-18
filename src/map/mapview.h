@@ -13,7 +13,7 @@
 #include <QWidget>
 #include "core/aircraft.h"
 
-#include "qt-google-maps/qtmapsconsts.h"
+#include "qt-maps/qtmapsconsts.h"
 #include "mapconsts.h"
 
 

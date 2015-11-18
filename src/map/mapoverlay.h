@@ -17,7 +17,7 @@
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"
 
-#include "qt-google-maps/qtmapsconsts.h"
+#include "qt-maps/qtmapsconsts.h"
 #include "mapconsts.h"
 
 class QPaintEvent;

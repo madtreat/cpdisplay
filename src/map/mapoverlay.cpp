@@ -12,7 +12,7 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
-#include "qt-google-maps/mapsettings.h"
+#include "qt-maps/mapsettings.h"
 #include "utils/geodist.h"
 #include "core/cpdsettings.h"
 

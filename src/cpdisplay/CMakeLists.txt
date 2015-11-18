@@ -4,12 +4,16 @@ set(SOURCES
    cpdcontroller.cpp
    cpdwidget.cpp
    cpdwindow.cpp
+   mcsslavewidget.cpp
+   mcswidget.cpp
 )
 
 set(HEADERS
    cpdcontroller.h
    cpdwidget.h
    cpdwindow.h
+   mcsslavewidget.h
+   mcswidget.h
 )
 
 set(RESOURCES

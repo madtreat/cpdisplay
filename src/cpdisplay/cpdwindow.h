@@ -9,6 +9,7 @@
 
 class CPDSettings;
 class CPDWidget;
+class SwitchBoard;
 
 class CPDWindow : public QMainWindow {
 	Q_OBJECT;
@@ -22,15 +23,16 @@ public slots:
 	void displaySlaveCPD(int i);
 
 private:
-	CPDSettings* 		settings;
+	CPDSettings*        settings;
 
 	// For an MCS window:
-	QTabWidget* 		tabWidget;
-	QList<CPDWidget*> 	slaveCPDs;
-	QWidget* 		 	mcsWidget; // MCS controls
+	QTabWidget*         tabWidget;
+	QList<CPDWidget*>   slaveCPDs;
+   QList<SwitchBoard*> slaveSwitches;
+	QWidget*            mcsWidget; // MCS controls
 
 	// For a standard CPD window:
-	CPDWidget* 			cpdWidget;
+	CPDWidget*          cpdWidget;
 };
 
 #endif

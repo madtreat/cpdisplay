@@ -45,6 +45,8 @@ public:
    ACMap* getACMap() const { return acMap; }
    int    getNumEngines() const { return numEngines; }
    
+   SwitchBoard* getSwitchBoard() const { return sb; }
+   
    MapController* getMapC() const { return mapC; }
    ADIController* getADIC() const { return adiC; }
    ALTController* getALTC() const { return altC; }

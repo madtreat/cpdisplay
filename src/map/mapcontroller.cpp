@@ -11,7 +11,7 @@
 
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"
-#include "qt-google-maps/mapsettings.h"
+#include "qt-maps/mapsettings.h"
 
 
 MapController::MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent)

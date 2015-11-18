@@ -13,8 +13,8 @@
 #include <QMessageBox>
 #include <QNetworkProxy>
 
-#include "qt-google-maps/geocode_data_manager.h"
-#include "qt-google-maps/mapsettings.h"
+#include "qt-maps/geocode_data_manager.h"
+#include "qt-maps/mapsettings.h"
 
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"

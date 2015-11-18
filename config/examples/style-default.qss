@@ -1,9 +1,10 @@
 /* 
-    Created on : Jul 7, 2015, 10:13:09 AM
-    Author     : Madison Treat <madison.treat@tamu.edu>
+   Created on : Jul 7, 2015, 10:13:09 AM
+   Author     : Madison Treat <madison.treat@tamu.edu>
 */
 
 QMainWindow,
+QTabWidget::pane,
 QFrame#include-background {
    background-color: black;
    background: url(':/style/bg/metal-1-200x200.jpg') repeat;
