@@ -194,6 +194,12 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value)
    xplane->writeDatagram(data, len, thisHost, thisPortIn);
 }
 
+void SwitchBoard::pauseSimulator()
+{
+   // TODO: figure out how to remotely pause the sim
+   // since XPDR_TIME_PAUSED is read only
+}
+
 // void SwitchBoard::notifyComms(float value)
 // {
 // }
@@ -237,9 +243,6 @@ void SwitchBoard::addLimitDRef(QString str, int freq, limit_fp sig)
  * NOTES:
  *  - The dataref's ID is determined programmatically so you do not have
  *    to keep track of ID's for every single dataref you request.
- *  - The curly braces in each of the macros are used to keep "int id = ..."
- *    from re-declaring the id variable each time the macro is called, which
- *    would throw compiler errors.
  */
 void SwitchBoard::requestDatarefsFromXPlane()
 {
@@ -253,14 +256,14 @@ void SwitchBoard::requestDatarefsFromXPlane()
    addDirectDRef(XPDR_GEAR_RETRACTABLE,  1, &SWB::gearRetractableUpdate);
 
    // Radios
-   addDirectDRef(XPDR_RADIO_COM1_FREQ,   2, &SWB::radioCom1FreqUpdate);
-   addDirectDRef(XPDR_RADIO_COM1_STDBY,  2, &SWB::radioCom1StdbyUpdate);
-   addDirectDRef(XPDR_RADIO_COM2_FREQ,   2, &SWB::radioCom2FreqUpdate);
-   addDirectDRef(XPDR_RADIO_COM2_STDBY,  2, &SWB::radioCom2StdbyUpdate);
-   addDirectDRef(XPDR_RADIO_NAV1_FREQ,   2, &SWB::radioNav1FreqUpdate);
-   addDirectDRef(XPDR_RADIO_NAV1_STDBY,  2, &SWB::radioNav1StdbyUpdate);
-   addDirectDRef(XPDR_RADIO_NAV2_FREQ,   2, &SWB::radioNav2FreqUpdate);
-   addDirectDRef(XPDR_RADIO_NAV2_STDBY,  2, &SWB::radioNav2StdbyUpdate);
+   addDirectDRef(XPDR_RADIO_COM1_FREQ,   1, &SWB::radioCom1FreqUpdate);
+   addDirectDRef(XPDR_RADIO_COM1_STDBY,  1, &SWB::radioCom1StdbyUpdate);
+   addDirectDRef(XPDR_RADIO_COM2_FREQ,   1, &SWB::radioCom2FreqUpdate);
+   addDirectDRef(XPDR_RADIO_COM2_STDBY,  1, &SWB::radioCom2StdbyUpdate);
+   addDirectDRef(XPDR_RADIO_NAV1_FREQ,   1, &SWB::radioNav1FreqUpdate);
+   addDirectDRef(XPDR_RADIO_NAV1_STDBY,  1, &SWB::radioNav1StdbyUpdate);
+   addDirectDRef(XPDR_RADIO_NAV2_FREQ,   1, &SWB::radioNav2FreqUpdate);
+   addDirectDRef(XPDR_RADIO_NAV2_STDBY,  1, &SWB::radioNav2StdbyUpdate);
 
    // Fuel
    for (int i = 0; i < MAX_NUM_FUEL_TANKS; i++) {
@@ -311,6 +314,11 @@ void SwitchBoard::requestDatarefsFromXPlane()
       addNumberedDRef(vstr, 20, &SWB::acSpdZUpdate, i);
    }
 
+   // Misc
+   addDirectDRef(XPDR_TIME_PAUSED, 2, &SWB::simPausedUpdate);
+
+
+   // This loop sends the DREF requests to xplane
    foreach (int i, drmap.keys()) {
       DRefValue* val = drmap.value(i);
       QString vstr = val->str;
@@ -333,7 +341,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
    }
 
 
-   // Turn on UDP output
+   // Turn on xplane's "simple" UDP output
    // This works (the DSEL packet to xplane), at least in 10.40b7
    QList<XPDataIndex> indexes;
    // Be lazy and enable everything we can for output.  Better this than

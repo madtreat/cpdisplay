@@ -15,65 +15,57 @@ MCSSlaveWidget::MCSSlaveWidget(CPDSettings* _settings, SwitchBoard* _sb, int _sl
    setObjectName("include-background");
    slaveConfig = settings->getSlave(slaveID);
    QVBoxLayout* layout = new QVBoxLayout(this);
+   layout->setContentsMargins(0, 0, 0, 0);
 
-   name = new QLabel(slaveConfig->m_slaveName);
-   layout->addWidget(name);
+   name        = new QLabel(slaveConfig->m_slaveName);
+   tail        = new QLabel("--TAIL--");
+   status      = new QLabel("--STATUS--");
+   ipSim       = new QLabel(slaveConfig->m_xplaneHost.toString());
+   ipCPD       = new QLabel(slaveConfig->m_cpdHost.toString());
+   aircraft    = new QLabel("--AIRCRAFT--");
+   flaps       = new QLabel("--FLAPS--");
+   altitude    = new QLabel("--ALTITUDE--");
+   airspeed    = new QLabel("--AIRSPEED--");
+   mach        = new QLabel("--MACH--");
+   heading     = new QLabel("--HEADING--");
+   fuel        = new QLabel("--FUEL--");
+   timeLocal   = new QLabel("--LOCAL TIME--");
+   timeZulu    = new QLabel("--ZULU TIME--");
 
    pause = new QPushButton("Resume");
    pause->setCheckable(true);
    pause->setChecked(true);
    pause->setEnabled(slaveConfig->m_allowMCSOverride);
    connect(pause, &QPushButton::toggled, this, &MCSSW::pauseSimulator);
-   layout->addWidget(pause);
-
-   status = new QLabel("--STATUS--");
-   layout->addWidget(status);
-
-   ipSim = new QLabel(slaveConfig->m_xplaneHost.toString());
-   layout->addWidget(ipSim);
-
-   ipCPD = new QLabel(slaveConfig->m_cpdHost.toString());
-   layout->addWidget(ipCPD);
-
-   aircraft = new QLabel("--AIRCRAFT--");
-   layout->addWidget(aircraft);
-
-   flaps = new QLabel("--FLAPS--");
-   layout->addWidget(flaps);
 
    gearStatus = new QPushButton("Down");
    gearStatus->setCheckable(true);
    gearStatus->setChecked(true);
    gearStatus->setEnabled(slaveConfig->m_allowMCSOverride);
    connect(gearStatus, &QPushButton::toggled, this, &MCSSW::lowerGear);
-   layout->addWidget(gearStatus);
-
-   altitude = new QLabel("--ALTITUDE--");
-   layout->addWidget(altitude);
-
-   airspeed = new QLabel("--AIRSPEED--");
-   layout->addWidget(airspeed);
-
-   mach = new QLabel("--MACH--");
-   layout->addWidget(mach);
-
-   heading = new QLabel("--HEADING--");
-   layout->addWidget(heading);
-
-   fuel = new QLabel("--FUEL--");
-   layout->addWidget(fuel);
-
-   timeLocal = new QLabel("--LOCAL TIME--");
-   layout->addWidget(timeLocal);
-
-   timeZulu = new QLabel("--ZULU TIME--");
-   layout->addWidget(timeZulu);
 
    wheelBreaks = new QPushButton("Breaks on");
    wheelBreaks->setCheckable(true);
    wheelBreaks->setChecked(true);
    wheelBreaks->setEnabled(slaveConfig->m_allowMCSOverride);
    connect(wheelBreaks, &QPushButton::toggled, this, &MCSSW::activateBreaks);
+
+   layout->addWidget(name);
+   layout->addWidget(tail);
+   layout->addWidget(pause);
+   layout->addWidget(status);
+   layout->addWidget(ipSim);
+   layout->addWidget(ipCPD);
+   layout->addWidget(aircraft);
+   layout->addWidget(flaps);
+   layout->addWidget(gearStatus);
+   layout->addWidget(altitude);
+   layout->addWidget(airspeed);
+   layout->addWidget(mach);
+   layout->addWidget(heading);
+   layout->addWidget(fuel);
+   layout->addWidget(timeLocal);
+   layout->addWidget(timeZulu);
    layout->addWidget(wheelBreaks);
 }
 
@@ -83,18 +75,21 @@ MCSSlaveWidget::~MCSSlaveWidget()
 
 void MCSSlaveWidget::pauseSimulator(bool paused)
 {
-   pause->setText(paused ? "Resume" : "Pause");
+   pause->setText(paused ? "Paused" : "Running");
+   pause->setChecked(paused); // when overriden by MCS, must change it
    // TODO: send signal to sim
 }
 
 void MCSSlaveWidget::lowerGear(bool down)
 {
-   gearStatus->setText(down ? "Raise" : "Lower");
+   gearStatus->setText(down ? "Gear is DOWN" : "Gear is UP");
+   gearStatus->setChecked(down);
    // TODO: send signal to sim
 }
 
 void MCSSlaveWidget::activateBreaks(bool active)
 {
-   wheelBreaks->setText(active ? "Off" : "Break");
+   wheelBreaks->setText(active ? "Breaks are ON" : "Breaks are OFF");
+   wheelBreaks->setChecked(active);
    // TODO: send signal to sim
 }

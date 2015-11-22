@@ -21,6 +21,8 @@ public:
 
 public slots:
    void pauseAllSimulators(bool paused);  // button checked == paused
+   void lowerAllGear(bool down);          // button checked == gear down
+   void activateAllBreaks(bool active);   // button checked == breaks on
 
 private:
    CPDSettings*         settings;
@@ -28,14 +30,13 @@ private:
    QList<SwitchBoard*>  slaveSwitches;
 
    // Labels and data
-   QPushButton*   pause;
    QLabel*        name;
+   QLabel*        tail;
    QLabel*        status;
    QLabel*        ipSim;      // IP Address
    QLabel*        ipCPD;      // IP Address
    QLabel*        aircraft;
    QLabel*        flaps;      // percent
-   QLabel*        gearStatus; // up/down
    QLabel*        altitude;   // FSL
    QLabel*        airspeed;   // KIAS
    QLabel*        mach;
@@ -43,7 +44,9 @@ private:
    QLabel*        fuel;       // percent
    QLabel*        timeLocal;
    QLabel*        timeZulu;
-   QLabel*        wheelBreaks;// on/off
+   QPushButton*   pause;
+   QPushButton*   gearStatus; // up/down
+   QPushButton*   wheelBreaks;// on/off
 
    QLayout* createSlaveWidgetLabels();
 };

@@ -36,56 +36,54 @@ MCSWidget::~MCSWidget()
 QLayout* MCSWidget::createSlaveWidgetLabels()
 {
    QVBoxLayout* layout = new QVBoxLayout(this);
+   layout->setContentsMargins(0, 0, 0, 0);
 
-   name = new QLabel("Station:");
-   layout->addWidget(name);
+   name        = new QLabel("Station:");
+   tail        = new QLabel("Tail Number:");
+   status      = new QLabel("Connection Status:");
+   ipSim       = new QLabel("Simulator IP:");
+   ipCPD       = new QLabel("CPDisplay IP:");
+   aircraft    = new QLabel("Aircraft:");
+   flaps       = new QLabel("Flaps (%)");
+   altitude    = new QLabel("Altitude (FSL):");
+   airspeed    = new QLabel("Airspeed (KIAS):");
+   mach        = new QLabel("Mach-o-Meter:");
+   heading     = new QLabel("Heading:");
+   fuel        = new QLabel("Fuel (%):");
+   timeLocal   = new QLabel("Local Time (24 hour):");
+   timeZulu    = new QLabel("Zulu Time (24 hour):");
 
-   pause = new QPushButton("Resume All");
+   pause = new QPushButton("All Paused");
    pause->setCheckable(true);
    pause->setChecked(true);
    connect(pause, &QPushButton::toggled, this, &MCSWidget::pauseAllSimulators);
+   
+   gearStatus = new QPushButton("All Gear DOWN");
+   gearStatus->setCheckable(true);
+   gearStatus->setChecked(true);
+   connect(gearStatus, &QPushButton::toggled, this, &MCSWidget::lowerAllGear);
+
+   wheelBreaks = new QPushButton("All Breaks ON");
+   wheelBreaks->setCheckable(true);
+   wheelBreaks->setChecked(true);
+   connect(wheelBreaks, &QPushButton::toggled, this, &MCSWidget::activateAllBreaks);
+
+   layout->addWidget(name);
+   layout->addWidget(tail);
    layout->addWidget(pause);
-
-   status = new QLabel("Connection Status:");
    layout->addWidget(status);
-
-   ipSim = new QLabel("Simulator IP:");
    layout->addWidget(ipSim);
-
-   ipCPD = new QLabel("CPDisplay IP:");
    layout->addWidget(ipCPD);
-
-   aircraft = new QLabel("Aircraft:");
    layout->addWidget(aircraft);
-
-   flaps = new QLabel("Flaps (%)");
    layout->addWidget(flaps);
-
-   gearStatus = new QLabel("Landing Gear:");
    layout->addWidget(gearStatus);
-
-   altitude = new QLabel("Altitude (FSL):");
    layout->addWidget(altitude);
-
-   airspeed = new QLabel("Airspeed (KIAS):");
    layout->addWidget(airspeed);
-
-   mach = new QLabel("Mach-o-Meter:");
    layout->addWidget(mach);
-
-   heading = new QLabel("Heading:");
    layout->addWidget(heading);
-
-   fuel = new QLabel("Fuel (%):");
    layout->addWidget(fuel);
-
-   timeLocal = new QLabel("Local Time (24 hour):");
    layout->addWidget(timeLocal);
-
-   timeZulu = new QLabel("Zulu Time (24 hour):");
    layout->addWidget(timeZulu);
-
-   wheelBreaks = new QLabel("Parking Break:");
    layout->addWidget(wheelBreaks);
 
    return layout;
@@ -94,9 +92,27 @@ QLayout* MCSWidget::createSlaveWidgetLabels()
 void MCSWidget::pauseAllSimulators(bool paused)
 {
    qDebug() << "Pausing all simulators.";
-   pause->setText(paused ? "Resume All" : "Pause All");
+   pause->setText(paused ? "All Paused" : "All Running");
    foreach (MCSSlaveWidget* slave, slaveWidgets)
    {
       slave->pauseSimulator(paused);
+   }
+}
+
+void MCSWidget::lowerAllGear(bool down)
+{
+   gearStatus->setText(down ? "All Gear DOWN" : "All Gear UP");
+   foreach (MCSSlaveWidget* slave, slaveWidgets)
+   {
+      slave->lowerGear(down);
+   }
+}
+
+void MCSWidget::activateAllBreaks(bool active)
+{
+   wheelBreaks->setText(active ? "All Breaks ON" : "All Breaks OFF");
+   foreach (MCSSlaveWidget* slave, slaveWidgets)
+   {
+      slave->activateBreaks(active);
    }
 }

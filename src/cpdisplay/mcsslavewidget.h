@@ -34,13 +34,12 @@ private:
 
    // Labels and data
    QLabel*        name;
-   QPushButton*   pause;
+   QLabel*        tail;
    QLabel*        status;
    QLabel*        ipSim;      // IP Address
    QLabel*        ipCPD;      // IP Address
    QLabel*        aircraft;
    QLabel*        flaps;      // percent
-   QPushButton*   gearStatus; // up/down
    QLabel*        altitude;   // FSL
    QLabel*        airspeed;   // KIAS
    QLabel*        mach;
@@ -48,6 +47,8 @@ private:
    QLabel*        fuel;       // percent
    QLabel*        timeLocal;
    QLabel*        timeZulu;
+   QPushButton*   pause;
+   QPushButton*   gearStatus; // up/down
    QPushButton*   wheelBreaks;// on/off
 };
 

@@ -119,8 +119,10 @@ static const char* XPDR_PLANE_X_SPEED_X   = "sim/multiplayer/position/plane__X__
 static const char* XPDR_PLANE_X_SPEED_Y   = "sim/multiplayer/position/plane__X___v_y";
 static const char* XPDR_PLANE_X_SPEED_Z   = "sim/multiplayer/position/plane__X___v_z";
 
+// Miscellaneous
+static const char* XPDR_TIME_PAUSED = "sim/time/paused"; // READ ONLY
+
 /*
-static const char* XPDR_ = "sim/";
 static const char* XPDR_ = "sim/";
 static const char* XPDR_ = "sim/";
 static const char* XPDR_ = "sim/";

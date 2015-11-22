@@ -104,6 +104,8 @@ public slots:
    void sendDREF(QString drefStr, xpflt value);
    void requestDatarefsFromXPlane();
 
+   void pauseSimulator();
+
    // XPlane send request slots: called when an app wants to send to XPlane
    // void notifyComms       (float value); // comm update
    // void notifyTimerActive (int   value); // timer is active? 1/0
@@ -158,6 +160,9 @@ signals:
    void acSpdXUpdate(float vx, int acNum);
    void acSpdYUpdate(float vy, int acNum);
    void acSpdZUpdate(float vz, int acNum);
+
+   // Misc
+   void simPausedUpdate(float paused); // a bool value
 
 
    // XPlane < 10.40 / raw UDP output versions:
