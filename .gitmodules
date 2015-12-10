@@ -1,8 +1,8 @@
 [submodule "ext/qt-maps"]
 	path = ext/qt-maps
 	url = git@github.com:madtreat/qt-maps.git
-[submodule "ext/qt-layout"]
-	path = ext/qt-layout
+[submodule "ext/qt-dynamic-layout"]
+	path = ext/qt-dynamic-layout
 	url = git@github.com:madtreat/qt-dynamic-layout.git
 [submodule "src/resources/sprites"]
 	path = src/resources/sprites
