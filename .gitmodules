@@ -1,12 +1,12 @@
 [submodule "ext/qt-maps"]
 	path = ext/qt-maps
-	url = git@github.tamu.edu:mtreat/qt-maps.git
+	url = git@github.com:madtreat/qt-maps.git
 [submodule "ext/qt-layout"]
 	path = ext/qt-layout
-	url = git@github.tamu.edu:mtreat/qt-layout.git
+	url = git@github.com:madtreat/qt-layout.git
 [submodule "src/resources/sprites"]
 	path = src/resources/sprites
-	url = git@github.tamu.edu:vscl/sprites.git
+	url = git@github.com:madtreat/sprites.git
 [submodule "ext/qt-toggle-input"]
 	path = ext/qt-toggle-input
 	url = git@github.com:madtreat/qt-toggle-input.git
