@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include <QUdpSocket>
+#include <QTcpSocket>
 #include <QByteArray>
 #include <QList>
 #include <QDebug>
@@ -99,18 +100,23 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, int _slaveID, QObject* _parent)
   didReceiveData(false)
 {
    xplane = new QUdpSocket(this);
+   xplanePlugin = new QTcpSocket(this);
+   // connect(xplanePlugin, &QTcpSocket::readyRead, this, &SWB::readPluginData);
+   // connect(xplanePlugin, &QTcpSocket::error, this, &SWB::pluginSocketError);
 
    // If standard CPD config...
    if (slaveID == -1) {
-      thisHost    = settings->xplaneHost();
-      thisPortOut = settings->xplanePortOut();
-      thisPortIn  = settings->xplanePortIn();
+      thisHost          = settings->xplaneHost();
+      thisPortOut       = settings->xplanePortOut();
+      thisPortIn        = settings->xplanePortIn();
+      xplanePluginPort  = settings->xplanePluginPort();
    }
    // Else (for a single MCS slave instance)...
    else {
-      thisHost    = settings->getSlave(slaveID)->m_xplaneHost;
-      thisPortOut = settings->getSlave(slaveID)->m_xplanePortOut;
-      thisPortIn  = settings->getSlave(slaveID)->m_xplanePortIn;
+      thisHost          = settings->getSlave(slaveID)->m_xplaneHost;
+      thisPortOut       = settings->getSlave(slaveID)->m_xplanePortOut;
+      thisPortIn        = settings->getSlave(slaveID)->m_xplanePortIn;
+      xplanePluginPort  = settings->getSlave(slaveID)->m_xplanePluginPort;
    }
 
    /*
@@ -129,6 +135,9 @@ SwitchBoard::SwitchBoard(CPDSettings* _settings, int _slaveID, QObject* _parent)
    else {
       xplane->bind(thisPortIn, QUdpSocket::ShareAddress);
    }
+
+   // Initialize the xplanePlugin TCP socket
+   xplanePlugin->connectToHost(thisHost, xplanePluginPort);
 
    requestDatarefsFromXPlane();
    connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readPendingData);
@@ -176,6 +185,36 @@ void SwitchBoard::readPendingData()
    }
 }
 
+void SwitchBoard::readPluginData()
+{
+}
+
+void SwitchBoard::pluginSocketError(QAbstractSocket::SocketError error)
+{
+   qWarning() << "ERROR:" << xplanePlugin->errorString();
+   switch (error) {
+      case QAbstractSocket::RemoteHostClosedError:
+         break;
+      case QAbstractSocket::HostNotFoundError:
+         // QMessageBox::information(this, tr("Fortune Client"),
+         //                         tr("The host was not found. Please check the "
+         //                            "host name and port settings."));
+         break;
+      case QAbstractSocket::ConnectionRefusedError:
+         // QMessageBox::information(this, tr("Fortune Client"),
+         //                         tr("The connection was refused by the peer. "
+         //                            "Make sure the fortune server is running, "
+         //                            "and check that the host name and port "
+         //                            "settings are correct."));
+         break;
+      default:
+         // QMessageBox::information(this, tr("Fortune Client"),
+         //                         tr("The following error occurred: %1.")
+         //                         .arg(xplanePlugin->errorString()));
+         qDebug() << "Other error";
+   }
+}
+
 void SwitchBoard::sendDREF(QString drefStr, xpflt value)
 {
    if (DEBUG_SEND)
@@ -194,10 +233,51 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value)
    xplane->writeDatagram(data, len, thisHost, thisPortIn);
 }
 
-void SwitchBoard::pauseSimulator()
+void SwitchBoard::sendToPlugin(QString data)
+{
+   if (DEBUG_SEND)
+      qDebug() << "Sending data to plugin:" << data;
+   int bytesWritten = xplanePlugin->write(data.toLocal8Bit());
+   if (bytesWritten == -1) {
+      qDebug() << "Error sending data:" << xplanePlugin->errorString();
+   }
+}
+
+void SwitchBoard::pauseSimulator(bool pause)
 {
    // TODO: figure out how to remotely pause the sim
    // since XPDR_TIME_PAUSED is read only
+   QString cmd = "CMND=" + QString(XPDR_OP_PAUSE_TOGGLE);
+   sendDREF(cmd, (float) pause);
+}
+
+void SwitchBoard::unpauseSimulator(bool unpause)
+{
+   QString cmd = "CMND=" + QString(XPDR_OP_PAUSE_TOGGLE);
+   sendDREF(cmd, (float) unpause);
+}
+
+void SwitchBoard::loadAircraft(QString path)
+{
+
+}
+
+void SwitchBoard::sendGearHandle(bool down)
+{
+   QString str(XPDR_GEAR_HANDLE_STATUS);
+   sendDREF(str, (int) down);
+}
+
+void SwitchBoard::sendFlapHandle(float value)
+{
+   QString str(XPDR_FLAP_HANDLE_DEPLOY);
+   sendDREF(str, value/100);
+}
+
+void SwitchBoard::sendBreaksOn(bool active)
+{
+   qDebug() << "Sending breaks on?" << active << "--> NOT IMPLEMENTED";
+   // QString str(XPDR_)
 }
 
 // void SwitchBoard::notifyComms(float value)
@@ -253,7 +333,6 @@ void SwitchBoard::requestDatarefsFromXPlane()
    //addDirectDRef(XPDR_AC_TYPE,           1, &SWB::acTypeUpdate);
    addDirectDRef(XPDR_AC_TAIL_NUM_1,     1, &SWB::acTailNumUpdate);
    addDirectDRef(XPDR_AC_NUM_ENGINES,    1, &SWB::acNumEnginesUpdate);
-   addDirectDRef(XPDR_GEAR_RETRACTABLE,  1, &SWB::gearRetractableUpdate);
 
    // Radios
    addDirectDRef(XPDR_RADIO_COM1_FREQ,   1, &SWB::radioCom1FreqUpdate);
@@ -271,8 +350,11 @@ void SwitchBoard::requestDatarefsFromXPlane()
       vstr.replace("__X__", QString::number(i));
       addNumberedDRef(vstr, 4, &SWB::fuelQuantityUpdate, i);
    }
+   addDirectDRef(XPDR_FUEL_WEIGHT,     10, &SWB::fuelQuantityUpdate);
+   addDirectDRef(XPDR_FUEL_WEIGHT_TOT, 1,  &SWB::fuelMaxQuantityUpdate);
 
    // Gear
+   addDirectDRef(XPDR_GEAR_RETRACTABLE,  1, &SWB::gearRetractableUpdate);
    for (int i = 0; i < MAX_NUM_LANDING_GEARS; i++) {
       QString vstr = XPDR_GEAR_DEPLOY_X;
       vstr.replace("__X__", QString::number(i));
@@ -316,6 +398,7 @@ void SwitchBoard::requestDatarefsFromXPlane()
 
    // Misc
    addDirectDRef(XPDR_TIME_PAUSED, 2, &SWB::simPausedUpdate);
+   addDirectDRef(XPDR_VSCL_AOA_D,  5, &SWB::aoaDUpdate);
 
 
    // This loop sends the DREF requests to xplane

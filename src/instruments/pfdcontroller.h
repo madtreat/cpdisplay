@@ -42,7 +42,13 @@ public slots:
    void setHeading(float h)      { pfdWidget->setHeading(h);      update(); }
    void setTurnRate(float tr)    { pfdWidget->setTurnRate(tr);    update(); }
    void setClimbRate(float cr)   { pfdWidget->setClimbRate(cr);   update(); }
-   void setFlightPathMarker(float aoa, float sideSlip) { pfdWidget->setFlightPathMarker(aoa, sideSlip); update(); }
+
+   void setFlightPathMarker(float aoa, float sideSlip) {
+      pfdWidget->setFlightPathMarker(aoa, sideSlip); update();
+   }
+   void setFlightPathMarkerDerived(float aoa_D, float sideSlip_D) {
+      // pfdWidget->setFlightPathMarkerDerived(aoa, sideSlip); update();
+   }
 
 private:
    WidgetPFD* pfdWidget;

@@ -45,6 +45,8 @@ SingleFlapWidget::SingleFlapWidget(CPDSettings* _settings, GearController* _gear
    slider->setValue(0);
    slider->setMinimum(0);
    slider->setMaximum(100);
+   slider->setInvertedControls(true);
+   slider->setInvertedAppearance(true);
    if (type == FLAP_HANDLE) {
       connect(slider, &QSlider::valueChanged, gearC, &GEARC::notifyXPlaneFlapHandle);
       connect(gearC, &GEARC::flapHandleUpdate, this, &SingleFlapWidget::setFlap);

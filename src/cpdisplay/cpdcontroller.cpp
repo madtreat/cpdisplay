@@ -46,12 +46,12 @@ CPDController::CPDController(CPDSettings* _settings, int _slaveID, QObject* _par
    tcdC = new TCDController(this);
    vsiC = new VSIController(this);
    
-   numEngines = 1;
-   numFuelTanks = 1;
+   numEngines = 2;
+   numFuelTanks = 2;
    numGears = 3;
    gearC = new GearController(settings, numGears, this);
    comC = new CommsController(settings, this);
-   engC = new EngineController(settings, AC_ENG_PROP, numEngines, numFuelTanks, this);
+   engC = new EngineController(settings, AC_ENG_JET, numEngines, numFuelTanks, this);
    tfcC = new TrafficController(settings, acMap, this);
 
    angVelUpdatedFlag = false;
@@ -69,6 +69,11 @@ CPDController::CPDController(CPDSettings* _settings, int _slaveID, QObject* _par
 
 CPDController::~CPDController()
 {
+}
+
+void CPDController::printSomething(float value)
+{
+   qDebug() << "CPDController received a value:" << value << "from AOA_Derived";
 }
 
 
@@ -115,6 +120,9 @@ void CPDController::connectSignals()
    connect(sb, &SWB::acSpdXUpdate,        this,  &CPDC::updateACSpdX);
    connect(sb, &SWB::acSpdYUpdate,        this,  &CPDC::updateACSpdY);
    connect(sb, &SWB::acSpdZUpdate,        this,  &CPDC::updateACSpdZ);
+
+   // Misc:
+   connect(sb, &SWB::aoaDUpdate,          this, &CPDC::printSomething);
 
 
    /*

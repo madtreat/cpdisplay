@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QMap>
 #include <QHostAddress>
+#include <QAbstractSocket>
 
 #include "xplanedata.h"
 #include "xplanedref.h"
@@ -17,6 +18,7 @@
 
 class QTimer;
 class QUdpSocket;
+class QTcpSocket;
 
 class CPDSettings;
 class XPOutputData;
@@ -101,15 +103,28 @@ public:
 public slots:
    void testConnection();
    void readPendingData();
-   void sendDREF(QString drefStr, xpflt value);
-   void requestDatarefsFromXPlane();
+   void readPluginData();
+   void pluginSocketError(QAbstractSocket::SocketError error);
 
-   void pauseSimulator();
+   void sendDREF(QString drefStr, xpflt value);
+   void sendToPlugin(QString data);
+
+   // paused: 1, unpaused: 0
+   void pauseSimulator(bool pause=true);
+   void unpauseSimulator(bool unpause=false);
+   void loadAircraft(QString path);
+
+   // Send DREF's to xplane
+   void sendGearHandle(bool down);
+   void sendFlapHandle(float value);
+   void sendBreaksOn(bool active);
 
    // XPlane send request slots: called when an app wants to send to XPlane
    // void notifyComms       (float value); // comm update
    // void notifyTimerActive (int   value); // timer is active? 1/0
    // void notifyTimerReset  (float value); // reset timer to 0
+
+   void requestDatarefsFromXPlane();
    
 signals:
    void notConnected(); // not connected to XPlane
@@ -145,7 +160,9 @@ signals:
    void radioNav2StdbyUpdate (float freq);
 
    // Fuel Quantity
+   void fuelQuantityUpdate   (float qty); // kgs
    void fuelQuantityUpdate   (float qty, int tankNum);
+   void fuelMaxQuantityUpdate(float max); // lbs?
 
    // Landing Gear - range: [0.0, 1.0]
    void gearRetractableUpdate(float rectractable); // a bool value
@@ -163,6 +180,7 @@ signals:
 
    // Misc
    void simPausedUpdate(float paused); // a bool value
+   void aoaDUpdate(float aoa_d); // derived angle of attack
 
 
    // XPlane < 10.40 / raw UDP output versions:
@@ -231,8 +249,10 @@ private:
    QHostAddress   thisHost;
    int            thisPortOut;
    int            thisPortIn;
-   QUdpSocket*    xplane;
-   int            drefID; // used for incrementing dataref request ID's
+   int            xplanePluginPort; // port number on which the plugin listens
+   QUdpSocket*    xplane;        // the xplane simulator
+   QTcpSocket*    xplanePlugin;  // xplane remote control plugin
+   int            drefID;        // used for incrementing dataref request ID's
 
    QTimer* timer; // connection-test timer
    bool didReceiveData; // did this object receive data within the last timer?

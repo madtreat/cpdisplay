@@ -70,7 +70,7 @@ static const char* XPDR_RADIO_NAV1_STDBY  = "sim/cockpit/radios/nav1_stdby_freq_
 static const char* XPDR_RADIO_NAV2_FREQ   = "sim/cockpit/radios/nav2_freq_hz";
 static const char* XPDR_RADIO_NAV2_STDBY  = "sim/cockpit/radios/nav2_stdby_freq_hz";
 
-// Fuel Tanks
+// Fuel and Tanks
 const int MAX_NUM_FUEL_TANKS = 9;
 static const char* XPDR_CP_FUEL_QTY_X     = "sim/cockpit2/fuel/fuel_quantity[__X__]";
 static const char* XPDR_CP_FUEL_QTY_0     = "sim/cockpit2/fuel/fuel_quantity[0]";
@@ -82,6 +82,11 @@ static const char* XPDR_CP_FUEL_QTY_5     = "sim/cockpit2/fuel/fuel_quantity[5]"
 static const char* XPDR_CP_FUEL_QTY_6     = "sim/cockpit2/fuel/fuel_quantity[6]";
 static const char* XPDR_CP_FUEL_QTY_7     = "sim/cockpit2/fuel/fuel_quantity[7]";
 static const char* XPDR_CP_FUEL_QTY_8     = "sim/cockpit2/fuel/fuel_quantity[8]";
+
+// Current fuel weight (kgs)
+static const char* XPDR_FUEL_WEIGHT       = "sim/flightmodel/weight/m_fuel_total";
+// Aircraft total fuel capacity (lbs?)
+static const char* XPDR_FUEL_WEIGHT_TOT   = "sim/aircraft/weight/acf_m_fuel_tot";
 
 // Timer
 // static const char* XPDR_CP_TIMER_RUNNING = "sim/cockpit2/clock_timer/timer_running";
@@ -120,11 +125,20 @@ static const char* XPDR_PLANE_X_SPEED_Y   = "sim/multiplayer/position/plane__X__
 static const char* XPDR_PLANE_X_SPEED_Z   = "sim/multiplayer/position/plane__X___v_z";
 
 // Miscellaneous
-static const char* XPDR_TIME_PAUSED = "sim/time/paused"; // READ ONLY
+static const char* XPDR_TIME_PAUSED       = "sim/time/paused"; // READ ONLY
+static const char* XPDR_OP_PAUSE_TOGGLE   = "sim/operation/pause_toggle"; // for un/pausing
+
+// Weapons
+static const char* XPDR_WEP_ARM_GUNS      = "sim/cockpit/weapons/guns_armed";
+static const char* XPDR_WEP_ARM_BOMBS     = "sim/cockpit/weapons/bombs_armed";
+static const char* XPDR_WEP_ARM_ROCKETS   = "sim/cockpit/weapons/rockets_armed";
+static const char* XPDR_WEP_ARM_MISSILES  = "sim/cockpit/weapons/missiles_armed";
+static const char* XPDR_WEP_TARGET_INDEX  = "sim/cockpit/weapons/plane_target_index";
+
+// Miscellaneous
+static const char* XPDR_VSCL_AOA_D        = "vscl/aoa_derived";
 
 /*
-static const char* XPDR_ = "sim/";
-static const char* XPDR_ = "sim/";
 static const char* XPDR_ = "sim/";
 // */
 

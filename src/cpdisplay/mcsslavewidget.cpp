@@ -77,19 +77,19 @@ void MCSSlaveWidget::pauseSimulator(bool paused)
 {
    pause->setText(paused ? "Paused" : "Running");
    pause->setChecked(paused); // when overriden by MCS, must change it
-   // TODO: send signal to sim
+   sb->pauseSimulator(paused);
 }
 
 void MCSSlaveWidget::lowerGear(bool down)
 {
    gearStatus->setText(down ? "Gear is DOWN" : "Gear is UP");
    gearStatus->setChecked(down);
-   // TODO: send signal to sim
+   sb->sendGearHandle(down);
 }
 
 void MCSSlaveWidget::activateBreaks(bool active)
 {
    wheelBreaks->setText(active ? "Breaks are ON" : "Breaks are OFF");
    wheelBreaks->setChecked(active);
-   // TODO: send signal to sim
+   sb->sendBreaksOn(active);
 }

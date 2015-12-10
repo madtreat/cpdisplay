@@ -107,6 +107,7 @@ void CPDSettings::loadSettingsFile(QString _filename)
          slave->m_allowMCSOverride  = settings->value("allow_mcs_override", "true").toBool();
          slave->m_xplanePortOut     = settings->value("xplane_port_out").toInt();
          slave->m_xplanePortIn      = settings->value("xplane_port_in").toInt();
+         slave->m_xplanePluginPort  = settings->value("xplane_plugin_port").toInt();
          slave->m_xplaneHost        = settings->value("xplane_host").toString();
          slave->m_cpdHost           = settings->value("cpd_host").toString();
          m_slaves.insert(i, slave);
@@ -120,9 +121,10 @@ void CPDSettings::loadSettingsFile(QString _filename)
    else {
       // Load X-Plane 10 settings
       settings->beginGroup("xplane");
-      m_xplanePortOut = settings->value("xplane_port_out").toInt();
-      m_xplanePortIn  = settings->value("xplane_port_in").toInt();
-      QString host    = settings->value("xplane_host").toString();
+      m_xplanePortOut      = settings->value("xplane_port_out").toInt();
+      m_xplanePortIn       = settings->value("xplane_port_in").toInt();
+      m_xplanePluginPort   = settings->value("xplane_plugin_port").toInt();
+      QString host         = settings->value("xplane_host").toString();
       if (host == "localhost") {
          m_xplaneHost = QHostAddress::LocalHost;
       }

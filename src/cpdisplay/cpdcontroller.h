@@ -80,6 +80,8 @@ public slots:
    void updateACSpdY(float vy, int ac);
    void updateACSpdZ(float vz, int ac);
 
+   void printSomething(float value); // for general testing
+
 signals:
    void turnRateUpdate(float tr);
    void updateGearRetractable(float retractable);

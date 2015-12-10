@@ -35,7 +35,7 @@ MCSWidget::~MCSWidget()
 
 QLayout* MCSWidget::createSlaveWidgetLabels()
 {
-   QVBoxLayout* layout = new QVBoxLayout(this);
+   QVBoxLayout* layout = new QVBoxLayout();
    layout->setContentsMargins(0, 0, 0, 0);
 
    name        = new QLabel("Station:");

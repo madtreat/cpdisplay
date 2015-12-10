@@ -22,6 +22,7 @@ struct SlaveSystem {
 
    int            m_xplanePortOut;
    int            m_xplanePortIn;
+   int            m_xplanePluginPort;
    QHostAddress   m_xplaneHost;
 
    QHostAddress   m_cpdHost;
@@ -47,18 +48,18 @@ public:
    bool        isMCS()           const { return m_isMCS;          }
    int         numSlaves()       const { return m_numSlaves;      }
 
-   QMap<int, SlaveSystem*> slaves()  const { return m_slaves;     }
+   QMap<int, SlaveSystem*> slaves()  const { return m_slaves;           }
    SlaveSystem*   getSlave(int id)   const { return m_slaves.value(id); }
    SlaveSystem*   getSlaveByName(QString name) const;
 
-   
-   int            xplanePortOut()const { return m_xplanePortOut;  }
-   int            xplanePortIn() const { return m_xplanePortIn;   }
-   QHostAddress   xplaneHost()   const { return m_xplaneHost;     }
+   int            xplanePortOut()    const { return m_xplanePortOut;    }
+   int            xplanePortIn()     const { return m_xplanePortIn;     }
+   int            xplanePluginPort() const { return m_xplanePluginPort; }
+   QHostAddress   xplaneHost()       const { return m_xplaneHost;       }
 
-   bool        mapUseProxy()     const { return m_mapUseProxy;    }
-   QString     mapProxyHost()    const { return m_mapProxyHost;   }
-   int         mapProxyPort()    const { return m_mapProxyPort;   }
+   bool        mapUseProxy()         const { return m_mapUseProxy;      }
+   QString     mapProxyHost()        const { return m_mapProxyHost;     }
+   int         mapProxyPort()        const { return m_mapProxyPort;     }
 
 public slots:
    void loadSettingsFile(QString _filename);
@@ -85,6 +86,7 @@ private:
    // "xplane" group
    int            m_xplanePortOut;
    int            m_xplanePortIn;
+   int            m_xplanePluginPort;
    QHostAddress   m_xplaneHost;
 
    // "map-proxy" group

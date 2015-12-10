@@ -8,7 +8,6 @@
 #include <QFile>
 #include <QWidget>
 #include <QHBoxLayout>
-//#include <QLatin1String>
 
 #include "qt-layout/layoutitem.h"
 #include "qt-layout/layoutprofile.h"
@@ -36,7 +35,7 @@
 
 
 CPDWidget::CPDWidget(CPDSettings* _cpdSettings, int _slaveID, QFrame* _parent) 
-: QFrame(),
+: QFrame(_parent),
   cpdSettings(_cpdSettings),
   slaveID(_slaveID)
 {

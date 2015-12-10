@@ -4,7 +4,7 @@
 */
 
 QMainWindow,
-QTabWidget::pane,
+QTabWidget::pane QFrame#include-background,
 QFrame#include-background {
    background-color: black;
    background: url(':/style/bg/metal-1-200x200.jpg') repeat;
