@@ -9,9 +9,9 @@
 #include <QWidget>
 #include <QHBoxLayout>
 
-#include "qt-layout/layoutitem.h"
-#include "qt-layout/layoutprofile.h"
-#include "qt-layout/layoutmanager.h"
+#include "qt-dynamic-layout/layoutitem.h"
+#include "qt-dynamic-layout/layoutprofile.h"
+#include "qt-dynamic-layout/layoutmanager.h"
 
 #include "cpdcontroller.h"
 #include "core/cpdsettings.h"
