@@ -1,1 +1,1 @@
-../../ext/qt-google-maps/config/ol-map.js
+../../ext/qt-maps/config/ol-map.js
