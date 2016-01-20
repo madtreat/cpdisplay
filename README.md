@@ -4,6 +4,9 @@ CPDisplay
 Cockpit Head Down Display for the Vehicle Systems and Controls Lab at Texas A&M University
 
 
+![Default Cockpit Display](images/v2.0.0-default.png)
+![Alternate Cockpit Display Layout](images/v2.0.0-big-pfd.png)
+
 Dependencies
 ============
 In addition to the dependencies listed below, in order to use Google Maps, you must have a Google Developer 
