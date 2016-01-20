@@ -1,7 +1,9 @@
 CPDisplay
 =========
 
-Cockpit Head Down Display for the Vehicle Systems and Controls Lab at Texas A&M University
+Cockpit Head Down Display for the Vehicle Systems and Controls Lab at Texas A&M University.
+
+This display is designed to work with X-Plane 10, and provides many panels.  The display itself is reconfigurable with a series of INI files, allowing users to modify the size and arrangement of panels to suite their needs and display resolutions.
 
 
 ![Default Cockpit Display](images/v2.0.0-default.png)
