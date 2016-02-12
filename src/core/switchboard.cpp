@@ -397,8 +397,8 @@ void SwitchBoard::requestDatarefsFromXPlane()
    }
 
    // Misc
-   addDirectDRef(XPDR_TIME_PAUSED, 2, &SWB::simPausedUpdate);
-   addDirectDRef(XPDR_VSCL_AOA_D,  5, &SWB::aoaDUpdate);
+   addDirectDRef(XPDR_TIME_PAUSED,  2, &SWB::simPausedUpdate);
+   addDirectDRef(XPDR_VSCL_ALPHA_D, 5, &SWB::aoaDUpdate);
 
 
    // This loop sends the DREF requests to xplane

@@ -19,9 +19,9 @@ MapController::MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* 
   cpdSettings(_cpdSettings),
   acMap(_acMap)
 {
-   orientation = TRACK_UP;
    QString mapSettingsFile = cpdSettings->mapSettingsFile();
    mapSettings = new MapSettings(mapSettingsFile, this);
+   mapSettings->mapOrientation();
    
    qDebug() << "Can enable maps?" << mapSettings->canEnableMaps();
 }

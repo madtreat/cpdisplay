@@ -37,6 +37,7 @@ public:
    SwitchBoard* getSwitchBoard() const;
 
 public slots:
+   void update();
    void swapPFDAltGauges(bool checked);
    void swapGearWidget(float retractable); // actuall a bool value (0|1)
    

@@ -128,6 +128,25 @@ static const char* XPDR_PLANE_X_SPEED_Z   = "sim/multiplayer/position/plane__X__
 static const char* XPDR_TIME_PAUSED       = "sim/time/paused"; // READ ONLY
 static const char* XPDR_OP_PAUSE_TOGGLE   = "sim/operation/pause_toggle"; // for un/pausing
 
+// Flight Mechanics for Derived AOA/Sideslip
+/*
+static const char* XPDR_U                 = "sim/flightmodel/position/indicated_airspeed";
+static const char* XPDR_ALPHA             = "sim/flightmodel/position/alpha";
+static const char* XPDR_Q                 = "sim/flightmodel/position/Q";
+static const char* XPDR_THETA             = "sim/flightmodel/position/theta";
+static const char* XPDR_BETA              = "sim/flightmodel/position/beta";
+// OpenGL coordinate system velocities
+static const char* XPDR_GL_VX             = "sim/flightmodel/position/local_vx";
+static const char* XPDR_GL_VY             = "sim/flightmodel/position/local_vy";
+static const char* XPDR_GL_VZ             = "sim/flightmodel/position/local_vz";
+// OpenGL coordinate system accelerations
+static const char* XPDR_GL_AX             = "sim/flightmodel/position/local_ax";
+static const char* XPDR_GL_AY             = "sim/flightmodel/position/local_ay";
+static const char* XPDR_GL_AZ             = "sim/flightmodel/position/local_az";
+// quaternion to convert OpenGL coordinates to Aircraft coordinates
+static const char* XPDR_GL2AC_Q           = "sim/flightmodel/position/q";
+// */
+
 // Weapons
 static const char* XPDR_WEP_ARM_GUNS      = "sim/cockpit/weapons/guns_armed";
 static const char* XPDR_WEP_ARM_BOMBS     = "sim/cockpit/weapons/bombs_armed";
@@ -136,7 +155,10 @@ static const char* XPDR_WEP_ARM_MISSILES  = "sim/cockpit/weapons/missiles_armed"
 static const char* XPDR_WEP_TARGET_INDEX  = "sim/cockpit/weapons/plane_target_index";
 
 // Miscellaneous
-static const char* XPDR_VSCL_AOA_D        = "vscl/aoa_derived";
+static const char* XPDR_ALPHA             = "sim/flightmodel/position/alpha";
+static const char* XPDR_BETA              = "sim/flightmodel/position/beta";
+static const char* XPDR_VSCL_ALPHA_D      = "vscl/cpd/alpha_derived";
+static const char* XPDR_VSCL_BETA_D       = "vscl/cpd/beta_derived";
 
 /*
 static const char* XPDR_ = "sim/";

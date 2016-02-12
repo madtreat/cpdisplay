@@ -70,7 +70,6 @@ private:
    GeocodeDataManager*  geocode;
    
    double heading; // current heading value in degrees
-   MapOrientation orientation; // currently selected orientation
    double lat; // current lat
    double lon; // current lon
    bool   showTraffic; // currently displaying traffic?

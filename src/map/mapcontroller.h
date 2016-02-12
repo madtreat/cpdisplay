@@ -59,8 +59,6 @@ private:
    MapSettings* mapSettings;
    
    ACMap* acMap;
-   
-   MapOrientation orientation;
 };
 
 typedef MapController MAPC;

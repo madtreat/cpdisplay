@@ -182,6 +182,5 @@ void MapWidget::orientationButtonClicked(bool checked)
 {
    MapOrientation mo = checked ? NORTH_UP : TRACK_UP;
    mapC->setOrientation(mo);
-   view->setOrientation(mo);
 }
 

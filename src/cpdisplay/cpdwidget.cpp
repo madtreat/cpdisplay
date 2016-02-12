@@ -158,6 +158,15 @@ void CPDWidget::setupPFDAltGuages()
    vbLayout->addLayout(botRow);
 }
 
+/*
+ * If any widgets need special handling when resizing, use this function.
+ * PFDWidget, I'm looking at YOU...
+ */
+void CPDWidget::update()
+{
+   cpdC->getPFDC()->getWidget()->update();
+}
+
 void CPDWidget::swapPFDAltGauges(bool checked)
 {
    LayoutItem* pfd = layoutProfile->getItemByName("PFDWidget");

@@ -34,6 +34,7 @@ MapView::MapView(CPDSettings* _cpdSettings, MapSettings* _settings, MapControlle
   showTraffic(false)
 {
    connect(mapC, &MAPC::updateZoom, this, &MapView::setZoom);
+   connect(settings, &MapSettings::mapOrientationChanged, this, &MapView::setOrientation);
 
    geocode = new GeocodeDataManager(settings->apiKey(), this);
    connect(geocode, SIGNAL(coordinatesReady(double,double)),  this, SLOT(showCoordinates(double,double)));
@@ -192,13 +193,13 @@ void MapView::panToLocation(float _lat, float _lon)
 void MapView::setHeading(float _heading)
 {
    heading = _heading;
-   QString js = QString("rotate(%1, %2, %3);").arg((orientation == TRACK_UP) ? (int) -heading : 0).arg(lat).arg(lon);
+   QString js = QString("rotate(%1, %2, %3);").arg(
+      (!northUp()) ? (int) -heading : 0).arg(lat).arg(lon);
    evaluateJS(js);
 }
 
 void MapView::setOrientation(MapOrientation mo)
 {
-   orientation = mo;
    setHeading(heading);
 }
 
