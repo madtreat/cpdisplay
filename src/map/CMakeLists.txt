@@ -39,7 +39,7 @@ target_link_libraries(${PROJECT_NAME}
    qt-gmaps
 
    cpd-utils
-   #cpd-core
+   cpd-core
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)

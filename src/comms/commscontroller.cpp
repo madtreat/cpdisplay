@@ -20,7 +20,8 @@ CommsController::CommsController(
   QObject* _parent
 )
 : QObject(_parent),
-cpdSettings(_cpdSettings) {
+cpdSettings(_cpdSettings),
+sb(_sb) {
   connect(sb,   &SWB::timeUpdate,         this, &COMC::setTimes);
   
   connect(sb,   &SWB::com1Update,         this, &COMC::setCom1);

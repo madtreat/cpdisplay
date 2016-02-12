@@ -11,17 +11,23 @@
 
 #include "core/aircraft.h"
 #include "core/cpdsettings.h"
+#include "core/switchboard.h"
 #include "qt-maps/mapsettings.h"
 
 
 MapController::MapController(
   CPDSettings* _cpdSettings,
+  SwitchBoard* _sb,
   ACMap* _acMap,
   QObject* _parent
 )
 : QObject(_parent),
+sb(_sb),
 cpdSettings(_cpdSettings),
 acMap(_acMap) {
+  connect(sb, &SWB::headingMagUpdate, this, &MAPC::setHeading);
+  connect(sb, &SWB::latLonUpdate,     this, &MAPC::panToLocation);
+
   QString mapSettingsFile = cpdSettings->mapSettingsFile();
   mapSettings = new MapSettings(mapSettingsFile, this);
   mapSettings->mapOrientation();

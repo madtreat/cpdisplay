@@ -17,12 +17,14 @@
 
 class CPDSettings;
 class MapSettings;
+class SwitchBoard;
+
 
 class MapController : public QObject {
   Q_OBJECT;
 
 public:
-  MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent = 0);
+  MapController(CPDSettings* _cpdSettings, SwitchBoard* _sb, ACMap* _acMap, QObject* _parent = 0);
   MapController(const MapController& orig) = delete;
   virtual ~MapController();
 
@@ -57,6 +59,7 @@ signals:
 private:
   CPDSettings* cpdSettings;
   MapSettings* mapSettings;
+  SwitchBoard* sb;
 
   ACMap* acMap;
 };

@@ -37,7 +37,7 @@ CPDController::CPDController(CPDSettings* _settings, int _slaveID, QObject* _par
    
    sb = new SwitchBoard(settings, slaveID);
    
-   mapC = new MapController(settings, acMap, this);
+   mapC = new MapController(settings, sb, acMap, this);
    adiC = new ADIController(this);
    altC = new ALTController(this);
    asiC = new ASIController(this);
@@ -159,7 +159,6 @@ void CPDController::connectSignals()
    connect(sb, &SWB::rollUpdate,    adiC,    &ADIC::setRoll);
    connect(sb, &SWB::rollUpdate,    pfdC,    &PFDC::setRoll);
 
-   connect(sb, &SWB::headingMagUpdate, mapC, &MAPC::setHeading);
    connect(sb, &SWB::headingMagUpdate, hsiC, &HSIC::setHeading);
    connect(sb, &SWB::headingMagUpdate, pfdC, &PFDC::setHeading);
 
@@ -179,9 +178,6 @@ void CPDController::connectSignals()
    connect(sb, &SWB::compassUpdate, pfdC,    &PFDC::setHeading);
    connect(sb, &SWB::compassUpdate, hsiC,    &HSIC::setHeading);
    // */
-
-   // Position (this AC)
-   connect(sb, &SWB::latLonUpdate, mapC,     &MAPC::panToLocation);
 
    // Altitudes: using MSL, but AGL could be connected later
    connect(sb, &SWB::altMSLUpdate, pfdC,     &PFDC::setAltitude);
