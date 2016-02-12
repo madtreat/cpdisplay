@@ -52,7 +52,7 @@ CPDController::CPDController(CPDSettings* _settings, int _slaveID, QObject* _par
    gearC = new GearController(settings, sb, numGears, this);
    comC = new CommsController(settings, sb, this);
    engC = new EngineController(settings, AC_ENG_JET, numEngines, numFuelTanks, this);
-   tfcC = new TrafficController(settings, acMap, this);
+   tfcC = new TrafficController(settings, sb, acMap, this);
 
    angVelUpdatedFlag = false;
    pitchUpdatedFlag = false;

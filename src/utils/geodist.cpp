@@ -38,7 +38,7 @@ double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
   dist = acos(dist);
   dist = rad2deg(dist);
   dist = dist * 60 * 1.1515;
-  switch(unit) {
+  switch (unit) {
     case 'M':
       break;
     case 'K':
@@ -71,15 +71,15 @@ double rad2deg(double rad) {
  * FOrmula from: http://www.movable-type.co.uk/scripts/latlong.html
  */
 namespace geo {
-double bearing(double lat1, double lon1, double lat2, double lon2, char unit)
-{
-   double y =  sin(deg2rad(lon2)-deg2rad(lon1)) * cos(deg2rad(lat2));
-   double x =  cos(deg2rad(lat1)) * sin(deg2rad(lat2)) - 
-               sin(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(lon2)-deg2rad(lon1));
-   double deg = rad2deg(atan2(y, x));
-   if (deg >= 0)
-      return deg;
-   else
-      return deg + 360;
+double bearing(double lat1, double lon1, double lat2, double lon2, char unit) {
+  double y =  sin(deg2rad(lon2)-deg2rad(lon1)) * cos(deg2rad(lat2));
+  double x =  cos(deg2rad(lat1)) * sin(deg2rad(lat2)) -
+              sin(deg2rad(lat1)) * cos(deg2rad(lat2)) *
+                cos(deg2rad(lon2) - deg2rad(lon1));
+  double deg = rad2deg(atan2(y, x));
+  if (deg >= 0)
+    return deg;
+  else
+    return deg + 360;
 }
 } // namespace geo

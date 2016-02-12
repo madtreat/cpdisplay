@@ -14,28 +14,31 @@
 
 
 class CPDSettings;
+class SwitchBoard;
+
 
 class TrafficController : public QObject {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   TrafficController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent = 0);
-   TrafficController(const TrafficController& orig) = delete;
-   virtual ~TrafficController();
+  TrafficController(CPDSettings* _cpdSettings, SwitchBoard* sb, ACMap* _acMap, QObject* _parent = 0);
+  TrafficController(const TrafficController& orig) = delete;
+  virtual ~TrafficController();
 
 public slots:
-   void acUpdated(int id);
-   void updateCurrentAC(int id);
-   
+  void acUpdated(int id);
+  void updateCurrentAC(int id);
+
 signals:
-   void displayedACUpdated(int id);
-   void acRngBerUpdated(int id);
+  void displayedACUpdated(int id);
+  void acRngBerUpdated(int id);
 
 private:
-   CPDSettings*   cpdSettings;
-   ACMap*         acMap;
-   
-   int currentID; // currently displayed AC ID
+  CPDSettings*  cpdSettings;
+  SwitchBoard*  sb;
+  ACMap*        acMap;
+
+  int currentID; // currently displayed AC ID
 };
 
 typedef TrafficController TFCC;

@@ -21,44 +21,45 @@ class TrafficController;
 
 
 class TrafficWidget : public QFrame {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   TrafficWidget(CPDSettings* _cpdSettings, TrafficController* _tfcC, ACMap* _acMap, QFrame* _parent = 0);
-   TrafficWidget(const TrafficWidget& orig) = delete;
-   virtual ~TrafficWidget();
+  TrafficWidget(CPDSettings* _cpdSettings, TrafficController* _tfcC, ACMap* _acMap, QFrame* _parent = 0);
+  TrafficWidget(const TrafficWidget& orig) = delete;
+  virtual ~TrafficWidget();
 
 public slots:
-   void displayAC(Aircraft* ac);
-   void displayAC(int acID);
-   void refreshAC(int acID);
-   void showNextAC();
-   void showPrevAC();
-   
+  void displayAC(Aircraft* ac);
+  void displayAC(int acID);
+  void refreshAC(int acID);
+  void showNextAC();
+  void showPrevAC();
+
 signals:
-   void displayedACChanged(int id);
+  void displayedACChanged(int id);
 
 private:
-   CPDSettings*   cpdSettings;
-   TrafficController* tfcC;
-   ACMap*         acMap;
-   Aircraft*      currentAC;
-   int            currentID;
-   
-   QLabel*        acLabel; // currently selected aircraft ID
-   QPushButton*   nextButton;
-   QPushButton*   prevButton;
-   
-   // The textual labels that will be connected to XPlane
-   QLabel* alt; // altitude
-   QLabel* spd; // speed
-   QLabel* hdg; // heading
-   QLabel* typ; // type
-   QLabel* rng; // range
-   QLabel* ber; // bearing
+  CPDSettings*   cpdSettings;
 
-   void setupTrafficControls();
+  TrafficController* tfcC;
+  ACMap*         acMap;
+  Aircraft*      currentAC;
+  int            currentID;
+
+  QLabel*        acLabel; // currently selected aircraft ID
+  QPushButton*   nextButton;
+  QPushButton*   prevButton;
+
+  // The textual labels that will be connected to XPlane
+  QLabel* alt; // altitude
+  QLabel* spd; // speed
+  QLabel* hdg; // heading
+  QLabel* typ; // type
+  QLabel* rng; // range
+  QLabel* ber; // bearing
+
+  void setupTrafficControls();
 };
 
-#endif	/* TRAFFICWIDGET_ */
+#endif // TRAFFICWIDGET_
 

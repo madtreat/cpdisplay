@@ -9,8 +9,8 @@
 #define GEODIST_H
 
 namespace geo {
-   double distance(double lat1, double lon1, double lat2, double lon2, char unit='N');
-   double bearing(double lat1, double lon1, double lat2, double lon2, char unit='N');
+  double distance(double lat1, double lon1, double lat2, double lon2, char unit='N');
+  double bearing(double lat1, double lon1, double lat2, double lon2, char unit='N');
 }
 
 double deg2rad(double deg);
