@@ -132,7 +132,9 @@ ADD_CUSTOM_TARGET(release
 ################################################################################
 # Qt5 via Homebrew on OS X requires some fancy PREFIX_PATH changes
 IF(APPLE)
-   SET(CMAKE_PREFIX_PATH /usr/local/opt/qt5)
+  SET(CMAKE_PREFIX_PATH /usr/local/opt/qt5)
+ELSEIF(UNIX and not APPLE)
+  SET(CMAKE_PREFIX_PATH /opt/qt5/5.5/gcc_64)
 ENDIF()
 FIND_PACKAGE(Qt5Core    REQUIRED)
 FIND_PACKAGE(Qt5Widgets REQUIRED)

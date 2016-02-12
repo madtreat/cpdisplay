@@ -19,18 +19,18 @@ class SingleFlapWidget;
 
 
 class FlapsWidget : public QFrame {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   FlapsWidget(CPDSettings* _settings, GearController* _gearC, QFrame* _parent=0);
-   ~FlapsWidget();
+  FlapsWidget(CPDSettings* _settings, GearController* _gearC, QFrame* _parent=0);
+  ~FlapsWidget();
 
 private:
-   CPDSettings* settings;
-   GearController* gearC;
+  CPDSettings* settings;
+  GearController* gearC;
 
-   SingleFlapWidget* flapHandle;
-   SingleFlapWidget* flapReal;
+  SingleFlapWidget* flapHandle;
+  SingleFlapWidget* flapReal;
 };
 
 

@@ -13,21 +13,21 @@ class SingleGearWidget;
 
 
 class GearWidget : public QFrame {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   GearWidget(CPDSettings* _settings, GearController* _gearC, int _numGears=3, QFrame* _parent=0);
-   ~GearWidget();
+  GearWidget(CPDSettings* _settings, GearController* _gearC, int _numGears=3, QFrame* _parent=0);
+  ~GearWidget();
 
 signals:
-   void masterChanged(bool up);
+  void masterChanged(bool up);
 
 private:
-   CPDSettings* settings;
-   GearController* gearC;
-   int numGears;
+  CPDSettings* settings;
+  GearController* gearC;
+  int numGears;
 
-   SingleGearWidget* master;
+  SingleGearWidget* master;
 };
 
 #endif // GEARWIDGET_H_

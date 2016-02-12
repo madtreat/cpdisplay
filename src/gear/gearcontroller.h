@@ -9,27 +9,27 @@ class CPDSettings;
 
 
 class GearController : public QObject {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   GearController(CPDSettings* _settings, int _numGears=3, QObject* _parent=0);
-   ~GearController();
+  GearController(CPDSettings* _settings, int _numGears=3, QObject* _parent=0);
+  ~GearController();
 
 public slots:
-   void notifyXPlaneGearHandle(bool up);
-   void notifyXPlaneFlapHandle(float value);
+  void notifyXPlaneGearHandle(bool up);
+  void notifyXPlaneFlapHandle(float value);
 
 signals:
-   void updateGearRetractable(float retractable);
-   void updateXPlaneGearHandle(QString dref, int down);
-   void updateXPlaneFlaps(QString dref, float value);
+  void updateGearRetractable(float retractable);
+  void updateXPlaneGearHandle(QString dref, int down);
+  void updateXPlaneFlaps(QString dref, float value);
 
-   void flapUpdate(float percent);
-   void flapHandleUpdate(float percent);
+  void flapUpdate(float percent);
+  void flapHandleUpdate(float percent);
 
 private:
-   CPDSettings* settings;
-   int numGears;
+  CPDSettings* settings;
+  int numGears;
 };
 
 typedef GearController GEARC;
