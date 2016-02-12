@@ -49,7 +49,7 @@ CPDController::CPDController(CPDSettings* _settings, int _slaveID, QObject* _par
    numEngines = 2;
    numFuelTanks = 2;
    numGears = 3;
-   gearC = new GearController(settings, numGears, this);
+   gearC = new GearController(settings, sb, numGears, this);
    comC = new CommsController(settings, this);
    engC = new EngineController(settings, AC_ENG_JET, numEngines, numFuelTanks, this);
    tfcC = new TrafficController(settings, acMap, this);
@@ -92,7 +92,6 @@ void CPDController::connectSignals()
    // General aircraft
    // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
    connect(sb, &SWB::acNumEnginesUpdate,    engC,  &ENGC::updateNumEngines);
-   connect(sb, &SWB::gearRetractableUpdate, gearC, &GEARC::updateGearRetractable);
    connect(sb, &SWB::gearRetractableUpdate, this,  &CPDC::updateGearRetractable);
 
    // Engine limits
@@ -111,10 +110,6 @@ void CPDController::connectSignals()
    connect(sb, &SWB::engLimitOilTUpdate,  engC, &ENGC::engLimitOilTUpdate);
    connect(sb, &SWB::engLimitFuelPUpdate, engC, &ENGC::engLimitFuelPUpdate);
 
-   // Flaps
-   connect(sb, &SWB::flapUpdate,          gearC, &GEARC::flapUpdate);
-   connect(sb, &SWB::flapHandleUpdate,    gearC, &GEARC::flapHandleUpdate);
-
    // Multiplayer: other aircraft
    connect(sb, &SWB::acHdgUpdate,         this,  &CPDC::updateACHdg);
    connect(sb, &SWB::acSpdXUpdate,        this,  &CPDC::updateACSpdX);
@@ -131,9 +126,6 @@ void CPDController::connectSignals()
     */
    connect(comC, &COMC::updateXPlaneComms,   sb, &SWB::sendDREF);
    connect(comC, &COMC::updateXPlaneTimer,   sb, &SWB::sendDREF);
-
-   connect(gearC, &GEARC::updateXPlaneGearHandle, sb, &SWB::sendDREF);
-   connect(gearC, &GEARC::updateXPlaneFlaps, sb, &SWB::sendDREF);
 
 
    /*

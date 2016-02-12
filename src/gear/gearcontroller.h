@@ -6,13 +6,14 @@
 
 
 class CPDSettings;
+class SwitchBoard;
 
 
 class GearController : public QObject {
   Q_OBJECT;
 
 public:
-  GearController(CPDSettings* _settings, int _numGears=3, QObject* _parent=0);
+  GearController(CPDSettings* _settings, SwitchBoard* _sb, int _numGears=3, QObject* _parent=0);
   ~GearController();
 
 public slots:
@@ -29,6 +30,7 @@ signals:
 
 private:
   CPDSettings* settings;
+  SwitchBoard* sb;
   int numGears;
 };
 
