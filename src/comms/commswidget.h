@@ -21,26 +21,26 @@ class CommsLine;
 
 
 class CommsWidget : public QFrame {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   CommsWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFrame* _parent = 0);
-   CommsWidget(const CommsWidget& orig) = delete;
-   virtual ~CommsWidget();
-   
+  CommsWidget(CPDSettings* _cpdSettings, CommsController* _comC, QFrame* _parent = 0);
+  CommsWidget(const CommsWidget& orig) = delete;
+  virtual ~CommsWidget();
+
 public slots:
 
 private:
-   CPDSettings* cpdSettings;
-   CommsController* comC;
-   
-   // The textual labels that will be connected to XPlane
-   CommsLine* com1;
-   CommsLine* com2;
-   CommsLine* nav1;
-   CommsLine* nav2;
+  CPDSettings* cpdSettings;
+  CommsController* comC;
 
-   void setupCommsControls();
+  // The textual labels that will be connected to XPlane
+  CommsLine* com1;
+  CommsLine* com2;
+  CommsLine* nav1;
+  CommsLine* nav2;
+
+  void setupCommsControls();
 };
 
 #endif	/* COMMSWIDGET_ */

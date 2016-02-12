@@ -40,22 +40,22 @@
  * 
  */
 enum CommType {
-   STANDBY = 0,
-   ACTIVE = 1,
-   COM1 = 1 << 1, // 2
-   COM2 = 1 << 2, // 4
-   NAV1 = 1 << 3, // 8
-   NAV2 = 1 << 4, // 16
+  STANDBY = 0,
+  ACTIVE = 1,
+  COM1 = 1 << 1, // 2
+  COM2 = 1 << 2, // 4
+  NAV1 = 1 << 3, // 8
+  NAV2 = 1 << 4, // 16
 
-   // Shortcuts
-   COM1_ACTIVE  = COM1 | ACTIVE,
-   COM1_STANDBY = COM1 | STANDBY,
-   COM2_ACTIVE  = COM2 | ACTIVE,
-   COM2_STANDBY = COM2 | STANDBY,
-   NAV1_ACTIVE  = NAV1 | ACTIVE,
-   NAV1_STANDBY = NAV1 | STANDBY,
-   NAV2_ACTIVE  = NAV2 | ACTIVE,
-   NAV2_STANDBY = NAV2 | STANDBY
+  // Shortcuts
+  COM1_ACTIVE  = COM1 | ACTIVE,
+  COM1_STANDBY = COM1 | STANDBY,
+  COM2_ACTIVE  = COM2 | ACTIVE,
+  COM2_STANDBY = COM2 | STANDBY,
+  NAV1_ACTIVE  = NAV1 | ACTIVE,
+  NAV1_STANDBY = NAV1 | STANDBY,
+  NAV2_ACTIVE  = NAV2 | ACTIVE,
+  NAV2_STANDBY = NAV2 | STANDBY
 };
 
 #endif	/* COMMS_H */
