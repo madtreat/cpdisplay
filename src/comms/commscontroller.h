@@ -14,13 +14,14 @@
 #include "comms.h"
 
 class CPDSettings;
+class SwitchBoard;
 
 
 class CommsController : public QObject {
   Q_OBJECT;
 
 public:
-  CommsController(CPDSettings* _cpdSettings, QObject* _parent = 0);
+  CommsController(CPDSettings* _cpdSettings, SwitchBoard* _sb, QObject* _parent = 0);
   CommsController(const CommsController& orig) = delete;
   virtual ~CommsController();
 
@@ -30,7 +31,7 @@ public slots:
   void setCom2(float freq, float standby);
   void setNav1(float freq, float standby);
   void setNav2(float freq, float standby);
-   
+
   void comSwapped(CommType ct);
   void com1Swapped();
   void com2Swapped();
@@ -40,7 +41,7 @@ public slots:
 
   void notifyXPlaneTimer(bool running);
   void notifyXPlaneTimerReset();
-   
+
 signals:
   void timesUpdated(float zulu, float local, float mission, float timer);
   void comUpdate(CommType ct, float active, float standby);
@@ -49,7 +50,8 @@ signals:
 
 private:
   CPDSettings* cpdSettings;
-   
+  SwitchBoard* sb;
+
   // Comms frequencies
   float com1active;
   float com1standby;
@@ -59,7 +61,7 @@ private:
   float nav1standby;
   float nav2active;
   float nav2standby;
-   
+
   float timeGMT;
   float timeLocal;
   float timeMission;

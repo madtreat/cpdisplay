@@ -21,6 +21,15 @@ CommsController::CommsController(
 )
 : QObject(_parent),
 cpdSettings(_cpdSettings) {
+  connect(sb,   &SWB::timeUpdate,         this, &COMC::setTimes);
+  
+  connect(sb,   &SWB::com1Update,         this, &COMC::setCom1);
+  connect(sb,   &SWB::com2Update,         this, &COMC::setCom2);
+  connect(sb,   &SWB::nav1Update,         this, &COMC::setNav1);
+  connect(sb,   &SWB::nav2Update,         this, &COMC::setNav2);
+
+  connect(this, &COMC::updateXPlaneComms, sb,   &SWB::sendDREF);
+  connect(this, &COMC::updateXPlaneTimer, sb,   &SWB::sendDREF);
 }
 
 //CommsController::CommsController(const CommsController& orig) {

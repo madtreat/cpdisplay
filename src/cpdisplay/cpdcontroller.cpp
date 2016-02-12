@@ -50,7 +50,7 @@ CPDController::CPDController(CPDSettings* _settings, int _slaveID, QObject* _par
    numFuelTanks = 2;
    numGears = 3;
    gearC = new GearController(settings, sb, numGears, this);
-   comC = new CommsController(settings, this);
+   comC = new CommsController(settings, sb, this);
    engC = new EngineController(settings, AC_ENG_JET, numEngines, numFuelTanks, this);
    tfcC = new TrafficController(settings, acMap, this);
 
@@ -124,8 +124,6 @@ void CPDController::connectSignals()
     * These connections are for xplane 10.40+ dataref set requests (DREFs sent
     * to xplane).
     */
-   connect(comC, &COMC::updateXPlaneComms,   sb, &SWB::sendDREF);
-   connect(comC, &COMC::updateXPlaneTimer,   sb, &SWB::sendDREF);
 
 
    /*
@@ -134,9 +132,6 @@ void CPDController::connectSignals()
    // Self-calculated turn rate
    connect(this, &CPDC::turnRateUpdate, pfdC, &PFDC::setTurnRate);
    connect(this, &CPDC::turnRateUpdate, tcdC, &TCDC::setTurnRate);
-   
-   // Times
-   connect(sb, &SWB::timeUpdate, comC, &COMC::setTimes);
 
    // Speeds
    connect(sb, &SWB::speedUpdate,   asiC,    &ASIC::setAirspeed);
@@ -224,14 +219,6 @@ void CPDController::connectSignals()
    
    connect(sb, &SWB::engOilPressureUpdate, engC, &ENGC::updateOilPressure);
    connect(sb, &SWB::engOilTempUpdate,     engC, &ENGC::updateOilTemp);
-   
-   // Comms and Navs
-   connect(sb, &SWB::com1Update, comC, &COMC::setCom1);
-   connect(sb, &SWB::com2Update, comC, &COMC::setCom2);
-   //connect(sb, &SWB::comTransmitUpdate, comC, &COMC::setComTransmit);
-   
-   connect(sb, &SWB::nav1Update, comC, &COMC::setNav1);
-   connect(sb, &SWB::nav2Update, comC, &COMC::setNav2);
 }
 
 

@@ -36,7 +36,7 @@ justInitialized(true) {
   if (type & COM1) {
     typeString = "COM 1:";
   }
-  els e if (type & COM2) {
+  else if (type & COM2) {
     typeString = "COM 2:";
   }
   else if (type & NAV1) {
