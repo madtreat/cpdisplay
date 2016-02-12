@@ -14,54 +14,51 @@
 #include "qt-maps/mapsettings.h"
 
 
-MapController::MapController(CPDSettings* _cpdSettings, ACMap* _acMap, QObject* _parent)
+MapController::MapController(
+  CPDSettings* _cpdSettings,
+  ACMap* _acMap,
+  QObject* _parent
+)
 : QObject(_parent),
-  cpdSettings(_cpdSettings),
-  acMap(_acMap)
-{
-   QString mapSettingsFile = cpdSettings->mapSettingsFile();
-   mapSettings = new MapSettings(mapSettingsFile, this);
-   mapSettings->mapOrientation();
-   
-   qDebug() << "Can enable maps?" << mapSettings->canEnableMaps();
+cpdSettings(_cpdSettings),
+acMap(_acMap) {
+  QString mapSettingsFile = cpdSettings->mapSettingsFile();
+  mapSettings = new MapSettings(mapSettingsFile, this);
+  mapSettings->mapOrientation();
+
+  qDebug() << "Can enable maps?" << mapSettings->canEnableMaps();
 }
 
-//MapController::MapController(const MapController& orig)
-//{
+//MapController::MapController(const MapController& orig) {
 //}
 
-MapController::~MapController()
-{
+MapController::~MapController() {
 }
 
-void MapController::setZoom(int level)
-{
-   if (level >= ZOOM_MAX) {
-      emit zoomMaxReached(true);
-      return;
-   }
-   else if (level <= ZOOM_MIN) {
-      emit zoomMinReached(true);
-      return;
-   }
-   mapSettings->setZoom(level);
-   emit updateZoom(level);
-   emit zoomEither(true);
+void MapController::setZoom(int level) {
+  if (level >= ZOOM_MAX) {
+    emit zoomMaxReached(true);
+    return;
+  }
+  else if (level <= ZOOM_MIN) {
+    emit zoomMinReached(true);
+    return;
+  }
+  mapSettings->setZoom(level);
+  emit updateZoom(level);
+  emit zoomEither(true);
 }
 
-void MapController::increaseZoom()
-{
-   int newLevel = mapSettings->zoom() + 1;
-   setZoom(newLevel);
+void MapController::increaseZoom() {
+  int newLevel = mapSettings->zoom() + 1;
+  setZoom(newLevel);
 }
 
-void MapController::decreaseZoom()
-{
-   int newLevel = mapSettings->zoom() - 1;
-   setZoom(newLevel);
+void MapController::decreaseZoom() {
+  int newLevel = mapSettings->zoom() - 1;
+  setZoom(newLevel);
 }
 
-void MapController::setOrientation(MapOrientation mo)
-{
-   mapSettings->setMapOrientation(mo);
+void MapController::setOrientation(MapOrientation mo) {
+  mapSettings->setMapOrientation(mo);
 }

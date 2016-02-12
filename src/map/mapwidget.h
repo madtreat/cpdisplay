@@ -25,56 +25,55 @@ class MapController;
 
 
 class MapWidget : public QFrame {
-   Q_OBJECT;
+  Q_OBJECT;
 
-   static const int BUTTON_WIDTH = 75;
-   static const int BUTTON_HEIGHT = 30;
+  static const int BUTTON_WIDTH = 75;
+  static const int BUTTON_HEIGHT = 30;
 
 public:
-   MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, MapController* _mapC, ACMap* _acMap, QFrame* _parent = 0);
-   MapWidget(const MapWidget& orig) = delete;
-   virtual ~MapWidget();
-   
-   QSize sizeHint() const;
-   void resize(int w, int h);
-   void resize(const QSize& size);
+  MapWidget(CPDSettings* _cpdSettings, MapSettings* _mapSettings, MapController* _mapC, ACMap* _acMap, QFrame* _parent = 0);
+  MapWidget(const MapWidget& orig) = delete;
+  virtual ~MapWidget();
 
-   MapView*    getMapView() const { return view; }
-   MapOverlay* getOverlay() const { return overlay; }
+  QSize sizeHint() const;
+  void resize(int w, int h);
+  void resize(const QSize& size);
+
+  MapView*    getMapView() const { return view; }
+  MapOverlay* getOverlay() const { return overlay; }
 
 public slots:
-   void orientationButtonClicked(bool checked);
+  void orientationButtonClicked(bool checked);
 
-   void setZoom(int level);
-   void panToLocation(float lat, float lon);
-   
+  void setZoom(int level);
+  void panToLocation(float lat, float lon);
+
 protected:
-   void resizeEvent(QResizeEvent* event);
+  void resizeEvent(QResizeEvent* event);
 
 private:
-   CPDSettings* cpdSettings;
-   MapSettings* mapSettings;
+  CPDSettings* cpdSettings;
+  MapSettings* mapSettings;
 
-   MapController* mapC;
-   MapView* view;
-   MapOverlay* overlay;
+  MapController* mapC;
+  MapView* view;
+  MapOverlay* overlay;
 
-   // Map control buttons and encompasing widget
-   QFrame*        controls;
-   QPushButton*   weatherButton;
-   QPushButton*   trafficButton;
-   QPushButton*   terrainButton;
-   QPushButton*   orientationButton; // map orientation, checked = NORTH_UP
-   QPushButton*   zoomInButton;
-   QPushButton*   zoomOutButton;
-   //   QPushButton*    homeButton;
-   
-   ACMap* acMap;
+  // Map control buttons and encompasing widget
+  QFrame*        controls;
+  QPushButton*   weatherButton;
+  QPushButton*   trafficButton;
+  QPushButton*   terrainButton;
+  QPushButton*   orientationButton; // map orientation, checked = NORTH_UP
+  QPushButton*   zoomInButton;
+  QPushButton*   zoomOutButton;
+  //   QPushButton*    homeButton;
 
-   QPushButton* createToolButton(QString text, bool checkable);
-   void setupControls();
+  ACMap* acMap;
 
+  QPushButton* createToolButton(QString text, bool checkable);
+  void setupControls();
 };
 
-#endif	/* MAPWIDGET_ */
+#endif  // MAPWIDGET_
 

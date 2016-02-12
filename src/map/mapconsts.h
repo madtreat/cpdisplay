@@ -16,5 +16,5 @@ const int DEFAULT_MAP_WIDTH  = 300;
 const int DEFAULT_MAP_HEIGHT = 300;
 const int MAP_PADDING = 11; // margins=11px
 
-#endif	/* MAPCONSTS_H */
+#endif // MAPCONSTS_H
 
