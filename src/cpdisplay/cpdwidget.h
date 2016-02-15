@@ -28,46 +28,46 @@ class TrafficWidget;
 
 
 class CPDWidget : public QFrame {
-   Q_OBJECT
+  Q_OBJECT
 
 public:
-   CPDWidget(CPDSettings* _cpdSettings, int _slaveID = -1, QFrame* _parent=0);
-   ~CPDWidget();
+  CPDWidget(CPDSettings* _cpdSettings, int _slaveID = -1, QFrame* _parent=0);
+  ~CPDWidget();
 
-   SwitchBoard* getSwitchBoard() const;
+  SwitchBoard* getSwitchBoard() const;
 
 public slots:
-   void update();
-   void swapPFDAltGauges(bool checked);
-   void swapGearWidget(float retractable); // actuall a bool value (0|1)
-   
-private:
-   CPDSettings*   cpdSettings;
-   CPDController* cpdC;
-   ACMap*         acMap;
-   int            numEngines;
-   int            slaveID; // current tab's slaveID
-   
-   // Main layout for central widget
-   LayoutProfile* layoutProfile;
-   LayoutManager* layoutManager;
-   
-   // Individual widgets
-   // NOTE: to add a new widget, first add a forward declare above, then add
-   // a line here.
-   MapWidget*     mapW;
-   TimeWidget*    timeW;
-   FuelWidget*    fuelW;
-   GearWidget*    gearW;
-   FlapsWidget*   flapW;
-   CommsWidget*   comW;
-   EngineWidget*  engW;
-   TrafficWidget* tfcW;
-   
-   // PFD Alternate - guages instead of PFD
-   QWidget*       pfdAltGuages;
+  void update();
+  void swapPFDAltGauges(bool checked);
+  void swapGearWidget(float retractable); // actuall a bool value (0|1)
 
-   void setupPFDAltGuages();
+private:
+  CPDSettings*   cpdSettings;
+  CPDController* cpdC;
+  ACMap*         acMap;
+  int            numEngines;
+  int            slaveID; // current tab's slaveID
+
+  // Main layout for central widget
+  LayoutProfile* layoutProfile;
+  LayoutManager* layoutManager;
+
+  // Individual widgets
+  // NOTE: to add a new widget, first add a forward declare above, then add
+  // a line here.
+  MapWidget*     mapW;
+  TimeWidget*    timeW;
+  FuelWidget*    fuelW;
+  GearWidget*    gearW;
+  FlapsWidget*   flapW;
+  CommsWidget*   comW;
+  EngineWidget*  engW;
+  TrafficWidget* tfcW;
+
+  // PFD Alternate - guages instead of PFD
+  QWidget*       pfdAltGuages;
+
+  void setupPFDAltGuages();
 };
 
 #endif
