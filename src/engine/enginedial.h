@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   enginedial.h
  * Author: Madison Treat <madison.treat@tamu.edu>
  *
@@ -20,59 +20,59 @@ class EngineController;
 
 
 class EngineDial : public QDial {
-   Q_OBJECT;
-   
-   static const int DIAL_OFFSET = 135;
+  Q_OBJECT;
+
+  static const int DIAL_OFFSET = 135;
 
 public:
-   EngineDial(EngineController* _engC, int _engNum, EngineDialType _type, int _min, int _max, int _value=0, QWidget* _parent=0);
-   EngineDial(const EngineDial& orig) = delete;
-   virtual ~EngineDial();
+  EngineDial(EngineController* _engC, int _engNum, EngineDialType _type, int _min, int _max, int _value=0, QWidget* _parent=0);
+  EngineDial(const EngineDial& orig) = delete;
+  virtual ~EngineDial();
 
 public slots:
-   void setValue(float value, int _engNum);
-   void setLimit(float limit, LimitType lt);
-   
+  void setValue(float value, int _engNum);
+  void setLimit(float limit, LimitType lt);
+
 protected:
-   void paintEvent(QPaintEvent*);
+  void paintEvent(QPaintEvent*);
 
 private:
-   EngineController* engC;
-   EngineDialType    type;
-   int               engNum;
-   
-   int valueMin;
-   int valueMax;
-   float valueFloat;
-   
-   int limitGreenLo;
-   int limitGreenHi;
-   int limitYellowLo;
-   int limitYellowHi;
-   int limitRedLo;
-   int limitRedHi;
+  EngineController* engC;
+  EngineDialType    type;
+  int               engNum;
 
-   double tickIncrement; // each tick represents X value
-   double tickRatio;     // ratio of value to rotation degrees
-   int tickDegIncrement; // each tick represents X rotation degrees
-   int tickDegMin;
-   int tickDegMax;
-   
-   int circleBuffer; // buffer from edge of box to circle
-   
-   QString typeText;
-   QString valueTextBase;
+  int valueMin;
+  int valueMax;
+  float valueFloat;
 
-   QColor tickColor;
-   QColor dialColor;
-   QColor textColor;
-   QColor bgColor;
+  int limitGreenLo;
+  int limitGreenHi;
+  int limitYellowLo;
+  int limitYellowHi;
+  int limitRedLo;
+  int limitRedHi;
 
-   QColor grnColor;
-   QColor ylwColor;
-   QColor redColor;
+  double tickIncrement; // each tick represents X value
+  double tickRatio;     // ratio of value to rotation degrees
+  int tickDegIncrement; // each tick represents X rotation degrees
+  int tickDegMin;
+  int tickDegMax;
+
+  int circleBuffer; // buffer from edge of box to circle
+
+  QString typeText;
+  QString valueTextBase;
+
+  QColor tickColor;
+  QColor dialColor;
+  QColor textColor;
+  QColor bgColor;
+
+  QColor grnColor;
+  QColor ylwColor;
+  QColor redColor;
 
 };
 
-#endif	/* ENGINEDIAL_H */
+#endif  // ENGINEDIAL_H
 

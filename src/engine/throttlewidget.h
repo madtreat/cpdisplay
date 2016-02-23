@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   throttlewidget.h
  * Author: madtreat
  *
@@ -19,25 +19,25 @@ class EngineController;
 
 
 class ThrottleWidget : public QWidget {
-   Q_OBJECT;
-   
+  Q_OBJECT;
+
 public:
-   ThrottleWidget(EngineController* _engC, int _engNum, int _max, int _value, QWidget* _parent=0);
-   ThrottleWidget(const ThrottleWidget& orig) = delete;
-   virtual ~ThrottleWidget();
-   
+  ThrottleWidget(EngineController* _engC, int _engNum, int _max, int _value, QWidget* _parent=0);
+  ThrottleWidget(const ThrottleWidget& orig) = delete;
+  virtual ~ThrottleWidget();
+
 public slots:
-   void setValue(int _value, int _engNum);
-   
+  void setValue(int _value, int _engNum);
+
 private:
-   EngineController* engC;
-   int engineNum;
-   int maxVal;
-   int value;
-   
-   QVBoxLayout* layout;
-   QProgressBar* throttle;
+  EngineController* engC;
+  int engineNum;
+  int maxVal;
+  int value;
+
+  QVBoxLayout* layout;
+  QProgressBar* throttle;
 };
 
-#endif	/* THROTTLEWIDGET_H */
+#endif  // THROTTLEWIDGET_H
 

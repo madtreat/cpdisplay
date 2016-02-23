@@ -12,13 +12,13 @@
 
 
 enum EngineDialType {
-   DIAL_OIL_TEMP,
-   DIAL_OIL_PRESSURE,
-   DIAL_ENG_RPM,
-   DIAL_PROP_RPM,
-   DIAL_EPR,
-   DIAL_EGT,
-   DIAL_FUEL
+  DIAL_OIL_TEMP,
+  DIAL_OIL_PRESSURE,
+  DIAL_ENG_RPM,
+  DIAL_PROP_RPM,
+  DIAL_EPR,
+  DIAL_EGT,
+  DIAL_FUEL
 };
 
 
@@ -31,5 +31,5 @@ typedef QList<SingleEngineWidget*> Engines;
 class SingleFuelWidget;
 typedef QList<SingleFuelWidget*> FuelGauges;
 
-#endif	/* ENGCONSTS_H */
+#endif  // ENGCONSTS_H
 

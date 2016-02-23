@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   enginewidget.h
  * Author: Madison Treat <madison.treat@tamu.edu>
  *
@@ -17,25 +17,25 @@ class EngineController;
 
 
 class EngineWidget : public QFrame {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   EngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines=1, QFrame* _parent = 0);
-   EngineWidget(const EngineWidget& orig) = delete;
-   virtual ~EngineWidget();
+  EngineWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numEngines=1, QFrame* _parent = 0);
+  EngineWidget(const EngineWidget& orig) = delete;
+  virtual ~EngineWidget();
 
 public slots:
-   void setNumEngines(int _eng);
+  void setNumEngines(int _eng);
 
 private:
-   CPDSettings* cpdSettings;
-   EngineController* engC;
-   int numEngines;
-   
-   Engines engines;
-   
-   void setupEngineControls();
+  CPDSettings* cpdSettings;
+  EngineController* engC;
+  int numEngines;
+
+  Engines engines;
+
+  void setupEngineControls();
 };
 
-#endif	/* ENGINEWIDGET_ */
+#endif  // ENGINEWIDGET_
 

@@ -1,6 +1,6 @@
 //
 //  fuelwidget.h
-//  
+//
 //
 //  Created by Madison Treat on 8/10/15.
 //
@@ -18,24 +18,25 @@ class EngineController;
 
 
 class FuelWidget : public QFrame {
-   Q_OBJECT;
+  Q_OBJECT;
 
 public:
-   FuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numTanks=1, QFrame* _parent=0);
-   FuelWidget(const FuelWidget& orig) = delete;
-   virtual ~FuelWidget();
+  FuelWidget(CPDSettings* _cpdSettings, EngineController* _engC, int _numTanks=1, QFrame* _parent=0);
+  FuelWidget(const FuelWidget& orig) = delete;
+  virtual ~FuelWidget();
 
 public slots:
-   void setNumTanks(int _eng);
+  void setNumTanks(int _eng);
 
 private:
-   CPDSettings* cpdSettings;
-   EngineController* engC;
-   int numTanks;
+  CPDSettings* cpdSettings;
+  EngineController* engC;
+  int numTanks;
 
-   FuelGauges fuelGauges;
+  FuelGauges fuelGauges;
 
-   void setupFuelGauges();
+  void setupFuelGauges();
 };
 
-#endif /* FUELWIDGET_H_ */
+#endif  // FUELWIDGET_H_
+
