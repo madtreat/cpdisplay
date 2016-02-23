@@ -78,12 +78,11 @@ void CPDController::printSomething(float value) {
 
 
 /*
-* Connects the switchboard directly to the widgets.
-*/
+ * Connects the switchboard directly to the widgets.
+ */
 void CPDController::connectSignals() {
-//  EngineWidget* engW = engC->getWidget();
-//  TrafficWidget* tfcW = tfcC->getWidget();
-
+  //  EngineWidget* engW = engC->getWidget();
+  //  TrafficWidget* tfcW = tfcC->getWidget();
 
   /*
    * These connections are for xplane 10.40+ dataref requests (RREF results).
@@ -265,8 +264,8 @@ void CPDController::updateRoll(float r) {
 }
 
 /*
-* Attempts to update the turn rate, but only works if all 3 flags are true.
-*/
+ * Attempts to update the turn rate, but only works if all 3 flags are true.
+ */
 void CPDController::tryCalculateTurnRate() {
   if (angVelUpdatedFlag && pitchUpdatedFlag && rollUpdatedFlag) {
     float turnRate = calculateTurnRate(angVelQ, angVelR, pitch, roll);

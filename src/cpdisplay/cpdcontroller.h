@@ -56,10 +56,10 @@ public:
   TCDController* getTCDC() const { return tcdC; }
   VSIController* getVSIC() const { return vsiC; }
 
-  GearController*    getGearC() const {return gearC;}
-  CommsController*   getComC() const { return comC; }
-  EngineController*  getEngC() const { return engC; }
-  TrafficController* getTfcC() const { return tfcC; }
+  GearController*    getGearC() const { return gearC; }
+  CommsController*   getComC()  const { return comC;  }
+  EngineController*  getEngC()  const { return engC;  }
+  TrafficController* getTfcC()  const { return tfcC;  }
 
   float calculateTurnRate(float q, float r, float pitch, float roll);
 
