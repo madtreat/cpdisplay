@@ -40,7 +40,7 @@ slaveID(_slaveID) {
 
   sb = new SwitchBoard(settings, slaveID);
 
-  mapC = new MapController(settings, sb, acMap, this);
+  mapC = new MapController(settings->mapSettingsFile(), sb, acMap, this);
   adiC = new ADIController(this);
   altC = new ALTController(this);
   asiC = new ASIController(this);

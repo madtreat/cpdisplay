@@ -58,7 +58,7 @@ slaveID(_slaveID) {
 
   MapController* mapC = cpdC->getMapC();
   // NOTE: to add a new widget, add its constructor here
-  mapW  = new MapWidget    (cpdSettings, mapC->getMapSettings(), mapC, acMap);
+  mapW  = new MapWidget    (mapC->getMapSettings(), mapC, acMap);
   timeW = new TimeWidget   (cpdSettings, cpdC->getComC());
   fuelW = new FuelWidget   (cpdSettings, cpdC->getEngC());
   gearW = new GearWidget   (cpdSettings, cpdC->getGearC());

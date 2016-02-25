@@ -159,6 +159,7 @@ link_directories(
 
 include_directories(
    ${HEADER_DIR}
+   ${EXTERN_DIR}
 )
 
 
@@ -176,15 +177,13 @@ include_directories(
 add_subdirectory(${QFI_DIR})
 
 # Dependency: Qt Google Maps
-set(QTGMAPS_DIR ${EXTERN_DIR}/qt-maps)
-set(QTGMAPS_HEADER_DIR ${QTGMAPS_DIR})
-include_directories(
-   ${EXTERN_DIR}
-#   ${QTGMAPS_HEADER_DIR}
-)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-add_subdirectory(${QTGMAPS_DIR})
+# set(QTGMAPS_DIR ${EXTERN_DIR}/qt-maps)
+# set(QTGMAPS_HEADER_DIR ${QTGMAPS_DIR})
+# include_directories(
+#    ${EXTERN_DIR}
+# #   ${QTGMAPS_HEADER_DIR}
+# )
+# add_subdirectory(${QTGMAPS_DIR})
 
 # Dependency: Qt Layout
 set(QTLAYOUT_DIR ${EXTERN_DIR}/qt-dynamic-layout)
@@ -192,6 +191,8 @@ set(QTLAYOUT_HEADER_DIR ${QTLAYOUT_DIR})
 #include_directories(
 #   ${QTLAYOUT_HEADER_DIR}
 #)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
 add_subdirectory(${QTLAYOUT_DIR})
 
 # Dependency: Qt Toggle Input

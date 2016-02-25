@@ -9,4 +9,4 @@
 	url = git@github.com:madtreat/qt-toggle-input.git
 [submodule "src/map"]
 	path = src/map
-	url = git@github.tamu.edu:vscl/map.git
+	url = git@github.tamu.edu:vscl/cpd-map.git

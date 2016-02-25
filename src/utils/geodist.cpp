@@ -68,7 +68,7 @@ double rad2deg(double rad) {
 
 // This code was not from the above website
 /*
- * FOrmula from: http://www.movable-type.co.uk/scripts/latlong.html
+ * Formula from: http://www.movable-type.co.uk/scripts/latlong.html
  */
 namespace geo {
 double bearing(double lat1, double lon1, double lat2, double lon2, char unit) {
