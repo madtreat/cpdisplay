@@ -31,9 +31,10 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-   ${Qt5Core_LIBRARIES}
-   ${Qt5Widgets_LIBRARIES}
-   ${Qt5Gui_LIBRARIES}
+   Qt5::Core
+   Qt5::Widgets
+   Qt5::Gui
+   Qt5::DBus
 
    qfi-core
    qfi-ui
