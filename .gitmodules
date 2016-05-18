@@ -1,12 +1,12 @@
 [submodule "ext/qt-dynamic-layout"]
 	path = ext/qt-dynamic-layout
-	url = git@github.com:madtreat/qt-dynamic-layout.git
+	url = https://github.com/tamu-vscl/qt-dynamic-layout.git
 [submodule "src/resources/sprites"]
 	path = src/resources/sprites
-	url = git@github.com:madtreat/sprites.git
+	url = https://github.com/tamu-vscl/sprites.git
 [submodule "ext/qt-toggle-input"]
 	path = ext/qt-toggle-input
-	url = git@github.com:madtreat/qt-toggle-input.git
+	url = https://github.com/tamu-vscl/qt-toggle-input.git
 [submodule "src/map"]
 	path = src/map
-	url = git@github.tamu.edu:vscl/cpd-map.git
+	url = https://github.com/tamu-vscl/cpd-map.git
