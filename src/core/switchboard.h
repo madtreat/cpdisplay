@@ -25,7 +25,7 @@ class XPOutputData;
 
 
 class SwitchBoard : public QObject {
-  Q_OBJECT
+  Q_OBJECT;
 
   // Typdef generic signal function pointers for direct value updates...
   typedef void (SwitchBoard::*direct_fp)(float);
@@ -93,6 +93,12 @@ class SwitchBoard : public QObject {
 
     // Copy constructor
     DRefValue(const DRefValue& rhs);
+
+    ~DRefValue() {
+      // delete signalDirect;
+      // delete signalNumbered;
+      // delete signalLimit;
+    }
   };
 
 public:
@@ -264,10 +270,11 @@ private:
   void addNumberedDRef (QString str, int freq, numbered_fp sig, int sigNum);
   void addLimitDRefHelp(QString str, int freq, limit_fp    sig, LimitType lt);
   void addLimitDRef    (QString str, int freq, limit_fp    sig);
+  void buildDRMap();
 
   void processDatagram(QByteArray& data);
   void notifyAll(int code, xpflt value);
-  void notifyAll(XPOutputData* data);
+  void notifyAll(XPOutputData data);
 
   void setDataref(QString dataref, float value);
 

@@ -157,6 +157,9 @@ didReceiveData(false) {
     xplane->bind(thisPortIn, QUdpSocket::ShareAddress);
   }
 
+  // Create the map of Datarefs.
+  buildDRMap();
+
   // Initialize the xplanePlugin TCP socket
   xplanePlugin->connectToHost(thisHost, xplanePluginPort);
 
@@ -181,7 +184,6 @@ void SwitchBoard::testConnection() {
   // If we did not receive anything, request it again
   else {
     qWarning() << "Warning: did not receive data, resending requests.";
-    drefID = NUM_DATA_INDEXES;
     requestDatarefsFromXPlane();
   }
 }
@@ -299,13 +301,13 @@ void SwitchBoard::addLimitDRef(QString str, int freq, limit_fp sig) {
 
 
 /*
- * Sends the RREF message to XPlane to request all necessary datarefs.
+ * Creates the DataRef map (drmap) ONE TIME ONLY.
  *
  * NOTES:
  *  - The dataref's ID is determined programmatically so you do not have
  *    to keep track of ID's for every single dataref you request.
  */
-void SwitchBoard::requestDatarefsFromXPlane() {
+void SwitchBoard::buildDRMap() {
   // Request datarefs from xplane (does not work in < 10.40b7: known bug:
   // http://forums.x-plane.org/index.php?showtopic=87772)
 
@@ -379,8 +381,12 @@ void SwitchBoard::requestDatarefsFromXPlane() {
   // Misc
   addDirectDRef(XPDR_TIME_PAUSED,  2, &SWB::simPausedUpdate);
   addDirectDRef(XPDR_VSCL_ALPHA_D, 5, &SWB::aoaDUpdate);
+}
 
-
+/*
+ * Sends the RREF message to XPlane to request all necessary datarefs.
+ */
+void SwitchBoard::requestDatarefsFromXPlane() {
   // This loop sends the DREF requests to xplane
   foreach (int i, drmap.keys()) {
     DRefValue* val = drmap.value(i);
@@ -453,7 +459,7 @@ void SwitchBoard::processDatagram(QByteArray& data) {
        * and value directly, as soon as the dref object is constructed.
        */
       if (DEBUG_RECV_RREF && code >= 188 && code <= 199) // EPR/EGT only
-        qDebug() << "   data received:" << header << dref->code << dref->data;
+        qDebug() << "   data received:" << header << code << data;
 
       notifyAll((int) code, value);
     }
@@ -474,8 +480,8 @@ void SwitchBoard::processDatagram(QByteArray& data) {
     for (int i = 0; i < numValues; i++) {
       // Get the size bytes starting at i*size
       QByteArray valueBytes = values.mid(i*size, size);
-      XPOutputData* outData = new XPOutputData();
-      outData->parseRawData(valueBytes);
+      XPOutputData outData;
+      outData.parseRawData(valueBytes);
 
       notifyAll(outData);
     }
@@ -509,6 +515,8 @@ void SwitchBoard::notifyAll(int code, xpflt value) {
     if (DEBUG_RECV_RREF)
       qWarning() << "Warning: invalid data from xplane";
   }
+  val = NULL;
+  delete val;
 }
 
 
@@ -518,9 +526,9 @@ void SwitchBoard::notifyAll(int code, xpflt value) {
  * Notify everyone of new data.  This parses the data's values and emits signals
  * that other objects can be connected to.
  */
-void SwitchBoard::notifyAll(XPOutputData* data) {
-  #define VALUE(pos) data->values.at(pos).toFloat()
-  switch (data->index) {
+void SwitchBoard::notifyAll(XPOutputData data) {
+  #define VALUE(pos) data.values.at(pos).toFloat()
+  switch (data.index) {
     case TIMES:
       emit timeUpdate(VALUE(5), VALUE(6), VALUE(2), VALUE(3));
       break;
