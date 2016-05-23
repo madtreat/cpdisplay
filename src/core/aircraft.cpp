@@ -90,7 +90,7 @@ void Aircraft::setLatLonAlt(float _lat, float _lon, float _alt) {
 
 void Aircraft::setHdg(float _hdg) {
   hdg = _hdg;
-  qDebug() << "AC" << id << "heading updated:" << hdg;
+  // qDebug() << "AC" << id << "heading updated:" << hdg;
   emit acUpdated(id);
   emit hdgUpdated(id);
 }
