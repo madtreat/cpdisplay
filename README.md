@@ -1,5 +1,9 @@
 CPDisplay
 =========
+<a href="https://scan.coverity.com/projects/tamu-vscl-cpdisplay">
+  <img alt="Coverity Scan Build Status"
+       src="https://img.shields.io/coverity/scan/8942.svg"/>
+</a>
 
 Cockpit Head Down Display for the Vehicle Systems and Controls Lab at Texas A&M University.
 
@@ -11,15 +15,15 @@ This display is designed to work with X-Plane 10, and provides many panels.  The
 
 Dependencies
 ============
-In addition to the dependencies listed below, in order to use Google Maps, you must have a Google Developer 
-account with both 
-[Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/) and 
+In addition to the dependencies listed below, in order to use Google Maps, you must have a Google Developer
+account with both
+[Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/) and
 [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/) enabled.  The default is currently [OpenLayers](http://openlayers.org/), which is free and does not require an account.
 
  Name                                       | Version     | Ubuntu Package  | OS X Homebrew Package | Notes
 --------------------------------------------|-------------|-----------------|-----------------------|-------
-[CMake](http://www.cmake.org/)              | 2.8.12+     | cmake           | cmake                 | 
-[Qt5](http://qt-project.org/)               | 5.3+        | qt5-default, libqt5svg5, libqt5svg5-dev | qt5 | 
+[CMake](http://www.cmake.org/)              | 2.8.12+     | cmake           | cmake                 |
+[Qt5](http://qt-project.org/)               | 5.3+        | qt5-default, libqt5svg5, libqt5svg5-dev | qt5 |
 [QFI](http://marekcel.pl/index.php?pg=qfi)  | 2014-01-26  | -               | -                     | included *1
 [Qt Maps](https://github.com/madtreat/qt-maps) | -        | -               | -                     | submodule
 [Qt Dynamic Layout](https://github.com/madtreat/qt-dynamic-layout) | - | -  | -                     | submodule
