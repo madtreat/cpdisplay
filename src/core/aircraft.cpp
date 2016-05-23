@@ -50,7 +50,7 @@ void Aircraft::tryEmitUpdate() {
 void Aircraft::tryEmitSpdUpdate() {
   if (spdXUpdated && spdYUpdated && spdZUpdated) {
     spd = sqrt(spdX*spdX + spdY*spdY + spdZ*spdZ) * MPS_TO_KNOTS;
-    qDebug() << "AC" << id << "speed updated:" << spd << "(" << spdX << spdY << spdZ << ")";
+    // qDebug() << "AC" << id << "speed updated:" << spd << "(" << spdX << spdY << spdZ << ")";
     emit acUpdated(id);
     emit spdUpdated(id);
     spdXUpdated = false;
