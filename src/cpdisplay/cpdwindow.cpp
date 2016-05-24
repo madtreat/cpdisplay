@@ -32,6 +32,7 @@ settings(_cpdSettings) {
   }
   else {
     // slaveID = -1; // this is a non-MCS CPD
+    tabWidget = NULL;
     mcsWidget = NULL;
     cpdWidget = new CPDWidget(settings, -1);
     setCentralWidget(cpdWidget);

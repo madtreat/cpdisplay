@@ -22,6 +22,20 @@ CommsController::CommsController(
 : QObject(_parent),
 cpdSettings(_cpdSettings),
 sb(_sb) {
+  com1active  = 0.0;
+  com1standby = 0.0;
+  com2active  = 0.0;
+  com2standby = 0.0;
+  nav1active  = 0.0;
+  nav1standby = 0.0;
+  nav2active  = 0.0;
+  nav2standby = 0.0;
+
+  timeGMT     = 0.0;
+  timeLocal   = 0.0;
+  timeMission = 0.0;
+  timeTimer   = 0.0;
+
   connect(sb,   &SWB::timeUpdate,         this, &COMC::setTimes);
   
   connect(sb,   &SWB::com1Update,         this, &COMC::setCom1);

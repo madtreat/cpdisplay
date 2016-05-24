@@ -54,28 +54,15 @@ justInitialized(true) {
   connect(activeSB,  SIGNAL(valueChanged(double)), this, SLOT(activeChanged(double)));
   connect(standbySB, SIGNAL(valueChanged(double)), this, SLOT(standbyChanged(double)));
 
-//  actUp = new QPushButton("^");
-//  actDown = new QPushButton("v");
-//  standbyUp = new QPushButton("^");
-//  standbyDown = new QPushButton("v");
-
   swap = new QPushButton("< Swap >");
   connect(swap, &QPushButton::clicked, this, &CommsLine::swapActive);
 
   QHBoxLayout* layout = new QHBoxLayout(this);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(typeLabel);
-//  layout->addWidget(actDown);
   layout->addWidget(activeSB);
-//  layout->addWidget(actUp);
   layout->addWidget(swap);
-//  layout->addWidget(standbyDown);
   layout->addWidget(standbySB);
-//  layout->addWidget(standbyUp);
-
-//  QFormLayout* lineLayout = new QFormLayout(this);
-//  lineLayout->setContentsMargins(0, 0, 0, 0);
-//  lineLayout->addRow(typeString, layout);
 
   justInitialized = false;
 }

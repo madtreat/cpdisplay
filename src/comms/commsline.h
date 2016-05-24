@@ -48,16 +48,8 @@ private:
   float activeFreq;
   float standbyFreq;
   QLabel* typeLabel;
-  QLabel* active;
-  QLabel* standby;
   QDoubleSpinBox* activeSB;
   QDoubleSpinBox* standbySB;
-
-  // Increase/Decrease buttons
-  QPushButton* actUp;
-  QPushButton* actDown;
-  QPushButton* standbyUp;
-  QPushButton* standbyDown;
 
   // Button to Swap Active and Standby
   QPushButton* swap;

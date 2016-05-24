@@ -41,8 +41,8 @@ TrafficController::~TrafficController() {
  * If this is the currently displayed aircraft, update the values in the widget.
  */
 void TrafficController::acUpdated(int id) {
-  Aircraft* ac0 = acMap->value(0);  // This cockpit/AC
-  Aircraft* ac  = acMap->value(id); // The updated AC
+  Aircraft* ac0 = acMap->value(0);   // This cockpit/AC
+  Aircraft* ac  = acMap->value(id);  // The updated AC
   double rng = geo::distance(ac0->getLat(), ac0->getLon(), ac->getLat(), ac->getLon());
   double ber = geo::bearing (ac0->getLat(), ac0->getLon(), ac->getLat(), ac->getLon());
   ac->setRngBer(rng, ber);

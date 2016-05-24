@@ -37,7 +37,7 @@ void EngineController::updateEngineType(AircraftEngineType type) {
 }
 
 void EngineController::updateNumEngines(int numEng) {
-  qDebug() << "Updating num engines...";
+  // qDebug() << "Updating num engines...";
   numEngines = numEng;
   emit numEnginesUpdate(numEngines);
 }

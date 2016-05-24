@@ -16,6 +16,8 @@
 
 Aircraft::Aircraft(int _id, QObject* _parent)
 : QObject(_parent),
+type(GENERAL_AVIATION),
+engType(AC_ENG_PROP),
 id(_id),
 displayed(false) {
   lat = 0.0;
@@ -27,9 +29,17 @@ displayed(false) {
   rng = 0.0;
   ber = 0.0;
 
+  spdX = 0.0;
+  spdY = 0.0;
+  spdZ = 0.0;
+
   latUpdated = false;
   lonUpdated = false;
   altUpdated = false;
+
+  spdXUpdated = false;
+  spdYUpdated = false;
+  spdZUpdated = false;
 }
 
 //Aircraft::Aircraft(const Aircraft& orig) {

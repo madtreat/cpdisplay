@@ -25,7 +25,9 @@ SingleFuelWidget::SingleFuelWidget(
   QFrame* _parent
 ) : cpdSettings(_cpdSettings),
 engC(_engC),
-tankNum(_tankNum) {
+tankNum(_tankNum),
+valuePercent(0.0),
+valueVolume(0.0) {
   QVBoxLayout* layout = new QVBoxLayout(this);
   layout->setContentsMargins(4, 4, 4, 4);
 
