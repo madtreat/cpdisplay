@@ -11,11 +11,14 @@ dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # executable in "/opt/cpdisplay".
 # ELSE IF this script is located in a user's home directory, then use the
 # local executable
-if [[ $dir == *"etc"* ]]; then
-  exe="/opt/cpdisplay/bin/cpdisplay"
-elif [[ $dir == *"home"* ]]; then
+if [ "$1" == "-l" ]; then
   exe="$dir/cpdisplay"
+else 
+# elif [[ $dir == *"etc"* ]]; then
+  exe="/opt/cpdisplay/bin/cpdisplay"
 fi
+echo "Script dir: $dir"
+echo "Executable: $exe"
 
 # Set up the LD_LIBRARY_PATH because Qt installations are weird and often
 # do not link the QtWebEngineProcess to the Qt core libs properly.
