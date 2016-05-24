@@ -1,5 +1,6 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 add_subdirectory(utils)
 add_subdirectory(core)

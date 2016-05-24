@@ -1,4 +1,5 @@
-<RCC>
+<!DOCTYPE RCC>
+<RCC version="1.0">
   <qresource prefix="/ac">
     <file>icons/airplane.png</file>
     <file>icons/airplane.128x128.png</file>
