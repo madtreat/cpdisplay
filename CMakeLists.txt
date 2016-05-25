@@ -13,8 +13,8 @@ endif()
 # Version
 ################################################################################
 set(cpd_MAJOR_VERSION 2)
-set(cpd_MINOR_VERSION 3)
-set(cpd_PATCH_VERSION 2)
+set(cpd_MINOR_VERSION 4)
+set(cpd_PATCH_VERSION 0)
 set(cpd_VERSION ${cpd_MAJOR_VERSION}.${cpd_MINOR_VERSION}.${cpd_PATCH_VERSION})
 
 
