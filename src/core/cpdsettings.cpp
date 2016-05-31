@@ -12,6 +12,8 @@
 #include <QFile>
 #include <QDir>
 
+#include "coreconsts.h"
+
 CPDSettings::CPDSettings(QString _filename, QObject* _parent)
 : QObject(_parent) {
   settings = NULL;
@@ -56,6 +58,7 @@ CPDSettings::CPDSettings(QString _filename, QObject* _parent)
 CPDSettings::~CPDSettings() {
 }
 
+
 SlaveSystem* CPDSettings::getSlaveByName(QString name) const {
   // The number of slaves should never be so large that a linear search
   // would be prohibitively slow.
@@ -66,6 +69,18 @@ SlaveSystem* CPDSettings::getSlaveByName(QString name) const {
     }
   }
   return NULL;
+}
+
+
+QHostAddress& CPDSettings::getDestHost(QHostAddress& src) {
+  foreach (int id, m_slaves.keys()) {
+    SlaveSystem* sys = m_slaves.value(id);
+    if (sys->m_xplaneHost == src) {
+      return sys->m_cpdHost;
+    }
+  }
+  QHostAddress host;
+  return host;
 }
 
 
@@ -88,6 +103,9 @@ void CPDSettings::loadSettingsFile(QString _filename) {
   // to be cluttered, also can prevent them from knowing about MCS)
   settings->beginGroup("mcs");
   m_isMCS = settings->value("is_mcs", "false").toBool();
+  m_isMCSDataSwitch = settings->value("is_mcsdataswitch", "false").toBool();
+  m_isMCSDisplay    = settings->value("is_mcsdisplay", "false").toBool();
+  m_forwardToMCS    = settings->value("is_mcsdisplay", "false").toBool();
   settings->endGroup();  // "mcs"
 
   if (m_isMCS) {

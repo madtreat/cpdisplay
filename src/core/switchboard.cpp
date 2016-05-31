@@ -114,10 +114,12 @@ SwitchBoard::DRefValue::DRefValue(const DRefValue& rhs) {
 SwitchBoard::SwitchBoard(
   CPDSettings* _settings,
   int _slaveID,
+  bool _forward,
   QObject* _parent
 ) : QObject(_parent),
 settings(_settings),
 slaveID(_slaveID),
+forwardToCPD(_forward),
 drefID(NUM_DATA_INDEXES),
 didReceiveData(false) {
   xplane = new QUdpSocket(this);
@@ -140,6 +142,21 @@ didReceiveData(false) {
     xplanePluginPort  = settings->getSlave(slaveID)->m_xplanePluginPort;
   }
 
+  if (forwardToCPD) {
+    // Get CPD destination host and port from the xplane host and port numbers
+    cpdHost = settings->getDestHost(thisHost);
+    cpdPort = thisPortOut;//cpdSettings->getDestPort(thisHost);
+    cpd = new QUdpSocket(this);
+
+    mcsHost = QHostAddress();
+    mcsPort = thisPortOut;
+    mcs = new QUdpSocket(this);
+  }
+  else {
+    cpd = NULL;
+    mcs = NULL;
+  }
+
   /*
    * This first function only works if xplane is running on this machine
    */
@@ -154,7 +171,7 @@ didReceiveData(false) {
    * ignored.
    */
   else {
-    xplane->bind(thisPortIn, QUdpSocket::ShareAddress);
+    xplane->bind(thisPortOut, QUdpSocket::ShareAddress);
   }
 
   // Create the map of Datarefs.
@@ -201,7 +218,12 @@ void SwitchBoard::readPendingData() {
     }
 
     didReceiveData = true;
-    processDatagram(datagram);
+    if (forwardToCPD) {
+      forwardDatagram(datagram, sender, senderPort);
+    }
+    else {
+      processDatagram(datagram);
+    }
   }
 }
 
@@ -432,6 +454,19 @@ void SwitchBoard::requestDatarefsFromXPlane() {
     memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
   }
   xplane->writeDatagram(dsel, len2, thisHost, thisPortIn);
+}
+
+
+void SwitchBoard::forwardDatagram(
+  QByteArray& data, 
+  QHostAddress& sender,
+  quint16 senderPort
+) {
+  // TODO: get the sender, find the matching destination and forward it
+  cpd->writeDatagram(data, cpdHost, cpdPort);
+  if (settings->forwardToMCS()) {
+    mcs->writeDatagram(data, mcsHost, mcsPort);
+  }
 }
 
 

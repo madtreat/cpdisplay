@@ -102,7 +102,7 @@ class SwitchBoard : public QObject {
   };
 
 public:
-  SwitchBoard(CPDSettings* _settings, int _slaveID = -1, QObject* _parent=0);
+  SwitchBoard(CPDSettings* _settings, int _slaveID = -1, bool _forward = false, QObject* _parent=0);
   SwitchBoard(const SwitchBoard& orig) = delete;
   ~SwitchBoard();
 
@@ -250,20 +250,34 @@ signals:
   void nav2Update       (float freq, float standby);
 
 private:
-  CPDSettings*   settings;
-  int            slaveID;
-  QHostAddress   thisHost;
-  int            thisPortOut;
-  int            thisPortIn;
-  int            xplanePluginPort; // port number on which the plugin listens
-  QUdpSocket*    xplane;        // the xplane simulator
-  QTcpSocket*    xplanePlugin;  // xplane remote control plugin
-  int            drefID;        // used for incrementing dataref request ID's
-
-  QTimer* timer; // connection-test timer
-  bool didReceiveData; // did this object receive data within the last timer?
+  CPDSettings*  settings;
+  int           slaveID;
 
   QMap<int, DRefValue*> drmap;
+
+  // XPlane communications
+  QHostAddress  thisHost;
+  int           thisPortOut;
+  int           thisPortIn;
+  int           xplanePluginPort;  // port number on which the plugin listens
+  QUdpSocket*   xplane;        // the xplane simulator
+  QTcpSocket*   xplanePlugin;  // xplane remote control plugin
+  int           drefID;        // used for incrementing dataref request ID's
+
+  // These are used only for MCSDataSwitch setups
+  bool          forwardToCPD;  // True if this is a MCSDataSwitch machine
+
+  QHostAddress  cpdHost;  // used only if forwardToCPD is True
+  int           cpdPort;  // used only if forwardToCPD is True
+  QUdpSocket*   cpd;      // NULL if !forwardToCPD
+
+  QHostAddress  mcsHost;  // used only if forwardToCPD is True
+  int           mcsPort;  // used only if forwardToCPD is True
+  QUdpSocket*   mcs;      // NULL if !forwardToCPD
+
+  // Other useful things
+  QTimer* timer; // connection-test timer
+  bool didReceiveData; // did this object receive data within the last timer?
 
   // Helper functions for adding new entries to the drmap.
   void addDirectDRef   (QString str, int freq, direct_fp   sig);
@@ -272,6 +286,7 @@ private:
   void addLimitDRef    (QString str, int freq, limit_fp    sig);
   void buildDRMap();
 
+  void forwardDatagram(QByteArray& data, QHostAddress& sender, quint16 senderPort);
   void processDatagram(QByteArray& data);
   void notifyAll(int code, xpflt value);
   void notifyAll(const XPOutputData& data);

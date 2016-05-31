@@ -9,6 +9,7 @@ set(SOURCES
 
 set(HEADERS
   aircraft.h
+  coreconsts.h
   cpdsettings.h
   switchboard.h
   xplanedata.h

@@ -38,7 +38,7 @@ slaveID(_slaveID) {
   settings = _settings;
   acMap = new QMap<int, Aircraft*>();
 
-  sb = new SwitchBoard(settings, slaveID);
+  sb = new SwitchBoard(settings, slaveID, false, this);
 
   mapC = new MapController(settings->mapSettingsFile(), sb, acMap, this);
   adiC = new ADIController(this);
