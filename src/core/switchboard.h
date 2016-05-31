@@ -274,7 +274,7 @@ private:
 
   void processDatagram(QByteArray& data);
   void notifyAll(int code, xpflt value);
-  void notifyAll(XPOutputData data);
+  void notifyAll(const XPOutputData& data);
 
   void setDataref(QString dataref, float value);
 

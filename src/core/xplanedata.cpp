@@ -17,6 +17,13 @@ QByteArray reverse(const QByteArray &ba) {
 }
 
 
+XPOutputData::XPOutputData(const XPOutputData& other) {
+  index = other.index;
+  type = other.type;
+  values = other.values;
+}
+
+
 /*
  * The data all comes in little endian format (smallest bytes first).
  * For the index, this does not matter, as nothing should be larger than 1 byte,

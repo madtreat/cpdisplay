@@ -115,7 +115,7 @@ void CPDController::connectSignals() {
   connect(sb, &SWB::acSpdZUpdate,        this,  &CPDC::updateACSpdZ);
 
   // Misc:
-  connect(sb, &SWB::aoaDUpdate,          this, &CPDC::printSomething);
+  // connect(sb, &SWB::aoaDUpdate,          this, &CPDC::printSomething);
 
 
   /*

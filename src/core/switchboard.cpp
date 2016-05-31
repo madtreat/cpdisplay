@@ -526,7 +526,7 @@ void SwitchBoard::notifyAll(int code, xpflt value) {
  * Notify everyone of new data.  This parses the data's values and emits signals
  * that other objects can be connected to.
  */
-void SwitchBoard::notifyAll(XPOutputData data) {
+void SwitchBoard::notifyAll(const XPOutputData& data) {
   #define VALUE(pos) data.values.at(pos).toFloat()
   switch (data.index) {
     case TIMES:
