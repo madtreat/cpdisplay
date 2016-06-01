@@ -1,3 +1,21 @@
+/*
+ *  This class has a few things that have not yet been accounted for:
+ *    - XPlane plugins are not set up completely
+ *    - XPlane plugins are not forwarded properly
+ *        sendToPlugin()
+ *    - sendDREF() is not set up to forward properly
+ *    - requestDatarefsFromXPlane() not set up to forward properly
+ *        2x data writes
+ *    - 
+ *    - 
+ *    - THERE IS CURRENTLY NO BACK-FORWARDING
+ *      so the CPD and MCS SwitchBoard instances are not set up to forward data
+ *      to XPlane, "officially".  They can be configured in settings to treat
+ *      the MCSDataSwitch host as the XPlane host, which is probably the 
+ *      simplest method.
+*/
+
+
 #include "switchboard.h"
 
 #include <netinet/in.h>
@@ -13,13 +31,8 @@
 #include <QDebug>
 #include <QTimer>
 
+// #include "coreconsts.h"
 #include "cpdsettings.h"
-
-#define DEBUG_DREF_ID 0
-#define DEBUG_SEND 1
-#define DEBUG_RECV_UDP 0
-#define DEBUG_RECV_RREF 0
-#define DEBUG_RECV (DEBUG_RECV_UDP | DEBUG_RECV_RREF)
 
 
 // Direct-signal-only constructor
@@ -129,30 +142,43 @@ didReceiveData(false) {
 
   // If standard CPD config...
   if (slaveID == -1) {
-    thisHost          = settings->xplaneHost();
-    thisPortOut       = settings->xplanePortOut();
-    thisPortIn        = settings->xplanePortIn();
+    xplaneHost        = settings->xplaneHost();
+    xplanePortOut     = settings->xplanePortOut();
+    xplanePortIn      = settings->xplanePortIn();
     xplanePluginPort  = settings->xplanePluginPort();
   }
   // Else (for a single MCS slave instance)...
   else {
-    thisHost          = settings->getSlave(slaveID)->m_xplaneHost;
-    thisPortOut       = settings->getSlave(slaveID)->m_xplanePortOut;
-    thisPortIn        = settings->getSlave(slaveID)->m_xplanePortIn;
+    xplaneHost        = settings->getSlave(slaveID)->m_xplaneHost;
+    xplanePortOut     = settings->getSlave(slaveID)->m_xplanePortOut;
+    xplanePortIn      = settings->getSlave(slaveID)->m_xplanePortIn;
     xplanePluginPort  = settings->getSlave(slaveID)->m_xplanePluginPort;
   }
 
   if (forwardToCPD) {
     // Get CPD destination host and port from the xplane host and port numbers
-    cpdHost = settings->getDestHost(thisHost);
-    cpdPort = thisPortOut;//cpdSettings->getDestPort(thisHost);
-    cpd = new QUdpSocket(this);
+    cpdHost     = settings->getDestHost(xplaneHost);
+    cpdPortIn   = xplanePortOut;//cpdSettings->getDestPort(xplaneHost);
+    cpdPortOut  = xplanePortIn;
 
-    mcsHost = QHostAddress();
-    mcsPort = thisPortOut;
+    cpd = new QUdpSocket(this);
+    cpd->bind(QHostAddress::Any, cpdPortOut, QUdpSocket::ShareAddress);
+    connect(cpd, &QUdpSocket::readyRead, this, &SwitchBoard::readFromCPD);
+
+    // Set up MCS forwarding TODO: finish this
+    mcsHost     = QHostAddress();  // TODO: get the real MCS host
+    mcsPortIn   = xplanePortOut;
+    mcsPortOut  = xplanePortIn;
+
     mcs = new QUdpSocket(this);
+    mcs->bind(QHostAddress::Any, mcsPortOut, QUdpSocket::ShareAddress);
+    connect(mcs, &QUdpSocket::readyRead, this, &SwitchBoard::readFromMCS);
   }
   else {
+    cpdPortIn   = 0;
+    cpdPortOut  = 0;
+    mcsPortIn   = 0;
+    mcsPortOut  = 0;
     cpd = NULL;
     mcs = NULL;
   }
@@ -160,9 +186,9 @@ didReceiveData(false) {
   /*
    * This first function only works if xplane is running on this machine
    */
-  if (thisHost == QHostAddress::LocalHost) {
+  if (xplaneHost == QHostAddress::LocalHost) {
     qDebug() << "Warning: X-Plane is running on localhost, some connection issues may occur.";
-    xplane->bind(thisHost, thisPortOut, QUdpSocket::ShareAddress);
+    xplane->bind(xplaneHost, xplanePortOut, QUdpSocket::ShareAddress);
   }
   /*
    * This second function only works if xplane is running on another machine
@@ -171,17 +197,17 @@ didReceiveData(false) {
    * ignored.
    */
   else {
-    xplane->bind(thisPortOut, QUdpSocket::ShareAddress);
+    xplane->bind(xplanePortOut, QUdpSocket::ShareAddress);
   }
 
   // Create the map of Datarefs.
   buildDRMap();
 
   // Initialize the xplanePlugin TCP socket
-  xplanePlugin->connectToHost(thisHost, xplanePluginPort);
+  xplanePlugin->connectToHost(xplaneHost, xplanePluginPort);
 
   requestDatarefsFromXPlane();
-  connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readPendingData);
+  connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readFromXPlane);
 
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &SwitchBoard::testConnection);
@@ -205,26 +231,84 @@ void SwitchBoard::testConnection() {
   }
 }
 
-void SwitchBoard::readPendingData() {
+void SwitchBoard::readFromCPD() {
+  while (cpd->hasPendingDatagrams()) {
+    readFromClient(CLIENT_CPD);
+  }
+}
+
+void SwitchBoard::readFromMCS() {
+  while (mcs->hasPendingDatagrams()) {
+    readFromClient(CLIENT_MCS);
+  }
+}
+
+void SwitchBoard::readFromXPlane() {
   while (xplane->hasPendingDatagrams()) {
-    QByteArray datagram;
-    datagram.resize(xplane->pendingDatagramSize());
-    QHostAddress sender;
-    quint16 senderPort;
+    readFromClient(CLIENT_XPLANE);
+  }
+}
 
-    xplane->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
-    if (DEBUG_RECV) {
-      qDebug() << "Packet size" << datagram.size() << "  \tfrom" << sender << ":" << senderPort;
+void SwitchBoard::readFromClient(ClientType ct) {
+  // Get the correct client
+  QUdpSocket* client = NULL;
+  if (ct & CLIENT_CPD) {
+    client = cpd;
+  }
+  else if (ct & CLIENT_MCS) {
+    client = mcs;
+  }
+  else if (ct & CLIENT_XPLANE) {
+    client = xplane;
+  }
+
+  // Read the data
+  QByteArray datagram;
+  datagram.resize(client->pendingDatagramSize());
+  QHostAddress sender;
+  quint16 senderPort;
+
+  client->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+
+  // If this data was not meant for this particular SwitchBoard instance,
+  // discard it.
+  if (sender != cpdHost && sender != mcsHost && sender != xplaneHost) {
+    if (DEBUG_RECV && DEBUG_RECV_DATASWITCH) {
+      QString str = "Discarding data from (%s) %s:%d :: not meant for this host";
+      str.arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
+      qDebug() << str;
     }
+    return;
+  }
 
+  // Debug if necessary
+  if (DEBUG_RECV) {
+    QString str = "Packet size %4d\tfrom (%s) %s:%d";
+    str.arg(datagram.size()).arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
+    qDebug() << str;
+  }
+
+  // Process or forward the data
+  if (ct & CLIENT_CPD || ct & CLIENT_MCS) {
+    forwardData(CLIENT_XPLANE, datagram);
+  }
+  else if (ct & CLIENT_XPLANE) {
     didReceiveData = true;
+
     if (forwardToCPD) {
-      forwardDatagram(datagram, sender, senderPort);
+      forwardData(CLIENT_CPD, datagram);
+
+      if (settings->forwardToMCS()) {
+        forwardData(CLIENT_MCS, datagram);
+      }
     }
     else {
       processDatagram(datagram);
     }
   }
+
+  // Unset the socket
+  client = NULL;
 }
 
 void SwitchBoard::readPluginData() {
@@ -248,7 +332,7 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value) {
   memcpy(&data, DREF_PREFIX, ID_DIM);
   memcpy(&data[ID_DIM], &dref, sizeof(xp_dref_in));
 
-  xplane->writeDatagram(data, len, thisHost, thisPortIn);
+  xplane->writeDatagram(data, len, xplaneHost, xplanePortIn);
 }
 
 void SwitchBoard::sendToPlugin(QString data) {
@@ -409,6 +493,13 @@ void SwitchBoard::buildDRMap() {
  * Sends the RREF message to XPlane to request all necessary datarefs.
  */
 void SwitchBoard::requestDatarefsFromXPlane() {
+  // If this SwitchBoard instance is running on a MCS Display, there is no need
+  // to request datarefs or UDP output, as that all gets forwarded from the 
+  // MCS DataSwitch's SwitchBoard instances as it forwards to the CPD.
+  if (settings->isMCSDisplay()) {
+    return;
+  }
+
   // This loop sends the DREF requests to xplane
   foreach (int i, drmap.keys()) {
     DRefValue* val = drmap.value(i);
@@ -428,7 +519,7 @@ void SwitchBoard::requestDatarefsFromXPlane() {
     memcpy(&data, RREF_PREFIX, ID_DIM);
     memcpy(&data[ID_DIM], &dref, sizeof(xp_rref_in));
 
-    xplane->writeDatagram(data, len, thisHost, thisPortIn);
+    xplane->writeDatagram(data, len, xplaneHost, xplanePortIn);
   }
 
 
@@ -453,20 +544,41 @@ void SwitchBoard::requestDatarefsFromXPlane() {
   for (int i = 0; i < indexes.size(); i++) {
     memset(&dsel[ID_DIM+(i*cs)], (xpint) indexes.at(i), cs);
   }
-  xplane->writeDatagram(dsel, len2, thisHost, thisPortIn);
+  xplane->writeDatagram(dsel, len2, xplaneHost, xplanePortIn);
 }
 
 
-void SwitchBoard::forwardDatagram(
-  QByteArray& data, 
-  QHostAddress& sender,
-  quint16 senderPort
+void SwitchBoard::forwardData(
+  ClientType destCT,
+  QByteArray& data
 ) {
   // TODO: get the sender, find the matching destination and forward it
-  cpd->writeDatagram(data, cpdHost, cpdPort);
-  if (settings->forwardToMCS()) {
-    mcs->writeDatagram(data, mcsHost, mcsPort);
+  QUdpSocket* client = NULL;
+  QHostAddress  host;
+  quint16       port = 0;
+  if (destCT & CLIENT_CPD) {
+    client = cpd;
+    host = cpdHost;
+    port = cpdPortIn;
   }
+  else if (destCT & CLIENT_MCS) {
+    client = mcs;
+    host = mcsHost;
+    port = mcsPortIn;
+  }
+  else if (destCT & CLIENT_XPLANE) {
+    client = xplane;
+    host = xplaneHost;
+    port = xplanePortIn;
+  }
+
+  // Write the data
+  if (client) {
+    client->writeDatagram(data, host, port);
+  }
+
+  // Unset the socket
+  client = NULL;
 }
 
 

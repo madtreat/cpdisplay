@@ -2,9 +2,14 @@
 # 
 # Launches the cpdisplay with the LD_LIBRARY_PATH set to the correct location
 # to avoid having to make adjustments to each system to fix Qt installations.
+#
+# This script can also be used to set up a proxy if necessary.
+#
 
 # The directory containing this script
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+host=`hostname -s`
 
 # The executable's directory:
 # IF this script is located in "/etc/cpdisplay/", then use the installed 
@@ -13,9 +18,15 @@ dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # local executable
 if [ "$1" == "-l" ]; then
   exe="$dir/cpdisplay"
+
+  # Get the proper settings file
+  settings="$dir/../config/cpd-settings.ini"
 else 
 # elif [[ $dir == *"etc"* ]]; then
   exe="/opt/cpdisplay/bin/cpdisplay"
+
+  # Get the proper settings file
+  settings="/etc/cpdisplay/config/cpd-settings.$host.ini"
 fi
 echo "Script dir: $dir"
 echo "Executable: $exe"
@@ -31,10 +42,6 @@ proxy_host="vsclproxy.ipa.vscl.tamu.edu"
 proxy_port="3128"
 export http_proxy="$proxy_host:$proxy_port"
 export https_proxy="$proxy_host:$proxy_port"
-
-# Get the proper settings file
-host=`hostname -s`
-settings="/etc/cpdisplay/config/cpd-settings.$host.ini"
 
 # The actual execution command
 $exe -c $settings

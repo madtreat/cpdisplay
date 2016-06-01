@@ -12,7 +12,6 @@
 #include <QFile>
 #include <QDir>
 
-#include "coreconsts.h"
 
 CPDSettings::CPDSettings(QString _filename, QObject* _parent)
 : QObject(_parent) {

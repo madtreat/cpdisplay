@@ -12,6 +12,7 @@
 #include <QHostAddress>
 #include <QAbstractSocket>
 
+#include "coreconsts.h"
 #include "xplanedata.h"
 #include "xplanedref.h"
 
@@ -108,7 +109,10 @@ public:
 
 public slots:
   void testConnection();
-  void readPendingData();
+  void readFromCPD();
+  void readFromMCS();
+  void readFromXPlane();
+  void readFromClient(ClientType c);
   void readPluginData();
   void pluginSocketError(QAbstractSocket::SocketError error);
 
@@ -256,24 +260,26 @@ private:
   QMap<int, DRefValue*> drmap;
 
   // XPlane communications
-  QHostAddress  thisHost;
-  int           thisPortOut;
-  int           thisPortIn;
-  int           xplanePluginPort;  // port number on which the plugin listens
-  QUdpSocket*   xplane;        // the xplane simulator
-  QTcpSocket*   xplanePlugin;  // xplane remote control plugin
-  int           drefID;        // used for incrementing dataref request ID's
+  QHostAddress  xplaneHost;         // xplane's host ip
+  int           xplanePortOut;      // xplane's output port
+  int           xplanePortIn;       // xplane's input port
+  int           xplanePluginPort;   // port number on which the plugin listens
+  QUdpSocket*   xplane;             // the xplane simulator
+  QTcpSocket*   xplanePlugin;       // xplane remote control plugin
+  int           drefID;             // used for incrementing dataref request ID's
 
   // These are used only for MCSDataSwitch setups
   bool          forwardToCPD;  // True if this is a MCSDataSwitch machine
 
-  QHostAddress  cpdHost;  // used only if forwardToCPD is True
-  int           cpdPort;  // used only if forwardToCPD is True
-  QUdpSocket*   cpd;      // NULL if !forwardToCPD
+  QHostAddress  cpdHost;      // used only if forwardToCPD is True
+  int           cpdPortIn;    // used only if forwardToCPD is True
+  int           cpdPortOut;   // used only if forwardToCPD is True
+  QUdpSocket*   cpd;          // NULL if !forwardToCPD
 
-  QHostAddress  mcsHost;  // used only if forwardToCPD is True
-  int           mcsPort;  // used only if forwardToCPD is True
-  QUdpSocket*   mcs;      // NULL if !forwardToCPD
+  QHostAddress  mcsHost;      // used only if forwardToCPD is True
+  int           mcsPortIn;    // used only if forwardToCPD is True
+  int           mcsPortOut;   // used only if forwardToCPD is True
+  QUdpSocket*   mcs;          // NULL if !forwardToCPD
 
   // Other useful things
   QTimer* timer; // connection-test timer
@@ -286,7 +292,7 @@ private:
   void addLimitDRef    (QString str, int freq, limit_fp    sig);
   void buildDRMap();
 
-  void forwardDatagram(QByteArray& data, QHostAddress& sender, quint16 senderPort);
+  void forwardData(ClientType destCT, QByteArray& data);
   void processDatagram(QByteArray& data);
   void notifyAll(int code, xpflt value);
   void notifyAll(const XPOutputData& data);
