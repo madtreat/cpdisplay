@@ -35,22 +35,24 @@ public:
   QString     styleFile()       const { return m_style; }
   QString     mapSettingsFile() const { return m_mapSettings; }
 
-  bool        isMCS()           const { return m_isMCS; }
+  bool        isMCS()           const { return m_isMCSDataSwitch || m_isMCSDisplay; }
   bool        isMCSDataSwitch() const { return m_isMCSDataSwitch; }
   bool        isMCSDisplay()    const { return m_isMCSDisplay; }
   bool        forwardToMCS()    const { return m_forwardToMCS; }
   int         numSlaves()       const { return m_numSlaves; }
 
-  SlaveMap      slaves()          const { return m_slaves; }
-  SlaveSystem*  getSlave(int id)  const { return m_slaves.value(id); }
+  QHostAddress  mcsDisplayHost()    const { return m_mcsDisplayHost; }
+
+  SlaveMap      slaves()            const { return m_slaves; }
+  SlaveSystem*  getSlave(int id)    const { return m_slaves.value(id); }
   SlaveSystem*  getSlaveByName(QString name) const;
 
-  int            xplanePortOut()    const { return m_xplanePortOut; }
-  int            xplanePortIn()     const { return m_xplanePortIn; }
-  int            xplanePluginPort() const { return m_xplanePluginPort; }
-  QHostAddress   xplaneHost()       const { return m_xplaneHost; }
+  int           xplanePortOut()     const { return m_xplanePortOut; }
+  int           xplanePortIn()      const { return m_xplanePortIn; }
+  int           xplanePluginPort()  const { return m_xplanePluginPort; }
+  QHostAddress  xplaneHost()        const { return m_xplaneHost; }
 
-  QHostAddress&  getDestHost(QHostAddress& src);
+  QHostAddress& getDestHost(QHostAddress& src);
   // int            getDestPort(int port);
 
 public slots:
@@ -69,11 +71,11 @@ private:
   QString m_mapSettings;    // map settings file
 
   // "mcs" group
-  bool m_isMCS;             // Is this a MCS (Master Control System)?
   bool m_isMCSDataSwitch;   // Is this a MCSDataSwitch host?
   bool m_isMCSDisplay;      // Is this a MCSDisplay host?
   bool m_forwardToMCS;      // Forward packets between CPD and xplane to MCS?
   int  m_numSlaves;         // Number of slaves under this MCS
+  QHostAddress m_mcsDisplayHost;
 
   // "xplane-slaves" group for MCS
   SlaveMap m_slaves;  // Map of <ID, Slave info>

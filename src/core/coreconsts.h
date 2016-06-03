@@ -41,16 +41,21 @@ enum MCSType {
 };
 
 struct SlaveSystem {
-  int            m_slaveID;
-  QString        m_slaveName;
-  bool           m_allowMCSOverride;
+  int           m_slaveID;
+  QString       m_slaveName;
+  bool          m_allowMCSOverride;
 
-  int            m_xplanePortOut;
-  int            m_xplanePortIn;
-  int            m_xplanePluginPort;
-  QHostAddress   m_xplaneHost;
+  QHostAddress  m_xplaneHost;
+  int           m_xplanePortOut;
+  int           m_xplanePortIn;
+  int           m_xplanePluginPort;
 
-  QHostAddress   m_cpdHost;
+  QHostAddress  m_cpdHost;
+  int           m_cpdPortOut;
+  int           m_cpdPortIn;
+
+  int           m_mcsPortOut;
+  int           m_mcsPortIn;
 };
 
 typedef QMap<int, SlaveSystem*> SlaveMap;

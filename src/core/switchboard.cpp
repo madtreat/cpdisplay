@@ -149,26 +149,28 @@ didReceiveData(false) {
   }
   // Else (for a single MCS slave instance)...
   else {
-    xplaneHost        = settings->getSlave(slaveID)->m_xplaneHost;
-    xplanePortOut     = settings->getSlave(slaveID)->m_xplanePortOut;
-    xplanePortIn      = settings->getSlave(slaveID)->m_xplanePortIn;
-    xplanePluginPort  = settings->getSlave(slaveID)->m_xplanePluginPort;
+    SlaveSystem* slave = settings->getSlave(slaveID);
+    xplaneHost        = slave->m_xplaneHost;
+    xplanePortOut     = slave->m_xplanePortOut;
+    xplanePortIn      = slave->m_xplanePortIn;
+    xplanePluginPort  = slave->m_xplanePluginPort;
   }
 
   if (forwardToCPD) {
+    SlaveSystem* slave = settings->getSlave(slaveID);
     // Get CPD destination host and port from the xplane host and port numbers
     cpdHost     = settings->getDestHost(xplaneHost);
-    cpdPortIn   = xplanePortOut;//cpdSettings->getDestPort(xplaneHost);
-    cpdPortOut  = xplanePortIn;
+    cpdPortOut  = slave->m_cpdPortOut;
+    cpdPortIn   = slave->m_cpdPortIn;
 
     cpd = new QUdpSocket(this);
     cpd->bind(QHostAddress::Any, cpdPortOut, QUdpSocket::ShareAddress);
     connect(cpd, &QUdpSocket::readyRead, this, &SwitchBoard::readFromCPD);
 
     // Set up MCS forwarding TODO: finish this
-    mcsHost     = QHostAddress();  // TODO: get the real MCS host
-    mcsPortIn   = xplanePortOut;
-    mcsPortOut  = xplanePortIn;
+    mcsHost     = settings->mcsDisplayHost();
+    mcsPortOut  = slave->m_mcsPortOut;
+    mcsPortIn   = slave->m_mcsPortIn;
 
     mcs = new QUdpSocket(this);
     mcs->bind(QHostAddress::Any, mcsPortOut, QUdpSocket::ShareAddress);

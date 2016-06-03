@@ -272,13 +272,13 @@ private:
   bool          forwardToCPD;  // True if this is a MCSDataSwitch machine
 
   QHostAddress  cpdHost;      // used only if forwardToCPD is True
-  int           cpdPortIn;    // used only if forwardToCPD is True
   int           cpdPortOut;   // used only if forwardToCPD is True
+  int           cpdPortIn;    // used only if forwardToCPD is True
   QUdpSocket*   cpd;          // NULL if !forwardToCPD
 
   QHostAddress  mcsHost;      // used only if forwardToCPD is True
-  int           mcsPortIn;    // used only if forwardToCPD is True
   int           mcsPortOut;   // used only if forwardToCPD is True
+  int           mcsPortIn;    // used only if forwardToCPD is True
   QUdpSocket*   mcs;          // NULL if !forwardToCPD
 
   // Other useful things

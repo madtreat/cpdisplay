@@ -101,27 +101,34 @@ void CPDSettings::loadSettingsFile(QString _filename) {
   // Default to false if it does not appear (do not want standard CPD's
   // to be cluttered, also can prevent them from knowing about MCS)
   settings->beginGroup("mcs");
-  m_isMCS = settings->value("is_mcs", "false").toBool();
   m_isMCSDataSwitch = settings->value("is_mcsdataswitch", "false").toBool();
   m_isMCSDisplay    = settings->value("is_mcsdisplay", "false").toBool();
   m_forwardToMCS    = settings->value("is_mcsdisplay", "false").toBool();
+  m_mcsDisplayHost  = settings->value("mcs_display_host").toString();
   settings->endGroup();  // "mcs"
 
-  if (m_isMCS) {
+  if (isMCS()) {
     // Load X-Plane 10 slave settings
     m_numSlaves = settings->beginReadArray("xplane-slaves");
     qDebug() << "Loading MCS settings for" << m_numSlaves << "slaves...";
     for (int i = 0; i < m_numSlaves; ++i) {
       settings->setArrayIndex(i);
       SlaveSystem* slave = new SlaveSystem();
-      slave->m_slaveID           = i;
-      slave->m_slaveName         = settings->value("slave_name").toString();
-      slave->m_allowMCSOverride  = settings->value("allow_mcs_override", "true").toBool();
-      slave->m_xplanePortOut     = settings->value("xplane_port_out").toInt();
-      slave->m_xplanePortIn      = settings->value("xplane_port_in").toInt();
-      slave->m_xplanePluginPort  = settings->value("xplane_plugin_port").toInt();
-      slave->m_xplaneHost        = settings->value("xplane_host").toString();
-      slave->m_cpdHost           = settings->value("cpd_host").toString();
+      slave->m_slaveID          = i;
+      slave->m_slaveName        = settings->value("slave_name").toString();
+      slave->m_allowMCSOverride = settings->value("allow_mcs_override", "true").toBool();
+      slave->m_xplanePortOut    = settings->value("xplane_port_out").toInt();
+      slave->m_xplanePortIn     = settings->value("xplane_port_in").toInt();
+      slave->m_xplanePluginPort = settings->value("xplane_plugin_port").toInt();
+      slave->m_xplaneHost       = settings->value("xplane_host").toString();
+
+      slave->m_cpdHost          = settings->value("cpd_host").toString();
+      slave->m_cpdPortOut       = settings->value("cpd_port_out", slave->m_xplanePortIn).toInt();
+      slave->m_cpdPortIn        = settings->value("cpd_port_in", slave->m_xplanePortOut).toInt();
+      
+      slave->m_mcsPortOut       = settings->value("mcs_port_out").toInt();
+      slave->m_mcsPortIn        = settings->value("mcs_port_in").toInt();
+      
       m_slaves.insert(i, slave);
     }
     settings->endArray();  // "xplane-slaves"

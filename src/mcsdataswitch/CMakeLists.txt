@@ -17,8 +17,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   Qt5::Core
-  Qt5::Widgets
-  Qt5::Gui
+  Qt5::Network
   cpd-core
 )
 
