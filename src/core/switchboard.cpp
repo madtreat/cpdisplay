@@ -288,7 +288,9 @@ void SwitchBoard::readFromClient(ClientType ct) {
     client = xplane;
     debugMsg += "xplane @ " + xplaneHost.toString() + ":" + QString::number(xplanePortOut);
   }
-  qDebug() << debugMsg;
+  if (DEBUG_RECV) {
+    qDebug() << debugMsg;
+  }
 
   // Read the data
   QByteArray datagram;
@@ -299,7 +301,7 @@ void SwitchBoard::readFromClient(ClientType ct) {
   client->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
   // Debug if necessary
-  if (DEBUG_RECV) {
+  if (DEBUG_RECV_PACKETS) {
     QString str = "Packet size %1 from (%2) %3:%4";
     str = str.arg(datagram.size()).arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
     qDebug() << str;
@@ -311,25 +313,25 @@ void SwitchBoard::readFromClient(ClientType ct) {
   }
   if (ct & CLIENT_CPD || ct & CLIENT_MCS) {
     if (DEBUG_FORWARD) {
-      qDebug() << "Data from CPD or MCS found!";
+      qDebug() << "  Data from CPD or MCS found!";
     }
     forwardData(CLIENT_XPLANE, datagram);
   }
   else if (ct & CLIENT_XPLANE) {
     if (DEBUG_FORWARD) {
-      qDebug() << "Data from xplane found!";
+      qDebug() << "  Data from xplane found!";
     }
     didReceiveData = true;
 
     if (forwardToCPD) {
       if (DEBUG_FORWARD) {
-        qDebug() << "Forwarding to the CPD...";
+        qDebug() << "    Forwarding to the CPD...";
       }
       forwardData(CLIENT_CPD, datagram);
 
       if (settings->forwardToMCS()) {
         if (DEBUG_FORWARD) {
-          qDebug() << "Forwarding to the MCS Display...";
+          qDebug() << "    Forwarding to the MCS Display...";
         }
         forwardData(CLIENT_MCS, datagram);
       }
