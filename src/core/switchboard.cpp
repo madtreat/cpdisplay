@@ -140,32 +140,41 @@ didReceiveData(false) {
   // connect(xplanePlugin, &QTcpSocket::readyRead, this, &SWB::readPluginData);
   // connect(xplanePlugin, &QTcpSocket::error, this, &SWB::pluginSocketError);
 
-  // If standard CPD config...
-  if (slaveID == -1) {
-    xplaneHost        = settings->xplaneHost();
-    xplanePortOut     = settings->xplanePortOut();
-    xplanePortIn      = settings->xplanePortIn();
-    xplanePluginPort  = settings->xplanePluginPort();
-  }
-  // Else (for a single MCS slave instance)...
-  else {
+  // If this is a MCS subsystem
+  if (settings->isMCS()) {
     SlaveSystem* slave = settings->getSlave(slaveID);
-    xplaneHost        = slave->m_xplaneHost;
-    xplanePortOut     = slave->m_xplanePortOut;
-    xplanePortIn      = slave->m_xplanePortIn;
-    xplanePluginPort  = slave->m_xplanePluginPort;
-  }
 
-  if (forwardToCPD) {
-    SlaveSystem* slave = settings->getSlave(slaveID);
+    // Set up the xplane host if this is a MCSDataSwitch
+    if (settings->isMCSDataSwitch()) {
+      xplaneHost        = slave->m_xplaneHost;
+      xplanePortOut     = slave->m_xplanePortOut;
+      xplanePortIn      = slave->m_xplanePortIn;
+      xplanePluginPort  = slave->m_xplanePluginPort;
+    }
+    // If this is not a MCSDataSwitch (is a CPD or MCSDisplay)
+    // In this case, the MCSDataSwitch machine is transparently presented
+    // as the xplane machine, which is how the system works.
+    else {
+      xplaneHost        = settings->mcsDataSwitchHost();
+      xplanePortOut     = slave->m_mcsPortIn;
+      xplanePortIn      = slave->m_mcsPortOut;
+      xplanePluginPort  = slave->m_xplanePluginPort; // TODO: figure this one out
+    }
+
+    QString groupName = settings->getSlave(slaveID)->m_slaveName;
+    qDebug() << "Multi-sim setup group" << groupName << ":";
+    qDebug() << "        xplane host:" << xplaneHost.toString() << "(out:" << xplanePortOut << ", in:" << xplanePortIn << ")";
+
     // Get CPD destination host and port from the xplane host and port numbers
-    cpdHost     = settings->getDestHost(xplaneHost);
+    cpdHost     = slave->m_cpdHost;//TODO: necessary? settings->getDestHost(xplaneHost);
     cpdPortOut  = slave->m_cpdPortOut;
     cpdPortIn   = slave->m_cpdPortIn;
 
     cpd = new QUdpSocket(this);
-    cpd->bind(QHostAddress::Any, cpdPortOut, QUdpSocket::ShareAddress);
     connect(cpd, &QUdpSocket::readyRead, this, &SwitchBoard::readFromCPD);
+    cpd->bind(QHostAddress::Any, cpdPortOut, QUdpSocket::ShareAddress);
+
+    qDebug() << "     cpdisplay host:" << cpdHost.toString()    << "(out:" << cpdPortOut    << ", in:" << cpdPortIn    << ")";
 
     // Set up MCS forwarding TODO: finish this
     mcsHost     = settings->mcsDisplayHost();
@@ -173,10 +182,20 @@ didReceiveData(false) {
     mcsPortIn   = slave->m_mcsPortIn;
 
     mcs = new QUdpSocket(this);
-    mcs->bind(QHostAddress::Any, mcsPortOut, QUdpSocket::ShareAddress);
     connect(mcs, &QUdpSocket::readyRead, this, &SwitchBoard::readFromMCS);
+    mcs->bind(QHostAddress::Any, mcsPortOut, QUdpSocket::ShareAddress);
+
+    qDebug() << "  mcscpdisplay host:" << mcsHost.toString()    << "(out:" << mcsPortOut    << ", in:" << mcsPortIn    << ")";
+    qDebug() << "-------------------------------------------------------------------------";
   }
+  // If standard CPD config...
   else {
+    xplaneHost        = settings->xplaneHost();
+    xplanePortOut     = settings->xplanePortOut();
+    xplanePortIn      = settings->xplanePortIn();
+    xplanePluginPort  = settings->xplanePluginPort();
+    qDebug() << "xplane primary host:" << xplaneHost;
+
     cpdPortIn   = 0;
     cpdPortOut  = 0;
     mcsPortIn   = 0;
@@ -199,8 +218,9 @@ didReceiveData(false) {
    * ignored.
    */
   else {
-    xplane->bind(xplanePortOut, QUdpSocket::ShareAddress);
+    xplane->bind(QHostAddress::Any, xplanePortOut, QUdpSocket::ShareAddress);
   }
+  connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readFromXPlane);
 
   // Create the map of Datarefs.
   buildDRMap();
@@ -209,11 +229,12 @@ didReceiveData(false) {
   xplanePlugin->connectToHost(xplaneHost, xplanePluginPort);
 
   requestDatarefsFromXPlane();
-  connect(xplane, &QUdpSocket::readyRead, this, &SwitchBoard::readFromXPlane);
-
-  timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, &SwitchBoard::testConnection);
-  timer->start(2000);
+  
+  if (!settings->isMCSDisplay() || forwardToCPD) {
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &SwitchBoard::testConnection);
+    timer->start(2000);
+  }
 }
 
 
@@ -228,7 +249,7 @@ void SwitchBoard::testConnection() {
   }
   // If we did not receive anything, request it again
   else {
-    qWarning() << "Warning: did not receive data, resending requests.";
+    qWarning() << "Warning: no data from" << settings->getSlave(slaveID)->m_slaveName << "xplane @" << xplaneHost.toString() << "; re-requesting.";
     requestDatarefsFromXPlane();
   }
 }
@@ -254,15 +275,20 @@ void SwitchBoard::readFromXPlane() {
 void SwitchBoard::readFromClient(ClientType ct) {
   // Get the correct client
   QUdpSocket* client = NULL;
+  QString debugMsg = "Received data from ";
   if (ct & CLIENT_CPD) {
     client = cpd;
+    debugMsg += "cpd    @ " + cpdHost.toString() + ":" + QString::number(cpdPortOut);
   }
   else if (ct & CLIENT_MCS) {
     client = mcs;
+    debugMsg += "mcs    @ " + mcsHost.toString() + ":" + QString::number(mcsPortOut);
   }
   else if (ct & CLIENT_XPLANE) {
     client = xplane;
+    debugMsg += "xplane @ " + xplaneHost.toString() + ":" + QString::number(xplanePortOut);
   }
+  qDebug() << debugMsg;
 
   // Read the data
   QByteArray datagram;
@@ -274,33 +300,43 @@ void SwitchBoard::readFromClient(ClientType ct) {
 
   // If this data was not meant for this particular SwitchBoard instance,
   // discard it.
+  /*
   if (sender != cpdHost && sender != mcsHost && sender != xplaneHost) {
     if (DEBUG_RECV && DEBUG_RECV_DATASWITCH) {
-      QString str = "Discarding data from (%s) %s:%d :: not meant for this host";
-      str.arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
+      QString str = "Discarding data from (%1) %2:%3 :: not meant for this host";
+      str = str.arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
       qDebug() << str;
     }
+    QString str = "* Discarding data from (%1) %2:%3 :: not meant for this host";
+    str = str.arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
+    qDebug() << str;
     return;
   }
+  // */
 
   // Debug if necessary
   if (DEBUG_RECV) {
-    QString str = "Packet size %4d\tfrom (%s) %s:%d";
-    str.arg(datagram.size()).arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
+    QString str = "Packet size %1 from (%2) %3:%4";
+    str = str.arg(datagram.size()).arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
     qDebug() << str;
   }
 
   // Process or forward the data
+  qDebug() << "Checking data forwarding for" << settings->getSlave(slaveID)->m_slaveName << "...";
   if (ct & CLIENT_CPD || ct & CLIENT_MCS) {
+    qDebug() << "Data from CPD or MCS found!";
     forwardData(CLIENT_XPLANE, datagram);
   }
   else if (ct & CLIENT_XPLANE) {
+    qDebug() << "Data from xplane found!";
     didReceiveData = true;
 
     if (forwardToCPD) {
+      qDebug() << "Forwarding to the CPD...";
       forwardData(CLIENT_CPD, datagram);
 
       if (settings->forwardToMCS()) {
+        qDebug() << "Forwarding to the MCS Display...";
         forwardData(CLIENT_MCS, datagram);
       }
     }
@@ -308,6 +344,8 @@ void SwitchBoard::readFromClient(ClientType ct) {
       processDatagram(datagram);
     }
   }
+  qDebug() << "done checking data forwarding.";
+  qDebug() << "-------------------------------------------------------------";
 
   // Unset the socket
   client = NULL;

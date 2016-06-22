@@ -18,6 +18,9 @@ settings(_cpdSettings) {
     tabWidget = new QTabWidget(this);
 
     for (int i = 0; i < settings->numSlaves(); ++i) {
+      if (i != 2 && i != 3) {
+        continue;
+      }
       CPDWidget* slave = new CPDWidget(settings, i);
       slaveSwitches.append(slave->getSwitchBoard());
       slaveCPDs.append(slave);

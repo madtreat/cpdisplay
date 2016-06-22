@@ -26,7 +26,7 @@ else
   exe="/opt/cpdisplay/bin/cpdisplay"
 
   # Get the proper settings file
-  settings="/etc/cpdisplay/config/cpd-settings.$host.ini"
+  settings="/etc/cpdisplay/config/vscl/cpd-settings.$host.ini"
 fi
 echo "Script dir: $dir"
 echo "Executable: $exe"

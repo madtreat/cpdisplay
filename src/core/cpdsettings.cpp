@@ -11,10 +11,12 @@
 #include <QSettings>
 #include <QFile>
 #include <QDir>
+#include <QHostInfo>
 
 
 CPDSettings::CPDSettings(QString _filename, QObject* _parent)
-: QObject(_parent) {
+: QObject(_parent),
+m_isMCSDataSwitch(false) {
   settings = NULL;
   m_userHomeDir = QDir::home().absolutePath();
 
@@ -101,10 +103,13 @@ void CPDSettings::loadSettingsFile(QString _filename) {
   // Default to false if it does not appear (do not want standard CPD's
   // to be cluttered, also can prevent them from knowing about MCS)
   settings->beginGroup("mcs");
-  m_isMCSDataSwitch = settings->value("is_mcsdataswitch", "false").toBool();
+  // m_isMCSDataSwitch = settings->value("is_mcsdataswitch", "false").toBool();
   m_isMCSDisplay    = settings->value("is_mcsdisplay", "false").toBool();
   m_forwardToMCS    = settings->value("is_mcsdisplay", "false").toBool();
-  m_mcsDisplayHost  = settings->value("mcs_display_host").toString();
+  QString mcsdh     = settings->value("mcs_display_host").toString();
+  m_mcsDisplayHost  = checkHost(mcsdh);
+  QString mcsdsh    = settings->value("mcs_data_switch_host").toString();
+  m_mcsDataSwitchHost = checkHost(mcsdsh);
   settings->endGroup();  // "mcs"
 
   if (isMCS()) {
@@ -120,9 +125,11 @@ void CPDSettings::loadSettingsFile(QString _filename) {
       slave->m_xplanePortOut    = settings->value("xplane_port_out").toInt();
       slave->m_xplanePortIn     = settings->value("xplane_port_in").toInt();
       slave->m_xplanePluginPort = settings->value("xplane_plugin_port").toInt();
-      slave->m_xplaneHost       = settings->value("xplane_host").toString();
+      QString xplaneH           = settings->value("xplane_host").toString();
+      slave->m_xplaneHost       = checkHost(xplaneH);
 
-      slave->m_cpdHost          = settings->value("cpd_host").toString();
+      QString cpdH              = settings->value("cpd_host").toString();
+      slave->m_cpdHost          = checkHost(cpdH);
       slave->m_cpdPortOut       = settings->value("cpd_port_out", slave->m_xplanePortIn).toInt();
       slave->m_cpdPortIn        = settings->value("cpd_port_in", slave->m_xplanePortOut).toInt();
       
@@ -153,5 +160,29 @@ void CPDSettings::loadSettingsFile(QString _filename) {
     settings->endGroup();  // "xplane"
     // Set default values for MCS data
     m_numSlaves = 0;
+  }
+}
+
+QHostAddress CPDSettings::checkHost(QString h) {
+  QHostAddress mcsDispHost(h);
+  if (DEBUG_SETTINGS) {
+    qDebug() << "Validating host" << h;
+  }
+  // If the host given was a hostname...
+  if (mcsDispHost == QHostAddress("")) {
+    QHostInfo info = QHostInfo::fromName(h);
+    QList<QHostAddress> addrs = info.addresses();
+    if (DEBUG_SETTINGS && addrs.size()) {
+      qDebug() << "Found hosts for reverse lookup of" << h << ":" << addrs;
+    }
+    if (!addrs.size()) {
+      qWarning() << "Warning: host not found, skipping...";
+      return QHostAddress();
+    }
+    return addrs.at(0);
+  } 
+  // ...else, if the host was an IP...
+  else {
+    return mcsDispHost;
   }
 }

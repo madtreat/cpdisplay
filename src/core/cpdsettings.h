@@ -35,6 +35,8 @@ public:
   QString     styleFile()       const { return m_style; }
   QString     mapSettingsFile() const { return m_mapSettings; }
 
+  void        setIsMCSDataSwitch() { m_isMCSDataSwitch = true; }
+
   bool        isMCS()           const { return m_isMCSDataSwitch || m_isMCSDisplay; }
   bool        isMCSDataSwitch() const { return m_isMCSDataSwitch; }
   bool        isMCSDisplay()    const { return m_isMCSDisplay; }
@@ -42,6 +44,7 @@ public:
   int         numSlaves()       const { return m_numSlaves; }
 
   QHostAddress  mcsDisplayHost()    const { return m_mcsDisplayHost; }
+  QHostAddress  mcsDataSwitchHost() const { return m_mcsDataSwitchHost; }
 
   SlaveMap      slaves()            const { return m_slaves; }
   SlaveSystem*  getSlave(int id)    const { return m_slaves.value(id); }
@@ -76,6 +79,7 @@ private:
   bool m_forwardToMCS;      // Forward packets between CPD and xplane to MCS?
   int  m_numSlaves;         // Number of slaves under this MCS
   QHostAddress m_mcsDisplayHost;
+  QHostAddress m_mcsDataSwitchHost;
 
   // "xplane-slaves" group for MCS
   SlaveMap m_slaves;  // Map of <ID, Slave info>
@@ -85,6 +89,8 @@ private:
   int            m_xplanePortIn;
   int            m_xplanePluginPort;
   QHostAddress   m_xplaneHost;
+
+  QHostAddress checkHost(QString h);
 };
 
 #endif	// CPDSETTINGS_H

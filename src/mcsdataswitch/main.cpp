@@ -31,7 +31,8 @@ int main(int argc, char* argv[])
   parser.process(app);
 
   // replace default constructor if supplied by command line
-  CPDSettings* settings = new CPDSettings(parser.value("settingsfile"));
+  CPDSettings* settings = new CPDSettings("");//parser.value("settingsfile"));
+  settings->setIsMCSDataSwitch();
 
   if (!settings->isMCS()) {
     qWarning() << "Warning: MCS is false, please check your settings.ini file.";
