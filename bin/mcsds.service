@@ -1,0 +1,10 @@
+[Unit]
+Description=MCS Data Switch
+
+[Service]
+ExecStart=/opt/cpdisplay/bin/mcsdataswitch -c /etc/cpdisplay/config/vscl/cpd-settings.mcsdataswitch.ini \
+> /var/log/mcs 2>&1
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
