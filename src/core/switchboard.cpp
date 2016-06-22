@@ -40,14 +40,25 @@ SwitchBoard::DRefValue::DRefValue(
   int _index,
   QString _str,
   int _freq,
+  DREF_Type _type,
   direct_fp _fn_d
 ) {
   xpIndex = _index;
   str = _str;
+  freq = _freq;
+  type = _type;
+  // if (type == DREF_TYPE_CHR) {
+  //   signalDirect = ((void (*)(xpchr))_fn_d);
+  // }
+  // if (type == DREF_TYPE_INT) {
+  //   signalDirect = ((void (*)(xpint))_fn_d);
+  // }
+  // if (type == DREF_TYPE_FLT) {
+  //   signalDirect = ((void (*)(float))_fn_d);
+  // }
   signalDirect = _fn_d;
   signalNumbered = NULL;
   signalLimit = NULL;
-  freq = _freq;
   signalNum = -1;
   limitType = NO_LIMIT;
 }
@@ -57,15 +68,18 @@ SwitchBoard::DRefValue::DRefValue(
   int _index,
   QString _str,
   int _freq,
+  DREF_Type _type,
   numbered_fp _fn_n,
   int _sigNum
 ) {
   xpIndex = _index;
   str = _str;
+  freq = _freq;
+  type = _type;
+
   signalDirect = NULL;
   signalNumbered = _fn_n;
   signalLimit = NULL;
-  freq = _freq;
   signalNum = _sigNum;
   limitType = NO_LIMIT;
 }
@@ -75,15 +89,18 @@ SwitchBoard::DRefValue::DRefValue(
   int _index,
   QString _str,
   int _freq,
+  DREF_Type _type,
   limit_fp _fn_l,
   LimitType _limitType
 ) {
   xpIndex = _index;
   str = _str;
+  freq = _freq;
+  type = _type;
+
   signalDirect = NULL;
   signalNumbered = NULL;
   signalLimit = _fn_l;
-  freq = _freq;
   signalNum = -1;
   limitType = _limitType;
 }
@@ -93,6 +110,7 @@ SwitchBoard::DRefValue::DRefValue(
   int _index,
   QString _str,
   int _freq,
+  DREF_Type _type,
   direct_fp _fn_d,
   numbered_fp _fn_n,
   limit_fp _fn_l,
@@ -101,10 +119,12 @@ SwitchBoard::DRefValue::DRefValue(
 ) {
   xpIndex = _index;
   str = _str;
+  freq = _freq;
+  type = _type;
+
   signalDirect = _fn_d;
   signalNumbered = _fn_n;
   signalLimit = _fn_l;
-  freq = _freq;
   signalNum = _sigNum;
   limitType = _limitType;
 }
@@ -112,10 +132,11 @@ SwitchBoard::DRefValue::DRefValue(
 SwitchBoard::DRefValue::DRefValue(const DRefValue& rhs) {
   xpIndex = rhs.xpIndex;
   str = rhs.str;
+  freq = rhs.freq;
+  type = rhs.type;
   signalDirect = rhs.signalDirect;
   signalNumbered = rhs.signalNumbered;
   signalLimit = rhs.signalLimit;
-  freq = rhs.freq;
   signalNum = rhs.signalNum;
   limitType = rhs.limitType;
 }
@@ -416,31 +437,31 @@ void SwitchBoard::sendBreaksOn(bool active) {
 //}
 
 
-void SwitchBoard::addDirectDRef(QString str, int freq, direct_fp sig) {
+void SwitchBoard::addDirectDRef(QString str, int freq, direct_fp sig, DREF_Type type) {
   int id = nextDRefID();
-  DRefValue* val = new DRefValue(id, str, freq, sig);
+  DRefValue* val = new DRefValue(id, str, freq, type, sig);
   drmap.insert(id, val);
 }
 
-void SwitchBoard::addNumberedDRef(QString str, int freq, numbered_fp sig, int sigNum) {
+void SwitchBoard::addNumberedDRef(QString str, int freq, numbered_fp sig, int sigNum, DREF_Type type) {
   int id = nextDRefID();
-  DRefValue* val = new DRefValue(id, str, freq, sig, sigNum);
+  DRefValue* val = new DRefValue(id, str, freq, type, sig, sigNum);
   drmap.insert(id, val);
 }
 
-void SwitchBoard::addLimitDRefHelp(QString str, int freq, limit_fp sig, LimitType lt) {
+void SwitchBoard::addLimitDRefHelp(QString str, int freq, limit_fp sig, LimitType lt, DREF_Type type) {
   int id = nextDRefID();
-  DRefValue* val = new DRefValue(id, str, freq, sig, lt);
+  DRefValue* val = new DRefValue(id, str, freq, type, sig, lt);
   drmap.insert(id, val);
 }
 
-void SwitchBoard::addLimitDRef(QString str, int freq, limit_fp sig) {
-  addLimitDRefHelp(QString(str).replace("__LT__", "green_lo"),  freq, sig, LIMIT_G_LO);
-  addLimitDRefHelp(QString(str).replace("__LT__", "green_hi"),  freq, sig, LIMIT_G_HI);
-  addLimitDRefHelp(QString(str).replace("__LT__", "yellow_lo"), freq, sig, LIMIT_Y_LO);
-  addLimitDRefHelp(QString(str).replace("__LT__", "yellow_hi"), freq, sig, LIMIT_Y_HI);
-  addLimitDRefHelp(QString(str).replace("__LT__", "red_lo"),    freq, sig, LIMIT_R_LO);
-  addLimitDRefHelp(QString(str).replace("__LT__", "red_hi"),    freq, sig, LIMIT_R_HI);
+void SwitchBoard::addLimitDRef(QString str, int freq, limit_fp sig, DREF_Type type) {
+  addLimitDRefHelp(QString(str).replace("__LT__", "green_lo"),  freq, sig, LIMIT_G_LO, type);
+  addLimitDRefHelp(QString(str).replace("__LT__", "green_hi"),  freq, sig, LIMIT_G_HI, type);
+  addLimitDRefHelp(QString(str).replace("__LT__", "yellow_lo"), freq, sig, LIMIT_Y_LO, type);
+  addLimitDRefHelp(QString(str).replace("__LT__", "yellow_hi"), freq, sig, LIMIT_Y_HI, type);
+  addLimitDRefHelp(QString(str).replace("__LT__", "red_lo"),    freq, sig, LIMIT_R_LO, type);
+  addLimitDRefHelp(QString(str).replace("__LT__", "red_hi"),    freq, sig, LIMIT_R_HI, type);
 }
 
 
@@ -521,6 +542,10 @@ void SwitchBoard::buildDRMap() {
     vstr = QString(XPDR_PLANE_X_SPEED_Y).replace("__X__", QString::number(i));
     addNumberedDRef(vstr, 20, &SWB::acSpdZUpdate, i);
   }
+
+  // VSCL-Specific
+  addDirectDRef(XPDR_VSCL_AC_NAME, 1, &SWB::acNameUpdate);
+  addDirectDRef(XPDR_VSCL_AC_TYPE, 1, &SWB::acTypeUpdate);
 
   // Misc
   addDirectDRef(XPDR_TIME_PAUSED,  2, &SWB::simPausedUpdate);
@@ -637,7 +662,7 @@ void SwitchBoard::processDatagram(QByteArray& data) {
     for (int i = 0; i < numValues; i++) {
       xp_rref_out* dref = (struct xp_rref_out*) values.mid(i*size, size).data();
       xpint code  = dref->code;
-      xpflt value = dref->data;
+      void* value = dref->data;
       /*
        * Somehow, calling dref->code after dref->data turns the value at
        * dref->code into some erroneous data, so variables store the code
@@ -680,7 +705,7 @@ void SwitchBoard::processDatagram(QByteArray& data) {
  * Notify everyone of new data.  This parses the data's values and emits signals
  * that other objects can be connected to.
  */
-void SwitchBoard::notifyAll(int code, xpflt value) {
+void SwitchBoard::notifyAll(int code, void* value) {
   DRefValue* val = drmap.value(code);
   if (val) {
     direct_fp   sigDirect   = val->signalDirect;

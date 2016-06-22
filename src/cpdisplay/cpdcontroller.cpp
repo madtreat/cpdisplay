@@ -54,7 +54,7 @@ slaveID(_slaveID) {
   numGears = 3;
   gearC = new GearController(settings, sb, numGears, this);
   comC = new CommsController(settings, sb, this);
-  engC = new EngineController(settings, AC_ENG_JET, numEngines, numFuelTanks, this);
+  engC = new EngineController(settings, sb, AC_ENG_JET, numEngines, numFuelTanks, this);
   tfcC = new TrafficController(settings, sb, acMap, this);
 
   angVelUpdatedFlag = false;
@@ -89,24 +89,7 @@ void CPDController::connectSignals() {
    */
   // General aircraft
   // connect(sb, &SWB::acTailNumUpdate,     this, &CPDC::setTailNum);
-  connect(sb, &SWB::acNumEnginesUpdate,    engC,  &ENGC::updateNumEngines);
   connect(sb, &SWB::gearRetractableUpdate, this,  &CPDC::updateGearRetractable);
-
-  // Engine limits
-  connect(sb, &SWB::engLimitMPUpdate,    engC, &ENGC::engLimitMPUpdate);
-  connect(sb, &SWB::engLimitFFUpdate,    engC, &ENGC::engLimitFFUpdate);
-  connect(sb, &SWB::engLimitN1Update,    engC, &ENGC::engLimitN1Update);
-  connect(sb, &SWB::engLimitN2Update,    engC, &ENGC::engLimitN2Update);
-
-  connect(sb, &SWB::engLimitEPRUpdate,   engC, &ENGC::engLimitEPRUpdate);
-  connect(sb, &SWB::engLimitEGTUpdate,   engC, &ENGC::engLimitEGTUpdate);
-  connect(sb, &SWB::engLimitTRQUpdate,   engC, &ENGC::engLimitTRQUpdate);
-  connect(sb, &SWB::engLimitITTUpdate,   engC, &ENGC::engLimitITTUpdate);
-  connect(sb, &SWB::engLimitCHTUpdate,   engC, &ENGC::engLimitCHTUpdate);
-
-  connect(sb, &SWB::engLimitOilPUpdate,  engC, &ENGC::engLimitOilPUpdate);
-  connect(sb, &SWB::engLimitOilTUpdate,  engC, &ENGC::engLimitOilTUpdate);
-  connect(sb, &SWB::engLimitFuelPUpdate, engC, &ENGC::engLimitFuelPUpdate);
 
   // Multiplayer: other aircraft
   connect(sb, &SWB::acHdgUpdate,         this,  &CPDC::updateACHdg);
@@ -188,31 +171,6 @@ void CPDController::connectSignals() {
   connect(sb, &SWB::acLatUpdate, this, &CPDC::updateACLat);
   connect(sb, &SWB::acLonUpdate, this, &CPDC::updateACLon);
   connect(sb, &SWB::acAltUpdate, this, &CPDC::updateACAlt);
-
-  // Throttle settings and actual values
-  connect(sb, &SWB::throttleCommandUpdate,   engC, &ENGC::updateThrottleCommand);
-  connect(sb, &SWB::throttleActualUpdate,    engC, &ENGC::updateThrottleActual);
-
-  // Engine settings
-  connect(sb, &SWB::engPowerUpdate,    engC, &ENGC::updateEngPower);
-  connect(sb, &SWB::engThrustUpdate,   engC, &ENGC::updateEngThrust);
-  connect(sb, &SWB::engTorqueUpdate,   engC, &ENGC::updateEngTorque);
-  connect(sb, &SWB::engRPMUpdate,      engC, &ENGC::updateEngRPM);
-  connect(sb, &SWB::propRPMUpdate,     engC, &ENGC::updatePropRPM);
-  connect(sb, &SWB::propPitchUpdate,   engC, &ENGC::updatePropPitch);
-  connect(sb, &SWB::propwashUpdate,    engC, &ENGC::updatePropwash);
-
-  connect(sb, &SWB::n1Update,    engC, &ENGC::updateN1);
-  connect(sb, &SWB::n2Update,    engC, &ENGC::updateN2);
-  connect(sb, &SWB::mpUpdate,    engC, &ENGC::updateMP);
-  connect(sb, &SWB::eprUpdate,   engC, &ENGC::updateEPR);
-  connect(sb, &SWB::ffUpdate,    engC, &ENGC::updateFF);
-  connect(sb, &SWB::ittUpdate,   engC, &ENGC::updateITT);
-  connect(sb, &SWB::egtUpdate,   engC, &ENGC::updateEGT);
-  connect(sb, &SWB::chtUpdate,   engC, &ENGC::updateCHT);
-
-  connect(sb, &SWB::engOilPressureUpdate, engC, &ENGC::updateOilPressure);
-  connect(sb, &SWB::engOilTempUpdate,     engC, &ENGC::updateOilTemp);
 }
 
 

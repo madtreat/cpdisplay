@@ -29,7 +29,10 @@ class SwitchBoard : public QObject {
   Q_OBJECT;
 
   // Typdef generic signal function pointers for direct value updates...
-  typedef void (SwitchBoard::*direct_fp)(float);
+  typedef void (SwitchBoard::*direct_fp_flt)(float);
+  typedef void (SwitchBoard::*direct_fp_chr)(char);
+  typedef void (SwitchBoard::*direct_fp_int)(int);
+  typedef void (SwitchBoard::*direct_fp)(...);
   // and value updates tied to a specific engine number, gear number, etc. ...
   typedef void (SwitchBoard::*numbered_fp)(float, int);
   // and value updates for engine limits ...
@@ -49,6 +52,7 @@ class SwitchBoard : public QObject {
                       //  (simple version: xpIndex == XPDataIndex)
     QString  str;     // The string representation of the dataref
     int      freq;    // Frequency of response
+    DREF_Type type;   // The return type
     // SignalType sigType;// Signal type(s) to be emitted
 
     /*
@@ -61,6 +65,9 @@ class SwitchBoard : public QObject {
      * If the dataref does not need one of these function pointers, then that
      * value can be safely set to null and no signal will not be emitted.
      */
+    // direct_fp_flt   signalDirectFlt;
+    // direct_fp_chr   signalDirectChr;
+    // direct_fp_int   signalDirectInt;
     direct_fp   signalDirect;
     numbered_fp signalNumbered;
     limit_fp    signalLimit;
@@ -81,16 +88,16 @@ class SwitchBoard : public QObject {
     LimitType limitType;
 
     // Direct-signal-only constructor
-    DRefValue(int _index, QString _str, int _freq, direct_fp _fn_d);
+    DRefValue(int _index, QString _str, int _freq, DREF_Type _type, direct_fp _fn_d);
 
     // Numbered-signal-only constructor
-    DRefValue(int _index, QString _str, int _freq, numbered_fp _fn_n, int _sigNum);
+    DRefValue(int _index, QString _str, int _freq, DREF_Type _type, numbered_fp _fn_n, int _sigNum);
 
     // Limit-signal-only constructor
-    DRefValue(int _index, QString _str, int _freq, limit_fp _fn_l, LimitType _limitType);
+    DRefValue(int _index, QString _str, int _freq, DREF_Type _type, limit_fp _fn_l, LimitType _limitType);
 
     // All-signals constructor: can use NULL to select only desired signal types
-    DRefValue(int _index, QString _str, int _freq, direct_fp _fn_d, numbered_fp _fn_n, limit_fp _fn_l, int _sigNum=-1,  LimitType _limitType=NO_LIMIT);
+    DRefValue(int _index, QString _str, int _freq, DREF_Type _type, direct_fp _fn_d, numbered_fp _fn_n, limit_fp _fn_l, int _sigNum=-1,  LimitType _limitType=NO_LIMIT);
 
     // Copy constructor
     DRefValue(const DRefValue& rhs);
@@ -189,6 +196,10 @@ signals:
   void acSpdXUpdate(float vx, int acNum);
   void acSpdYUpdate(float vy, int acNum);
   void acSpdZUpdate(float vz, int acNum);
+
+  // VSCL-Specific
+  void acNameUpdate(char* name);
+  void acTypeUpdate(uint32_t type);
 
   // Misc
   void simPausedUpdate(float paused); // a bool value
@@ -289,15 +300,15 @@ private:
   bool didReceiveData; // did this object receive data within the last timer?
 
   // Helper functions for adding new entries to the drmap.
-  void addDirectDRef   (QString str, int freq, direct_fp   sig);
-  void addNumberedDRef (QString str, int freq, numbered_fp sig, int sigNum);
-  void addLimitDRefHelp(QString str, int freq, limit_fp    sig, LimitType lt);
-  void addLimitDRef    (QString str, int freq, limit_fp    sig);
+  void addDirectDRef   (QString str, int freq, direct_fp   sig,               DREF_Type type=DREF_TYPE_FLT);
+  void addNumberedDRef (QString str, int freq, numbered_fp sig, int sigNum,   DREF_Type type=DREF_TYPE_FLT);
+  void addLimitDRefHelp(QString str, int freq, limit_fp    sig, LimitType lt, DREF_Type type=DREF_TYPE_FLT);
+  void addLimitDRef    (QString str, int freq, limit_fp    sig,               DREF_Type type=DREF_TYPE_FLT);
   void buildDRMap();
 
   void forwardData(ClientType destCT, QByteArray& data);
   void processDatagram(QByteArray& data);
-  void notifyAll(int code, xpflt value);
+  void notifyAll(int code, void* value);
   void notifyAll(const XPOutputData& data);
 
   void setDataref(QString dataref, float value);

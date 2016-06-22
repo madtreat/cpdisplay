@@ -10,19 +10,64 @@
 #include <QDebug>
 
 #include "core/cpdsettings.h"
+#include "core/switchboard.h"
 
 
 EngineController::EngineController(
   CPDSettings* _cpdSettings,
+  SwitchBoard* _sb,
   AircraftEngineType _engType,
   int _numEngines,
   int _numFuelTanks,
   QObject* _parent
 ) : QObject(_parent),
 cpdSettings(_cpdSettings),
+sb(_sb),
 engType(_engType),
 numEngines(_numEngines),
 numFuelTanks(_numFuelTanks) {
+  connect(sb, &SWB::acNumEnginesUpdate,    this,  &ENGC::updateNumEngines);
+
+  // Engine limits
+  connect(sb, &SWB::engLimitMPUpdate,    this, &ENGC::engLimitMPUpdate);
+  connect(sb, &SWB::engLimitFFUpdate,    this, &ENGC::engLimitFFUpdate);
+  connect(sb, &SWB::engLimitN1Update,    this, &ENGC::engLimitN1Update);
+  connect(sb, &SWB::engLimitN2Update,    this, &ENGC::engLimitN2Update);
+
+  connect(sb, &SWB::engLimitEPRUpdate,   this, &ENGC::engLimitEPRUpdate);
+  connect(sb, &SWB::engLimitEGTUpdate,   this, &ENGC::engLimitEGTUpdate);
+  connect(sb, &SWB::engLimitTRQUpdate,   this, &ENGC::engLimitTRQUpdate);
+  connect(sb, &SWB::engLimitITTUpdate,   this, &ENGC::engLimitITTUpdate);
+  connect(sb, &SWB::engLimitCHTUpdate,   this, &ENGC::engLimitCHTUpdate);
+
+  connect(sb, &SWB::engLimitOilPUpdate,  this, &ENGC::engLimitOilPUpdate);
+  connect(sb, &SWB::engLimitOilTUpdate,  this, &ENGC::engLimitOilTUpdate);
+  connect(sb, &SWB::engLimitFuelPUpdate, this, &ENGC::engLimitFuelPUpdate);
+
+  // Throttle settings and actual values
+  connect(sb, &SWB::throttleCommandUpdate,   this, &ENGC::updateThrottleCommand);
+  connect(sb, &SWB::throttleActualUpdate,    this, &ENGC::updateThrottleActual);
+
+  // Engine settings
+  connect(sb, &SWB::engPowerUpdate,    this, &ENGC::updateEngPower);
+  connect(sb, &SWB::engThrustUpdate,   this, &ENGC::updateEngThrust);
+  connect(sb, &SWB::engTorqueUpdate,   this, &ENGC::updateEngTorque);
+  connect(sb, &SWB::engRPMUpdate,      this, &ENGC::updateEngRPM);
+  connect(sb, &SWB::propRPMUpdate,     this, &ENGC::updatePropRPM);
+  connect(sb, &SWB::propPitchUpdate,   this, &ENGC::updatePropPitch);
+  connect(sb, &SWB::propwashUpdate,    this, &ENGC::updatePropwash);
+
+  connect(sb, &SWB::n1Update,    this, &ENGC::updateN1);
+  connect(sb, &SWB::n2Update,    this, &ENGC::updateN2);
+  connect(sb, &SWB::mpUpdate,    this, &ENGC::updateMP);
+  connect(sb, &SWB::eprUpdate,   this, &ENGC::updateEPR);
+  connect(sb, &SWB::ffUpdate,    this, &ENGC::updateFF);
+  connect(sb, &SWB::ittUpdate,   this, &ENGC::updateITT);
+  connect(sb, &SWB::egtUpdate,   this, &ENGC::updateEGT);
+  connect(sb, &SWB::chtUpdate,   this, &ENGC::updateCHT);
+
+  connect(sb, &SWB::engOilPressureUpdate, this, &ENGC::updateOilPressure);
+  connect(sb, &SWB::engOilTempUpdate,     this, &ENGC::updateOilTemp);
 }
 
 //EngineController::EngineController(const EngineController& orig) {

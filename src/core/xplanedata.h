@@ -100,6 +100,14 @@ typedef uint32_t        xpint;
 typedef float           xpflt;
 typedef double          xpdbl;
 
+enum DREF_Type {
+  DREF_TYPE_UNKNOWN = 0,
+  DREF_TYPE_CHR,
+  DREF_TYPE_INT,
+  DREF_TYPE_FLT,
+  DREF_TYPE_DBL
+};
+
 const int VEH_DIM = 20;
 const int STR_DIM = 500;
 const int ID_DIM = 5;
@@ -127,7 +135,7 @@ struct xp_rref_in {
 // The response packet to a xp_rref_in, sent from xplane to the CPDisplay
 struct xp_rref_out {
    xpint code; // the id/code defined in xp_rref_in
-   xpflt data; // output data from xplane
+   void* data; // output data from xplane
 };
 
 // Prefix this struct with DREF_PREFIX and send to xplane
