@@ -13,9 +13,6 @@ mcsSettings(_settings) {
   SlaveMap slaveMap = mcsSettings->slaves();
   foreach (SlaveSystem* slave, slaveMap.values()) {
     int id = slave->m_slaveID;
-    if (id != 2 && id != 3) {
-      continue;
-    }
     SwitchBoard* sb = new SwitchBoard(mcsSettings, id, true, this);
     slaves[id] = sb;
   }
