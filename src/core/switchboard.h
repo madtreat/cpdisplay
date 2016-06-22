@@ -107,6 +107,8 @@ public:
   SwitchBoard(const SwitchBoard& orig) = delete;
   ~SwitchBoard();
 
+  QString getGroupName() const {return groupName;}
+
 public slots:
   void testConnection();
   void readFromCPD();
@@ -256,6 +258,7 @@ signals:
 private:
   CPDSettings*  settings;
   int           slaveID;
+  QString       groupName;  // also slave name
 
   QMap<int, DRefValue*> drmap;
 

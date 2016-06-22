@@ -161,7 +161,7 @@ didReceiveData(false) {
       xplanePluginPort  = slave->m_xplanePluginPort; // TODO: figure this one out
     }
 
-    QString groupName = settings->getSlave(slaveID)->m_slaveName;
+    groupName = settings->getSlave(slaveID)->m_slaveName;
     qDebug() << "Multi-sim setup group" << groupName << ":";
     qDebug() << "        xplane host:" << xplaneHost.toString() << "(out:" << xplanePortOut << ", in:" << xplanePortIn << ")";
 
@@ -249,7 +249,7 @@ void SwitchBoard::testConnection() {
   }
   // If we did not receive anything, request it again
   else {
-    qWarning() << "Warning: no data from" << settings->getSlave(slaveID)->m_slaveName << "xplane @" << xplaneHost.toString() << "; re-requesting.";
+    qWarning() << "Warning: no data from" << groupName << "xplane @" << xplaneHost.toString() << "; re-requesting.";
     requestDatarefsFromXPlane();
   }
 }
@@ -275,7 +275,7 @@ void SwitchBoard::readFromXPlane() {
 void SwitchBoard::readFromClient(ClientType ct) {
   // Get the correct client
   QUdpSocket* client = NULL;
-  QString debugMsg = "Received data from ";
+  QString debugMsg = "Received data from " + groupName + " ";
   if (ct & CLIENT_CPD) {
     client = cpd;
     debugMsg += "cpd    @ " + cpdHost.toString() + ":" + QString::number(cpdPortOut);
@@ -298,22 +298,6 @@ void SwitchBoard::readFromClient(ClientType ct) {
 
   client->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
-  // If this data was not meant for this particular SwitchBoard instance,
-  // discard it.
-  /*
-  if (sender != cpdHost && sender != mcsHost && sender != xplaneHost) {
-    if (DEBUG_RECV && DEBUG_RECV_DATASWITCH) {
-      QString str = "Discarding data from (%1) %2:%3 :: not meant for this host";
-      str = str.arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
-      qDebug() << str;
-    }
-    QString str = "* Discarding data from (%1) %2:%3 :: not meant for this host";
-    str = str.arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
-    qDebug() << str;
-    return;
-  }
-  // */
-
   // Debug if necessary
   if (DEBUG_RECV) {
     QString str = "Packet size %1 from (%2) %3:%4";
@@ -322,21 +306,31 @@ void SwitchBoard::readFromClient(ClientType ct) {
   }
 
   // Process or forward the data
-  qDebug() << "Checking data forwarding for" << settings->getSlave(slaveID)->m_slaveName << "...";
+  if (DEBUG_FORWARD) {
+    qDebug() << "Checking data forwarding for" << groupName << "...";
+  }
   if (ct & CLIENT_CPD || ct & CLIENT_MCS) {
-    qDebug() << "Data from CPD or MCS found!";
+    if (DEBUG_FORWARD) {
+      qDebug() << "Data from CPD or MCS found!";
+    }
     forwardData(CLIENT_XPLANE, datagram);
   }
   else if (ct & CLIENT_XPLANE) {
-    qDebug() << "Data from xplane found!";
+    if (DEBUG_FORWARD) {
+      qDebug() << "Data from xplane found!";
+    }
     didReceiveData = true;
 
     if (forwardToCPD) {
-      qDebug() << "Forwarding to the CPD...";
+      if (DEBUG_FORWARD) {
+        qDebug() << "Forwarding to the CPD...";
+      }
       forwardData(CLIENT_CPD, datagram);
 
       if (settings->forwardToMCS()) {
-        qDebug() << "Forwarding to the MCS Display...";
+        if (DEBUG_FORWARD) {
+          qDebug() << "Forwarding to the MCS Display...";
+        }
         forwardData(CLIENT_MCS, datagram);
       }
     }
@@ -344,8 +338,10 @@ void SwitchBoard::readFromClient(ClientType ct) {
       processDatagram(datagram);
     }
   }
-  qDebug() << "done checking data forwarding.";
-  qDebug() << "-------------------------------------------------------------";
+  if (DEBUG_FORWARD) {
+    qDebug() << "done checking data forwarding.";
+    qDebug() << "-------------------------------------------------------------";
+  }
 
   // Unset the socket
   client = NULL;

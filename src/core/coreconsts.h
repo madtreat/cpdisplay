@@ -7,11 +7,12 @@
 
 #define DEBUG_DREF_ID 0
 #define DEBUG_SEND 1
-#define DEBUG_RECV_UDP 1
+#define DEBUG_RECV_UDP 0
 #define DEBUG_RECV_RREF 0
 #define DEBUG_RECV (DEBUG_RECV_UDP | DEBUG_RECV_RREF)
 #define DEBUG_RECV_DATASWITCH 0
 #define DEBUG_SETTINGS 1
+#define DEBUG_FORWARD 0
 
 
 enum ClientType {
