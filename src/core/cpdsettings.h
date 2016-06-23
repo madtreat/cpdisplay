@@ -22,7 +22,7 @@ class CPDSettings : public QObject {
   Q_OBJECT;
 
 public:
-  CPDSettings(QString _filename, QObject* _parent = 0);
+  CPDSettings(QString _filename, DebugType _dt = DEBUG_NONE, QObject* _parent = 0);
   CPDSettings(const CPDSettings& orig) = delete;
   virtual ~CPDSettings();
 
@@ -32,7 +32,7 @@ public:
   QString     settingsFile()    const { return m_settingsFile; }
 
   // Debug flags
-  void        setDebugFlags(uint16_t flags) { m_debug = flags; }
+  void        setDebugFlags(DebugType flags) { m_debug = flags; }
   bool        debugDREFID()     const { return m_debug & DEBUG_DREF_ID; }
   bool        debugSend()       const { return m_debug & DEBUG_SEND; }
   bool        debugRecvUDP()    const { return m_debug & DEBUG_RECV_UDP; }
@@ -79,7 +79,7 @@ private:
   QString     m_userHomeDir;
   QString     m_settingsFile;
 
-  uint16_t    m_debug;
+  DebugType    m_debug;
 
   // Settings values for the Cockpit Display app
   QString m_layoutProfile;  // LayoutProfile config file

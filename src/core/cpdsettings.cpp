@@ -14,8 +14,9 @@
 #include <QHostInfo>
 
 
-CPDSettings::CPDSettings(QString _filename, QObject* _parent)
+CPDSettings::CPDSettings(QString _filename, DebugType _dt, QObject* _parent)
 : QObject(_parent),
+m_debug(_dt),
 m_isMCSDataSwitch(false) {
   settings = NULL;
   m_userHomeDir = QDir::home().absolutePath();
