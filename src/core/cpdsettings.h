@@ -31,6 +31,17 @@ public:
   QString     userHomeDir()     const { return m_userHomeDir; }
   QString     settingsFile()    const { return m_settingsFile; }
 
+  // Debug flags
+  void        setDebugFlags(uint16_t flags) { m_debug = flags; }
+  bool        debugDREFID()     const { return m_debug & DEBUG_DREF_ID; }
+  bool        debugSend()       const { return m_debug & DEBUG_SEND; }
+  bool        debugRecvUDP()    const { return m_debug & DEBUG_RECV_UDP; }
+  bool        debugRecvPacket() const { return m_debug & DEBUG_RECV_PACKET; }
+  bool        debugRecvRREF()   const { return m_debug & DEBUG_RECV_RREF; }
+  bool        debugRecvDS()     const { return m_debug & DEBUG_RECV_DATASWITCH; }
+  bool        debugSettings()   const { return m_debug & DEBUG_SETTINGS; }
+  bool        debugForward()    const { return m_debug & DEBUG_FORWARD; }
+
   QString     layoutProfile()   const { return m_layoutProfile; }
   QString     styleFile()       const { return m_style; }
   QString     mapSettingsFile() const { return m_mapSettings; }
@@ -67,6 +78,8 @@ private:
   QString     m_appRootDir;
   QString     m_userHomeDir;
   QString     m_settingsFile;
+
+  uint16_t    m_debug;
 
   // Settings values for the Cockpit Display app
   QString m_layoutProfile;  // LayoutProfile config file

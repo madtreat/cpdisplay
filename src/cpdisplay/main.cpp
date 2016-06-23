@@ -20,22 +20,56 @@ int main(int argc, char* argv[]) {
   parser.addVersionOption();
 
   // Verbose mode
-  QCommandLineOption verboseOption({"v", "verbose"},
-                                   QCoreApplication::translate("main", "Verbose mode.  Prints out more information."));
-  parser.addOption(verboseOption);
-
-  // User-specified configuration file
-  QCommandLineOption configOption( {"c", "config"},
-                                   QCoreApplication::translate("main", "Config file.  Use this <settings.ini> file instead of the default."),
-                                   QCoreApplication::translate("main", "settings.ini"));
-  parser.addOption(configOption);
+  parser.addOptions({
+    // {
+    //   {"v", "verbose"},
+    //   QCoreApplication::translate("main", "Verbose mode")
+    // },
+    {
+      {"c", "config"},
+      QCoreApplication::translate("main", "Config file.  Use this <settings.ini> file instead of the default."),
+      QCoreApplication::translate("main", "settings.ini")
+    },
+    {
+      {"i", "dref-id"},
+      QCoreApplication::translate("main", "Print DREF ID's.")
+    },
+    {
+      {"s", "send"},
+      QCoreApplication::translate("main", "Verbosely write to the network.")
+    },
+    {
+      {"u", "recv-udp"},
+      QCoreApplication::translate("main", "Verbosely receive UDP.")
+    },
+    {
+      {"p", "recv-packet"},
+      QCoreApplication::translate("main", "Verbosely receive packets.")
+    },
+    {
+      {"r", "recv-rref"},
+      QCoreApplication::translate("main", "Verbosely receive RREF data.")
+    },
+    {
+      {"d", "recv-ds"},
+      QCoreApplication::translate("main", "Verbosely receive data from the DataSwitch.")
+    },
+    {
+      {"c", "settings"},
+      QCoreApplication::translate("main", "Verbosely read settings.")
+    },
+    {
+      {"f", "forward"},
+      QCoreApplication::translate("main", "Verbosely forward data packets. Only applies to the MCS Data Switch")
+    }
+  });
 
   // Parse the command line args
   parser.process(app);
 
   qDebug() << "Initializing...";
-  qDebug() << "Config option:" << parser.value(configOption);
-  CPDSettings* settings = new CPDSettings(parser.value(configOption));// replace default constructor if supplied by command line
+  qDebug() << "Config option:" << parser.value("config");
+  CPDSettings* settings = new CPDSettings(parser.value("config"));
 
   CPDWindow window(settings);
   window.show();//FullScreen();

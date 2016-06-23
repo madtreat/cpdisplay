@@ -165,14 +165,14 @@ void CPDSettings::loadSettingsFile(QString _filename) {
 
 QHostAddress CPDSettings::checkHost(QString h) {
   QHostAddress mcsDispHost(h);
-  if (DEBUG_SETTINGS) {
+  if (debugSettings()) {
     qDebug() << "Validating host" << h;
   }
   // If the host given was a hostname...
   if (mcsDispHost == QHostAddress("")) {
     QHostInfo info = QHostInfo::fromName(h);
     QList<QHostAddress> addrs = info.addresses();
-    if (DEBUG_SETTINGS && addrs.size()) {
+    if (debugSettings() && addrs.size()) {
       qDebug() << "Found hosts for reverse lookup of" << h << ":" << addrs;
     }
     if (!addrs.size()) {
