@@ -44,4 +44,4 @@ export http_proxy="$proxy_host:$proxy_port"
 export https_proxy="$proxy_host:$proxy_port"
 
 # The actual execution command
-$exe -c $settings
+$exe -c $settings "$2"
