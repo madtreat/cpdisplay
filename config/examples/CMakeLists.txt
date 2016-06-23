@@ -3,10 +3,9 @@ project(cpd-config-examples)
 set(CONFIG
    cpd-settings.ini
    google-maps.js
-   maps.ini
+   ol-map.ini
    ol-map.js
    profile.ini
-   qt-google-maps.ini
    style-default.qss
 )
 
