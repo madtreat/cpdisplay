@@ -156,7 +156,7 @@ void CPDSettings::loadSettingsFile(QString _filename) {
       m_xplaneHost = QHostAddress::LocalHost;
     }
     else {
-      m_xplaneHost = QHostAddress(host);
+      m_xplaneHost = checkHost(host);
     }
     settings->endGroup();  // "xplane"
     // Set default values for MCS data
