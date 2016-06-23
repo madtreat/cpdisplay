@@ -171,10 +171,11 @@ QHostAddress CPDSettings::checkHost(QString h) {
   }
   // If the host given was a hostname...
   if (mcsDispHost == QHostAddress("")) {
+    // Do a reverse-lookup to get the IP
     QHostInfo info = QHostInfo::fromName(h);
     QList<QHostAddress> addrs = info.addresses();
     if (debugSettings() && addrs.size()) {
-      qDebug() << "Found hosts for reverse lookup of" << h << ":" << addrs;
+      qDebug() << "  Found hosts for reverse lookup of\n" << h << "\n  :" << addrs;
     }
     if (!addrs.size()) {
       qWarning() << "Warning: host not found, skipping...";

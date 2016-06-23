@@ -81,6 +81,13 @@ private:
 
   DebugType    m_debug;
 
+  // To avoid multiple reverse-lookups for the same address in some MCS
+  // network setups, keep track of those we have found.
+  typedef QMap<QHostAddress, QHostAddress> RLAddrMap;
+  RLAddrMap addresses;
+  QList<QHostAddress> hostnames;
+  QList<QHostAddress> hostIPs;
+
   // Settings values for the Cockpit Display app
   QString m_layoutProfile;  // LayoutProfile config file
   QString m_style;          // QSS style file
