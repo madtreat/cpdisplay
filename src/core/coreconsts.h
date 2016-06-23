@@ -5,16 +5,19 @@
 #include <QString>
 #include <QHostAddress>
 
-#define DEBUG_DREF_ID 0
-#define DEBUG_SEND 1
-#define DEBUG_RECV_UDP 0
-#define DEBUG_RECV_RREF 0
-#define DEBUG_RECV_PACKETS 0
-#define DEBUG_RECV (DEBUG_RECV_UDP | DEBUG_RECV_RREF)
-#define DEBUG_RECV_DATASWITCH 0
-#define DEBUG_SETTINGS 1
-#define DEBUG_FORWARD 0
 
+// Debug Types/Levels
+enum DebugType {
+  DEBUG_NONE            = 0,
+  DEBUG_DREF_ID         = 1 << 0,
+  DEBUG_SEND            = 1 << 1,
+  DEBUG_RECV_UDP        = 1 << 2,
+  DEBUG_RECV_PACKET     = 1 << 3,
+  DEBUG_RECV_RREF       = 1 << 4,
+  DEBUG_RECV_DATASWITCH = 1 << 5,
+  DEBUG_SETTINGS        = 1 << 6,
+  DEBUG_FORWARD         = 1 << 7
+};
 
 enum ClientType {
   CLIENT_UNKNOWN = 0,

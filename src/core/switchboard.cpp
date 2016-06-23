@@ -288,7 +288,7 @@ void SwitchBoard::readFromClient(ClientType ct) {
     client = xplane;
     debugMsg += "xplane @ " + xplaneHost.toString() + ":" + QString::number(xplanePortOut);
   }
-  if (DEBUG_RECV) {
+  if (settings->debugRecvPacket()) {
     qDebug() << debugMsg;
   }
 
@@ -301,37 +301,37 @@ void SwitchBoard::readFromClient(ClientType ct) {
   client->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
   // Debug if necessary
-  if (DEBUG_RECV_PACKETS) {
+  if (settings->debugRecvPacket()) {
     QString str = "Packet size %1 from (%2) %3:%4";
     str = str.arg(datagram.size()).arg(clientTypeStr(ct)).arg(sender.toString()).arg(senderPort);
     qDebug() << str;
   }
 
   // Process or forward the data
-  if (DEBUG_FORWARD) {
+  if (settings->debugForward()) {
     qDebug() << "Checking data forwarding for" << groupName << "...";
   }
   if (ct & CLIENT_CPD || ct & CLIENT_MCS) {
-    if (DEBUG_FORWARD) {
-      qDebug() << "  Data from CPD or MCS found!";
+    if (settings->debugForward()) {
+      qDebug() << "Data from CPD or MCS found!";
     }
     forwardData(CLIENT_XPLANE, datagram);
   }
   else if (ct & CLIENT_XPLANE) {
-    if (DEBUG_FORWARD) {
-      qDebug() << "  Data from xplane found!";
+    if (settings->debugForward()) {
+      qDebug() << "Data from xplane found!";
     }
     didReceiveData = true;
 
     if (forwardToCPD) {
-      if (DEBUG_FORWARD) {
-        qDebug() << "    Forwarding to the CPD...";
+      if (settings->debugForward()) {
+        qDebug() << "Forwarding to the CPD...";
       }
       forwardData(CLIENT_CPD, datagram);
 
       if (settings->forwardToMCS()) {
-        if (DEBUG_FORWARD) {
-          qDebug() << "    Forwarding to the MCS Display...";
+        if (settings->debugForward()) {
+          qDebug() << "Forwarding to the MCS Display...";
         }
         forwardData(CLIENT_MCS, datagram);
       }
@@ -340,7 +340,7 @@ void SwitchBoard::readFromClient(ClientType ct) {
       processDatagram(datagram);
     }
   }
-  if (DEBUG_FORWARD) {
+  if (settings->debugForward()) {
     qDebug() << "done checking data forwarding.";
     qDebug() << "-------------------------------------------------------------";
   }
@@ -357,7 +357,7 @@ void SwitchBoard::pluginSocketError(QAbstractSocket::SocketError error) {
 }
 
 void SwitchBoard::sendDREF(QString drefStr, xpflt value) {
-  if (DEBUG_SEND)
+  if (settings->debugSend())
     qDebug() << "Sending DREF packet:" << drefStr << "(" << value << ")";
   xp_dref_in dref;
   dref.value = value;
@@ -374,7 +374,7 @@ void SwitchBoard::sendDREF(QString drefStr, xpflt value) {
 }
 
 void SwitchBoard::sendToPlugin(QString data) {
-  if (DEBUG_SEND)
+  if (settings->debugSend())
     qDebug() << "Sending data to plugin:" << data;
   int bytesWritten = xplanePlugin->write(data.toLocal8Bit());
   if (bytesWritten == -1) {
@@ -542,8 +542,9 @@ void SwitchBoard::requestDatarefsFromXPlane() {
   foreach (int i, drmap.keys()) {
     DRefValue* val = drmap.value(i);
     QString vstr = val->str;
-    if (DEBUG_DREF_ID)
+    if (settings->debugDREFID()) {
       qDebug() << "Dataref" << i << "(" << val->xpIndex << ") @" << val->freq << "hz:" << vstr;
+    }
 
     xp_rref_in dref;
     dref.freq = (xpint) val->freq;
@@ -631,7 +632,7 @@ void SwitchBoard::processDatagram(QByteArray& data) {
   if (header == "RREFO") {
     int size = sizeof(xp_rref_out);
     int numValues = values.size()/size;
-    if (DEBUG_RECV_RREF)
+    if (settings->debugRecvRREF())
       qDebug() << "Received RREFO with" << numValues << "values:";
 
     for (int i = 0; i < numValues; i++) {
@@ -643,12 +644,12 @@ void SwitchBoard::processDatagram(QByteArray& data) {
        * dref->code into some erroneous data, so variables store the code
        * and value directly, as soon as the dref object is constructed.
        */
-      if (DEBUG_RECV_RREF && code >= 188 && code <= 199) // EPR/EGT only
+      if (settings->debugRecvRREF() && code >= 188 && code <= 199) // EPR/EGT only
         qDebug() << "   data received:" << header << code << data;
 
       notifyAll((int) code, value);
     }
-    if (DEBUG_RECV_RREF)
+    if (settings->debugRecvRREF())
       qDebug() << "--- --- --- --- ---";
   }
 
@@ -697,7 +698,7 @@ void SwitchBoard::notifyAll(int code, xpflt value) {
     }
   }
   else {
-    if (DEBUG_RECV_RREF)
+    if (settings->debugRecvRREF())
       qWarning() << "Warning: invalid data from xplane";
   }
   val = NULL;
