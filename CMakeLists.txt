@@ -205,7 +205,7 @@ add_subdirectory(${QTTOGGLEINPUT_DIR})
 # Project: CPD (Cockpit Display)
 add_subdirectory(src)
 
-# Project: CPD Configuration files
+# Project: CPD Configuration files and launch/utility scripts
 # This is primarily for installation and package builds
 add_subdirectory(config)
-
+add_subdirectory(bin)
