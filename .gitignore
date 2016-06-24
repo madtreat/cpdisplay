@@ -2,6 +2,7 @@ build
 lib
 bin
 packages
+cpdisplay*.rpm
 
 # Compiled Object files
 *.slo

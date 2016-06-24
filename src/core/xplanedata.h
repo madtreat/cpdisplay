@@ -184,7 +184,7 @@ struct XPOutputData {
    // There should be 8 integer or double values
    QList<QVariant> values;
 
-   XPOutputData() {};
+   XPOutputData() : index(0), type(0) {};
    XPOutputData(const XPOutputData& other);
 
    void parseRawData(QByteArray raw);

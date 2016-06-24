@@ -14,8 +14,9 @@
 #include <QHostInfo>
 
 
-CPDSettings::CPDSettings(QString _filename, QObject* _parent)
+CPDSettings::CPDSettings(QString _filename, DebugType _dt, QObject* _parent)
 : QObject(_parent),
+m_debug(_dt),
 m_isMCSDataSwitch(false) {
   settings = NULL;
   m_userHomeDir = QDir::home().absolutePath();
@@ -73,15 +74,14 @@ SlaveSystem* CPDSettings::getSlaveByName(QString name) const {
 }
 
 
-QHostAddress& CPDSettings::getDestHost(QHostAddress& src) {
+QHostAddress CPDSettings::getDestHost(const QHostAddress& src) {
   foreach (int id, m_slaves.keys()) {
     SlaveSystem* sys = m_slaves.value(id);
     if (sys->m_xplaneHost == src) {
       return sys->m_cpdHost;
     }
   }
-  QHostAddress host;
-  return host;
+  return QHostAddress();
 }
 
 
@@ -155,7 +155,7 @@ void CPDSettings::loadSettingsFile(QString _filename) {
       m_xplaneHost = QHostAddress::LocalHost;
     }
     else {
-      m_xplaneHost = QHostAddress(host);
+      m_xplaneHost = checkHost(host);
     }
     settings->endGroup();  // "xplane"
     // Set default values for MCS data
@@ -165,15 +165,16 @@ void CPDSettings::loadSettingsFile(QString _filename) {
 
 QHostAddress CPDSettings::checkHost(QString h) {
   QHostAddress mcsDispHost(h);
-  if (DEBUG_SETTINGS) {
+  if (debugSettings()) {
     qDebug() << "Validating host" << h;
   }
   // If the host given was a hostname...
   if (mcsDispHost == QHostAddress("")) {
+    // Do a reverse-lookup to get the IP
     QHostInfo info = QHostInfo::fromName(h);
     QList<QHostAddress> addrs = info.addresses();
-    if (DEBUG_SETTINGS && addrs.size()) {
-      qDebug() << "Found hosts for reverse lookup of" << h << ":" << addrs;
+    if (debugSettings() && addrs.size()) {
+      qDebug() << "  Found hosts for reverse lookup of\n" << h << "\n  :" << addrs;
     }
     if (!addrs.size()) {
       qWarning() << "Warning: host not found, skipping...";

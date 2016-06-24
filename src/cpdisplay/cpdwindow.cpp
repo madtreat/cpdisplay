@@ -14,6 +14,7 @@ CPDWindow::CPDWindow(CPDSettings* _cpdSettings, QWidget* _parent)
 settings(_cpdSettings) {
   if (settings->isMCS()) {
     qDebug() << "Creating MCS for" << settings->numSlaves() << "slaves...";
+    cpdWidget = NULL;
     // slaveID = 0; // default to first in the list
     tabWidget = new QTabWidget(this);
 

@@ -13,8 +13,8 @@ endif()
 # Version
 ################################################################################
 set(cpd_MAJOR_VERSION 2)
-set(cpd_MINOR_VERSION 4)
-set(cpd_PATCH_VERSION 0)
+set(cpd_MINOR_VERSION 5)
+set(cpd_PATCH_VERSION 1)
 set(cpd_VERSION ${cpd_MAJOR_VERSION}.${cpd_MINOR_VERSION}.${cpd_PATCH_VERSION})
 
 
@@ -48,6 +48,7 @@ set(CPACK_PACKAGE_CONTACT "Madison Treat")
 set(CPACK_PACKAGE_VENDOR "VSCL")
 set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_RPM_PACKAGE_AUTOREQPROV " no")
 include(CPack)
 
 
@@ -205,7 +206,7 @@ add_subdirectory(${QTTOGGLEINPUT_DIR})
 # Project: CPD (Cockpit Display)
 add_subdirectory(src)
 
-# Project: CPD Configuration files
+# Project: CPD Configuration files and launch/utility scripts
 # This is primarily for installation and package builds
 add_subdirectory(config)
-
+add_subdirectory(bin)
