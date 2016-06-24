@@ -235,6 +235,9 @@ didReceiveData(false) {
     connect(timer, &QTimer::timeout, this, &SwitchBoard::testConnection);
     timer->start(2000);
   }
+  else {
+    timer = NULL;
+  }
 }
 
 

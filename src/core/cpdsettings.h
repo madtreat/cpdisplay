@@ -66,7 +66,7 @@ public:
   int           xplanePluginPort()  const { return m_xplanePluginPort; }
   QHostAddress  xplaneHost()        const { return m_xplaneHost; }
 
-  QHostAddress& getDestHost(QHostAddress& src);
+  QHostAddress  getDestHost(const QHostAddress& src);
   // int            getDestPort(int port);
 
 public slots:

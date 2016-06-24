@@ -74,15 +74,14 @@ SlaveSystem* CPDSettings::getSlaveByName(QString name) const {
 }
 
 
-QHostAddress& CPDSettings::getDestHost(QHostAddress& src) {
+QHostAddress CPDSettings::getDestHost(const QHostAddress& src) {
   foreach (int id, m_slaves.keys()) {
     SlaveSystem* sys = m_slaves.value(id);
     if (sys->m_xplaneHost == src) {
       return sys->m_cpdHost;
     }
   }
-  QHostAddress host;
-  return host;
+  return QHostAddress();
 }
 
 
