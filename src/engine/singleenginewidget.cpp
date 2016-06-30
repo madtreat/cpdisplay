@@ -147,14 +147,15 @@ engNum(_engNum) {
 SingleEngineWidget::~SingleEngineWidget() {
 }
 
-void SingleEngineWidget::setVisibleWidgets(AircraftEngineType type) {
-  engRPM->setVisible(type == AC_ENG_PROP || type == AC_ENG_TURBOJET);
-  propRPM->setVisible(type == AC_ENG_PROP || type == AC_ENG_TURBOJET);
-  eprDial->setVisible(type == AC_ENG_JET || type == AC_ENG_TURBOJET);
-  egtDial->setVisible(type == AC_ENG_JET || type == AC_ENG_TURBOJET);
+void SingleEngineWidget::setVisibleWidgets(AircraftType type) {
+  qDebug() << "Engine type changed to" << (int) (type & ENG_TYPES);
+  engRPM->setVisible  (type & (AC_PISTON | AC_TURBOPROP));
+  propRPM->setVisible (type & (AC_PISTON | AC_TURBOPROP));
+  eprDial->setVisible (type & (AC_JET    | AC_TURBOPROP));
+  egtDial->setVisible (type & (AC_JET    | AC_TURBOPROP));
 
-  propForm->setVisible(type == AC_ENG_PROP || type == AC_ENG_TURBOJET);
-  jetForm->setVisible(type == AC_ENG_JET);
+  propForm->setVisible(type & (AC_PISTON | AC_TURBOPROP));
+  jetForm->setVisible (type & (AC_JET));
 }
 
 void SingleEngineWidget::setEngRPM(float value, int _engNum) {

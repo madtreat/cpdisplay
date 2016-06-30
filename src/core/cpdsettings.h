@@ -22,7 +22,7 @@ class CPDSettings : public QObject {
   Q_OBJECT;
 
 public:
-  CPDSettings(QString _filename, DebugType _dt = DEBUG_NONE, QObject* _parent = 0);
+  CPDSettings(QString _filename, DebugType _dt = DEBUG_NONE, bool _isMCSDS = false, QObject* _parent = 0);
   CPDSettings(const CPDSettings& orig) = delete;
   virtual ~CPDSettings();
 
@@ -45,8 +45,6 @@ public:
   QString     layoutProfile()   const { return m_layoutProfile; }
   QString     styleFile()       const { return m_style; }
   QString     mapSettingsFile() const { return m_mapSettings; }
-
-  void        setIsMCSDataSwitch() { m_isMCSDataSwitch = true; }
 
   bool        isMCS()           const { return m_isMCSDataSwitch || m_isMCSDisplay; }
   bool        isMCSDataSwitch() const { return m_isMCSDataSwitch; }

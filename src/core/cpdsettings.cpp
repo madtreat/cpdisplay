@@ -14,10 +14,14 @@
 #include <QHostInfo>
 
 
-CPDSettings::CPDSettings(QString _filename, DebugType _dt, QObject* _parent)
-: QObject(_parent),
+CPDSettings::CPDSettings(
+  QString _filename,
+  DebugType _dt,
+  bool _isMCSDS,
+  QObject* _parent
+) : QObject(_parent),
 m_debug(_dt),
-m_isMCSDataSwitch(false) {
+m_isMCSDataSwitch(_isMCSDS) {
   settings = NULL;
   m_userHomeDir = QDir::home().absolutePath();
 
@@ -177,7 +181,7 @@ QHostAddress CPDSettings::checkHost(QString h) {
       qDebug() << "  Found hosts for reverse lookup of\n" << h << "\n  :" << addrs;
     }
     if (!addrs.size()) {
-      qWarning() << "Warning: host not found, skipping...";
+      qWarning() << "Warning: host" << h << "not found, skipping...";
       return QHostAddress();
     }
     return addrs.at(0);

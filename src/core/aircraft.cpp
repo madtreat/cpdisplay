@@ -16,10 +16,9 @@
 
 Aircraft::Aircraft(int _id, QObject* _parent)
 : QObject(_parent),
-type(GENERAL_AVIATION),
-engType(AC_ENG_PROP),
 id(_id),
 displayed(false) {
+  type = (AircraftType) (AC_GA | AC_PISTON);
   lat = 0.0;
   lon = 0.0;
   alt = 0.0;

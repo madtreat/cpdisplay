@@ -29,10 +29,10 @@ class SwitchBoard : public QObject {
   Q_OBJECT;
 
   // Typdef generic signal function pointers for direct value updates...
-  typedef void (SwitchBoard::*direct_fp_flt)(float);
-  typedef void (SwitchBoard::*direct_fp_chr)(char);
+  typedef void (SwitchBoard::*direct_fp_chr)(QString);
   typedef void (SwitchBoard::*direct_fp_int)(int);
-  typedef void (SwitchBoard::*direct_fp)(...);
+  typedef void (SwitchBoard::*direct_fp_flt)(float);
+  typedef void (SwitchBoard::*direct_fp)(float);
   // and value updates tied to a specific engine number, gear number, etc. ...
   typedef void (SwitchBoard::*numbered_fp)(float, int);
   // and value updates for engine limits ...
@@ -47,7 +47,8 @@ class SwitchBoard : public QObject {
   // };
 
   // Define the value struct for the Dataref Map drmap
-  struct DRefValue {
+  class DRefValue : public QObject {
+  public:
     int      xpIndex; // The index as defined by the application
                       //  (simple version: xpIndex == XPDataIndex)
     QString  str;     // The string representation of the dataref
@@ -88,7 +89,7 @@ class SwitchBoard : public QObject {
     LimitType limitType;
 
     // Direct-signal-only constructor
-    DRefValue(int _index, QString _str, int _freq, DREF_Type _type, direct_fp _fn_d);
+    DRefValue(int _index, QString _str, int _freq, DREF_Type _type, direct_fp _fn_d=0);
 
     // Numbered-signal-only constructor
     DRefValue(int _index, QString _str, int _freq, DREF_Type _type, numbered_fp _fn_n, int _sigNum);
@@ -107,6 +108,26 @@ class SwitchBoard : public QObject {
       // delete signalNumbered;
       // delete signalLimit;
     }
+  };
+
+  class DRefValueChr : public DRefValue {
+  public:
+    direct_fp_chr signalDirectChr;
+
+    DRefValueChr(const DRefValue& drv);
+    DRefValueChr(int _index, QString _str, int _freq, DREF_Type _type, direct_fp_chr _fn_d);
+    DRefValueChr(const DRefValueChr& rhs);
+    ~DRefValueChr() {}
+  };
+
+  class DRefValueInt : public DRefValue {
+  public:
+    direct_fp_int signalDirectInt;
+
+    DRefValueInt(const DRefValue& drv);
+    DRefValueInt(int _index, QString _str, int _freq, DREF_Type _type, direct_fp_int _fn_d);
+    DRefValueInt(const DRefValueInt& rhs);
+    ~DRefValueInt() {}
   };
 
 public:
@@ -198,8 +219,8 @@ signals:
   void acSpdZUpdate(float vz, int acNum);
 
   // VSCL-Specific
-  void acNameUpdate(char* name);
-  void acTypeUpdate(uint32_t type);
+  void acNameUpdate(QString name);
+  void acTypeUpdate(int     type);
 
   // Misc
   void simPausedUpdate(float paused); // a bool value
@@ -300,10 +321,13 @@ private:
   bool didReceiveData; // did this object receive data within the last timer?
 
   // Helper functions for adding new entries to the drmap.
-  void addDirectDRef   (QString str, int freq, direct_fp   sig,               DREF_Type type=DREF_TYPE_FLT);
-  void addNumberedDRef (QString str, int freq, numbered_fp sig, int sigNum,   DREF_Type type=DREF_TYPE_FLT);
-  void addLimitDRefHelp(QString str, int freq, limit_fp    sig, LimitType lt, DREF_Type type=DREF_TYPE_FLT);
-  void addLimitDRef    (QString str, int freq, limit_fp    sig,               DREF_Type type=DREF_TYPE_FLT);
+  void addDirectDRef   (QString str, int freq, direct_fp     sig, DREF_Type type=DREF_TYPE_FLT);
+  void addDirectDRefChr(QString str, int freq, direct_fp_chr sig);
+  void addDirectDRefInt(QString str, int freq, direct_fp_int sig);
+  void addDirectDRefFlt(QString str, int freq, direct_fp_flt sig);
+  void addNumberedDRef (QString str, int freq, numbered_fp   sig, int sigNum,   DREF_Type type=DREF_TYPE_FLT);
+  void addLimitDRefHelp(QString str, int freq, limit_fp      sig, LimitType lt, DREF_Type type=DREF_TYPE_FLT);
+  void addLimitDRef    (QString str, int freq, limit_fp      sig,               DREF_Type type=DREF_TYPE_FLT);
   void buildDRMap();
 
   void forwardData(ClientType destCT, QByteArray& data);

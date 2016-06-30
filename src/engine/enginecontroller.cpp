@@ -16,7 +16,7 @@
 EngineController::EngineController(
   CPDSettings* _cpdSettings,
   SwitchBoard* _sb,
-  AircraftEngineType _engType,
+  AircraftType _engType,
   int _numEngines,
   int _numFuelTanks,
   QObject* _parent
@@ -26,48 +26,49 @@ sb(_sb),
 engType(_engType),
 numEngines(_numEngines),
 numFuelTanks(_numFuelTanks) {
-  connect(sb, &SWB::acNumEnginesUpdate,    this,  &ENGC::updateNumEngines);
+  connect(sb, &SWB::acTypeUpdate,         this, &ENGC::updateACType);
+  connect(sb, &SWB::acNumEnginesUpdate,   this, &ENGC::updateNumEngines);
 
   // Engine limits
-  connect(sb, &SWB::engLimitMPUpdate,    this, &ENGC::engLimitMPUpdate);
-  connect(sb, &SWB::engLimitFFUpdate,    this, &ENGC::engLimitFFUpdate);
-  connect(sb, &SWB::engLimitN1Update,    this, &ENGC::engLimitN1Update);
-  connect(sb, &SWB::engLimitN2Update,    this, &ENGC::engLimitN2Update);
+  connect(sb, &SWB::engLimitMPUpdate,     this, &ENGC::engLimitMPUpdate);
+  connect(sb, &SWB::engLimitFFUpdate,     this, &ENGC::engLimitFFUpdate);
+  connect(sb, &SWB::engLimitN1Update,     this, &ENGC::engLimitN1Update);
+  connect(sb, &SWB::engLimitN2Update,     this, &ENGC::engLimitN2Update);
 
-  connect(sb, &SWB::engLimitEPRUpdate,   this, &ENGC::engLimitEPRUpdate);
-  connect(sb, &SWB::engLimitEGTUpdate,   this, &ENGC::engLimitEGTUpdate);
-  connect(sb, &SWB::engLimitTRQUpdate,   this, &ENGC::engLimitTRQUpdate);
-  connect(sb, &SWB::engLimitITTUpdate,   this, &ENGC::engLimitITTUpdate);
-  connect(sb, &SWB::engLimitCHTUpdate,   this, &ENGC::engLimitCHTUpdate);
+  connect(sb, &SWB::engLimitEPRUpdate,    this, &ENGC::engLimitEPRUpdate);
+  connect(sb, &SWB::engLimitEGTUpdate,    this, &ENGC::engLimitEGTUpdate);
+  connect(sb, &SWB::engLimitTRQUpdate,    this, &ENGC::engLimitTRQUpdate);
+  connect(sb, &SWB::engLimitITTUpdate,    this, &ENGC::engLimitITTUpdate);
+  connect(sb, &SWB::engLimitCHTUpdate,    this, &ENGC::engLimitCHTUpdate);
 
-  connect(sb, &SWB::engLimitOilPUpdate,  this, &ENGC::engLimitOilPUpdate);
-  connect(sb, &SWB::engLimitOilTUpdate,  this, &ENGC::engLimitOilTUpdate);
-  connect(sb, &SWB::engLimitFuelPUpdate, this, &ENGC::engLimitFuelPUpdate);
+  connect(sb, &SWB::engLimitOilPUpdate,   this, &ENGC::engLimitOilPUpdate);
+  connect(sb, &SWB::engLimitOilTUpdate,   this, &ENGC::engLimitOilTUpdate);
+  connect(sb, &SWB::engLimitFuelPUpdate,  this, &ENGC::engLimitFuelPUpdate);
 
   // Throttle settings and actual values
-  connect(sb, &SWB::throttleCommandUpdate,   this, &ENGC::updateThrottleCommand);
-  connect(sb, &SWB::throttleActualUpdate,    this, &ENGC::updateThrottleActual);
+  connect(sb, &SWB::throttleCommandUpdate,  this, &ENGC::updateThrottleCommand);
+  connect(sb, &SWB::throttleActualUpdate,   this, &ENGC::updateThrottleActual);
 
   // Engine settings
-  connect(sb, &SWB::engPowerUpdate,    this, &ENGC::updateEngPower);
-  connect(sb, &SWB::engThrustUpdate,   this, &ENGC::updateEngThrust);
-  connect(sb, &SWB::engTorqueUpdate,   this, &ENGC::updateEngTorque);
-  connect(sb, &SWB::engRPMUpdate,      this, &ENGC::updateEngRPM);
-  connect(sb, &SWB::propRPMUpdate,     this, &ENGC::updatePropRPM);
-  connect(sb, &SWB::propPitchUpdate,   this, &ENGC::updatePropPitch);
-  connect(sb, &SWB::propwashUpdate,    this, &ENGC::updatePropwash);
+  connect(sb, &SWB::engPowerUpdate,    this, &ENGC::engPowerUpdate);
+  connect(sb, &SWB::engThrustUpdate,   this, &ENGC::engThrustUpdate);
+  connect(sb, &SWB::engTorqueUpdate,   this, &ENGC::engTorqueUpdate);
+  connect(sb, &SWB::engRPMUpdate,      this, &ENGC::engRPMUpdate);
+  connect(sb, &SWB::propRPMUpdate,     this, &ENGC::propRPMUpdate);
+  connect(sb, &SWB::propPitchUpdate,   this, &ENGC::propPitchUpdate);
+  connect(sb, &SWB::propwashUpdate,    this, &ENGC::propwashUpdate);
 
-  connect(sb, &SWB::n1Update,    this, &ENGC::updateN1);
-  connect(sb, &SWB::n2Update,    this, &ENGC::updateN2);
-  connect(sb, &SWB::mpUpdate,    this, &ENGC::updateMP);
-  connect(sb, &SWB::eprUpdate,   this, &ENGC::updateEPR);
-  connect(sb, &SWB::ffUpdate,    this, &ENGC::updateFF);
-  connect(sb, &SWB::ittUpdate,   this, &ENGC::updateITT);
-  connect(sb, &SWB::egtUpdate,   this, &ENGC::updateEGT);
-  connect(sb, &SWB::chtUpdate,   this, &ENGC::updateCHT);
+  connect(sb, &SWB::n1Update,    this, &ENGC::n1Update);
+  connect(sb, &SWB::n2Update,    this, &ENGC::n2Update);
+  connect(sb, &SWB::mpUpdate,    this, &ENGC::mpUpdate);
+  connect(sb, &SWB::eprUpdate,   this, &ENGC::eprUpdate);
+  connect(sb, &SWB::ffUpdate,    this, &ENGC::ffUpdate);
+  connect(sb, &SWB::ittUpdate,   this, &ENGC::ittUpdate);
+  connect(sb, &SWB::egtUpdate,   this, &ENGC::egtUpdate);
+  connect(sb, &SWB::chtUpdate,   this, &ENGC::chtUpdate);
 
-  connect(sb, &SWB::engOilPressureUpdate, this, &ENGC::updateOilPressure);
-  connect(sb, &SWB::engOilTempUpdate,     this, &ENGC::updateOilTemp);
+  connect(sb, &SWB::engOilPressureUpdate, this, &ENGC::oilPUpdate);
+  connect(sb, &SWB::engOilTempUpdate,     this, &ENGC::oilTUpdate);
 }
 
 //EngineController::EngineController(const EngineController& orig) {
@@ -76,8 +77,12 @@ numFuelTanks(_numFuelTanks) {
 EngineController::~EngineController() {
 }
 
-void EngineController::updateEngineType(AircraftEngineType type) {
-  engType = type;
+
+void EngineController::updateACType(int acType) {
+  AircraftType type = (AircraftType) acType;
+  engType = (AircraftType) (acType & ENG_TYPES);
+  qDebug() << "Engine type:" << engType;
+
   emit engineTypeUpdate(engType);
 }
 
@@ -98,73 +103,4 @@ void EngineController::updateThrottleCommand(float throttle, int engNum) {
 }
 
 void EngineController::updateThrottleActual(float throttle, int engNum) {
-}
-
-void EngineController::updateEngPower(float power, int engNum) {
-}
-
-void EngineController::updateEngThrust(float thrust, int engNum) {
-}
-
-void EngineController::updateEngTorque(float torque, int engNum) {
-}
-
-void EngineController::updateEngRPM(float rpm, int engNum) {
-  emit engRPMUpdate(rpm, engNum);
-}
-
-void EngineController::updatePropRPM(float rpm, int engNum) {
-  emit propRPMUpdate(rpm, engNum);
-}
-
-void EngineController::updatePropPitch(float pitch, int engNum) {
-  emit propPitchUpdate(pitch, engNum);
-}
-
-void EngineController::updatePropwash(float pwash, int engNum) {
-  emit propwashUpdate(pwash, engNum);
-}
-
-void EngineController::updateN1(float n1, int engNum) {
-  emit n1Update(n1, engNum);
-}
-
-void EngineController::updateN2(float n2, int engNum) {
-  emit n2Update(n2, engNum);
-}
-
-void EngineController::updateMP(float mp, int engNum) {
-  emit mpUpdate(mp, engNum);
-}
-
-void EngineController::updateEPR(float epr, int engNum) {
-  emit eprUpdate(epr, engNum);
-}
-
-void EngineController::updateFF(float ff, int engNum) {
-  emit ffUpdate(ff, engNum);
-}
-
-void EngineController::updateITT(float itt, int engNum) {
-  emit ittUpdate(itt, engNum);
-}
-
-void EngineController::updateEGT(float egt, int engNum) {
-  emit egtUpdate(egt, engNum);
-}
-
-void EngineController::updateCHT(float cht, int engNum) {
-  emit chtUpdate(cht, engNum);
-}
-
-void EngineController::updateOilPressure(float pressure, int engNum) {
-  emit oilPUpdate(pressure, engNum);
-}
-
-void EngineController::updateOilTemp(float temp, int engNum) {
-  emit oilTUpdate(temp, engNum);
-}
-
-void EngineController::updateFuelQuantity(float fuel, int engNum) {
-  emit fuelUpdate(fuel, engNum);
 }

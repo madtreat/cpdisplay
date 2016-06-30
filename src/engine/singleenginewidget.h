@@ -34,7 +34,7 @@ public:
   virtual ~SingleEngineWidget();
 
 public slots:
-  void setVisibleWidgets(AircraftEngineType type);
+  void setVisibleWidgets(AircraftType type);
 
   void setEngRPM(float value, int _engNum);
   void setPropRPM(float value, int _engNum);

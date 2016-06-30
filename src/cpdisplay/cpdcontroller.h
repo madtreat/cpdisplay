@@ -80,7 +80,9 @@ public slots:
   void updateACSpdY(float vy, int ac);
   void updateACSpdZ(float vz, int ac);
 
-  void printSomething(float value); // for general testing
+  void printSomethingStr(QString value); // for general testing
+  void printSomethingFlt(float   value); // for general testing
+  void printSomethingInt(int     value); // for general testing
 
 signals:
   void turnRateUpdate(float tr);

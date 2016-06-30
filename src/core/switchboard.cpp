@@ -142,6 +142,48 @@ SwitchBoard::DRefValue::DRefValue(const DRefValue& rhs) {
 }
 
 
+SwitchBoard::DRefValueChr::DRefValueChr(const DRefValue& drv) 
+: DRefValue(drv) {
+  signalDirectChr = NULL;
+}
+
+SwitchBoard::DRefValueChr::DRefValueChr(
+  int _index,
+  QString _str,
+  int _freq,
+  DREF_Type _type,
+  direct_fp_chr _fn_d
+) : DRefValue(_index, _str, _freq, _type) {
+  signalDirectChr = _fn_d;
+}
+
+SwitchBoard::DRefValueChr::DRefValueChr(const DRefValueChr& rhs)
+: DRefValue(rhs) {
+  signalDirectChr = rhs.signalDirectChr;
+}
+
+
+SwitchBoard::DRefValueInt::DRefValueInt(const DRefValue& drv) 
+: DRefValue(drv) {
+  signalDirectInt = NULL;
+}
+
+SwitchBoard::DRefValueInt::DRefValueInt(
+  int _index,
+  QString _str,
+  int _freq,
+  DREF_Type _type,
+  direct_fp_int _fn_d
+) : DRefValue(_index, _str, _freq, _type) {
+  signalDirectInt = _fn_d;
+}
+
+SwitchBoard::DRefValueInt::DRefValueInt(const DRefValueInt& rhs)
+: DRefValue(rhs) {
+  signalDirectInt = rhs.signalDirectInt;
+}
+
+
 /*
  * slaveID is the identity of this machine if the
  */
@@ -441,10 +483,27 @@ void SwitchBoard::sendBreaksOn(bool active) {
 
 
 void SwitchBoard::addDirectDRef(QString str, int freq, direct_fp sig, DREF_Type type) {
+  addDirectDRefFlt(str, freq, sig);
+}
+
+void SwitchBoard::addDirectDRefChr(QString str, int freq, direct_fp_chr sig) {
   int id = nextDRefID();
-  DRefValue* val = new DRefValue(id, str, freq, type, sig);
+  DRefValue* val = new DRefValueChr(id, str, freq, DREF_TYPE_CHR, sig);
   drmap.insert(id, val);
 }
+
+void SwitchBoard::addDirectDRefInt(QString str, int freq, direct_fp_int sig) {
+  int id = nextDRefID();
+  DRefValue* val = new DRefValueInt(id, str, freq, DREF_TYPE_INT, sig);
+  drmap.insert(id, val);
+}
+
+void SwitchBoard::addDirectDRefFlt(QString str, int freq, direct_fp_flt sig) {
+  int id = nextDRefID();
+  DRefValue* val = new DRefValue(id, str, freq, DREF_TYPE_FLT, sig);
+  drmap.insert(id, val);
+}
+
 
 void SwitchBoard::addNumberedDRef(QString str, int freq, numbered_fp sig, int sigNum, DREF_Type type) {
   int id = nextDRefID();
@@ -479,12 +538,16 @@ void SwitchBoard::buildDRMap() {
   // Request datarefs from xplane (does not work in < 10.40b7: known bug:
   // http://forums.x-plane.org/index.php?showtopic=87772)
 
+// #define F_F(f) dynamic_cast<direct_fp>(f)
+
   // Aircraft type and info
-  //addDirectDRef(XPDR_AC_TYPE,           1, &SWB::acTypeUpdate);
+  // addDirectDRef(XPDR_AC_TYPE,           1, &SWB::acTypeUpdate);
+  // addDirectDRef(XPDR_AC_TAIL_NUM_1,     1, F_F(&SWB::acTailNumUpdate));
   addDirectDRef(XPDR_AC_TAIL_NUM_1,     1, &SWB::acTailNumUpdate);
   addDirectDRef(XPDR_AC_NUM_ENGINES,    1, &SWB::acNumEnginesUpdate);
 
   // Radios
+  //*
   addDirectDRef(XPDR_RADIO_COM1_FREQ,   1, &SWB::radioCom1FreqUpdate);
   addDirectDRef(XPDR_RADIO_COM1_STDBY,  1, &SWB::radioCom1StdbyUpdate);
   addDirectDRef(XPDR_RADIO_COM2_FREQ,   1, &SWB::radioCom2FreqUpdate);
@@ -547,12 +610,14 @@ void SwitchBoard::buildDRMap() {
   }
 
   // VSCL-Specific
-  addDirectDRef(XPDR_VSCL_AC_NAME, 1, &SWB::acNameUpdate);
-  addDirectDRef(XPDR_VSCL_AC_TYPE, 1, &SWB::acTypeUpdate);
+  addDirectDRefChr(XPDR_VSCL_AC_NAME, 1, &SWB::acNameUpdate);
+  addDirectDRefInt(XPDR_VSCL_AC_TYPE, 1, &SWB::acTypeUpdate);
 
   // Misc
   addDirectDRef(XPDR_TIME_PAUSED,  2, &SWB::simPausedUpdate);
   addDirectDRef(XPDR_VSCL_ALPHA_D, 5, &SWB::aoaDUpdate);
+
+  // */
 }
 
 /*
@@ -716,13 +781,57 @@ void SwitchBoard::notifyAll(int code, void* value) {
     numbered_fp sigNumbered = val->signalNumbered;
     limit_fp    sigLimit    = val->signalLimit;
     if (sigDirect) {
-      emit (this->*(sigDirect))(value);
+      // qDebug() << "Emitting direct fp...";
+      if (val->type == DREF_TYPE_CHR) {
+        qDebug() << "  of type char";
+        DRefValueChr* vc = NULL;
+        try {
+          vc = (DRefValueChr*) val;
+        }
+        catch(int e) {
+          qDebug() << "Error casting DRefValue as DRefValueChr";
+        }
+
+        direct_fp_chr sigChar = vc->signalDirectChr;
+
+        char* valueChar = (char*) value;
+        QString vcs(valueChar);
+        try {
+          emit (this->*(sigChar))(vcs);
+        }
+        catch(int e) {
+          qDebug() << "Error emitting DRefValueChr signal";
+        }
+      }
+      else if (val->type == DREF_TYPE_INT) {
+        qDebug() << "  of type int";
+        DRefValueInt* vc = NULL;
+        try {
+          vc = (DRefValueInt*) val;
+        }
+        catch(int e) {
+          qDebug() << "Error casting DRefValue as DRefValueInt";
+        }
+
+        direct_fp_int sigChar = vc->signalDirectInt;
+
+        try {
+          emit (this->*(sigChar))(*(int*) &value);
+        }
+        catch(int e) {
+          qDebug() << "Error emitting DRefValueInt signal";
+        }
+      }
+      else if (val->type == DREF_TYPE_FLT) {
+        // qDebug() << "  of type float";
+        emit (this->*(sigDirect))(*(float*) &value);
+      }
     }
     if (sigNumbered) {
-      emit (this->*(sigNumbered))(value, val->signalNum);
+      emit (this->*(sigNumbered))(*(float*) &value, val->signalNum);
     }
     if (sigLimit) {
-      emit (this->*(sigLimit))(value, val->limitType);
+      emit (this->*(sigLimit))(*(float*) &value, val->limitType);
     }
   }
   else {

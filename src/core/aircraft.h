@@ -15,24 +15,33 @@
 #include <QMap>
 
 
+// These values are a bitmask, so you can have an AC_TYPE_JET | AC_TYPE_BOMBER
 enum AircraftType {
-  BOMBER = 0,
-  CIVIL,
-  FIGHTER,
-  GENERAL_AVIATION,
-  GLIDER,
-  HELO,
-  TRANSPORT,
-  UAS,
-  NUM_AIRCRAFT_TYPES
+  AC_UNKNOWN     = 0,
+  // Types of engines
+  AC_JET         = 1 << 0,
+  AC_PISTON      = 1 << 1,
+  AC_TURBOPROP   = 1 << 2,
+  // Types of aircraft
+  AC_AIRLINER    = 1 << 3,
+  AC_ATTACK      = 1 << 4,
+  AC_CARGO       = 1 << 5,
+  AC_BOMBER      = 1 << 6,
+  AC_EW          = 1 << 7,
+  AC_FIGHTER     = 1 << 8,
+  AC_GA          = 1 << 9,
+  AC_GLIDER      = 1 << 10,
+  AC_HELICOPTER  = 1 << 11,
+  AC_RECON       = 1 << 12,
+  AC_SEAPLANE    = 1 << 13,
+  AC_SPACECRAFT  = 1 << 14,
+  AC_TANKER      = 1 << 15,
+  AC_UAV         = 1 << 16,
+  AC_VTOL        = 1 << 17,
+  AC_XPLANE      = 1 << 18 
 };
 
-
-enum AircraftEngineType {
-  AC_ENG_PROP = 0,
-  AC_ENG_JET,
-  AC_ENG_TURBOJET
-};
+static const int ENG_TYPES = AC_JET | AC_PISTON | AC_TURBOPROP;
 
 
 class Aircraft : public QObject {
@@ -76,7 +85,6 @@ signals:
 
 private:
   AircraftType type;
-  AircraftEngineType engType;
   int   id;  // aircraft id
   bool  displayed;  // has this aircraft been displayed on the map yet?
 

@@ -160,29 +160,7 @@ static const char* XPDR_WEP_TARGET_INDEX  = "sim/cockpit/weapons/plane_target_in
 // VSCL-Specific datarefs that you might want to have yourself
 static const char* XPDR_VSCL_AC_NAME      = "vscl/sim/aircraft/name";
 static const char* XPDR_VSCL_AC_TYPE      = "vscl/sim/aircraft/type";
-// where XPDR_VSCL_AC_TYPE can be a bitmask of:
-enum AC_TYPE {
-  AC_TYPE_UNKNOWN = 0,
-  AC_TYPE_JET          = 1 << 0,
-  AC_TYPE_PISTON       = 1 << 1,
-  AC_TYPE_TURBOPROP    = 1 << 2,
-  AC_TYPE_AIRLINER     = 1 << 3,
-  AC_TYPE_ATTACK       = 1 << 4,
-  AC_TYPE_CARGO        = 1 << 5,
-  AC_TYPE_BOMBER       = 1 << 6,
-  AC_TYPE_EW           = 1 << 7,
-  AC_TYPE_FIGHTER      = 1 << 8,
-  AC_TYPE_GA           = 1 << 9,
-  AC_TYPE_GLIDER       = 1 << 10,
-  AC_TYPE_HELICOPTER   = 1 << 11,
-  AC_TYPE_RECON        = 1 << 12,
-  AC_TYPE_SEAPLANE     = 1 << 13,
-  AC_TYPE_SPACECRAFT   = 1 << 14,
-  AC_TYPE_TANKER       = 1 << 15,
-  AC_TYPE_UAV          = 1 << 16,
-  AC_TYPE_VTOL         = 1 << 17,
-  AC_TYPE_XPLANE       = 1 << 18 
-};
+// where XPDR_VSCL_AC_TYPE can be a bitmask of values found in aircraft.h
 
 // Miscellaneous
 static const char* XPDR_ALPHA             = "sim/flightmodel/position/alpha";

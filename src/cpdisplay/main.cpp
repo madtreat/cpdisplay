@@ -79,6 +79,7 @@ int main(int argc, char* argv[]) {
 
   qDebug() << "Initializing...";
   qDebug() << "Config option:" << parser.value("config");
+  qDebug() << "Debug options:" << dfi;
   CPDSettings* settings = new CPDSettings(parser.value("config"), (DebugType) dfi);
 
   CPDWindow window(settings);

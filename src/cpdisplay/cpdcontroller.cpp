@@ -54,7 +54,7 @@ slaveID(_slaveID) {
   numGears = 3;
   gearC = new GearController(settings, sb, numGears, this);
   comC = new CommsController(settings, sb, this);
-  engC = new EngineController(settings, sb, AC_ENG_JET, numEngines, numFuelTanks, this);
+  engC = new EngineController(settings, sb, AC_JET, numEngines, numFuelTanks, this);
   tfcC = new TrafficController(settings, sb, acMap, this);
 
   angVelUpdatedFlag = false;
@@ -72,8 +72,16 @@ slaveID(_slaveID) {
 CPDController::~CPDController() {
 }
 
-void CPDController::printSomething(float value) {
-  qDebug() << "CPDController received a value:" << value << "from AOA_Derived";
+void CPDController::printSomethingStr(QString value) {
+  qDebug() << "CPDController received a QString value:" << value;
+}
+
+void CPDController::printSomethingFlt(float value) {
+  qDebug() << "CPDController received a   float value:" << value;
+}
+
+void CPDController::printSomethingInt(int value) {
+  qDebug() << "CPDController received a     int value:" << value;
 }
 
 
@@ -83,6 +91,9 @@ void CPDController::printSomething(float value) {
 void CPDController::connectSignals() {
   //  EngineWidget* engW = engC->getWidget();
   //  TrafficWidget* tfcW = tfcC->getWidget();
+
+  connect(sb, &SWB::acNameUpdate, this, &CPDC::printSomethingStr);
+  connect(sb, &SWB::acTypeUpdate, this, &CPDC::printSomethingInt);
 
   /*
    * These connections are for xplane 10.40+ dataref requests (RREF results).
